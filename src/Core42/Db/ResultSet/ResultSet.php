@@ -1,18 +1,23 @@
 <?php
 namespace Core42\Db\ResultSet;
 
-use Zend\Db\ResultSet\HydratingResultSet;
+use Zend\Db\ResultSet\ResultSet as ZendResultSet;
 
-class ResultSet extends HydratingResultSet
+class ResultSet extends ZendResultSet
 {
     
 	/**
 	 * 
 	 * @return \Core42\Db\ResultSet\ResultSet
 	 */
-	public function filter()
+	public function filter(\Closure $closure)
 	{
+	    
 		$resultSet = new self();
+		
+		foreach ($this as $obj) {
+		    
+		}
 		
 		return $resultSet;
 	}
@@ -20,7 +25,7 @@ class ResultSet extends HydratingResultSet
 	public function save()
 	{
 		foreach ($this as $obj) {
-			if ($obj instanceof )
+		    $obj->save();
 		}
 	}
 }
