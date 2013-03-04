@@ -50,7 +50,7 @@ class RowGateway extends AbstractRowGateway
             throw new \Zend\Db\RowGateway\Exception\InvalidArgumentException('Invalid model object');
         }
         
-        $this->hydrator = new ClassMethods(true);
+        $this->hydrator = new ClassMethods();
         
         $this->initialize();
     }

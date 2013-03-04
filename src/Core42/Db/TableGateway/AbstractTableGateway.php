@@ -4,6 +4,8 @@ namespace Core42\Db\TableGateway;
 use Zend\Db\TableGateway\AbstractTableGateway as ZendAbstractTableGateway;
 use Core42\Application\Registry;
 use Core42\Db\ResultSet\ResultSet;
+use Core42\Model\Model;
+use Zend\Stdlib\Hydrator\ClassMethods;
 
 abstract class AbstractTableGateway extends ZendAbstractTableGateway
 {
@@ -52,7 +54,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     
     /**
      *
-     * @return AbstractTableGateway:
+     * @return \Zend\Db\TableGateway\AbstractTableGateway
      */
     public static function getInstance()
     {
@@ -62,5 +64,15 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         }
     
         return self::$instance[$className];
+    }
+    
+    public function insert($set)
+    {
+        if ($set instanceof Model) {
+            $hydrator = new ClassMethods();
+            $set = $hydrator->extract($set);
+        }
+        
+        return parent::insert($set);
     }
 }

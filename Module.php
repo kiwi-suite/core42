@@ -4,8 +4,6 @@ namespace Core42;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
-use Zend\Mvc\ModuleRouteListener;
-use Zend\Mvc\MvcEvent;
 use Core42\Application\Registry;
 
 class Module implements BootstrapListenerInterface,
@@ -24,12 +22,8 @@ class Module implements BootstrapListenerInterface,
      * @see \Zend\ModuleManager\Feature\BootstrapListenerInterface::onBootstrap()
      */
     public function onBootstrap (\Zend\EventManager\EventInterface $e)
-    {
-        $eventManager        = $e->getApplication()->getEventManager();
-        $moduleRouteListener = new ModuleRouteListener();
-        $moduleRouteListener->attach($eventManager);
-        
-        $e->getApplication()->getEventManager()->attach(MvcEvent::EVENT_ROUTE, array($this, 'startupRegistry'), 100);
+    {   
+        Registry::setServiceManager($e->getApplication()->getServiceManager());
     }
 
 	/* 
@@ -44,10 +38,5 @@ class Module implements BootstrapListenerInterface,
                 ),
             ),
         );
-    }
-    
-    public function startupRegistry(MvcEvent $e)
-    {
-        Registry::setServiceManager($e->getApplication()->getServiceManager());
     }
 }

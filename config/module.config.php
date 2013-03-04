@@ -12,6 +12,7 @@ return array(
                 }
                 return new Adapter($config['dbParams']);
             },
+            'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
         ),
     ),
 );
