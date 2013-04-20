@@ -5,7 +5,7 @@ use Zend\Db\TableGateway\AbstractTableGateway as ZendAbstractTableGateway;
 use Core42\Application\Registry;
 use Core42\Db\ResultSet\ResultSet;
 use Core42\Model\Model;
-use Zend\Stdlib\Hydrator\ClassMethods;
+use Core42\Hydrator\ModelHydrator;
 
 abstract class AbstractTableGateway extends ZendAbstractTableGateway
 {
@@ -69,7 +69,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     public function insert($set)
     {
         if ($set instanceof Model) {
-            $hydrator = new ClassMethods();
+            $hydrator = new ModelHydrator();
             $set = $hydrator->extract($set);
         }
         

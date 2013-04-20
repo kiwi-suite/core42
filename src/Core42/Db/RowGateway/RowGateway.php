@@ -5,7 +5,7 @@ use Zend\Db\RowGateway\AbstractRowGateway;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Sql;
 use Core42\Model\Model;
-use Zend\Stdlib\Hydrator\ClassMethods;
+use Core42\Hydrator\ModelHydrator;
 
 class RowGateway extends AbstractRowGateway
 {
@@ -17,7 +17,7 @@ class RowGateway extends AbstractRowGateway
     
     /**
      * 
-     * @var ClassMethods
+     * @var ModelHydrator
      */
     private $hydrator = null;
     
@@ -50,7 +50,7 @@ class RowGateway extends AbstractRowGateway
             throw new \Zend\Db\RowGateway\Exception\InvalidArgumentException('Invalid model object');
         }
         
-        $this->hydrator = new ClassMethods();
+        $this->hydrator = new ModelHydrator();
         
         $this->initialize();
     }
