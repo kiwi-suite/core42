@@ -6,6 +6,8 @@ use Core42\Db\ResultSet\ResultSet;
 use Core42\Model\Model;
 use Core42\Hydrator\ModelHydrator;
 use Zend\ServiceManager\ServiceManager;
+use Zend\Db\TableGateway\Feature\FeatureSet;
+use Zend\Db\TableGateway\Feature\MasterSlaveFeature;
 
 abstract class AbstractTableGateway extends ZendAbstractTableGateway
 {
@@ -49,11 +51,13 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     protected function __construct()
     {
         $this->adapter = $this->getServiceManager()->get("db_master");
-        
         $className = $this->rowGatewayDefinition;
         $rowGateway = new $className($this->primaryKey, $this->table, $this->modelPrototype, $this->adapter);
 
         $this->resultSetPrototype = new ResultSet(ResultSet::TYPE_ARRAYOBJECT, $rowGateway);
+        
+        $this->featureSet = new FeatureSet();
+        $this->featureSet->addFeature(new MasterSlaveFeature($this->getServiceManager()->get("db_slave")));
         
         $this->initialize();
     }
