@@ -12,13 +12,15 @@ class ResultSet extends ZendResultSet
 	 */
 	public function filter(\Closure $closure)
 	{
-	    
-		$resultSet = new self();
+	    $data = array();
 		
 		foreach ($this as $obj) {
-		    
+		    if ($closure($obj)) {
+		        $data[] = $obj;
+		    }
 		}
-		
+		$resultSet = new self();
+		$resultSet->initialize($data);
 		return $resultSet;
 	}
 	
