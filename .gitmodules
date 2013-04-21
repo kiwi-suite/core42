@@ -1,0 +1,6 @@
+[submodule "vendor/ChromePHP"]
+	path = vendor/ChromePHP
+	url = https://github.com/ccampbell/chromephp.git
+[submodule "vendor/FirePHP"]
+	path = vendor/FirePHP
+	url = https://github.com/firephp/firephp-core
