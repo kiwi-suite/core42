@@ -1,8 +1,14 @@
 <?php
 namespace Core42\Command;
 
+use Zend\ServiceManager\ServiceManager;
 abstract class AbstractCommand
 {
+    /**
+     * 
+     * @var ServiceManager
+     */
+    private static $serviceManager = null;
     
     public static function createCommand()
     {
@@ -14,8 +20,33 @@ abstract class AbstractCommand
         $this->init();
     }
     
+    /**
+     * 
+     * @param ServiceManager $manager
+     */
+    public static function setServiceManager(ServiceManager $manager)
+    {
+        self::$serviceManager = $manager;
+    }
+    
+    /**
+     * 
+     * @return \Zend\ServiceManager\ServiceManager
+     */
+    protected function getServiceManager()
+    {
+        return self::$serviceManager;
+    }
+    
+    /**
+     * 
+     */
     protected function init(){}
     
+    /**
+     * 
+     * @return \Core42\Command\AbstractCommand
+     */
     final public function run()
     {
         $this->validate();
@@ -26,11 +57,23 @@ abstract class AbstractCommand
         return $this;
     }
     
+    /**
+     * 
+     */
     protected function validate(){}
     
+    /**
+     * 
+     */
     protected function preExecute(){}
     
+    /**
+     * 
+     */
     abstract protected function execute();
     
+    /**
+     * 
+     */
     protected function postExecute(){}
 }

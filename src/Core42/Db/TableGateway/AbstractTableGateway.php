@@ -2,10 +2,10 @@
 namespace Core42\Db\TableGateway;
 
 use Zend\Db\TableGateway\AbstractTableGateway as ZendAbstractTableGateway;
-use Core42\Application\Registry;
 use Core42\Db\ResultSet\ResultSet;
 use Core42\Model\Model;
 use Core42\Hydrator\ModelHydrator;
+use Zend\ServiceManager\ServiceManager;
 
 abstract class AbstractTableGateway extends ZendAbstractTableGateway
 {
@@ -40,9 +40,15 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
      */
     private static $instance = array();
     
+    /**
+     * 
+     * @var ServiceManager
+     */
+    private static $serviceManager = null;
+    
     protected function __construct()
     {
-        $this->adapter = Registry::getDbAdapter();
+        $this->adapter = $this->getServiceManager()->get("db_master");
         
         $className = $this->rowGatewayDefinition;
         $rowGateway = new $className($this->primaryKey, $this->table, $this->modelPrototype, $this->adapter);
@@ -50,6 +56,24 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         $this->resultSetPrototype = new ResultSet(ResultSet::TYPE_ARRAYOBJECT, $rowGateway);
         
         $this->initialize();
+    }
+    
+    /**
+     * 
+     * @param ServiceManager $manager
+     */
+    public static function setServiceManager(ServiceManager $manager)
+    {
+        self::$serviceManager = $manager;
+    }
+    
+    /**
+     * 
+     * @return \Zend\ServiceManager\ServiceManager
+     */
+    protected function getServiceManager()
+    {
+        return self::$serviceManager;
     }
     
     /**
