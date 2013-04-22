@@ -9,10 +9,15 @@ return array(
             'translator' => 'Zend\I18n\Translator\TranslatorServiceFactory',
         ),
     ),
-    
+
+    'service_manager_static_aware' => array(
+        'AbstractCommand' => 'Core42\Command\AbstractCommand',
+        'AbstractTableGateway' => 'Core42\Db\TableGateway\AbstractTableGateway',
+    ),
+
     'db_master' => array(
         'driver'    => 'mysqli',
-        'database'  => 'push',
+        'database'  => '',
         'username'  => 'root',
         'password'  => '',
         'hostname'  => '127.0.0.1',

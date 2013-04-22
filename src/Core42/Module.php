@@ -4,8 +4,6 @@ namespace Core42;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
-use Core42\Command\AbstractCommand;
-use Core42\Db\TableGateway\AbstractTableGateway;
 
 class Module implements BootstrapListenerInterface,
                             ConfigProviderInterface,
@@ -24,8 +22,16 @@ class Module implements BootstrapListenerInterface,
      */
     public function onBootstrap (\Zend\EventManager\EventInterface $e)
     {   
-        AbstractCommand::setServiceManager($e->getApplication()->getServiceManager());
-        AbstractTableGateway::setServiceManager($e->getApplication()->getServiceManager());
+        $config = $e->getApplication()->getServiceManager()->get("Config");
+        if (empty($config["service_manager_static_aware"])) {
+            return;
+        }
+        foreach ($config["service_manager_static_aware"] as $_class) {
+            if (!is_callable($_class."::setServiceManager")) {
+                throw new \Exception("{$_class} doesn't implement ServiceManagerStaticAwareInterface");
+            }
+            call_user_func($_class."::setServiceManager", $e->getApplication()->getServiceManager());
+        }
     }
 
 	/* 
