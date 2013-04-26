@@ -9,7 +9,7 @@ class Module implements BootstrapListenerInterface,
                             ConfigProviderInterface,
                             AutoloaderProviderInterface
 {
-    /* 
+    /*
      * @see \Zend\ModuleManager\Feature\ConfigProviderInterface::getConfig()
      */
     public function getConfig ()
@@ -17,11 +17,11 @@ class Module implements BootstrapListenerInterface,
         return include __DIR__ . '/../../config/module.config.php';
     }
 
-	/* 
+    /*
      * @see \Zend\ModuleManager\Feature\BootstrapListenerInterface::onBootstrap()
      */
     public function onBootstrap (\Zend\EventManager\EventInterface $e)
-    {   
+    {
         $config = $e->getApplication()->getServiceManager()->get("Config");
         if (empty($config["service_manager_static_aware"])) {
             return;
@@ -34,7 +34,7 @@ class Module implements BootstrapListenerInterface,
         }
     }
 
-	/* 
+    /*
      * @see \Zend\ModuleManager\Feature\AutoloaderProviderInterface::getAutoloaderConfig()
      */
     public function getAutoloaderConfig ()

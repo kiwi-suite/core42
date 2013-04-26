@@ -16,38 +16,38 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
      * @var string
      */
     protected $rowGatewayDefinition = '\Core42\Db\RowGateway\RowGateway';
-    
+
     /**
-     * 
+     *
      * @var string
      */
     protected $table = '';
-    
+
     /**
-     * 
+     *
      * @var array
      */
     protected $primaryKey = array();
-    
+
     /**
-     * 
+     *
      * @var string|Model
      */
     protected $modelPrototype = null;
-    
-    
+
+
     /**
      *
      * @var array
      */
     private static $instance = array();
-    
+
     /**
-     * 
+     *
      * @var ServiceManager
      */
     private static $serviceManager = null;
-    
+
     protected function __construct()
     {
         $this->adapter = $this->getServiceManager()->get("db_master");
@@ -55,31 +55,31 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         $rowGateway = new $className($this->primaryKey, $this->table, $this->modelPrototype, $this->adapter);
 
         $this->resultSetPrototype = new ResultSet(ResultSet::TYPE_ARRAYOBJECT, $rowGateway);
-        
+
         $this->featureSet = new FeatureSet();
         $this->featureSet->addFeature(new MasterSlaveFeature($this->getServiceManager()->get("db_slave")));
-        
+
         $this->initialize();
     }
-    
+
     /**
-     * 
+     *
      * @param ServiceManager $manager
      */
     public static function setServiceManager(ServiceManager $manager)
     {
         self::$serviceManager = $manager;
     }
-    
+
     /**
-     * 
+     *
      * @return \Zend\ServiceManager\ServiceManager
      */
     protected function getServiceManager()
     {
         return self::$serviceManager;
     }
-    
+
     /**
      *
      * @return \Zend\Db\TableGateway\AbstractTableGateway
@@ -90,17 +90,17 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         if (!array_key_exists($className, self::$instance)) {
             self::$instance[$className] = new $className;
         }
-    
+
         return self::$instance[$className];
     }
-    
+
     public function insert($set)
     {
         if ($set instanceof Model) {
             $hydrator = new ModelHydrator();
             $set = $hydrator->extract($set);
         }
-        
+
         return parent::insert($set);
     }
 }

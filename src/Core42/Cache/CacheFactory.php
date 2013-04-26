@@ -12,15 +12,15 @@ class CacheFactory implements ServiceManagerStaticAwareInterface
      * @var ServiceManager
      */
     private static $serviceManager = null;
-    
+
     /**
-     * 
+     *
      * @var array
      */
     private static $_instances = array();
-    
+
     /**
-     * 
+     *
      * @param string $name
      * @return \Zend\Cache\Storage\StorageInterface
      */
@@ -31,9 +31,9 @@ class CacheFactory implements ServiceManagerStaticAwareInterface
         }
         return self::$_instances[$name];
     }
-    
+
     /**
-     * 
+     *
      * @param string $name
      * @throws \Exception
      * @return \Zend\Cache\Storage\StorageInterface
@@ -44,17 +44,17 @@ class CacheFactory implements ServiceManagerStaticAwareInterface
         if (!isset($config["cache"][$name])) {
             throw new \Exception("cache {$name} not found in config");
         }
-        
+
         return StorageFactory::factory($config["cache"][$name]);
     }
-	
+
     /**
-     * 
+     *
      * @param ServiceManager $serviceManager
      */
     public static function setServiceManager(ServiceManager $serviceManager)
     {
         self::$serviceManager = $serviceManager;
     }
-    
+
 }

@@ -28,7 +28,7 @@ return array(
         'charset'   => 'utf8',
     ),
     'db_slave' => false,
-        
+
     'cache' => array(
         'default' => array(
             'adapter' => array(
