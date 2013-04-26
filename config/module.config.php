@@ -13,6 +13,7 @@ return array(
     'service_manager_static_aware' => array(
         'AbstractCommand' => 'Core42\Command\AbstractCommand',
         'AbstractTableGateway' => 'Core42\Db\TableGateway\AbstractTableGateway',
+        'CacheFactory' => 'Core42\Cache\CacheFactory',
     ),
 
     'db_master' => array(
@@ -27,4 +28,18 @@ return array(
         'charset'   => 'utf8',
     ),
     'db_slave' => false,
+        
+    'cache' => array(
+        'default' => array(
+            'adapter' => array(
+                'name' => 'filesystem',
+                'options' => array(
+                    'cache_dir' => getcwd() . "/data/cache",
+                ),
+            ),
+            'plugins' => array(
+                'Serializer',
+            ),
+        ),
+    ),
 );
