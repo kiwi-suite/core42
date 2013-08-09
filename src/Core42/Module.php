@@ -23,14 +23,14 @@ class Module implements BootstrapListenerInterface,
     public function onBootstrap (\Zend\EventManager\EventInterface $e)
     {
         $config = $e->getApplication()->getServiceManager()->get("Config");
-        if (empty($config["service_manager_static_aware"])) {
-            return;
-        }
-        foreach ($config["service_manager_static_aware"] as $_class) {
-            if (!is_callable($_class."::setServiceManager")) {
-                throw new \Exception("{$_class} doesn't implement ServiceManagerStaticAwareInterface");
+        
+        if (!empty($config["service_manager_static_aware"])) {
+            foreach ($config["service_manager_static_aware"] as $_class) {
+                if (!is_callable($_class."::setServiceManager")) {
+                    throw new \Exception("{$_class} doesn't implement ServiceManagerStaticAwareInterface");
+                }
+                call_user_func($_class."::setServiceManager", $e->getApplication()->getServiceManager());
             }
-            call_user_func($_class."::setServiceManager", $e->getApplication()->getServiceManager());
         }
     }
 

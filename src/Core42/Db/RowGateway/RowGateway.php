@@ -4,14 +4,15 @@ namespace Core42\Db\RowGateway;
 use Zend\Db\RowGateway\AbstractRowGateway;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Sql;
-use Core42\Model\Model;
 use Core42\Hydrator\ModelHydrator;
+use Core42\Model\AbstractModel;
+use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 
 class RowGateway extends AbstractRowGateway
 {
     /**
      *
-     * @var Model
+     * @var AbstractModel
      */
     private $model = null;
 
@@ -42,7 +43,7 @@ class RowGateway extends AbstractRowGateway
             throw new \Zend\Db\RowGateway\Exception\InvalidArgumentException('The Sql object provided does not have a table that matches this row object');
         }
 
-        if ($modelPrototype instanceof Model) {
+        if ($modelPrototype instanceof AbstractModel) {
             $this->model = $modelPrototype;
         } elseif (is_string($modelPrototype)) {
             $this->model = new $modelPrototype;
@@ -77,7 +78,30 @@ class RowGateway extends AbstractRowGateway
 
     /**
      *
-     * @return \Core42\Db\Model\Model
+     * @param string $name
+     * @param StrategyInterface $strategy
+     * @return \Core42\Db\RowGateway\RowGateway
+     */
+    public function addHydratorStrategy($name, StrategyInterface $strategy)
+    {
+        $this->hydrator->addStrategy($name, $strategy);
+        return $this;
+    }
+
+    /**
+     *
+     * @param string $name
+     * @return \Core42\Db\RowGateway\RowGateway
+     */
+    public function removeHydratorStrategy($name)
+    {
+        $this->hydrator->removeStrategy($name);
+        return $this;
+    }
+
+    /**
+     *
+     * @return \Core42\Db\Model\AbstractModel
      */
     public function get()
     {
@@ -86,10 +110,10 @@ class RowGateway extends AbstractRowGateway
 
     /**
      *
-     * @param Model $model
+     * @param \Core42\Db\Model\AbstractModel $model
      * @return \Core42\Db\RowGateway\RowGateway
      */
-    public function set(Model $model)
+    public function set(AbstractModel $model)
     {
         if (get_class($model) !== get_class($this->model)) {
             throw new \Zend\Db\RowGateway\Exception\InvalidArgumentException('Invalid model object');
@@ -107,5 +131,17 @@ class RowGateway extends AbstractRowGateway
         $model = new $modelPrototype();
 
         $this->model = $this->hydrator->hydrate($this->data, $model);
+    }
+
+    public function save()
+    {
+        $this->data = $this->hydrator->extract($this->model);
+        parent::save();
+    }
+
+    public function delete()
+    {
+        $this->data = $this->hydrator->extract($this->model);
+        parent::delete();
     }
 }

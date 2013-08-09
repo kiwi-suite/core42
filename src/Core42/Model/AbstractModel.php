@@ -1,7 +1,7 @@
 <?php
 namespace Core42\Model;
 
-abstract class Model
+abstract class AbstractModel
 {
 
 }

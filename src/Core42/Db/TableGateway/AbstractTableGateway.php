@@ -3,11 +3,11 @@ namespace Core42\Db\TableGateway;
 
 use Zend\Db\TableGateway\AbstractTableGateway as ZendAbstractTableGateway;
 use Core42\Db\ResultSet\ResultSet;
-use Core42\Model\Model;
 use Core42\Hydrator\ModelHydrator;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Db\TableGateway\Feature\FeatureSet;
 use Zend\Db\TableGateway\Feature\MasterSlaveFeature;
+use Core42\Model\AbstractModel;
 
 abstract class AbstractTableGateway extends ZendAbstractTableGateway
 {
@@ -31,7 +31,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
 
     /**
      *
-     * @var string|Model
+     * @var string|AbstractModel
      */
     protected $modelPrototype = null;
 
@@ -58,6 +58,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
 
         $this->featureSet = new FeatureSet();
         $this->featureSet->addFeature(new MasterSlaveFeature($this->getServiceManager()->get("db_slave")));
+        $this->featureSet->addFeature(new \Core42\Db\TableGateway\Feature\MetadataFeature());
 
         $this->initialize();
     }
@@ -96,7 +97,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
 
     public function insert($set)
     {
-        if ($set instanceof Model) {
+        if ($set instanceof AbstractModel) {
             $hydrator = new ModelHydrator();
             $set = $hydrator->extract($set);
         }
