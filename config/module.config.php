@@ -14,6 +14,7 @@ return array(
         'AbstractCommand' => 'Core42\Command\AbstractCommand',
         'AbstractTableGateway' => 'Core42\Db\TableGateway\AbstractTableGateway',
         'SqlQuery' => 'Core42\Db\SqlQuery\SqlQuery',
+        'DataConverter' => 'Core42\Db\DataConverter\DataConverter',
     ),
 
     'db_master' => array(
