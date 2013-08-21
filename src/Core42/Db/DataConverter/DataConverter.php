@@ -27,6 +27,15 @@ class DataConverter implements ServiceManagerStaticAwareInterface
 
     /**
      *
+     * @return \Core42\Db\DataConverter\DataConverter
+     */
+    public static function createInstance()
+    {
+        return new self;
+    }
+
+    /**
+     *
      * @param ServiceManager $manager
      */
     public static function setServiceManager(ServiceManager $manager)
