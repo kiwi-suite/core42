@@ -41,20 +41,30 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
 
     /**
      *
+     * @var ModelHydrator
+     */
+    protected $hydrator;
+
+    /**
+     *
      * @var ServiceManager
      */
     private static $serviceManager = null;
 
     protected function __construct()
     {
-        $this->adapter = $this->getServiceManager()->get("db_master");
+        $this->adapter = $this->getServiceManager()->get("db_slave");
 
         $metadata = new Metadata($this->adapter);
+
+        if ($this->hydrator === null) {
+            $this->hydrator = new ModelHydrator();
+        }
 
         $this->featureSet = new FeatureSet();
         $this->featureSet->addFeature(new MasterSlaveFeature($this->getServiceManager()->get("db_slave")));
         $this->featureSet->addFeature(new MetadataFeature($metadata));
-        $this->featureSet->addFeature(new RowGatewayFeature($this->rowGatewayDefinition, $this->modelPrototype));
+        $this->featureSet->addFeature(new RowGatewayFeature($this->rowGatewayDefinition, $this->modelPrototype, $this->hydrator));
         $this->featureSet->addFeature(new HydratorFeature($metadata));
 
         $this->initialize();
@@ -92,11 +102,18 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         return self::$instance[$className];
     }
 
+    /**
+     * @return \Core42\Hydrator\ModelHydrator
+     */
+    public function getHydrator()
+    {
+        return $this->hydrator;
+    }
+
     public function insert($set)
     {
         if ($set instanceof AbstractModel) {
-            $hydrator = new ModelHydrator();
-            $set = $hydrator->extract($set);
+            $set = $this->hydrator->extract($set);
         }
 
         return parent::insert($set);

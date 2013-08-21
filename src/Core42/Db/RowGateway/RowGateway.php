@@ -22,7 +22,7 @@ class RowGateway extends AbstractRowGateway
      */
     private $hydrator = null;
 
-    public function __construct($primaryKeyColumn, $table, $modelPrototype, $adapterOrSql = null)
+    public function __construct($primaryKeyColumn, $table, $modelPrototype, $adapterOrSql = null, ModelHydrator $hydrator)
     {
         // setup primary key
         $this->primaryKeyColumn = (array) $primaryKeyColumn;
@@ -51,7 +51,7 @@ class RowGateway extends AbstractRowGateway
             throw new \Zend\Db\RowGateway\Exception\InvalidArgumentException('Invalid model object');
         }
 
-        $this->hydrator = new ModelHydrator();
+        $this->hydrator = $hydrator;
 
         $this->initialize();
     }

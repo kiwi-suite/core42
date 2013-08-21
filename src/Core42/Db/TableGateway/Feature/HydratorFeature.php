@@ -1,7 +1,6 @@
 <?php
 namespace Core42\Db\TableGateway\Feature;
 
-use Core42\Db\RowGateway\RowGateway;
 use Core42\Hydrator\Strategy\BooleanStrategy;
 use Core42\Hydrator\Strategy\DatetimeStrategy;
 use Zend\Db\TableGateway\Feature\AbstractFeature;
@@ -32,16 +31,10 @@ class HydratorFeature extends AbstractFeature
             /* @var $_column \Zend\Db\Metadata\Object\ColumnObject */
             switch (true) {
             	case ($_column->getDataType() == 'datetime'):
-                    $rowGateway = $this->tableGateway->getResultSetPrototype()->getArrayObjectPrototype();
-                    if ($rowGateway instanceof RowGateway) {
-                        $rowGateway->addHydratorStrategy($_column->getName(), new DatetimeStrategy());
-                    }
+            	    $this->tableGateway->getHydrator()->addStrategy($_column->getName(), new DatetimeStrategy());
             	    break;
             	case ($_column->getDataType() == "bit" && $_column->getNumericPrecision() == 1):
-            	    $rowGateway = $this->tableGateway->getResultSetPrototype()->getArrayObjectPrototype();
-            	    if ($rowGateway instanceof RowGateway) {
-            	        $rowGateway->addHydratorStrategy($_column->getName(), new BooleanStrategy());
-            	    }
+            	    $this->tableGateway->getHydrator()->addStrategy($_column->getName(), new BooleanStrategy());
             	    break;
             	default:
                     break;

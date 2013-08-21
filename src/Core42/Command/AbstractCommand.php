@@ -52,18 +52,12 @@ abstract class AbstractCommand implements ServiceManagerStaticAwareInterface
      */
     final public function run()
     {
-        $this->validate();
         $this->preExecute();
         $this->execute();
         $this->postExecute();
 
         return $this;
     }
-
-    /**
-     *
-     */
-    protected function validate(){}
 
     /**
      *

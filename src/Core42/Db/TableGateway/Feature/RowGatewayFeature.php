@@ -3,6 +3,7 @@ namespace Core42\Db\TableGateway\Feature;
 
 use Zend\Db\TableGateway\Feature\AbstractFeature;
 use Core42\Db\ResultSet\ResultSet;
+use Core42\Hydrator\ModelHydrator;
 
 class RowGatewayFeature extends AbstractFeature
 {
@@ -10,10 +11,13 @@ class RowGatewayFeature extends AbstractFeature
 
     private $modelPrototype;
 
-    public function __construct($rowGatewayDefinition, $modelPrototype)
+    private $hydrator;
+
+    public function __construct($rowGatewayDefinition, $modelPrototype, ModelHydrator $hydrator)
     {
         $this->rowGatewayDefinition = $rowGatewayDefinition;
         $this->modelPrototype = $modelPrototype;
+        $this->hydrator = $hydrator;
     }
 
     public function postInitialize()
@@ -23,7 +27,7 @@ class RowGatewayFeature extends AbstractFeature
 
         $className = $this->rowGatewayDefinition;
 
-        $rowGateway = new $className($primaryKey, $this->tableGateway->table, $this->modelPrototype, $this->tableGateway->adapter);
+        $rowGateway = new $className($primaryKey, $this->tableGateway->table, $this->modelPrototype, $this->tableGateway->adapter, $this->hydrator);
 
         $this->tableGateway->resultSetPrototype = new ResultSet(ResultSet::TYPE_ARRAYOBJECT, $rowGateway);
     }
