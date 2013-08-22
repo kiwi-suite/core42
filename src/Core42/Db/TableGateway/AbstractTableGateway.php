@@ -159,7 +159,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     {
         if ($where instanceof AbstractModel) {
             $rowGateway = $this->getRowGateway();
-            $rowGateway->set($where, true);
+            $rowGateway->set($where);
             return $rowGateway->delete();
         }
         return parent::delete($where);

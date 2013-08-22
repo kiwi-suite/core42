@@ -16,11 +16,11 @@ class MySQL implements AdapterInterface
 
     public function convertBooleanToDb($boolean)
     {
-        return ($boolean === true) ? 1 : 0;
+        return ($boolean === true) ? "true" : "false";
     }
 
     public function convertBooleanToLocal($value)
     {
-        return (boolean) $value;
+        return ($value === "true") ? true : false;
     }
 }

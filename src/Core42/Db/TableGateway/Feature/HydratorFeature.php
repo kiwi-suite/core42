@@ -33,8 +33,8 @@ class HydratorFeature extends AbstractFeature
             	case ($_column->getDataType() == 'datetime'):
             	    $this->tableGateway->getHydrator()->addStrategy($_column->getName(), new DatetimeStrategy());
             	    break;
-            	case ($_column->getDataType() == "bit" && $_column->getNumericPrecision() == 1):
-            	    $this->tableGateway->getHydrator()->addStrategy($_column->getName(), new BooleanStrategy());
+            	case ($_column->getDataType() == "enum" && in_array($_column->getErrata("permitted_values"), array(array("true", "false"), array("false", "true")))):
+                    $this->tableGateway->getHydrator()->addStrategy($_column->getName(), new BooleanStrategy());
             	    break;
             	default:
                     break;
