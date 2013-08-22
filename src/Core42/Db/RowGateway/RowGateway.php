@@ -6,7 +6,6 @@ use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Sql;
 use Core42\Hydrator\ModelHydrator;
 use Core42\Model\AbstractModel;
-use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 
 class RowGateway extends AbstractRowGateway
 {
@@ -58,49 +57,6 @@ class RowGateway extends AbstractRowGateway
 
     /**
      *
-     */
-    public function __get($name){}
-
-    /**
-     *
-     */
-    public function __set($name, $value){}
-
-    /**
-     *
-     */
-    public function __isset($name){}
-
-    /**
-     *
-     */
-    public function __unset($name){}
-
-    /**
-     *
-     * @param string $name
-     * @param StrategyInterface $strategy
-     * @return \Core42\Db\RowGateway\RowGateway
-     */
-    public function addHydratorStrategy($name, StrategyInterface $strategy)
-    {
-        $this->hydrator->addStrategy($name, $strategy);
-        return $this;
-    }
-
-    /**
-     *
-     * @param string $name
-     * @return \Core42\Db\RowGateway\RowGateway
-     */
-    public function removeHydratorStrategy($name)
-    {
-        $this->hydrator->removeStrategy($name);
-        return $this;
-    }
-
-    /**
-     *
      * @return \Core42\Db\Model\AbstractModel
      */
     public function get()
@@ -113,12 +69,17 @@ class RowGateway extends AbstractRowGateway
      * @param \Core42\Db\Model\AbstractModel $model
      * @return \Core42\Db\RowGateway\RowGateway
      */
-    public function set(AbstractModel $model)
+    public function set(AbstractModel $model, $rowExistsInDatabase = false)
     {
+        if ($this->model === $model) {
+            return $this;
+        }
+
         if (get_class($model) !== get_class($this->model)) {
             throw new \Zend\Db\RowGateway\Exception\InvalidArgumentException('Invalid model object');
         }
-        $this->populate($this->hydrator->extract($model), $this->rowExistsInDatabase());
+        $this->model = $model;
+        parent::populate($this->hydrator->extract($this->model), $rowExistsInDatabase);
 
         return $this;
     }
@@ -126,22 +87,18 @@ class RowGateway extends AbstractRowGateway
     public function populate($rowData, $rowExistsInDatabase = false)
     {
         parent::populate($rowData, $rowExistsInDatabase);
-
-        $modelPrototype = get_class($this->model);
-        $model = new $modelPrototype();
-
-        $this->model = $this->hydrator->hydrate($this->data, $model);
+        $this->model = $this->hydrator->hydrate($this->data, $this->model);
     }
 
     public function save()
     {
         $this->data = $this->hydrator->extract($this->model);
-        parent::save();
+        return parent::save();
     }
 
     public function delete()
     {
         $this->data = $this->hydrator->extract($this->model);
-        parent::delete();
+        return parent::delete();
     }
 }

@@ -11,6 +11,7 @@ use Zend\Db\Metadata\Metadata;
 use Zend\Db\TableGateway\Feature\MetadataFeature;
 use Core42\Db\TableGateway\Feature\HydratorFeature;
 use Core42\Db\TableGateway\Feature\RowGatewayFeature;
+use Core42\Db\RowGateway\RowGateway;
 
 abstract class AbstractTableGateway extends ZendAbstractTableGateway
 {
@@ -18,7 +19,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
      *
      * @var string
      */
-    protected $rowGatewayDefinition = '\Core42\Db\RowGateway\RowGateway';
+    private $rowGatewayDefinition = '\Core42\Db\RowGateway\RowGateway';
 
     /**
      *
@@ -47,13 +48,19 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
 
     /**
      *
+     * @var \Core42\Db\RowGateway\RowGateway
+     */
+    protected $rowGatewayPrototype;
+
+    /**
+     *
      * @var ServiceManager
      */
     private static $serviceManager = null;
 
     protected function __construct()
     {
-        $this->adapter = $this->getServiceManager()->get("db_slave");
+        $this->adapter = $this->getServiceManager()->get("db_master");
 
         $metadata = new Metadata($this->adapter);
 
@@ -103,6 +110,24 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     }
 
     /**
+     *
+     * @param RowGateway $rowGateway
+     */
+    public function setRowGateway(RowGateway $rowGateway)
+    {
+        $this->rowGatewayPrototype = $rowGateway;
+    }
+
+    /**
+     *
+     * @return \Core42\Db\RowGateway\RowGateway
+     */
+    public function getRowGateway()
+    {
+        return clone $this->rowGatewayPrototype;
+    }
+
+    /**
      * @return \Core42\Hydrator\ModelHydrator
      */
     public function getHydrator()
@@ -113,9 +138,30 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     public function insert($set)
     {
         if ($set instanceof AbstractModel) {
-            $set = $this->hydrator->extract($set);
+            $rowGateway = $this->getRowGateway();
+            $rowGateway->set($set, false);
+            return $rowGateway->save();
         }
-
         return parent::insert($set);
+    }
+
+    public function update($set, $where = null)
+    {
+        if ($set instanceof AbstractModel && $where === null) {
+            $rowGateway = $this->getRowGateway();
+            $rowGateway->set($set, true);
+            return $rowGateway->save();
+        }
+        return parent::update($set, $where);
+    }
+
+    public function delete($where)
+    {
+        if ($where instanceof AbstractModel) {
+            $rowGateway = $this->getRowGateway();
+            $rowGateway->set($where, true);
+            return $rowGateway->delete();
+        }
+        return parent::delete($where);
     }
 }

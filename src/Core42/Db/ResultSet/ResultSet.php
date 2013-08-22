@@ -1,9 +1,9 @@
 <?php
 namespace Core42\Db\ResultSet;
 
-use Zend\Db\ResultSet\ResultSet as ZendResultSet;
+use Zend\Db\ResultSet\HydratingResultSet;
 
-class ResultSet extends ZendResultSet
+class ResultSet extends HydratingResultSet
 {
 
     /**
@@ -22,12 +22,5 @@ class ResultSet extends ZendResultSet
         $resultSet = new self();
         $resultSet->initialize($data);
         return $resultSet;
-    }
-
-    public function save()
-    {
-        foreach ($this as $obj) {
-            $obj->save();
-        }
     }
 }

@@ -17,6 +17,11 @@ class RowGatewayFeature extends AbstractFeature
     {
         $this->rowGatewayDefinition = $rowGatewayDefinition;
         $this->modelPrototype = $modelPrototype;
+
+        if (is_string($this->modelPrototype)) {
+            $this->modelPrototype = new $modelPrototype();
+        }
+
         $this->hydrator = $hydrator;
     }
 
@@ -29,6 +34,7 @@ class RowGatewayFeature extends AbstractFeature
 
         $rowGateway = new $className($primaryKey, $this->tableGateway->table, $this->modelPrototype, $this->tableGateway->adapter, $this->hydrator);
 
-        $this->tableGateway->resultSetPrototype = new ResultSet(ResultSet::TYPE_ARRAYOBJECT, $rowGateway);
+        $this->tableGateway->resultSetPrototype = new ResultSet($this->hydrator, $this->modelPrototype);
+        $this->tableGateway->setRowGateway($rowGateway);
     }
 }
