@@ -4,10 +4,12 @@ namespace Core42;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
+use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
 
 class Module implements BootstrapListenerInterface,
                             ConfigProviderInterface,
-                            AutoloaderProviderInterface
+                            AutoloaderProviderInterface,
+                            ConsoleBannerProviderInterface
 {
     /*
      * @see \Zend\ModuleManager\Feature\ConfigProviderInterface::getConfig()
@@ -23,7 +25,7 @@ class Module implements BootstrapListenerInterface,
     public function onBootstrap (\Zend\EventManager\EventInterface $e)
     {
         $config = $e->getApplication()->getServiceManager()->get("Config");
-        
+
         if (!empty($config["service_manager_static_aware"])) {
             foreach ($config["service_manager_static_aware"] as $_class) {
                 if (!is_callable($_class."::setServiceManager")) {
@@ -45,4 +47,13 @@ class Module implements BootstrapListenerInterface,
             ),
         );
     }
+
+	/*
+     * @see \Zend\ModuleManager\Feature\ConsoleBannerProviderInterface::getConsoleBanner()
+     */
+    public function getConsoleBanner(\Zend\Console\Adapter\AdapterInterface $console)
+    {
+        return "Core42 - (copy) raum42 OG 2010 - ".date("Y");
+    }
+
 }
