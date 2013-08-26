@@ -1,6 +1,11 @@
 {
     "name": "fruit42/core42",
+    "type": "modulework-module",
     "require": {
-        "php": ">=5.3.3"
+        "php": ">=5.3.3",
+        "composer/installers": "~1.0"
+    },
+    "extra": {
+        "installer-name": "Core42"
     }
 }
