@@ -3,7 +3,7 @@
     "type": "fruit42-module",
     "require": {
         "php": ">=5.3.3",
-        "composer/installers": "~1.0"
+        "fruit42/skeletonInstaller42": "*"
     },
     "extra": {
         "installer-name": "Core42"
