@@ -84,7 +84,7 @@ class RowGateway extends AbstractRowGateway
         return $this;
     }
 
-    public function populate($rowData, $rowExistsInDatabase = false)
+    public function populate(array $rowData, $rowExistsInDatabase = false)
     {
         parent::populate($rowData, $rowExistsInDatabase);
         $this->model = $this->hydrator->hydrate($this->data, $this->model);
