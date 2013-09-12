@@ -27,7 +27,7 @@ class RowGatewayFeature extends AbstractFeature
 
     public function postInitialize()
     {
-        $metadata = $this->tableGateway->featureSet->getFeatureByClassName('Zend\Db\TableGateway\Feature\MetadataFeature');
+        $metadata = $this->tableGateway->featureSet->getFeatureByClassName('Core42\Db\TableGateway\Feature\MetadataFeature');
         $primaryKey = $metadata->sharedData['metadata']['primaryKey'];
 
         $className = $this->rowGatewayDefinition;

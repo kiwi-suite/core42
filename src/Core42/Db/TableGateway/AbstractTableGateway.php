@@ -8,10 +8,10 @@ use Zend\Db\TableGateway\Feature\FeatureSet;
 use Zend\Db\TableGateway\Feature\MasterSlaveFeature;
 use Core42\Model\AbstractModel;
 use Zend\Db\Metadata\Metadata;
-use Zend\Db\TableGateway\Feature\MetadataFeature;
 use Core42\Db\TableGateway\Feature\HydratorFeature;
 use Core42\Db\TableGateway\Feature\RowGatewayFeature;
 use Core42\Db\RowGateway\RowGateway;
+use Core42\Db\TableGateway\Feature\MetadataFeature;
 
 abstract class AbstractTableGateway extends ZendAbstractTableGateway
 {
@@ -51,6 +51,12 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
      * @var \Core42\Db\RowGateway\RowGateway
      */
     protected $rowGatewayPrototype;
+    
+    /**
+     * 
+     * @var Metadata
+     */
+    protected $metadata;
 
     /**
      *
@@ -62,17 +68,17 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     {
         $this->adapter = $this->getServiceManager()->get("db_master");
 
-        $metadata = new Metadata($this->adapter);
+        $this->metadata = new Metadata($this->adapter);
 
         if ($this->hydrator === null) {
             $this->hydrator = new ModelHydrator();
         }
-
+        
         $this->featureSet = new FeatureSet();
         $this->featureSet->addFeature(new MasterSlaveFeature($this->getServiceManager()->get("db_slave")));
-        $this->featureSet->addFeature(new MetadataFeature($metadata));
+        $this->featureSet->addFeature(new MetadataFeature($this->metadata));
         $this->featureSet->addFeature(new RowGatewayFeature($this->rowGatewayDefinition, $this->modelPrototype, $this->hydrator));
-        $this->featureSet->addFeature(new HydratorFeature($metadata));
+        $this->featureSet->addFeature(new HydratorFeature($this->metadata));
 
         $this->initialize();
     }
@@ -163,5 +169,40 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
             return $rowGateway->delete();
         }
         return parent::delete($where);
+    }
+    
+    
+    /**
+     * 
+     * @param string|int|array $values
+     * @return \Core42\Model\AbstractModel|null
+     */
+    public function selectByPrimary($values)
+    {
+        if (!is_array($values) && !is_int($values) && !is_string($values)) {
+            throw new \Exception("invalid value");
+        }
+        
+        $metadata = $this->getFeatureSet()->getFeatureByClassName('Core42\Db\TableGateway\Feature\MetadataFeature');
+        $primary = $metadata->getPrimaryKey();
+        
+        if ((!is_array($values) && count($primary) != 1) || count($values) != count($primary)) {
+            throw new \Exception("invalid value");
+        }
+        
+        if (!is_array($values)) {
+            $values = array($primary[0] => $values);
+        }
+        
+        if (count(array_diff(array_keys($values), $primary)) > 0) {
+            throw new \Exception("invalid value");
+        }
+        
+        $resultSet = $this->select($values);
+        if ($resultSet->count() == 0) {
+            return null;
+        }
+        
+        return $resultSet->current();
     }
 }
