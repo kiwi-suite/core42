@@ -21,4 +21,3 @@ return array(
     'Core42\Module'                                            => __DIR__ . '/src/Core42/Module.php',
     'Core42\ServiceManager\ServiceManagerStaticAwareInterface' => __DIR__ . '/src/Core42/ServiceManager/ServiceManagerStaticAwareInterface.php',
 );
-

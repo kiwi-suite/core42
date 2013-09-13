@@ -13,10 +13,22 @@ use Core42\Model\AbstractModel;
 
 class SqlQuery implements ServiceManagerStaticAwareInterface
 {
+    /**
+     *
+     * @var \Zend\Db\Adapter\Adapter
+     */
     private $adapterMaster;
 
+    /**
+     *
+     * @var \Zend\Db\Adapter\Adapter
+     */
     private $adapterSlave;
 
+    /**
+     *
+     * @var Sql
+     */
     private $sql;
 
     /**
@@ -27,7 +39,6 @@ class SqlQuery implements ServiceManagerStaticAwareInterface
 
     public function __construct()
     {
-
         $this->adapterMaster = $this->getServiceManager()->get('Db\Master');
         $this->adapterSlave = $this->adapterMaster;
         if ($this->getServiceManager()->has('Db\Slave')) {
@@ -53,30 +64,57 @@ class SqlQuery implements ServiceManagerStaticAwareInterface
         return self::$serviceManager;
     }
 
+    /**
+     *
+     * @param string $table
+     * @return \Zend\Db\Sql\Select
+     */
     public function select($table = null)
     {
         $this->sql =  new Sql($this->adapterSlave);
         return $this->sql->select($table);
     }
 
+    /**
+     *
+     * @param string $table
+     * @return \Zend\Db\Sql\Insert
+     */
     public function insert($table = null)
     {
         $this->sql =  new Sql($this->adapterMaster);
         return $this->sql->insert($table);
     }
 
+    /**
+     *
+     * @param string $table
+     * @return \Zend\Db\Sql\Update
+     */
     public function update($table = null)
     {
         $this->sql =  new Sql($this->adapterMaster);
         return $this->sql->update($table);
     }
 
+    /**
+     *
+     * @param string $table
+     * @return \Zend\Db\Sql\Delete
+     */
     public function delete($table = null)
     {
         $this->sql =  new Sql($this->adapterMaster);
         return $this->sql->delete($table);
     }
 
+    /**
+     *
+     * @param PreparableSqlInterface $prepareableSql
+     * @param AbstractModel $model
+     * @throws \Exception
+     * @return \Core42\Db\ResultSet\ResultSet
+     */
     public function execute(PreparableSqlInterface $prepareableSql, AbstractModel $model = null)
     {
         if (!($this->sql instanceof Sql)) {

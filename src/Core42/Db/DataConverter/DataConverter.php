@@ -52,21 +52,41 @@ class DataConverter implements ServiceManagerStaticAwareInterface
         return self::$serviceManager;
     }
 
+    /**
+     *
+     * @param \DateTime $datetime
+     * @return string
+     */
     public function convertDatetimeToDb(\DateTime $datetime)
     {
         return $this->adapter->convertDatetimeToDb($datetime);
     }
 
+    /**
+     *
+     * @param string $value
+     * @return DateTime
+     */
     public function convertDatetimeToLocal($value)
     {
         return $this->adapter->convertDatetimeToLocal($value);
     }
 
+    /**
+     *
+     * @param boolean $boolean
+     * @return string
+     */
     public function convertBooleanToDb($boolean)
     {
         return $this->adapter->convertBooleanToDb($boolean);
     }
 
+    /**
+     *
+     * @param string $value
+     * @return boolean
+     */
     public function convertBooleanToLocal($value)
     {
         return $this->adapter->convertBooleanToLocal($value);

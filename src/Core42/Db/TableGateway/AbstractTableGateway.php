@@ -64,6 +64,9 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
      */
     private static $serviceManager = null;
 
+    /**
+     *
+     */
     protected function __construct()
     {
         $this->adapter = $this->getServiceManager()->get('Db\Master');
@@ -145,6 +148,10 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         return $this->hydrator;
     }
 
+    /**
+     *
+     * @see \Zend\Db\TableGateway\AbstractTableGateway::insert()
+     */
     public function insert($set)
     {
         if ($set instanceof AbstractModel) {
@@ -155,6 +162,10 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         return parent::insert($set);
     }
 
+    /**
+     *
+     * @see \Zend\Db\TableGateway\AbstractTableGateway::update()
+     */
     public function update($set, $where = null)
     {
         if ($set instanceof AbstractModel && $where === null) {
@@ -165,6 +176,10 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         return parent::update($set, $where);
     }
 
+    /**
+     *
+     * @see \Zend\Db\TableGateway\AbstractTableGateway::delete()
+     */
     public function delete($where)
     {
         if ($where instanceof AbstractModel) {
@@ -174,7 +189,6 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         }
         return parent::delete($where);
     }
-
 
     /**
      *

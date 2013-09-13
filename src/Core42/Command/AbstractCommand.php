@@ -12,12 +12,19 @@ abstract class AbstractCommand implements ServiceManagerStaticAwareInterface
      */
     private static $serviceManager = null;
 
+    /**
+     *
+     * @return \Core42\Command\AbstractCommand
+     */
     public static function createCommand()
     {
         $className = get_called_class();
         return new $className;
     }
 
+    /**
+     *
+     */
     final protected function __construct()
     {
         $this->init();

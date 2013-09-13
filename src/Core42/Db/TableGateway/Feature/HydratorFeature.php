@@ -14,7 +14,6 @@ class HydratorFeature extends AbstractFeature
     protected $metadata = null;
 
     /**
-     * Constructor
      *
      * @param MetadataInterface $metadata
      */
@@ -23,6 +22,9 @@ class HydratorFeature extends AbstractFeature
         $this->metadata = $metadata;
     }
 
+    /**
+     *
+     */
     public function postInitialize()
     {
         $columns = $this->metadata->getColumns($this->tableGateway->getTable());

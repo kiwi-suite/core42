@@ -3,8 +3,19 @@ namespace Core42\Model;
 
 class DefaultModel extends AbstractModel
 {
+    /**
+     *
+     * @var array
+     */
     private $properties = array();
 
+    /**
+     *
+     * @param string $method
+     * @param mixed $params
+     * @throws \Exception
+     * @return \Core42\Model\DefaultModel
+     */
     public function __call($method, $params)
     {
         $return = null;
@@ -22,6 +33,10 @@ class DefaultModel extends AbstractModel
         return $return;
     }
 
+    /**
+     *
+     * @param array $data
+     */
     public function exchangeArray($data)
     {
         foreach ($data as $name => $value) {

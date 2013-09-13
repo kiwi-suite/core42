@@ -21,6 +21,15 @@ class RowGateway extends AbstractRowGateway
      */
     private $hydrator = null;
 
+    /**
+     *
+     * @param string|array $primaryKeyColumn
+     * @param string $table
+     * @param string|AbstractModel $modelPrototype
+     * @param string $adapterOrSql
+     * @param ModelHydrator $hydrator
+     * @throws \Zend\Db\RowGateway\Exception\InvalidArgumentException
+     */
     public function __construct($primaryKeyColumn, $table, $modelPrototype, $adapterOrSql = null, ModelHydrator $hydrator)
     {
         // setup primary key
@@ -84,18 +93,30 @@ class RowGateway extends AbstractRowGateway
         return $this;
     }
 
+    /**
+     *
+     * @see \Zend\Db\RowGateway\AbstractRowGateway::populate()
+     */
     public function populate(array $rowData, $rowExistsInDatabase = false)
     {
         parent::populate($rowData, $rowExistsInDatabase);
         $this->model = $this->hydrator->hydrate($this->data, $this->model);
     }
 
+    /**
+     *
+     * @see \Zend\Db\RowGateway\AbstractRowGateway::save()
+     */
     public function save()
     {
         $this->data = $this->hydrator->extract($this->model);
         return parent::save();
     }
 
+    /**
+     *
+     * @see \Zend\Db\RowGateway\AbstractRowGateway::delete()
+     */
     public function delete()
     {
         $this->data = $this->hydrator->extract($this->model);

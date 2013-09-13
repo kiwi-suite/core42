@@ -7,12 +7,30 @@ use Core42\Hydrator\ModelHydrator;
 
 class RowGatewayFeature extends AbstractFeature
 {
+    /**
+     *
+     * @var string
+     */
     private $rowGatewayDefinition;
 
+    /**
+     *
+     * @var string|\Core42\Model\AbstractModel
+     */
     private $modelPrototype;
 
+    /**
+     *
+     * @var ModelHydrator
+     */
     private $hydrator;
 
+    /**
+     *
+     * @param string $rowGatewayDefinition
+     * @param string|AbstractModel $modelPrototype
+     * @param ModelHydrator $hydrator
+     */
     public function __construct($rowGatewayDefinition, $modelPrototype, ModelHydrator $hydrator)
     {
         $this->rowGatewayDefinition = $rowGatewayDefinition;
@@ -25,6 +43,9 @@ class RowGatewayFeature extends AbstractFeature
         $this->hydrator = $hydrator;
     }
 
+    /**
+     *
+     */
     public function postInitialize()
     {
         $metadata = $this->tableGateway->featureSet->getFeatureByClassName('Core42\Db\TableGateway\Feature\MetadataFeature');
