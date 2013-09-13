@@ -66,7 +66,11 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
 
     protected function __construct()
     {
-        $this->adapter = $this->getServiceManager()->get("db_master");
+        $this->adapter = $this->getServiceManager()->get('Db\Master');
+        $slave = $this->adapter;
+        if ($this->getServiceManager()->has('Db\Slave')) {
+            $slave = $this->getServiceManager()->get('Db\Slave');
+        }
 
         $this->metadata = new Metadata($this->adapter);
 
@@ -75,7 +79,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         }
         
         $this->featureSet = new FeatureSet();
-        $this->featureSet->addFeature(new MasterSlaveFeature($this->getServiceManager()->get("db_slave")));
+        $this->featureSet->addFeature(new MasterSlaveFeature($slave));
         $this->featureSet->addFeature(new MetadataFeature($this->metadata));
         $this->featureSet->addFeature(new RowGatewayFeature($this->rowGatewayDefinition, $this->modelPrototype, $this->hydrator));
         $this->featureSet->addFeature(new HydratorFeature($this->metadata));

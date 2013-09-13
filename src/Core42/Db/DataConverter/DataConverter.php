@@ -21,7 +21,7 @@ class DataConverter implements ServiceManagerStaticAwareInterface
 
     public function __construct()
     {
-        $className = 'Core42\Db\DataConverter\Adapter\\' . $this->getServiceManager()->get('db_master')->getPlatform()->getName();
+        $className = 'Core42\Db\DataConverter\Adapter\\' . $this->getServiceManager()->get('Db\Master')->getPlatform()->getName();
         $this->adapter = new $className;
     }
 

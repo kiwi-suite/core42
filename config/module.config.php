@@ -3,12 +3,9 @@ namespace Core42;
 
 return array(
     'service_manager' => array(
-        'factories' => array(
-            'db_master' => 'Core42\Db\Adapter\MasterServiceFactory',
-            'db_slave' => 'Core42\Db\Adapter\SlaveServiceFactory',
-        ),
         'abstract_factories' => array(
             'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
+            'Zend\Db\Adapter\AdapterAbstractServiceFactory'
         ),
     ),
     
@@ -34,16 +31,31 @@ return array(
         'DataConverter' => 'Core42\Db\DataConverter\DataConverter',
     ),
 
-    'db_master' => array(
-        'driver'    => 'mysqli',
-        'database'  => '',
-        'username'  => 'root',
-        'password'  => '',
-        'hostname'  => '127.0.0.1',
-        'options'   => array(
-            'buffer_results' => true
+    'db' => array(
+        'adapters' =>array(
+            'Db\Master' => array(
+                'driver'    => 'mysqli',
+                'database'  => '',
+                'username'  => 'root',
+                'password'  => '',
+                'hostname'  => '127.0.0.1',
+                'options'   => array(
+                    'buffer_results' => true
+                ),
+                'charset'   => 'utf8',
+            ),
+// Set this for using Master/Slave Adapters
+//             'Db\Slave' => array(
+//                 'driver'    => 'mysqli',
+//                 'database'  => '',
+//                 'username'  => 'root',
+//                 'password'  => '',
+//                 'hostname'  => '127.0.0.1',
+//                 'options'   => array(
+//                     'buffer_results' => true
+//                 ),
+//                 'charset'   => 'utf8',
+//             ),
         ),
-        'charset'   => 'utf8',
     ),
-    'db_slave' => false,
 );
