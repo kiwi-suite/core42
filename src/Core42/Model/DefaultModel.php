@@ -12,7 +12,7 @@ class DefaultModel extends AbstractModel
         $variableName = substr($method, 3);
         if (strncasecmp($method, "get", 3) === 0) {
             $return = $this->properties[$variableName];
-        } else if (strncasecmp($method, "set", 3) === 0) {
+        } elseif (strncasecmp($method, "set", 3) === 0) {
             $return = $this;
             $this->properties[$variableName] = $params[0];
         } else {

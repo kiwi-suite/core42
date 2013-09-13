@@ -48,7 +48,7 @@ class Module implements BootstrapListenerInterface,
         );
     }
 
-	/*
+    /*
      * @see \Zend\ModuleManager\Feature\ConsoleBannerProviderInterface::getConsoleBanner()
      */
     public function getConsoleBanner(\Zend\Console\Adapter\AdapterInterface $console)

@@ -17,20 +17,20 @@ class BooleanStrategy implements StrategyInterface
         $this->dataConverter = new DataConverter();
     }
 
-	/*
-	 * @see \Zend\Stdlib\Hydrator\Strategy\StrategyInterface::extract()
-	 */
-	public function extract($value)
-	{
-		return $this->dataConverter->convertBooleanToDb($value);
-	}
+    /*
+     * @see \Zend\Stdlib\Hydrator\Strategy\StrategyInterface::extract()
+     */
+    public function extract($value)
+    {
+        return $this->dataConverter->convertBooleanToDb($value);
+    }
 
-	/*
-	 * @see \Zend\Stdlib\Hydrator\Strategy\StrategyInterface::hydrate()
-	 */
-	public function hydrate($value)
-	{
+    /*
+     * @see \Zend\Stdlib\Hydrator\Strategy\StrategyInterface::hydrate()
+     */
+    public function hydrate($value)
+    {
         return $this->dataConverter->convertBooleanToLocal($value);
-	}
+    }
 
 }

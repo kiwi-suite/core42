@@ -13,7 +13,7 @@ class MetadataFeature extends ZendMetadataFeature
         if (!is_array($return)) {
             $return = array($return);
         }
-        
+
         return $return;
     }
 }

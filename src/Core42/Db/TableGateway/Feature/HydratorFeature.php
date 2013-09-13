@@ -30,13 +30,13 @@ class HydratorFeature extends AbstractFeature
         foreach ($columns as $_column) {
             /* @var $_column \Zend\Db\Metadata\Object\ColumnObject */
             switch (true) {
-            	case ($_column->getDataType() == 'datetime'):
-            	    $this->tableGateway->getHydrator()->addStrategy($_column->getName(), new DatetimeStrategy());
-            	    break;
-            	case ($_column->getDataType() == "enum" && in_array($_column->getErrata("permitted_values"), array(array("true", "false"), array("false", "true")))):
+                case ($_column->getDataType() == 'datetime'):
+                    $this->tableGateway->getHydrator()->addStrategy($_column->getName(), new DatetimeStrategy());
+                    break;
+                case ($_column->getDataType() == "enum" && in_array($_column->getErrata("permitted_values"), array(array("true", "false"), array("false", "true")))):
                     $this->tableGateway->getHydrator()->addStrategy($_column->getName(), new BooleanStrategy());
-            	    break;
-            	default:
+                    break;
+                default:
                     break;
             }
         }

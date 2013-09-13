@@ -27,7 +27,7 @@ class SqlQuery implements ServiceManagerStaticAwareInterface
 
     public function __construct()
     {
-        
+
         $this->adapterMaster = $this->getServiceManager()->get('Db\Master');
         $this->adapterSlave = $this->adapterMaster;
         if ($this->getServiceManager()->has('Db\Slave')) {
@@ -98,4 +98,3 @@ class SqlQuery implements ServiceManagerStaticAwareInterface
 
     }
 }
-

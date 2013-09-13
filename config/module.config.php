@@ -9,18 +9,18 @@ return array(
             'Zend\Log\LoggerAbstractServiceFactory'
         ),
     ),
-    
+
     'service_manager_static_aware' => array(
         'AbstractCommand' => 'Core42\Command\AbstractCommand',
         'AbstractTableGateway' => 'Core42\Db\TableGateway\AbstractTableGateway',
         'SqlQuery' => 'Core42\Db\SqlQuery\SqlQuery',
         'DataConverter' => 'Core42\Db\DataConverter\DataConverter',
     ),
-    
+
     'caches' => array(
         'Cache\Intern' => array(
             'adapter' => array(
-            	   'name' => 'filesystem',
+                   'name' => 'filesystem',
                 'options' => array(
                     'cache_dir' => 'data/cache/',
                     'namespace' => 'cache_intern'
@@ -31,7 +31,7 @@ return array(
             ),
         ),
     ),
-    
+
     'db' => array(
         'adapters' =>array(
             'Db\Master' => array(
@@ -59,17 +59,17 @@ return array(
 //             ),
         ),
     ),
-    
+
     'log' => array(
         'Log\Dev' => array(
-    	   'writers' => array(
-        	   array(
-    	   	       'name' => 'chromephp'
-    	       ),
-        	   array(
-    	   	       'name' => 'firephp'
-    	       ),
+           'writers' => array(
+               array(
+                      'name' => 'chromephp'
+               ),
+               array(
+                      'name' => 'firephp'
+               ),
             ),
-        ),        	
+        ),
     ),
 );

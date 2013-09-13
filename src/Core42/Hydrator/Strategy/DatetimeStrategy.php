@@ -18,23 +18,23 @@ class DatetimeStrategy implements StrategyInterface
         $this->dataConverter = new DataConverter();
     }
 
-	/*
-	 * @see \Zend\Stdlib\Hydrator\Strategy\StrategyInterface::extract()
-	 */
-	public function extract($value)
-	{
-		if ($value instanceof \DateTime) {
+    /*
+     * @see \Zend\Stdlib\Hydrator\Strategy\StrategyInterface::extract()
+     */
+    public function extract($value)
+    {
+        if ($value instanceof \DateTime) {
             return $this->dataConverter->convertDatetimeToDb($value);
-		}
-		return $value;
-	}
+        }
+        return $value;
+    }
 
-	/*
-	 * @see \Zend\Stdlib\Hydrator\Strategy\StrategyInterface::hydrate()
-	 */
-	public function hydrate($value)
-	{
+    /*
+     * @see \Zend\Stdlib\Hydrator\Strategy\StrategyInterface::hydrate()
+     */
+    public function hydrate($value)
+    {
         return $this->dataConverter->convertDatetimeToLocal($value);
-	}
+    }
 
 }

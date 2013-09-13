@@ -51,9 +51,9 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
      * @var \Core42\Db\RowGateway\RowGateway
      */
     protected $rowGatewayPrototype;
-    
+
     /**
-     * 
+     *
      * @var Metadata
      */
     protected $metadata;
@@ -77,7 +77,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         if ($this->hydrator === null) {
             $this->hydrator = new ModelHydrator();
         }
-        
+
         $this->featureSet = new FeatureSet();
         $this->featureSet->addFeature(new MasterSlaveFeature($slave));
         $this->featureSet->addFeature(new MetadataFeature($this->metadata));
@@ -174,10 +174,10 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         }
         return parent::delete($where);
     }
-    
-    
+
+
     /**
-     * 
+     *
      * @param string|int|array $values
      * @return \Core42\Model\AbstractModel|null
      */
@@ -186,27 +186,27 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         if (!is_array($values) && !is_int($values) && !is_string($values)) {
             throw new \Exception("invalid value");
         }
-        
+
         $metadata = $this->getFeatureSet()->getFeatureByClassName('Core42\Db\TableGateway\Feature\MetadataFeature');
         $primary = $metadata->getPrimaryKey();
-        
+
         if ((!is_array($values) && count($primary) != 1) || count($values) != count($primary)) {
             throw new \Exception("invalid value");
         }
-        
+
         if (!is_array($values)) {
             $values = array($primary[0] => $values);
         }
-        
+
         if (count(array_diff(array_keys($values), $primary)) > 0) {
             throw new \Exception("invalid value");
         }
-        
+
         $resultSet = $this->select($values);
         if ($resultSet->count() == 0) {
             return null;
         }
-        
+
         return $resultSet->current();
     }
 }
