@@ -6,7 +6,7 @@
         "fruit42/skeletonInstaller42": "*",
 	"firephp/firephp-core": "*",
 	"ccampbell/chromephp": "*",
-	"mobiledetect/mobiledetectlib": "dev-master"
+	"mobiledetect/mobiledetectlib": "*"
     },
     "extra": {
         "installer-name": "Core42"
