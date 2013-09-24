@@ -12,7 +12,6 @@ return array(
     'Core42\Db\TableGateway\Feature\HydratorFeature'           => __DIR__ . '/src/Core42/Db/TableGateway/Feature/HydratorFeature.php',
     'Core42\Db\TableGateway\Feature\MetadataFeature'           => __DIR__ . '/src/Core42/Db/TableGateway/Feature/MetadataFeature.php',
     'Core42\Db\TableGateway\Feature\RowGatewayFeature'         => __DIR__ . '/src/Core42/Db/TableGateway/Feature/RowGatewayFeature.php',
-    'Core42\Form\AbstractForm'                                 => __DIR__ . '/src/Core42/Form/AbstractForm.php',
     'Core42\Hydrator\ModelHydrator'                            => __DIR__ . '/src/Core42/Hydrator/ModelHydrator.php',
     'Core42\Hydrator\Strategy\BooleanStrategy'                 => __DIR__ . '/src/Core42/Hydrator/Strategy/BooleanStrategy.php',
     'Core42\Hydrator\Strategy\DatetimeStrategy'                => __DIR__ . '/src/Core42/Hydrator/Strategy/DatetimeStrategy.php',
@@ -20,4 +19,6 @@ return array(
     'Core42\Model\DefaultModel'                                => __DIR__ . '/src/Core42/Model/DefaultModel.php',
     'Core42\Module'                                            => __DIR__ . '/src/Core42/Module.php',
     'Core42\ServiceManager\ServiceManagerStaticAwareInterface' => __DIR__ . '/src/Core42/ServiceManager/ServiceManagerStaticAwareInterface.php',
+    'Core42\Session\SessionInitializer'                        => __DIR__ . '/src/Core42/Session/SessionInitializer.php',
+    'Core42\View\Helper\Params'                                => __DIR__ . '/src/Core42/View/Helper/Params.php',
 );

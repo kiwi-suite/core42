@@ -25,7 +25,7 @@ abstract class AbstractCommand implements ServiceManagerStaticAwareInterface
     /**
      *
      */
-    final protected function __construct()
+    final public function __construct()
     {
         $this->init();
     }

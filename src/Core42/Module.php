@@ -1,15 +1,18 @@
 <?php
 namespace Core42;
 
+use Core42\Session\SessionInitializer;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
+use Zend\Mvc\MvcEvent;
+use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\Uri\UriFactory;
 
 class Module implements BootstrapListenerInterface,
                             ConfigProviderInterface,
-                            AutoloaderProviderInterface,
-                            ConsoleBannerProviderInterface
+                            AutoloaderProviderInterface
 {
     /*
      * @see \Zend\ModuleManager\Feature\ConfigProviderInterface::getConfig()
@@ -34,6 +37,9 @@ class Module implements BootstrapListenerInterface,
                 call_user_func($_class."::setServiceManager", $e->getApplication()->getServiceManager());
             }
         }
+
+        $sessionInit = new SessionInitializer();
+        $sessionInit->initialize($e->getApplication()->getServiceManager());
     }
 
     /*
@@ -47,13 +53,4 @@ class Module implements BootstrapListenerInterface,
             ),
         );
     }
-
-    /*
-     * @see \Zend\ModuleManager\Feature\ConsoleBannerProviderInterface::getConsoleBanner()
-     */
-    public function getConsoleBanner(\Zend\Console\Adapter\AdapterInterface $console)
-    {
-        return "Core42 - (copy) raum42 OG 2010 - ".date("Y");
-    }
-
 }

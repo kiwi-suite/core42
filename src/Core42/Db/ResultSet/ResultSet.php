@@ -5,7 +5,6 @@ use Zend\Db\ResultSet\HydratingResultSet;
 
 class ResultSet extends HydratingResultSet
 {
-
     /**
      *
      * @return \Core42\Db\ResultSet\ResultSet

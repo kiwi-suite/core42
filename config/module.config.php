@@ -8,6 +8,11 @@ return array(
             'Zend\Db\Adapter\AdapterAbstractServiceFactory',
             'Zend\Log\LoggerAbstractServiceFactory'
         ),
+        'factories' => array(
+            'Zend\Session\Service\SessionManagerFactory' => 'Zend\Session\Service\SessionManagerFactory',
+            'Zend\Session\Config\ConfigInterface' => 'Zend\Session\Service\SessionConfigFactory',
+            'Zend\Session\Storage\StorageInterface' => 'Zend\Session\Service\StorageFactory',
+        ),
     ),
 
     'service_manager_static_aware' => array(
@@ -15,6 +20,12 @@ return array(
         'AbstractTableGateway' => 'Core42\Db\TableGateway\AbstractTableGateway',
         'SqlQuery' => 'Core42\Db\SqlQuery\SqlQuery',
         'DataConverter' => 'Core42\Db\DataConverter\DataConverter',
+    ),
+
+    'view_helpers' => array(
+        'invokables' => array(
+            'params' => __NAMESPACE__.'\View\Helper\Params',
+        ),
     ),
 
     'caches' => array(
@@ -70,6 +81,23 @@ return array(
                       'name' => 'firephp'
                ),
             ),
+        ),
+    ),
+
+    'session_config' => array(
+        'name' => 'sid',
+        'use_trans_sid' => false,
+        'use_cookies' => true,
+        'use_only_cookies' => true,
+    ),
+
+    'session_storage' => array(
+        'type' => 'Zend\Session\Storage\SessionArrayStorage',
+    ),
+
+    'session_manager' => array(
+        'enable_trans_sid_check' => false,
+        'validator' => array(
         ),
     ),
 );

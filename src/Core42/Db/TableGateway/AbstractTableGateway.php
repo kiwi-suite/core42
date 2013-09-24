@@ -110,7 +110,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
 
     /**
      *
-     * @return \Zend\Db\TableGateway\AbstractTableGateway
+     * @return \Core42\Db\TableGateway\AbstractTableGateway
      */
     public static function getInstance()
     {
