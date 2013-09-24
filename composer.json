@@ -5,7 +5,8 @@
         "php": ">=5.3.3",
         "fruit42/skeletonInstaller42": "*",
 	"firephp/firephp-core": "*",
-	"ccampbell/chromephp": "*"
+	"ccampbell/chromephp": "*",
+	"mobiledetect/mobiledetectlib": "dev-master"
     },
     "extra": {
         "installer-name": "Core42"
