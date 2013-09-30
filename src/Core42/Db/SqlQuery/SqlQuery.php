@@ -2,6 +2,8 @@
 namespace Core42\Db\SqlQuery;
 
 
+use Core42\Hydrator\ModelHydrator;
+use Zend\Db\ResultSet\AbstractResultSet;
 use Zend\ServiceManager\ServiceManager;
 use Core42\ServiceManager\ServiceManagerStaticAwareInterface;
 use Zend\Db\Sql\Sql;
@@ -30,6 +32,16 @@ class SqlQuery implements ServiceManagerStaticAwareInterface
      * @var Sql
      */
     private $sql;
+
+    /**
+     * @var AbstractModel
+     */
+    private $model;
+
+    /**
+     * @var AbstractResultSet
+     */
+    private $resultSet;
 
     /**
      *
@@ -66,46 +78,88 @@ class SqlQuery implements ServiceManagerStaticAwareInterface
 
     /**
      *
-     * @param string $table
+     * @param string|array $table
      * @return \Zend\Db\Sql\Select
      */
     public function select($table = null)
     {
-        $this->sql =  new Sql($this->adapterSlave);
+        $this->sql = new Sql($this->adapterSlave);
         return $this->sql->select($table);
     }
 
     /**
      *
-     * @param string $table
+     * @param string|array $table
      * @return \Zend\Db\Sql\Insert
      */
     public function insert($table = null)
     {
-        $this->sql =  new Sql($this->adapterMaster);
+        $this->sql = new Sql($this->adapterMaster);
         return $this->sql->insert($table);
     }
 
     /**
      *
-     * @param string $table
+     * @param string|array $table
      * @return \Zend\Db\Sql\Update
      */
     public function update($table = null)
     {
-        $this->sql =  new Sql($this->adapterMaster);
+        $this->sql = new Sql($this->adapterMaster);
         return $this->sql->update($table);
     }
 
     /**
      *
-     * @param string $table
+     * @param string|array $table
      * @return \Zend\Db\Sql\Delete
      */
     public function delete($table = null)
     {
-        $this->sql =  new Sql($this->adapterMaster);
+        $this->sql = new Sql($this->adapterMaster);
         return $this->sql->delete($table);
+    }
+
+    /**
+     * @param AbstractModel $model
+     * @return \Core42\Db\SqlQuery\SqlQuery
+     */
+    public function setModel(AbstractModel $model)
+    {
+        $this->model = $model;
+        return $this;
+    }
+
+    /**
+     * @return AbstractModel
+     */
+    protected function getModel()
+    {
+        if (!($this->model instanceof AbstractModel)) {
+            $this->model = new DefaultModel();
+        }
+        return $this->model;
+    }
+
+    /**
+     * @param AbstractResultSet $resultSet
+     * @return \Core42\Db\SqlQuery\SqlQuery
+     */
+    public function setResultSet(AbstractResultSet $resultSet)
+    {
+        $this->resultSet = $resultSet;
+        return $this;
+    }
+
+    /**
+     * @return AbstractResultSet
+     */
+    public function getResultSet()
+    {
+        if (!($this->resultSet instanceof AbstractResultSet)) {
+            $this->resultSet = new ResultSet(new ModelHydrator(), $this->getModel());
+        }
+        return $this->resultSet;
     }
 
     /**
@@ -115,24 +169,26 @@ class SqlQuery implements ServiceManagerStaticAwareInterface
      * @throws \Exception
      * @return \Core42\Db\ResultSet\ResultSet
      */
-    public function execute(PreparableSqlInterface $prepareableSql, AbstractModel $model = null)
+    public function execute(PreparableSqlInterface $prepareableSql)
     {
         if (!($this->sql instanceof Sql)) {
             throw new \Exception();
         }
+        $return = null;
 
         $statement = $this->sql->prepareStatementForSqlObject($prepareableSql);
         $result = $statement->execute();
-        $this->sql = null;
 
         if ($prepareableSql instanceof Select) {
-            if ($model === null) {
-                $model = new DefaultModel();
-            }
-            $resultSet = new ResultSet(ResultSet::TYPE_ARRAYOBJECT, $model);
+            $resultSet = $this->getResultSet();
             $resultSet->initialize($result);
-            return $resultSet;
+            $return = $resultSet;
         }
 
+        $this->sql = null;
+        $this->model = null;
+        $this->resultSet = null;
+
+        return $return;
     }
 }

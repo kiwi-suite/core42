@@ -5,6 +5,7 @@ return array(
     'Core42\Db\DataConverter\Adapter\AdapterInterface'         => __DIR__ . '/src/Core42/Db/DataConverter/Adapter/AdapterInterface.php',
     'Core42\Db\DataConverter\Adapter\MySQL'                    => __DIR__ . '/src/Core42/Db/DataConverter/Adapter/MySQL.php',
     'Core42\Db\DataConverter\DataConverter'                    => __DIR__ . '/src/Core42/Db/DataConverter/DataConverter.php',
+    'Core42\Db\ResultSet\JoinedResultSet'                      => __DIR__ . '/src/Core42/Db/ResultSet/JoinedResultSet.php',
     'Core42\Db\ResultSet\ResultSet'                            => __DIR__ . '/src/Core42/Db/ResultSet/ResultSet.php',
     'Core42\Db\RowGateway\RowGateway'                          => __DIR__ . '/src/Core42/Db/RowGateway/RowGateway.php',
     'Core42\Db\SqlQuery\SqlQuery'                              => __DIR__ . '/src/Core42/Db/SqlQuery/SqlQuery.php',
@@ -18,7 +19,10 @@ return array(
     'Core42\Model\AbstractModel'                               => __DIR__ . '/src/Core42/Model/AbstractModel.php',
     'Core42\Model\DefaultModel'                                => __DIR__ . '/src/Core42/Model/DefaultModel.php',
     'Core42\Module'                                            => __DIR__ . '/src/Core42/Module.php',
+    'Core42\Mvc\Controller\Plugin\MobileDetect'                => __DIR__ . '/src/Core42/Mvc/Controller/Plugin/MobileDetect.php',
+    'Core42\Mvc\Controller\Plugin\Service\MobileDetectFactory' => __DIR__ . '/src/Core42/Mvc/Controller/Plugin/Service/MobileDetectFactory.php',
     'Core42\ServiceManager\ServiceManagerStaticAwareInterface' => __DIR__ . '/src/Core42/ServiceManager/ServiceManagerStaticAwareInterface.php',
     'Core42\Session\SessionInitializer'                        => __DIR__ . '/src/Core42/Session/SessionInitializer.php',
+    'Core42\View\Helper\MobileDetect'                          => __DIR__ . '/src/Core42/View/Helper/MobileDetect.php',
     'Core42\View\Helper\Params'                                => __DIR__ . '/src/Core42/View/Helper/Params.php',
 );

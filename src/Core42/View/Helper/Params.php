@@ -4,7 +4,6 @@ namespace Core42\View\Helper;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceManager;
-use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\View\Helper\AbstractHelper;
 
 class Params extends AbstractHelper implements ServiceLocatorAwareInterface

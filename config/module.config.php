@@ -13,6 +13,9 @@ return array(
             'Zend\Session\Config\ConfigInterface' => 'Zend\Session\Service\SessionConfigFactory',
             'Zend\Session\Storage\StorageInterface' => 'Zend\Session\Service\StorageFactory',
         ),
+        'invokables' => array(
+            'MobileDetect' => '\Mobile_Detect',
+        ),
     ),
 
     'service_manager_static_aware' => array(
@@ -25,6 +28,13 @@ return array(
     'view_helpers' => array(
         'invokables' => array(
             'params' => __NAMESPACE__.'\View\Helper\Params',
+            'mobileDetect' => __NAMESPACE__ . '\View\Helper\MobileDetect',
+        ),
+    ),
+
+    'controller_plugins' => array(
+        'factories' => array(
+            'mobileDetect' => 'Core42\Mvc\Controller\Plugin\Service\MobileDetectFactory',
         ),
     ),
 

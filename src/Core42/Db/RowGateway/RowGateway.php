@@ -66,7 +66,7 @@ class RowGateway extends AbstractRowGateway
 
     /**
      *
-     * @return \Core42\Db\Model\AbstractModel
+     * @return \Core42\Model\AbstractModel
      */
     public function get()
     {
@@ -75,7 +75,7 @@ class RowGateway extends AbstractRowGateway
 
     /**
      *
-     * @param \Core42\Db\Model\AbstractModel $model
+     * @param \Core42\Model\AbstractModel $model
      * @return \Core42\Db\RowGateway\RowGateway
      */
     public function set(AbstractModel $model, $rowExistsInDatabase = false)
@@ -120,6 +120,7 @@ class RowGateway extends AbstractRowGateway
     public function delete()
     {
         $this->data = $this->hydrator->extract($this->model);
+        $this->processPrimaryKeyData();
         return parent::delete();
     }
 }

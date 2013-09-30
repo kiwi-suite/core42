@@ -141,6 +141,14 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     }
 
     /**
+     * @return AbstractModel|string
+     */
+    public function getModelPrototype()
+    {
+        return $this->modelPrototype;
+    }
+
+    /**
      * @return \Core42\Hydrator\ModelHydrator
      */
     public function getHydrator()
@@ -222,5 +230,14 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         }
 
         return $resultSet->current();
+    }
+
+    public function getSqlColumns()
+    {
+        $sqlColumns = array();
+        foreach ($this->getColumns() as $column){
+            $sqlColumns["{$this->table}.{$column}"] = $column;
+        }
+        return $sqlColumns;
     }
 }
