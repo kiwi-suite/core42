@@ -3,7 +3,6 @@
     "type": "fruit42-module",
     "require": {
         "php": ">=5.3.3",
-        "fruit42/skeletonInstaller42": "*",
 	"firephp/firephp-core": "*",
 	"ccampbell/chromephp": "*",
 	"mobiledetect/mobiledetectlib": "*"
