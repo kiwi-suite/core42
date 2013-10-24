@@ -1,10 +1,10 @@
 <?php
-namespace Core42\Hydrator\Strategy;
+namespace Core42\Hydrator\Strategy\Database;
 
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 use Core42\Db\DataConverter\DataConverter;
 
-class DatetimeStrategy implements StrategyInterface
+class DatetimeStrategy implements StrategyInterface, DatabaseStrategyInterface
 {
 
     /**
@@ -37,4 +37,8 @@ class DatetimeStrategy implements StrategyInterface
         return $this->dataConverter->convertDatetimeToLocal($value);
     }
 
+    public function getStrategy(\Zend\Db\Metadata\Object\ColumnObject $column)
+    {
+        return (in_array($column->getDataType(), array('datetime', 'date', 'timestamp'))) ? $this : null;
+    }
 }

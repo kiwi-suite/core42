@@ -1,10 +1,11 @@
 <?php
 namespace Core42\Db\TableGateway\Feature;
 
-use Core42\Hydrator\Strategy\BooleanStrategy;
-use Core42\Hydrator\Strategy\DatetimeStrategy;
+use Core42\Hydrator\Strategy\Database\BooleanStrategy;
+use Core42\Hydrator\Strategy\Database\DatetimeStrategy;
 use Zend\Db\TableGateway\Feature\AbstractFeature;
 use Zend\Db\Metadata\MetadataInterface;
+use Zend\ServiceManager\ServiceManager;
 
 class HydratorFeature extends AbstractFeature
 {
@@ -14,12 +15,18 @@ class HydratorFeature extends AbstractFeature
     protected $metadata = null;
 
     /**
+     * @var ServiceManager
+     */
+    protected $serviceManager = null;
+
+    /**
      *
      * @param MetadataInterface $metadata
      */
-    public function __construct(MetadataInterface $metadata)
+    public function __construct(MetadataInterface $metadata, ServiceManager $serviceManager)
     {
         $this->metadata = $metadata;
+        $this->serviceManager = $serviceManager;
     }
 
     /**
@@ -31,16 +38,8 @@ class HydratorFeature extends AbstractFeature
 
         foreach ($columns as $_column) {
             /* @var $_column \Zend\Db\Metadata\Object\ColumnObject */
-            switch (true) {
-                case ($_column->getDataType() == 'datetime'):
-                    $this->tableGateway->getHydrator()->addStrategy($_column->getName(), new DatetimeStrategy());
-                    break;
-                case ($_column->getDataType() == "enum" && in_array($_column->getErrata("permitted_values"), array(array("true", "false"), array("false", "true")))):
-                    $this->tableGateway->getHydrator()->addStrategy($_column->getName(), new BooleanStrategy());
-                    break;
-                default:
-                    break;
-            }
+            $strategy = $this->serviceManager->get('Core42\Hydrator\Strategy\Database\PluginManager')->getStrategy($_column);
+            $this->tableGateway->getHydrator()->addStrategy($_column->getName(), $strategy);
         }
     }
 }
