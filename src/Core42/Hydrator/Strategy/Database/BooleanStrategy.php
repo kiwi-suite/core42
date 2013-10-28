@@ -1,10 +1,10 @@
 <?php
-namespace Core42\Hydrator\Strategy;
+namespace Core42\Hydrator\Strategy\Database;
 
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 use Core42\Db\DataConverter\DataConverter;
 
-class BooleanStrategy implements StrategyInterface
+class BooleanStrategy implements StrategyInterface, DatabaseStrategyInterface
 {
     /**
      *
@@ -33,4 +33,11 @@ class BooleanStrategy implements StrategyInterface
         return $this->dataConverter->convertBooleanToLocal($value);
     }
 
+    public function getStrategy(\Zend\Db\Metadata\Object\ColumnObject $column)
+    {
+        if ($column->getDataType() == "enum" && in_array($column->getErrata("permitted_values"), array(array("true", "false"), array("false", "true")))) {
+            return $this;
+        }
+        return null;
+    }
 }

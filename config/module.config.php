@@ -15,6 +15,7 @@ return array(
         ),
         'invokables' => array(
             'MobileDetect' => '\Mobile_Detect',
+            'Core42\Hydrator\Strategy\Database\PluginManager' => 'Core42\Hydrator\Strategy\Database\PluginManager'
         ),
     ),
 
@@ -36,6 +37,13 @@ return array(
         'factories' => array(
             'mobileDetect' => 'Core42\Mvc\Controller\Plugin\Service\MobileDetectFactory',
         ),
+    ),
+
+    'database_hydrator_plugins' => array(
+        'boolean'   => 'Core42\Hydrator\Strategy\Database\BooleanStrategy',
+        'datetime'  => 'Core42\Hydrator\Strategy\Database\DatetimeStrategy',
+        'integer'   => 'Core42\Hydrator\Strategy\Database\IntegerStrategy',
+        'float'     => 'Core42\Hydrator\Strategy\Database\FloatStrategy',
     ),
 
     'caches' => array(

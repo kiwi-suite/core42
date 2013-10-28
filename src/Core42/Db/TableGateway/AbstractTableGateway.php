@@ -85,7 +85,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         $this->featureSet->addFeature(new MasterSlaveFeature($slave));
         $this->featureSet->addFeature(new MetadataFeature($this->metadata));
         $this->featureSet->addFeature(new RowGatewayFeature($this->rowGatewayDefinition, $this->modelPrototype, $this->hydrator));
-        $this->featureSet->addFeature(new HydratorFeature($this->metadata));
+        $this->featureSet->addFeature(new HydratorFeature($this->metadata, $this->getServiceManager()));
 
         $this->initialize();
     }
