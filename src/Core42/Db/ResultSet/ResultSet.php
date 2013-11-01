@@ -5,21 +5,12 @@ use Zend\Db\ResultSet\HydratingResultSet;
 
 class ResultSet extends HydratingResultSet
 {
-    /**
-     *
-     * @return \Core42\Db\ResultSet\ResultSet
-     */
-    public function filter(\Closure $closure)
+    public function current()
     {
-        $data = array();
-
-        foreach ($this as $obj) {
-            if ($closure($obj)) {
-                $data[] = $obj;
-            }
+        $object = parent::current();
+        if (!$object->isMemento()) {
+            $object->memento();
         }
-        $resultSet = new self();
-        $resultSet->initialize($data);
-        return $resultSet;
+        return $object;
     }
 }

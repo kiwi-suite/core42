@@ -30,6 +30,9 @@ abstract class AbstractModel implements FilterProviderInterface,
      */
     private $inputFilter;
 
+    /**
+     * @var null|array
+     */
     private $memento = null;
 
     /**
@@ -72,6 +75,7 @@ abstract class AbstractModel implements FilterProviderInterface,
                     ->addFilter("parameter", new OptionalParametersFilter(), FilterComposite::CONDITION_AND)
                     ->addFilter("getInputFilterSpecification", new MethodMatchFilter("getInputFilterSpecification"), FilterComposite::CONDITION_AND)
                     ->addFilter("isValid", new MethodMatchFilter("isValid"), FilterComposite::CONDITION_AND)
+                    ->addFilter("isMemento", new MethodMatchFilter("isMemento"), FilterComposite::CONDITION_AND)
                     ->addFilter("getHydrator", new MethodMatchFilter("getHydrator"), FilterComposite::CONDITION_AND)
                     ->addFilter("getInputFilter", new MethodMatchFilter("getInputFilter"), FilterComposite::CONDITION_AND);
 
@@ -88,6 +92,9 @@ abstract class AbstractModel implements FilterProviderInterface,
                             ->isValid();
     }
 
+    /**
+     *
+     */
     public function filter()
     {
         $this->getHydrator()->hydrate(
@@ -114,12 +121,20 @@ abstract class AbstractModel implements FilterProviderInterface,
     }
 
     /**
+     * @return bool
+     */
+    public function isMemento()
+    {
+        return ($this->memento !== null);
+    }
+
+    /**
      * @return array
      * @throws \Exception
      */
     public function diff()
     {
-        if ($this->memento === null) {
+        if (!$this->isMemento()) {
             throw new \Exception("memento never called");
         }
 

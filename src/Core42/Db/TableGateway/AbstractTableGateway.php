@@ -1,6 +1,7 @@
 <?php
 namespace Core42\Db\TableGateway;
 
+use Core42\Db\ResultSet\ResultSet;
 use Zend\Db\TableGateway\AbstractTableGateway as ZendAbstractTableGateway;
 use Core42\Hydrator\ModelHydrator;
 use Zend\ServiceManager\ServiceManager;
@@ -9,18 +10,10 @@ use Zend\Db\TableGateway\Feature\MasterSlaveFeature;
 use Core42\Model\AbstractModel;
 use Zend\Db\Metadata\Metadata;
 use Core42\Db\TableGateway\Feature\HydratorFeature;
-use Core42\Db\TableGateway\Feature\RowGatewayFeature;
-use Core42\Db\RowGateway\RowGateway;
 use Core42\Db\TableGateway\Feature\MetadataFeature;
 
 abstract class AbstractTableGateway extends ZendAbstractTableGateway
 {
-    /**
-     *
-     * @var string
-     */
-    private $rowGatewayDefinition = '\Core42\Db\RowGateway\RowGateway';
-
     /**
      *
      * @var string
@@ -33,13 +26,6 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
      */
     protected $modelPrototype = null;
 
-
-    /**
-     *
-     * @var array
-     */
-    private static $instance = array();
-
     /**
      *
      * @var ModelHydrator
@@ -48,27 +34,22 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
 
     /**
      *
-     * @var \Core42\Db\RowGateway\RowGateway
-     */
-    protected $rowGatewayPrototype;
-
-    /**
-     *
      * @var Metadata
      */
     protected $metadata;
 
     /**
-     *
      * @var ServiceManager
      */
-    private static $serviceManager = null;
+    private $serviceManager;
 
     /**
      *
      */
-    protected function __construct()
+    public function __construct(ServiceManager $serviceManager)
     {
+        $this->setServiceManager($serviceManager);
+
         $this->adapter = $this->getServiceManager()->get('Db\Master');
         $slave = $this->adapter;
         if ($this->getServiceManager()->has('Db\Slave')) {
@@ -77,14 +58,21 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
 
         $this->metadata = new Metadata($this->adapter);
 
-        if ($this->hydrator === null) {
-            $this->hydrator = new ModelHydrator();
+        if (is_string($this->modelPrototype)) {
+            $className = $this->modelPrototype;
+            $this->modelPrototype = new $className;
         }
+
+        if (!($this->modelPrototype instanceof AbstractModel)) {
+            throw new \Exception("invalid model prototype");
+        }
+        $this->hydrator = clone $this->modelPrototype->getHydrator();
+
+        $this->resultSetPrototype = new ResultSet($this->hydrator, $this->modelPrototype);
 
         $this->featureSet = new FeatureSet();
         $this->featureSet->addFeature(new MasterSlaveFeature($slave));
         $this->featureSet->addFeature(new MetadataFeature($this->metadata));
-        $this->featureSet->addFeature(new RowGatewayFeature($this->rowGatewayDefinition, $this->modelPrototype, $this->hydrator));
         $this->featureSet->addFeature(new HydratorFeature($this->metadata, $this->getServiceManager()));
 
         $this->initialize();
@@ -94,9 +82,9 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
      *
      * @param ServiceManager $manager
      */
-    public static function setServiceManager(ServiceManager $manager)
+    public function setServiceManager(ServiceManager $manager)
     {
-        self::$serviceManager = $manager;
+        $this->serviceManager = $manager;
     }
 
     /**
@@ -105,39 +93,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
      */
     protected function getServiceManager()
     {
-        return self::$serviceManager;
-    }
-
-    /**
-     *
-     * @return \Core42\Db\TableGateway\AbstractTableGateway
-     */
-    public static function getInstance()
-    {
-        $className = get_called_class();
-        if (!array_key_exists($className, self::$instance)) {
-            self::$instance[$className] = new $className;
-        }
-
-        return self::$instance[$className];
-    }
-
-    /**
-     *
-     * @param RowGateway $rowGateway
-     */
-    public function setRowGateway(RowGateway $rowGateway)
-    {
-        $this->rowGatewayPrototype = $rowGateway;
-    }
-
-    /**
-     *
-     * @return \Core42\Db\RowGateway\RowGateway
-     */
-    public function getRowGateway()
-    {
-        return clone $this->rowGatewayPrototype;
+        return $this->serviceManager;
     }
 
     /**
@@ -163,9 +119,19 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     public function insert($set)
     {
         if ($set instanceof AbstractModel) {
-            $rowGateway = $this->getRowGateway();
-            $rowGateway->set($set, false);
-            return $rowGateway->save();
+            $insertSet = $this->getHydrator()->extract($set);
+            $result = parent::insert($insertSet);
+            if (($primaryKeyValue = $this->lastInsertValue) && count($this->getPrimaryKey()) == 1) {
+                $where = array_flip($this->getPrimaryKey());
+                reset($where);
+                $where[key($where)] = $primaryKeyValue;
+            } else {
+                $where = $this->getPrimaryValues($set);
+            }
+            $tmpObject = $this->selectByPrimary($where);
+            $set->getHydrator()->hydrate($tmpObject->getHydrator()->extract($tmpObject), $set);
+            $set->memento();
+            return $result;
         }
         return parent::insert($set);
     }
@@ -176,10 +142,17 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
      */
     public function update($set, $where = null)
     {
-        if ($set instanceof AbstractModel && $where === null) {
-            $rowGateway = $this->getRowGateway();
-            $rowGateway->set($set, true);
-            return $rowGateway->save();
+        if ($set instanceof AbstractModel) {
+            $where = $this->getPrimaryValues($set);
+            if (empty($where)) {
+                throw new \Exception("no primary key set");
+            }
+            $set = $set->diff();
+        } elseif (is_array($set)) {
+            $set = array_intersect_key($this->getHydrator()->extract($this->getHydrator()->hydrate($set, $this->getModelPrototype())), $set);
+            if (is_array($where)) {
+                $where = array_intersect_key($this->getHydrator()->extract($this->getHydrator()->hydrate($where, $this->getModelPrototype())), $where);
+            }
         }
         return parent::update($set, $where);
     }
@@ -191,9 +164,12 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     public function delete($where)
     {
         if ($where instanceof AbstractModel) {
-            $rowGateway = $this->getRowGateway();
-            $rowGateway->set($where);
-            return $rowGateway->delete();
+            $where = $this->getPrimaryValues($where);
+            if (empty($where)) {
+                return 0;
+            }
+        } elseif (is_array($where)) {
+            $where = array_intersect_key($this->getHydrator()->extract($this->getHydrator()->hydrate($where, $this->getModelPrototype())), $where);
         }
         return parent::delete($where);
     }
@@ -209,8 +185,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
             throw new \Exception("invalid value");
         }
 
-        $metadata = $this->getFeatureSet()->getFeatureByClassName('Core42\Db\TableGateway\Feature\MetadataFeature');
-        $primary = $metadata->getPrimaryKey();
+        $primary = $this->getPrimaryKey();
 
         if ((!is_array($values) && count($primary) != 1) || count($values) != count($primary)) {
             throw new \Exception("invalid value");
@@ -232,6 +207,32 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         return $resultSet->current();
     }
 
+    /**
+     * @return array
+     */
+    public function getPrimaryKey()
+    {
+        $metadata = $this->getFeatureSet()->getFeatureByClassName('Core42\Db\TableGateway\Feature\MetadataFeature');
+        return $metadata->getPrimaryKey();
+    }
+
+    /**
+     * @param AbstractModel $model
+     * @return array
+     */
+    public function getPrimaryValues(AbstractModel $model)
+    {
+        $values = $this->getHydrator()->extract($model);
+
+        $values = array_intersect_key($values, array_flip($this->getPrimaryKey()));
+        return array_filter($values, function($var) {
+            return !empty($var);
+        });
+    }
+
+    /**
+     * @return array
+     */
     public function getSqlColumns()
     {
         $sqlColumns = array();
