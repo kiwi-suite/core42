@@ -20,22 +20,58 @@ abstract class AbstractModel implements FilterProviderInterface,
      */
     protected $inputFilterSpecifications = array();
 
+    /**
+     * @var ModelHydrator
+     */
+    private $hydrator;
+
+    /**
+     * @var \Zend\InputFilter\InputFilterInterface
+     */
+    private $inputFilter;
+
+    /**
+     * @return ModelHydrator
+     */
+    protected  function getHydrator()
+    {
+        if ($this->hydrator === null) {
+            $this->hydrator = new ModelHydrator();
+        }
+        return $this->hydrator;
+    }
+
+    /**
+     * @return \Zend\InputFilter\InputFilterInterface
+     */
+    protected function getInputFilter()
+    {
+        if (!($this->inputFilter instanceof \Zend\InputFilter\InputFilterInterface)) {
+            $inputFilterSpecifications = $this->getInputFilterSpecification();
+            if (empty($inputFilterSpecifications)) {
+                return null;
+            }
+
+            $factory = new Factory();
+            $this->inputFilter = $factory->createInputFilter($inputFilterSpecifications);
+        }
+        return $this->inputFilter;
+    }
 
     /**
      * @return FilterComposite|\Zend\Stdlib\Hydrator\Filter\FilterInterface
      */
     public function getFilter()
     {
-        $excludeFilter = new FilterComposite();
-        $excludeFilter->addFilter("getInputFilterSpecification", new MethodMatchFilter("getInputFilterSpecification"));
-        $excludeFilter->addFilter("isValid", new MethodMatchFilter("isValid"));
-
         $composite = new FilterComposite();
         $composite->addFilter("is", new IsFilter())
                     ->addFilter("has", new HasFilter())
                     ->addFilter("get", new GetFilter())
                     ->addFilter("parameter", new OptionalParametersFilter(), FilterComposite::CONDITION_AND)
-                    ->addFilter("exclude", $excludeFilter, FilterComposite::CONDITION_AND);
+                    ->addFilter("getInputFilterSpecification", new MethodMatchFilter("getInputFilterSpecification"), FilterComposite::CONDITION_AND)
+                    ->addFilter("isValid", new MethodMatchFilter("isValid"), FilterComposite::CONDITION_AND)
+                    ->addFilter("getHydrator", new MethodMatchFilter("getHydrator"), FilterComposite::CONDITION_AND)
+                    ->addFilter("getInputFilter", new MethodMatchFilter("getHydrator"), FilterComposite::CONDITION_AND);
 
         return $composite;
     }
@@ -45,17 +81,17 @@ abstract class AbstractModel implements FilterProviderInterface,
      */
     public function isValid()
     {
-        $inputFilterSpecifications = $this->getInputFilterSpecification();
-        if (empty($inputFilterSpecifications)) {
-            return true;
-        }
-
-        $factory = new Factory();
-        $inputFilter = $factory->createInputFilter($inputFilterSpecifications);
-        $hydrator = new ModelHydrator();
-
-        return $inputFilter->setData($hydrator->extract($this))
+        $this->filter();
+        return $this->getInputFilter()
                             ->isValid();
+    }
+
+    public function filter()
+    {
+        $this->getHydrator()->hydrate(
+            $this->getInputFilter()->setData($this->getHydrator()->extract($this))->getValues(),
+            $this
+        );
     }
 
     /**
