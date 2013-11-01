@@ -33,13 +33,6 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
      */
     protected $modelPrototype = null;
 
-
-    /**
-     *
-     * @var array
-     */
-    private static $instance = array();
-
     /**
      *
      * @var ModelHydrator
@@ -59,16 +52,17 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     protected $metadata;
 
     /**
-     *
      * @var ServiceManager
      */
-    private static $serviceManager = null;
+    private $serviceManager;
 
     /**
      *
      */
-    protected function __construct()
+    public function __construct(ServiceManager $serviceManager)
     {
+        $this->setServiceManager($serviceManager);
+
         $this->adapter = $this->getServiceManager()->get('Db\Master');
         $slave = $this->adapter;
         if ($this->getServiceManager()->has('Db\Slave')) {
@@ -94,9 +88,9 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
      *
      * @param ServiceManager $manager
      */
-    public static function setServiceManager(ServiceManager $manager)
+    public function setServiceManager(ServiceManager $manager)
     {
-        self::$serviceManager = $manager;
+        $this->serviceManager = $manager;
     }
 
     /**
@@ -105,21 +99,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
      */
     protected function getServiceManager()
     {
-        return self::$serviceManager;
-    }
-
-    /**
-     *
-     * @return \Core42\Db\TableGateway\AbstractTableGateway
-     */
-    public static function getInstance()
-    {
-        $className = get_called_class();
-        if (!array_key_exists($className, self::$instance)) {
-            self::$instance[$className] = new $className;
-        }
-
-        return self::$instance[$className];
+        return $this->serviceManager;
     }
 
     /**

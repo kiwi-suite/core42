@@ -4,6 +4,7 @@ namespace Core42;
 return array(
     'service_manager' => array(
         'abstract_factories' => array(
+            'Core42\Db\TableGateway\Service\TableGatewayAbstractServiceFactory',
             'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
             'Zend\Db\Adapter\AdapterAbstractServiceFactory',
             'Zend\Log\LoggerAbstractServiceFactory'
@@ -21,7 +22,6 @@ return array(
 
     'service_manager_static_aware' => array(
         'AbstractCommand' => 'Core42\Command\AbstractCommand',
-        'AbstractTableGateway' => 'Core42\Db\TableGateway\AbstractTableGateway',
         'SqlQuery' => 'Core42\Db\SqlQuery\SqlQuery',
         'DataConverter' => 'Core42\Db\DataConverter\DataConverter',
     ),
@@ -37,6 +37,10 @@ return array(
         'factories' => array(
             'mobileDetect' => 'Core42\Mvc\Controller\Plugin\Service\MobileDetectFactory',
         ),
+    ),
+
+    'tablegateway' => array(
+
     ),
 
     'database_hydrator_plugins' => array(
