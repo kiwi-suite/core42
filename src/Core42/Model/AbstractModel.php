@@ -30,10 +30,12 @@ abstract class AbstractModel implements FilterProviderInterface,
      */
     private $inputFilter;
 
+    private $memento = null;
+
     /**
      * @return ModelHydrator
      */
-    protected  function getHydrator()
+    public function getHydrator()
     {
         if ($this->hydrator === null) {
             $this->hydrator = new ModelHydrator();
@@ -44,7 +46,7 @@ abstract class AbstractModel implements FilterProviderInterface,
     /**
      * @return \Zend\InputFilter\InputFilterInterface
      */
-    protected function getInputFilter()
+    public function getInputFilter()
     {
         if (!($this->inputFilter instanceof \Zend\InputFilter\InputFilterInterface)) {
             $inputFilterSpecifications = $this->getInputFilterSpecification();
@@ -71,7 +73,7 @@ abstract class AbstractModel implements FilterProviderInterface,
                     ->addFilter("getInputFilterSpecification", new MethodMatchFilter("getInputFilterSpecification"), FilterComposite::CONDITION_AND)
                     ->addFilter("isValid", new MethodMatchFilter("isValid"), FilterComposite::CONDITION_AND)
                     ->addFilter("getHydrator", new MethodMatchFilter("getHydrator"), FilterComposite::CONDITION_AND)
-                    ->addFilter("getInputFilter", new MethodMatchFilter("getHydrator"), FilterComposite::CONDITION_AND);
+                    ->addFilter("getInputFilter", new MethodMatchFilter("getInputFilter"), FilterComposite::CONDITION_AND);
 
         return $composite;
     }
@@ -100,5 +102,29 @@ abstract class AbstractModel implements FilterProviderInterface,
     public function getInputFilterSpecification()
     {
         return $this->inputFilterSpecifications;
+    }
+
+    /**
+     * @return \Core42\Model\AbstractModel
+     */
+    public function memento()
+    {
+        $this->memento = $this->getHydrator()->extract($this);
+        return $this;
+    }
+
+    /**
+     * @return array
+     * @throws \Exception
+     */
+    public function diff()
+    {
+        if ($this->memento === null) {
+            throw new \Exception("memento never called");
+        }
+
+        return array_udiff_assoc($this->getHydrator()->extract($this), $this->memento, function($value1, $value2) {
+            return ($value1 === $value2) ? 0 : 1;
+        });
     }
 }
