@@ -13,10 +13,14 @@ return array(
             'Zend\Session\Service\SessionManagerFactory' => 'Zend\Session\Service\SessionManagerFactory',
             'Zend\Session\Config\ConfigInterface' => 'Zend\Session\Service\SessionConfigFactory',
             'Zend\Session\Storage\StorageInterface' => 'Zend\Session\Service\StorageFactory',
+            'Core42\Authentication\AuthenticationService' => 'Core42\Authentication\Service\AuthenticationFactory',
         ),
         'invokables' => array(
             'MobileDetect' => '\Mobile_Detect',
             'Core42\Hydrator\Strategy\Database\PluginManager' => 'Core42\Hydrator\Strategy\Database\PluginManager'
+        ),
+        'aliases' => array(
+            'Zend\Authentication\AuthenticationService' => 'Core42\Authentication\AuthenticationService',
         ),
     ),
 
@@ -122,4 +126,15 @@ return array(
         'validator' => array(
         ),
     ),
+
+//    'authentication' => array(
+//        'adapter' => array(
+//            'name' => 'Core42\Authentication\Adapter\DbTable\BCryptCheckAdapter',
+//            'options' => array(
+//                'table_gateway' => '',
+//                'identity_column' => '',
+//                'credential_column' => '',
+//              ),
+//        ),
+//    ),
 );
