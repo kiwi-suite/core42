@@ -1,7 +1,6 @@
 <?php
 namespace Core42\Db\SqlQuery;
 
-
 use Core42\Hydrator\ModelHydrator;
 use Zend\Db\ResultSet\AbstractResultSet;
 use Zend\ServiceManager\ServiceManager;
@@ -78,55 +77,60 @@ class SqlQuery implements ServiceManagerStaticAwareInterface
 
     /**
      *
-     * @param string|array $table
+     * @param  string|array        $table
      * @return \Zend\Db\Sql\Select
      */
     public function select($table = null)
     {
         $this->sql = new Sql($this->adapterSlave);
+
         return $this->sql->select($table);
     }
 
     /**
      *
-     * @param string|array $table
+     * @param  string|array        $table
      * @return \Zend\Db\Sql\Insert
      */
     public function insert($table = null)
     {
         $this->sql = new Sql($this->adapterMaster);
+
         return $this->sql->insert($table);
     }
 
     /**
      *
-     * @param string|array $table
+     * @param  string|array        $table
      * @return \Zend\Db\Sql\Update
      */
     public function update($table = null)
     {
         $this->sql = new Sql($this->adapterMaster);
+
         return $this->sql->update($table);
     }
 
     /**
      *
-     * @param string|array $table
+     * @param  string|array        $table
      * @return \Zend\Db\Sql\Delete
      */
     public function delete($table = null)
     {
         $this->sql = new Sql($this->adapterMaster);
+
         return $this->sql->delete($table);
     }
 
     /**
-     * @param AbstractModel $model
+     * @param  AbstractModel                $model
      * @return \Core42\Db\SqlQuery\SqlQuery
      */
     public function setModel(AbstractModel $model)
     {
         $this->model = $model;
+
         return $this;
     }
 
@@ -138,16 +142,18 @@ class SqlQuery implements ServiceManagerStaticAwareInterface
         if (!($this->model instanceof AbstractModel)) {
             $this->model = new DefaultModel();
         }
+
         return $this->model;
     }
 
     /**
-     * @param AbstractResultSet $resultSet
+     * @param  AbstractResultSet            $resultSet
      * @return \Core42\Db\SqlQuery\SqlQuery
      */
     public function setResultSet(AbstractResultSet $resultSet)
     {
         $this->resultSet = $resultSet;
+
         return $this;
     }
 
@@ -159,14 +165,15 @@ class SqlQuery implements ServiceManagerStaticAwareInterface
         if (!($this->resultSet instanceof AbstractResultSet)) {
             $this->resultSet = new ResultSet(new ModelHydrator(), $this->getModel());
         }
+
         return $this->resultSet;
     }
 
     /**
      *
-     * @param PreparableSqlInterface $prepareableSql
-     * @param AbstractModel $model
+     * @param  PreparableSqlInterface $prepareableSql
      * @throws \Exception
+     * @internal param \Core42\Model\AbstractModel  $model
      * @return \Core42\Db\ResultSet\ResultSet
      */
     public function execute(PreparableSqlInterface $prepareableSql)

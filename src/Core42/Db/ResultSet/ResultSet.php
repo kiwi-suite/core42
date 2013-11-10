@@ -11,6 +11,7 @@ class ResultSet extends HydratingResultSet
         if (!$object->isMemento()) {
             $object->memento();
         }
+
         return $object;
     }
 }

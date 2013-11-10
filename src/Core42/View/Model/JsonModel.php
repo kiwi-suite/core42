@@ -15,12 +15,13 @@ class JsonModel extends ZendJsonModel
     /**
      * Set the already encoded JSON string
      *
-     * @param  string $json
+     * @param  string    $json
      * @return JsonModel
      */
     public function setJsonString($json)
     {
         $this->jsonString = $json;
+
         return $this;
     }
 
@@ -31,10 +32,11 @@ class JsonModel extends ZendJsonModel
      */
     public function serialize()
     {
-        //todo: eventuell mergen
+        //todo: merge
         if ($this->jsonString !== null) {
             return $this->jsonString;
         }
+
         return parent::serialize();
     }
 }

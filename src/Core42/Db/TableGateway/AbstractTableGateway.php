@@ -131,8 +131,10 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
             $tmpObject = $this->selectByPrimary($where);
             $set->getHydrator()->hydrate($tmpObject->getHydrator()->extract($tmpObject), $set);
             $set->memento();
+
             return $result;
         }
+
         return parent::insert($set);
     }
 
@@ -154,6 +156,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
                 $where = array_intersect_key($this->getHydrator()->extract($this->getHydrator()->hydrate($where, $this->getModelPrototype())), $where);
             }
         }
+
         return parent::update($set, $where);
     }
 
@@ -171,12 +174,13 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         } elseif (is_array($where)) {
             $where = array_intersect_key($this->getHydrator()->extract($this->getHydrator()->hydrate($where, $this->getModelPrototype())), $where);
         }
+
         return parent::delete($where);
     }
 
     /**
      *
-     * @param string|int|array $values
+     * @param  string|int|array                 $values
      * @return \Core42\Model\AbstractModel|null
      */
     public function selectByPrimary($values)
@@ -213,11 +217,12 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     public function getPrimaryKey()
     {
         $metadata = $this->getFeatureSet()->getFeatureByClassName('Core42\Db\TableGateway\Feature\MetadataFeature');
+
         return $metadata->getPrimaryKey();
     }
 
     /**
-     * @param AbstractModel $model
+     * @param  AbstractModel $model
      * @return array
      */
     public function getPrimaryValues(AbstractModel $model)
@@ -225,7 +230,8 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         $values = $this->getHydrator()->extract($model);
 
         $values = array_intersect_key($values, array_flip($this->getPrimaryKey()));
-        return array_filter($values, function($var) {
+
+        return array_filter($values, function ($var) {
             return !empty($var);
         });
     }
@@ -236,9 +242,10 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     public function getSqlColumns()
     {
         $sqlColumns = array();
-        foreach ($this->getColumns() as $column){
+        foreach ($this->getColumns() as $column) {
             $sqlColumns["{$this->table}.{$column}"] = $column;
         }
+
         return $sqlColumns;
     }
 }

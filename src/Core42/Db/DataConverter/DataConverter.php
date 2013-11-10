@@ -54,7 +54,7 @@ class DataConverter implements ServiceManagerStaticAwareInterface
 
     /**
      *
-     * @param \DateTime $datetime
+     * @param  \DateTime $datetime
      * @return string
      */
     public function convertDatetimeToDb(\DateTime $datetime)
@@ -64,7 +64,7 @@ class DataConverter implements ServiceManagerStaticAwareInterface
 
     /**
      *
-     * @param string $value
+     * @param  string   $value
      * @return DateTime
      */
     public function convertDatetimeToLocal($value)
@@ -74,7 +74,7 @@ class DataConverter implements ServiceManagerStaticAwareInterface
 
     /**
      *
-     * @param boolean $boolean
+     * @param  boolean $boolean
      * @return string
      */
     public function convertBooleanToDb($boolean)
@@ -84,7 +84,7 @@ class DataConverter implements ServiceManagerStaticAwareInterface
 
     /**
      *
-     * @param string $value
+     * @param  string  $value
      * @return boolean
      */
     public function convertBooleanToLocal($value)

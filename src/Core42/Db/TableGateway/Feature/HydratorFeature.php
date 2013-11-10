@@ -1,8 +1,6 @@
 <?php
 namespace Core42\Db\TableGateway\Feature;
 
-use Core42\Hydrator\Strategy\Database\BooleanStrategy;
-use Core42\Hydrator\Strategy\Database\DatetimeStrategy;
 use Zend\Db\TableGateway\Feature\AbstractFeature;
 use Zend\Db\Metadata\MetadataInterface;
 use Zend\ServiceManager\ServiceManager;

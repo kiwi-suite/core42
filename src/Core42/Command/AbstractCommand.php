@@ -19,6 +19,7 @@ abstract class AbstractCommand implements ServiceManagerStaticAwareInterface
     public static function createCommand()
     {
         $className = get_called_class();
+
         return new $className;
     }
 
@@ -51,7 +52,7 @@ abstract class AbstractCommand implements ServiceManagerStaticAwareInterface
     /**
      *
      */
-    protected function init(){}
+    protected function init() {}
 
     /**
      *
@@ -69,7 +70,7 @@ abstract class AbstractCommand implements ServiceManagerStaticAwareInterface
     /**
      *
      */
-    protected function preExecute(){}
+    protected function preExecute() {}
 
     /**
      *
@@ -79,5 +80,5 @@ abstract class AbstractCommand implements ServiceManagerStaticAwareInterface
     /**
      *
      */
-    protected function postExecute(){}
+    protected function postExecute() {}
 }

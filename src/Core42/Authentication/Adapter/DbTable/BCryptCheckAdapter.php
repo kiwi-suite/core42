@@ -24,13 +24,18 @@ class BCryptCheckAdapter extends CallbackCheckAdapter
         }
         $credentialColumn =  $options['credential_column'];
 
-
         parent::__construct($tableGateway->getAdapter(), $tableGateway->getTable(), $identityColumn, $credentialColumn, array($this, 'bcryptValidationCallback'));
     }
 
+    /**
+     * @param  string $dbPassword
+     * @param  string $userPassword
+     * @return bool
+     */
     public function bcryptValidationCallback($dbPassword, $userPassword)
     {
         $bcrypt = new Bcrypt();
+
         return $bcrypt->verify($userPassword, $dbPassword);
     }
 }

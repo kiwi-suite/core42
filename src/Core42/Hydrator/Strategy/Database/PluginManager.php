@@ -53,7 +53,7 @@ class PluginManager implements ServiceManagerAwareInterface
         $return = null;
 
         $this->initialize();
-        foreach ($this->plugins as $plugin){
+        foreach ($this->plugins as $plugin) {
             $return = $plugin->getStrategy($column);
             if ($return !== null) {
                 break;
@@ -63,6 +63,7 @@ class PluginManager implements ServiceManagerAwareInterface
         if ($return === null) {
             $return = $this->defaultStrategy;
         }
+
         return $return;
     }
 }

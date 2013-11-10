@@ -1,7 +1,6 @@
 <?php
 namespace Core42\Db\DataConverter\Adapter;
 
-
 class MySQL implements AdapterInterface
 {
     /**

@@ -5,10 +5,6 @@ use Core42\Session\SessionInitializer;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
-use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
-use Zend\Mvc\MvcEvent;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\Uri\UriFactory;
 
 class Module implements BootstrapListenerInterface,
                             ConfigProviderInterface,
@@ -17,7 +13,7 @@ class Module implements BootstrapListenerInterface,
     /*
      * @see \Zend\ModuleManager\Feature\ConfigProviderInterface::getConfig()
      */
-    public function getConfig ()
+    public function getConfig()
     {
         return include __DIR__ . '/../../config/module.config.php';
     }
@@ -25,7 +21,7 @@ class Module implements BootstrapListenerInterface,
     /*
      * @see \Zend\ModuleManager\Feature\BootstrapListenerInterface::onBootstrap()
      */
-    public function onBootstrap (\Zend\EventManager\EventInterface $e)
+    public function onBootstrap(\Zend\EventManager\EventInterface $e)
     {
         $config = $e->getApplication()->getServiceManager()->get("Config");
 
@@ -45,7 +41,7 @@ class Module implements BootstrapListenerInterface,
     /*
      * @see \Zend\ModuleManager\Feature\AutoloaderProviderInterface::getAutoloaderConfig()
      */
-    public function getAutoloaderConfig ()
+    public function getAutoloaderConfig()
     {
         return array(
             'Zend\Loader\ClassMapAutoloader' => array(

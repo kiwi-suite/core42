@@ -43,6 +43,7 @@ abstract class AbstractModel implements FilterProviderInterface,
         if ($this->hydrator === null) {
             $this->hydrator = new ModelHydrator();
         }
+
         return $this->hydrator;
     }
 
@@ -60,6 +61,7 @@ abstract class AbstractModel implements FilterProviderInterface,
             $factory = new Factory();
             $this->inputFilter = $factory->createInputFilter($inputFilterSpecifications);
         }
+
         return $this->inputFilter;
     }
 
@@ -88,6 +90,7 @@ abstract class AbstractModel implements FilterProviderInterface,
     public function isValid()
     {
         $this->filter();
+
         return $this->getInputFilter()
                             ->isValid();
     }
@@ -117,6 +120,7 @@ abstract class AbstractModel implements FilterProviderInterface,
     public function memento()
     {
         $this->memento = $this->getHydrator()->extract($this);
+
         return $this;
     }
 
@@ -138,7 +142,7 @@ abstract class AbstractModel implements FilterProviderInterface,
             throw new \Exception("memento never called");
         }
 
-        return array_udiff_assoc($this->getHydrator()->extract($this), $this->memento, function($value1, $value2) {
+        return array_udiff_assoc($this->getHydrator()->extract($this), $this->memento, function ($value1, $value2) {
             return ($value1 === $value2) ? 0 : 1;
         });
     }
