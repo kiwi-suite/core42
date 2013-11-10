@@ -47,7 +47,6 @@ class Bootstrap
         $config = array(
             'modules' => array(
                 'Core42',
-                'Payment42'
             ),
 
             'module_listener_options' => array(
