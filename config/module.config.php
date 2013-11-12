@@ -43,6 +43,55 @@ return array(
         ),
     ),
 
+    'console' => array(
+        'router' => array(
+            'routes' => array(
+                'migration-make' => array(
+                    'options' => array(
+                        'route'    => 'migration-make',
+                        'defaults' => array(
+                            'controller' => __NAMESPACE__.'\Controller\Cli\Migration',
+                            'action' => 'make'
+                        ),
+                    ),
+                ),
+                'migration-migrate' => array(
+                    'options' => array(
+                        'route'    => 'migration-migrate',
+                        'defaults' => array(
+                            'controller' => __NAMESPACE__.'\Controller\Cli\Migration',
+                            'action' => 'migrate'
+                        ),
+                    ),
+                ),
+                'migration-rollback' => array(
+                    'options' => array(
+                        'route'    => 'migration-rollback',
+                        'defaults' => array(
+                            'controller' => __NAMESPACE__.'\Controller\Cli\Migration',
+                            'action' => 'rollback'
+                        ),
+                    ),
+                ),
+                'migration-reset' => array(
+                    'options' => array(
+                        'route'    => 'migration-reset',
+                        'defaults' => array(
+                            'controller' => __NAMESPACE__.'\Controller\Cli\Migration',
+                            'action' => 'reset'
+                        ),
+                    ),
+                ),
+            ),
+        ),
+    ),
+
+    'controllers' => array(
+        'invokables' => array(
+            __NAMESPACE__.'\Controller\Cli\Migration' => __NAMESPACE__.'\Controller\Cli\MigrationController',
+        ),
+    ),
+
     'tablegateway' => array(
 
     ),
@@ -57,7 +106,7 @@ return array(
     'caches' => array(
         'Cache\Intern' => array(
             'adapter' => array(
-                   'name' => 'filesystem',
+                'name' => 'filesystem',
                 'options' => array(
                     'cache_dir' => 'data/cache/',
                     'namespace' => 'cache_intern'
@@ -67,6 +116,23 @@ return array(
                 'Serializer'
             ),
         ),
+        'Cache\InternStatic' => array(
+            'adapter' => array(
+                'name' => 'filesystem',
+                'options' => array(
+                    'cache_dir' => 'data/cache/',
+                    'namespace' => 'cache_internstatic'
+                ),
+            ),
+            'plugins' => array(
+                'Serializer'
+            ),
+        ),
+    ),
+
+    'migration' => array(
+        'migration_dir' => 'data/database/migrations/',
+        'default_name' => '',
     ),
 
     'db' => array(
