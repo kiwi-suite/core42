@@ -38,7 +38,7 @@ class MigrationController extends AbstractActionController
     }
 
     /**
-     * 
+     *
      */
     public function resetAction()
     {
