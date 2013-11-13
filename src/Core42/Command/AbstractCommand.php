@@ -1,6 +1,7 @@
 <?php
 namespace Core42\Command;
 
+use Zend\Console\Request;
 use Zend\ServiceManager\ServiceManager;
 use Core42\ServiceManager\ServiceManagerStaticAwareInterface;
 
@@ -63,6 +64,11 @@ abstract class AbstractCommand implements ServiceManagerStaticAwareInterface
         $this->preExecute();
         $this->execute();
         $this->postExecute();
+
+        $request = $this->getServiceManager()->get("Request");
+        if ($this instanceof ConsoleOutputInterface && $request instanceof Request) {
+            $this->publishToConsole();
+        }
 
         return $this;
     }

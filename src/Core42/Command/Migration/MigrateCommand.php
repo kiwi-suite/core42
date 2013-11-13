@@ -2,16 +2,22 @@
 namespace Core42\Command\Migration;
 
 use Core42\Command\AbstractCommand;
+use Core42\Command\ConsoleOutputInterface;
 use Core42\Db\Migration\Container;
 use Core42\Migration\Migration;
 use Zend\Validator\File\Extension;
 
-class MigrateCommand extends AbstractCommand
+class MigrateCommand extends AbstractCommand implements ConsoleOutputInterface
 {
     /**
      * @var string
      */
     private $migrationDirectory;
+
+    /**
+     * @var Container
+     */
+    private $migrationContainer;
 
     /**
      *
@@ -23,6 +29,8 @@ class MigrateCommand extends AbstractCommand
             mkdir($config['migration']['migration_dir'], 0777, true);
         }
         $this->migrationDirectory = rtrim($config['migration']['migration_dir'], "/") . "/";
+
+        $this->migrationContainer = new Container();
     }
 
     /**
@@ -45,8 +53,6 @@ class MigrateCommand extends AbstractCommand
 
         /** @var $cache \Zend\Cache\Storage\Adapter\Filesystem */
         $cache = $this->getServiceManager()->get('Cache\InternStatic');
-        $migrationContainer = new Container();
-
         $finishedMigrations = $cache->getItem("finishedMigrations");
         if (empty($finishedMigrations) || !is_array($finishedMigrations)) $finishedMigrations = array();
 
@@ -61,12 +67,31 @@ class MigrateCommand extends AbstractCommand
             $className = 'Migrations\Migration'.$version;
 
             $migration = new Migration('Db\Master', $version);
-            $migrationContainer->addMigration($migration);
+            $this->migrationContainer->addMigration($migration);
 
             $migrationVersion = new $className();
             $migrationVersion->up($migration);
         }
 
-        $migrationContainer->execute($this->getServiceManager(), 'up');
+        $this->migrationContainer->execute($this->getServiceManager(), 'up');
+    }
+
+    /**
+     *
+     */
+    public function publishToConsole()
+    {
+        /** @var $console \Zend\Console\Adapter\AdapterInterface */
+        $console = $this->getServiceManager()->get("Console");
+
+        if ($this->migrationContainer->count() == 0) {
+            $console->writeLine("Nothing to migrate");
+            return;
+        }
+
+        /** @var $migration Migration */
+        foreach ($this->migrationContainer as $migration) {
+            $console->writeLine("Migration " . $migration->getVersion() . " migrated");
+        }
     }
 }

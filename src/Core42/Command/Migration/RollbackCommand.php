@@ -2,16 +2,22 @@
 namespace Core42\Command\Migration;
 
 use Core42\Command\AbstractCommand;
+use Core42\Command\ConsoleOutputInterface;
 use Core42\Db\Migration\Container;
 use Core42\Migration\Migration;
 use Zend\Validator\File\Extension;
 
-class RollbackCommand extends AbstractCommand
+class RollbackCommand extends AbstractCommand implements ConsoleOutputInterface
 {
     /**
      * @var string
      */
     private $migrationDirectory;
+
+    /**
+     * @var Container
+     */
+    private $migrationContainer;
 
     /**
      *
@@ -23,6 +29,8 @@ class RollbackCommand extends AbstractCommand
             mkdir($config['migration']['migration_dir'], 0777, true);
         }
         $this->migrationDirectory = rtrim($config['migration']['migration_dir'], "/") . "/";
+
+        $this->migrationContainer = new Container();
     }
 
     /**
@@ -44,8 +52,6 @@ class RollbackCommand extends AbstractCommand
         sort($files, SORT_NUMERIC);
         $files = array_reverse($files);
 
-        $migrationContainer = new Container();
-
         /** @var $cache \Zend\Cache\Storage\Adapter\Filesystem */
         $cache = $this->getServiceManager()->get('Cache\InternStatic');
         $finishedMigrations = $cache->getItem("finishedMigrations");
@@ -62,7 +68,7 @@ class RollbackCommand extends AbstractCommand
             $className = 'Migrations\Migration'.$version;
 
             $migration = new Migration('Db\Master', $version);
-            $migrationContainer->addMigration($migration);
+            $this->migrationContainer->addMigration($migration);
 
             $migrationVersion = new $className();
             $migrationVersion->down($migration);
@@ -70,7 +76,26 @@ class RollbackCommand extends AbstractCommand
             break;
         }
 
-        $migrationContainer->execute($this->getServiceManager(), 'down');
+        $this->migrationContainer->execute($this->getServiceManager(), 'down');
 
+    }
+
+    /**
+     *
+     */
+    public function publishToConsole()
+    {
+        /** @var $console \Zend\Console\Adapter\AdapterInterface */
+        $console = $this->getServiceManager()->get("Console");
+
+        if ($this->migrationContainer->count() == 0) {
+            $console->writeLine("Nothing to rollback");
+            return;
+        }
+
+        /** @var $migration Migration */
+        foreach ($this->migrationContainer as $migration) {
+            $console->writeLine("Migration " . $migration->getVersion() . " rolled back");
+        }
     }
 }

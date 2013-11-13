@@ -2,11 +2,12 @@
 namespace Core42\Command\Migration;
 
 use Core42\Command\AbstractCommand;
+use Core42\Command\ConsoleOutputInterface;
 use Zend\Code\Generator\ClassGenerator;
 use Zend\Code\Generator\ParameterGenerator;
 use Zend\I18n\Filter\Alnum;
 
-class MakeCommand extends AbstractCommand
+class MakeCommand extends AbstractCommand implements ConsoleOutputInterface
 {
     /**
      * @var string
@@ -63,14 +64,17 @@ class MakeCommand extends AbstractCommand
             new ParameterGenerator("migration", '\Core42\Migration\Migration'),
         ));
 
-        file_put_contents($this->migrationDirectory . $this->name .'.php', "<?php\n" . $classGenerator->generate());
+        file_put_contents($this->filename, "<?php\n" . $classGenerator->generate());
     }
 
     /**
-     * @return string
+     *
      */
-    public function getFilename()
+    public function publishToConsole()
     {
-        return $this->filename;
+        /** @var $console \Zend\Console\Adapter\AdapterInterface */
+        $console = $this->getServiceManager()->get("Console");
+
+        $console->writeLine("Migration created at {$this->filename}");
     }
 }
