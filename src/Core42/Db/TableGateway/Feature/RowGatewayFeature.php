@@ -27,9 +27,9 @@ class RowGatewayFeature extends AbstractFeature
 
     /**
      *
-     * @param string $rowGatewayDefinition
+     * @param string               $rowGatewayDefinition
      * @param string|AbstractModel $modelPrototype
-     * @param ModelHydrator $hydrator
+     * @param ModelHydrator        $hydrator
      */
     public function __construct($rowGatewayDefinition, $modelPrototype, ModelHydrator $hydrator)
     {

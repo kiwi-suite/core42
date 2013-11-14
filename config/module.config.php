@@ -43,6 +43,75 @@ return array(
         ),
     ),
 
+    'console' => array(
+        'router' => array(
+            'routes' => array(
+                'migration-make' => array(
+                    'options' => array(
+                        'route'    => 'migration-make',
+                        'defaults' => array(
+                            'controller' => __NAMESPACE__.'\Controller\Cli\Migration',
+                            'action' => 'make'
+                        ),
+                    ),
+                ),
+                'migration-migrate' => array(
+                    'options' => array(
+                        'route'    => 'migration-migrate',
+                        'defaults' => array(
+                            'controller' => __NAMESPACE__.'\Controller\Cli\Migration',
+                            'action' => 'migrate'
+                        ),
+                    ),
+                ),
+                'migration-rollback' => array(
+                    'options' => array(
+                        'route'    => 'migration-rollback',
+                        'defaults' => array(
+                            'controller' => __NAMESPACE__.'\Controller\Cli\Migration',
+                            'action' => 'rollback'
+                        ),
+                    ),
+                ),
+                'migration-reset' => array(
+                    'options' => array(
+                        'route'    => 'migration-reset',
+                        'defaults' => array(
+                            'controller' => __NAMESPACE__.'\Controller\Cli\Migration',
+                            'action' => 'reset'
+                        ),
+                    ),
+                ),
+
+                'seeding-make' => array(
+                    'options' => array(
+                        'route'    => 'seeding-make <name>',
+                        'defaults' => array(
+                            'controller' => __NAMESPACE__.'\Controller\Cli\Seeding',
+                            'action' => 'make'
+                        ),
+                    ),
+                ),
+                'seeding-seed' => array(
+                    'options' => array(
+                        'route'    => 'seeding-seed',
+                        'defaults' => array(
+                            'controller' => __NAMESPACE__.'\Controller\Cli\Seeding',
+                            'action' => 'seed'
+                        ),
+                    ),
+                ),
+            ),
+        ),
+    ),
+
+    'controllers' => array(
+        'invokables' => array(
+            __NAMESPACE__.'\Controller\Cli\Migration' => __NAMESPACE__.'\Controller\Cli\MigrationController',
+            __NAMESPACE__.'\Controller\Cli\Seeding' => __NAMESPACE__.'\Controller\Cli\SeedingController',
+        ),
+    ),
+
     'tablegateway' => array(
 
     ),
@@ -57,7 +126,7 @@ return array(
     'caches' => array(
         'Cache\Intern' => array(
             'adapter' => array(
-                   'name' => 'filesystem',
+                'name' => 'filesystem',
                 'options' => array(
                     'cache_dir' => 'data/cache/',
                     'namespace' => 'cache_intern'
@@ -67,6 +136,26 @@ return array(
                 'Serializer'
             ),
         ),
+        'Cache\InternStatic' => array(
+            'adapter' => array(
+                'name' => 'filesystem',
+                'options' => array(
+                    'cache_dir' => 'data/cache/',
+                    'namespace' => 'cache_internstatic'
+                ),
+            ),
+            'plugins' => array(
+                'Serializer'
+            ),
+        ),
+    ),
+
+    'migration' => array(
+        'migration_dir' => 'data/database/migrations/',
+    ),
+
+    'seeding' => array(
+        'seeding_dir' => 'data/database/seeding/',
     ),
 
     'db' => array(

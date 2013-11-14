@@ -33,6 +33,7 @@ class TableGatewayAbstractServiceFactory implements AbstractFactoryInterface
         if (empty($config)) {
             return false;
         }
+
         return (isset($config[$requestedName]) && is_string($config[$requestedName]));
     }
 
@@ -49,6 +50,7 @@ class TableGatewayAbstractServiceFactory implements AbstractFactoryInterface
         $config = $this->getConfig($serviceLocator);
         $config = $config[$requestedName];
         $class = new $config($serviceLocator);
+
         return $class;
     }
 
@@ -66,16 +68,19 @@ class TableGatewayAbstractServiceFactory implements AbstractFactoryInterface
 
         if (!$services->has('Config')) {
             $this->config = array();
+
             return $this->config;
         }
 
         $config = $services->get('Config');
         if (!isset($config[$this->configKey])) {
             $this->config = array();
+
             return $this->config;
         }
 
         $this->config = $config[$this->configKey];
+
         return $this->config;
     }
 }

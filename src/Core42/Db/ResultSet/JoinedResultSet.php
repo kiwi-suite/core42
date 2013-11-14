@@ -34,7 +34,7 @@ class JoinedResultSet extends AbstractResultSet
         $data = $this->dataSource->current();
         $preparedData = array();
 
-        foreach ($data as $name => $value){
+        foreach ($data as $name => $value) {
             if (strpos($name, ".") !== false) {
                 list($aliasName, $column) = explode(".", $name);
                 $preparedData[$aliasName][$column] = $value;

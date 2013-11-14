@@ -3,7 +3,6 @@ namespace Core42\Session;
 
 use Zend\Mvc\MvcEvent;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\Session\Container;
 
 class SessionInitializer
 {
@@ -29,7 +28,7 @@ class SessionInitializer
     {
         $this->serviceLocator = $serviceLocator;
 
-        $sessionManager = $serviceLocator->get("Zend\Session\Service\SessionManagerFactory");
+        $sessionManager = $serviceLocator->get('Zend\Session\Service\SessionManagerFactory');
         $config = $serviceLocator->get("Config");
         if (isset($config['session_manager']['validator'])) {
             $chain = $sessionManager->getValidatorChain();
@@ -60,7 +59,7 @@ class SessionInitializer
         }
 
         $this->enabledTransSid = $enable;
-        $sessionManager = $this->serviceLocator->get("Zend\Session\Service\SessionManagerFactory");
+        $sessionManager = $this->serviceLocator->get('Zend\Session\Service\SessionManagerFactory');
 
         $config = $sessionManager->getConfig();
         if ($enable === true) {
@@ -81,7 +80,7 @@ class SessionInitializer
     public function checkForCookieHttpParam()
     {
         $request = $this->serviceLocator->get('Application')->getRequest();
-        $sessionManager = $this->serviceLocator->get("Zend\Session\Service\SessionManagerFactory");
+        $sessionManager = $this->serviceLocator->get('Zend\Session\Service\SessionManagerFactory');
 
         if ($request instanceof \Zend\Http\Request) {
             if ($request->getQuery($sessionManager->getName(), null) !== null || $request->getPost($sessionManager->getName(), null) !== null) {
@@ -103,7 +102,7 @@ class SessionInitializer
 
         $response = $event->getResponse();
         if ($response instanceof \Zend\Http\Response && $response->isRedirect()) {
-            $sessionManager = $this->serviceLocator->get("Zend\Session\Service\SessionManagerFactory");
+            $sessionManager = $this->serviceLocator->get('Zend\Session\Service\SessionManagerFactory');
 
             $uri = $response->getHeaders()->get('Location')->uri();
             if (is_string($uri)) {

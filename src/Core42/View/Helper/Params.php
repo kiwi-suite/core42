@@ -43,8 +43,8 @@ class Params extends AbstractHelper implements ServiceLocatorAwareInterface
 
     /**
      *
-     * @param string $param
-     * @param mixed $default
+     * @param  string $param
+     * @param  mixed  $default
      * @return mixed
      */
     public function __invoke($param = null, $default = null)
@@ -52,13 +52,14 @@ class Params extends AbstractHelper implements ServiceLocatorAwareInterface
         if ($param === null) {
             return $this;
         }
+
         return $this->fromRoute($param, $default);
     }
 
     /**
      *
-     * @param  string $name
-     * @param  mixed $default
+     * @param  string                  $name
+     * @param  mixed                   $default
      * @return array|\ArrayAccess|null
      */
     public function fromFiles($name = null, $default = null)
@@ -72,8 +73,8 @@ class Params extends AbstractHelper implements ServiceLocatorAwareInterface
 
     /**
      *
-     * @param  string $header
-     * @param  mixed $default
+     * @param  string                                 $header
+     * @param  mixed                                  $default
      * @return null|\Zend\Http\Header\HeaderInterface
      */
     public function fromHeader($header = null, $default = null)
@@ -87,8 +88,8 @@ class Params extends AbstractHelper implements ServiceLocatorAwareInterface
 
     /**
      *
-     * @param string $param
-     * @param mixed $default
+     * @param  string $param
+     * @param  mixed  $default
      * @return mixed
      */
     public function fromPost($param = null, $default = null)
@@ -102,8 +103,8 @@ class Params extends AbstractHelper implements ServiceLocatorAwareInterface
 
     /**
      *
-     * @param string $param
-     * @param mixed $default
+     * @param  string $param
+     * @param  mixed  $default
      * @return mixed
      */
     public function fromQuery($param = null, $default = null)
@@ -117,8 +118,8 @@ class Params extends AbstractHelper implements ServiceLocatorAwareInterface
 
     /**
      *
-     * @param string $param
-     * @param mixed $default
+     * @param  string $param
+     * @param  mixed  $default
      * @return mixed
      */
     public function fromRoute($param = null, $default = null)

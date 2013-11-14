@@ -11,8 +11,8 @@ class DefaultModel extends AbstractModel
 
     /**
      *
-     * @param string $method
-     * @param mixed $params
+     * @param  string                     $method
+     * @param  mixed                      $params
      * @throws \Exception
      * @return \Core42\Model\DefaultModel
      */

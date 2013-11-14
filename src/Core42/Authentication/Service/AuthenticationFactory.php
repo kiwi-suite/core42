@@ -11,7 +11,7 @@ class AuthenticationFactory implements FactoryInterface
     /**
      * Create service
      *
-     * @param ServiceLocatorInterface $serviceLocator
+     * @param  ServiceLocatorInterface $serviceLocator
      * @return AuthenticationService
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
