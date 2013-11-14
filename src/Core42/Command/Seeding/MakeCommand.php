@@ -64,6 +64,9 @@ class MakeCommand extends AbstractCommand
         $classGenerator->addMethod("seed", array(
             new ParameterGenerator("serviceManager", '\Zend\ServiceManager\ServiceManager')
         ));
+        $classGenerator->addMethod("reset", array(
+            new ParameterGenerator("serviceManager", '\Zend\ServiceManager\ServiceManager')
+        ));
 
         file_put_contents($this->filename, "<?php\n" . $classGenerator->generate());
     }

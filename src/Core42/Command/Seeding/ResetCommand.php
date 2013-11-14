@@ -4,7 +4,7 @@ namespace Core42\Command\Seeding;
 use Core42\Command\AbstractCommand;
 use Zend\Validator\File\Extension;
 
-class SeedCommand extends AbstractCommand
+class ResetCommand extends AbstractCommand
 {
     /**
      * @var string
@@ -23,7 +23,7 @@ class SeedCommand extends AbstractCommand
 
     /**
      * @param $name
-     * @return \Core42\Command\Seeding\SeedCommand
+     * @return \Core42\Command\Seeding\ResetCommand
      */
     public function setName($name)
     {
@@ -60,7 +60,7 @@ class SeedCommand extends AbstractCommand
             $className = 'Seeding\Seeding' . ucfirst(str_ireplace(".php", "", $file));
             require_once $this->seedingDirectory . $file;
             $obj = new $className;
-            $obj->seed($this->getServiceManager());
+            $obj->reset($this->getServiceManager());
         }
     }
 }
