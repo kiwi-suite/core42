@@ -82,6 +82,25 @@ return array(
                         ),
                     ),
                 ),
+
+                'seeding-make' => array(
+                    'options' => array(
+                        'route'    => 'seeding-make <name>',
+                        'defaults' => array(
+                            'controller' => __NAMESPACE__.'\Controller\Cli\Seeding',
+                            'action' => 'make'
+                        ),
+                    ),
+                ),
+                'seeding-seed' => array(
+                    'options' => array(
+                        'route'    => 'seeding-seed',
+                        'defaults' => array(
+                            'controller' => __NAMESPACE__.'\Controller\Cli\Seeding',
+                            'action' => 'seed'
+                        ),
+                    ),
+                ),
             ),
         ),
     ),
@@ -89,6 +108,7 @@ return array(
     'controllers' => array(
         'invokables' => array(
             __NAMESPACE__.'\Controller\Cli\Migration' => __NAMESPACE__.'\Controller\Cli\MigrationController',
+            __NAMESPACE__.'\Controller\Cli\Seeding' => __NAMESPACE__.'\Controller\Cli\SeedingController',
         ),
     ),
 
@@ -132,7 +152,10 @@ return array(
 
     'migration' => array(
         'migration_dir' => 'data/database/migrations/',
-        'default_name' => '',
+    ),
+
+    'seeding' => array(
+        'seeding_dir' => 'data/database/seeding/',
     ),
 
     'db' => array(
