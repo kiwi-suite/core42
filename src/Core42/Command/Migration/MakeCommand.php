@@ -44,11 +44,12 @@ class MakeCommand extends AbstractCommand implements ConsoleOutputInterface
 
         $this->className = 'Migration' . $date;
         $this->name = $date;
-        if (file_exists($this->migrationDirectory . $this->name)) {
-            throw new \Exception("migration file already exists");
-        }
 
         $this->filename = $this->migrationDirectory . $this->name . '.php';
+
+        if (file_exists($this->filename)) {
+            throw new \Exception("migration file already exists");
+        }
     }
 
     /**
