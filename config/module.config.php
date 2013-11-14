@@ -94,10 +94,19 @@ return array(
                 ),
                 'seeding-seed' => array(
                     'options' => array(
-                        'route'    => 'seeding-seed',
+                        'route'    => 'seeding-seed [<name>]',
                         'defaults' => array(
                             'controller' => __NAMESPACE__.'\Controller\Cli\Seeding',
                             'action' => 'seed'
+                        ),
+                    ),
+                ),
+                'seeding-reset' => array(
+                    'options' => array(
+                        'route'    => 'seeding-reset [<name>]',
+                        'defaults' => array(
+                            'controller' => __NAMESPACE__.'\Controller\Cli\Seeding',
+                            'action' => 'reset'
                         ),
                     ),
                 ),

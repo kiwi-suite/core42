@@ -10,6 +10,7 @@ return array(
     'Core42\Command\Migration\ResetCommand'                             => __DIR__ . '/src/Core42/Command/Migration/ResetCommand.php',
     'Core42\Command\Migration\RollbackCommand'                          => __DIR__ . '/src/Core42/Command/Migration/RollbackCommand.php',
     'Core42\Command\Seeding\MakeCommand'                                => __DIR__ . '/src/Core42/Command/Seeding/MakeCommand.php',
+    'Core42\Command\Seeding\ResetCommand'                               => __DIR__ . '/src/Core42/Command/Seeding/ResetCommand.php',
     'Core42\Command\Seeding\SeedCommand'                                => __DIR__ . '/src/Core42/Command/Seeding/SeedCommand.php',
     'Core42\Controller\Cli\MigrationController'                         => __DIR__ . '/src/Core42/Controller/Cli/MigrationController.php',
     'Core42\Controller\Cli\SeedingController'                           => __DIR__ . '/src/Core42/Controller/Cli/SeedingController.php',
