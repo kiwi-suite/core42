@@ -6,11 +6,17 @@ use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 class IntegerStrategy implements StrategyInterface, DatabaseStrategyInterface
 {
     /**
+     * @var boolean
+     */
+    private $isNullable;
+
+    /**
      * @param  \Zend\Db\Metadata\Object\ColumnObject $column
      * @return mixed
      */
     public function getStrategy(\Zend\Db\Metadata\Object\ColumnObject $column)
     {
+        $this->isNullable = $column->getIsNullable();
         return (in_array($column->getDataType(), array('tinyint', 'smallint', 'mediumint', 'int', 'bigint'))) ? $this : null;
     }
 
@@ -23,6 +29,7 @@ class IntegerStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function extract($value)
     {
+        if ($this->isNullable && $value === null) return null;
         return (int) $value;
     }
 
@@ -35,6 +42,7 @@ class IntegerStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function hydrate($value)
     {
+        if ($this->isNullable && $value === null) return null;
         return (int) $value;
     }
 }
