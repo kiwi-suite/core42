@@ -1,21 +1,15 @@
 <?php
-namespace Core42\Hydrator\Strategy\Database;
+namespace Core42\Hydrator\Strategy\Database\MySQL;
 
+use Core42\Hydrator\Strategy\Database\DatabaseStrategyInterface;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
-use Core42\Db\DataConverter\DataConverter;
 
 class BooleanStrategy implements StrategyInterface, DatabaseStrategyInterface
 {
     /**
-     *
-     * @var DataConverter
+     * @var boolean
      */
-    private $dataConverter;
-
-    public function __construct()
-    {
-        $this->dataConverter = new DataConverter();
-    }
+    private $isNullable;
 
     /**
      * Converts the given value so that it can be extracted by the hydrator.
@@ -26,7 +20,8 @@ class BooleanStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function extract($value)
     {
-        return $this->dataConverter->convertBooleanToDb($value);
+        if ($this->isNullable && $value === null) return null;
+        return ($value === true) ? "true" : "false";
     }
 
     /**
@@ -38,7 +33,8 @@ class BooleanStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function hydrate($value)
     {
-        return $this->dataConverter->convertBooleanToLocal($value);
+        if ($this->isNullable && $value === null) return null;
+        return ($value === "true") ? true : false;
     }
 
     /**
@@ -48,6 +44,8 @@ class BooleanStrategy implements StrategyInterface, DatabaseStrategyInterface
     public function getStrategy(\Zend\Db\Metadata\Object\ColumnObject $column)
     {
         if ($column->getDataType() == "enum" && in_array($column->getErrata("permitted_values"), array(array("true", "false"), array("false", "true")))) {
+            $this->isNullable = $column->getIsNullable();
+
             return $this;
         }
 

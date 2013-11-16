@@ -4,7 +4,7 @@ namespace Core42\Command\Migration;
 use Core42\Command\AbstractCommand;
 use Core42\Command\ConsoleOutputInterface;
 use Core42\Db\Migration\Container;
-use Core42\Migration\Migration;
+use Core42\Db\Migration\Migration;
 use Zend\Validator\File\Extension;
 
 class MigrateCommand extends AbstractCommand implements ConsoleOutputInterface
@@ -86,6 +86,7 @@ class MigrateCommand extends AbstractCommand implements ConsoleOutputInterface
 
         if ($this->migrationContainer->count() == 0) {
             $console->writeLine("Nothing to migrate");
+
             return;
         }
 

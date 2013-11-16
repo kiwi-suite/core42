@@ -5,7 +5,6 @@ use Core42\Command\AbstractCommand;
 use Core42\Command\ConsoleOutputInterface;
 use Zend\Code\Generator\ClassGenerator;
 use Zend\Code\Generator\ParameterGenerator;
-use Zend\I18n\Filter\Alnum;
 
 class MakeCommand extends AbstractCommand implements ConsoleOutputInterface
 {
@@ -59,10 +58,10 @@ class MakeCommand extends AbstractCommand implements ConsoleOutputInterface
     {
         $classGenerator = new ClassGenerator($this->className, "Migrations");
         $classGenerator->addMethod("up", array(
-            new ParameterGenerator("migration", '\Core42\Migration\Migration'),
+            new ParameterGenerator("migration", '\Core42\Db\Migration\Migration'),
         ));
         $classGenerator->addMethod("down", array(
-            new ParameterGenerator("migration", '\Core42\Migration\Migration'),
+            new ParameterGenerator("migration", '\Core42\Db\Migration\Migration'),
         ));
 
         file_put_contents($this->filename, "<?php\n" . $classGenerator->generate());

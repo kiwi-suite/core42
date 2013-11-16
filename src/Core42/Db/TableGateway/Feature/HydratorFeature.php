@@ -33,10 +33,10 @@ class HydratorFeature extends AbstractFeature
     public function postInitialize()
     {
         $columns = $this->metadata->getColumns($this->tableGateway->getTable());
-
+        $pluginManager = 'Core42\Hydrator\Strategy\Database\\' . $this->tableGateway->getAdapter()->getPlatform()->getName() . '\PluginManager';
         foreach ($columns as $_column) {
             /* @var $_column \Zend\Db\Metadata\Object\ColumnObject */
-            $strategy = $this->serviceManager->get('Core42\Hydrator\Strategy\Database\PluginManager')->getStrategy($_column);
+            $strategy = $this->serviceManager->get($pluginManager)->getStrategy($_column);
             $this->tableGateway->getHydrator()->addStrategy($_column->getName(), $strategy);
         }
     }

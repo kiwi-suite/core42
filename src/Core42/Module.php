@@ -2,12 +2,9 @@
 namespace Core42;
 
 use Core42\Session\SessionInitializer;
-use Zend\Console\Adapter\AdapterInterface;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
-use Zend\ModuleManager\Feature\ConsoleBannerProviderInterface;
-use Zend\ModuleManager\Feature\ConsoleUsageProviderInterface;
 
 class Module implements BootstrapListenerInterface,
                             ConfigProviderInterface,

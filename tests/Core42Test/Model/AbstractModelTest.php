@@ -26,7 +26,7 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
     public function testFilter()
     {
         $testModel = new TestModel();
-        $testModel->setDate(new \DateTime());
+        //$testModel->setDate(new \DateTime());
         $testModel->setId((string) "45");
         $testModel->filter();
         $this->assertSame(45, $testModel->getId());

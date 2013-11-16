@@ -1,9 +1,10 @@
 <?php
-namespace Core42\Hydrator\Strategy\Database;
+namespace Core42\Hydrator\Strategy\Database\MySQL;
 
+use Core42\Hydrator\Strategy\Database\DatabaseStrategyInterface;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 
-class IntegerStrategy implements StrategyInterface, DatabaseStrategyInterface
+class FloatStrategy implements StrategyInterface, DatabaseStrategyInterface
 {
     /**
      * @var boolean
@@ -17,7 +18,8 @@ class IntegerStrategy implements StrategyInterface, DatabaseStrategyInterface
     public function getStrategy(\Zend\Db\Metadata\Object\ColumnObject $column)
     {
         $this->isNullable = $column->getIsNullable();
-        return (in_array($column->getDataType(), array('tinyint', 'smallint', 'mediumint', 'int', 'bigint'))) ? $this : null;
+
+        return (in_array($column->getDataType(), array('decimal', 'numeric', 'float', 'double'))) ? $this : null;
     }
 
     /**
@@ -30,7 +32,7 @@ class IntegerStrategy implements StrategyInterface, DatabaseStrategyInterface
     public function extract($value)
     {
         if ($this->isNullable && $value === null) return null;
-        return (int) $value;
+        return (float) $value;
     }
 
     /**
@@ -43,6 +45,6 @@ class IntegerStrategy implements StrategyInterface, DatabaseStrategyInterface
     public function hydrate($value)
     {
         if ($this->isNullable && $value === null) return null;
-        return (int) $value;
+        return (float) $value;
     }
 }

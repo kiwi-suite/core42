@@ -17,7 +17,7 @@ return array(
         ),
         'invokables' => array(
             'MobileDetect' => '\Mobile_Detect',
-            'Core42\Hydrator\Strategy\Database\PluginManager' => 'Core42\Hydrator\Strategy\Database\PluginManager'
+            'Core42\Hydrator\Strategy\Database\MySQL\PluginManager' => 'Core42\Hydrator\Strategy\Database\MySQL\PluginManager'
         ),
         'aliases' => array(
             'Zend\Authentication\AuthenticationService' => 'Core42\Authentication\AuthenticationService',
@@ -27,7 +27,6 @@ return array(
     'service_manager_static_aware' => array(
         'AbstractCommand' => 'Core42\Command\AbstractCommand',
         'SqlQuery' => 'Core42\Db\SqlQuery\SqlQuery',
-        'DataConverter' => 'Core42\Db\DataConverter\DataConverter',
     ),
 
     'view_helpers' => array(
@@ -126,10 +125,12 @@ return array(
     ),
 
     'database_hydrator_plugins' => array(
-        'boolean'   => 'Core42\Hydrator\Strategy\Database\BooleanStrategy',
-        'datetime'  => 'Core42\Hydrator\Strategy\Database\DatetimeStrategy',
-        'integer'   => 'Core42\Hydrator\Strategy\Database\IntegerStrategy',
-        'float'     => 'Core42\Hydrator\Strategy\Database\FloatStrategy',
+        'mysql' => array(
+            'boolean'   => 'Core42\Hydrator\Strategy\Database\MySQL\BooleanStrategy',
+            'datetime'  => 'Core42\Hydrator\Strategy\Database\MySQL\DatetimeStrategy',
+            'integer'   => 'Core42\Hydrator\Strategy\Database\MySQL\IntegerStrategy',
+            'float'     => 'Core42\Hydrator\Strategy\Database\MySQL\FloatStrategy',
+        ),
     ),
 
     'caches' => array(

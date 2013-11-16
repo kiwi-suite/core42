@@ -1,5 +1,5 @@
 <?php
-namespace Core42\Hydrator\Strategy\Database;
+namespace Core42\Hydrator\Strategy\Database\MySQL;
 
 use Zend\ServiceManager\ServiceManager;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
@@ -12,6 +12,8 @@ class PluginManager implements ServiceManagerAwareInterface
     private $plugins = array();
 
     private $defaultStrategy;
+
+    private $initialized = false;
 
     /**
      * Set service manager
@@ -37,7 +39,15 @@ class PluginManager implements ServiceManagerAwareInterface
         if (!array_key_exists("database_hydrator_plugins", $config)) {
             return;
         }
-        foreach ($config["database_hydrator_plugins"] as $className) {
+        if (!array_key_exists("mysql", $config['database_hydrator_plugins'])) {
+            return;
+        }
+
+        if ($this->initialized === true) {
+            return;
+        }
+
+        foreach ($config["database_hydrator_plugins"]['mysql'] as $className) {
             $object = new $className();
             if (!($object instanceof DatabaseStrategyInterface)) {
                 continue;
@@ -46,6 +56,7 @@ class PluginManager implements ServiceManagerAwareInterface
         }
 
         $this->defaultStrategy = new DefaultStrategy();
+        $this->initialized = true;
     }
 
     public function getStrategy(\Zend\Db\Metadata\Object\ColumnObject $column)

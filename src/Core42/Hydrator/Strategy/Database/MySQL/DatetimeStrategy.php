@@ -1,22 +1,15 @@
 <?php
-namespace Core42\Hydrator\Strategy\Database;
+namespace Core42\Hydrator\Strategy\Database\MySQL;
 
+use Core42\Hydrator\Strategy\Database\DatabaseStrategyInterface;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
-use Core42\Db\DataConverter\DataConverter;
 
 class DatetimeStrategy implements StrategyInterface, DatabaseStrategyInterface
 {
-
     /**
-     *
-     * @var DataConverter
+     * @var boolean
      */
-    private $dataConverter;
-
-    public function __construct()
-    {
-        $this->dataConverter = new DataConverter();
-    }
+    private $isNullable;
 
     /**
      * Converts the given value so that it can be extracted by the hydrator.
@@ -27,8 +20,10 @@ class DatetimeStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function extract($value)
     {
+        if ($this->isNullable && $value === null) return null;
+
         if ($value instanceof \DateTime) {
-            return $this->dataConverter->convertDatetimeToDb($value);
+            return date("Y-m-d H:i:s", $value->getTimestamp());
         }
 
         return $value;
@@ -43,7 +38,8 @@ class DatetimeStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function hydrate($value)
     {
-        return $this->dataConverter->convertDatetimeToLocal($value);
+        if ($this->isNullable && $value === null) return null;
+        return new \DateTime($value);
     }
 
     /**
@@ -52,6 +48,8 @@ class DatetimeStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function getStrategy(\Zend\Db\Metadata\Object\ColumnObject $column)
     {
+        $this->isNullable = $column->getIsNullable();
+
         return (in_array($column->getDataType(), array('datetime', 'date', 'timestamp'))) ? $this : null;
     }
 }

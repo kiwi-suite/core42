@@ -22,7 +22,7 @@ class TestModel extends AbstractModel
                         'className' => '\DateTime',
                     ),
                 ),
-            ),1
+            ),
         ),
     );
 
@@ -33,7 +33,7 @@ class TestModel extends AbstractModel
 
     /**
      * @var \DateTime
-     */ 
+     */
     private $date;
 
     /**

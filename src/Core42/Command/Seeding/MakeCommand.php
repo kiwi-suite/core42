@@ -1,7 +1,6 @@
 <?php
 namespace Core42\Command\Seeding;
 
-
 use Core42\Command\AbstractCommand;
 use Zend\Code\Generator\ClassGenerator;
 use Zend\Code\Generator\ParameterGenerator;
@@ -31,6 +30,7 @@ class MakeCommand extends AbstractCommand
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 

@@ -1,8 +1,5 @@
 <?php
-namespace Core42\Migration;
-
-use Zend\Db\Adapter\Adapter;
-use Zend\ServiceManager\ServiceManager;
+namespace Core42\Db\Migration;
 
 class Migration
 {

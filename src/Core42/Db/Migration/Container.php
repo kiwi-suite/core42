@@ -1,7 +1,7 @@
 <?php
 namespace Core42\Db\Migration;
 
-use Core42\Migration\Migration;
+use Core42\Db\Migration\Migration;
 use Zend\Db\Adapter\Adapter;
 use Zend\ServiceManager\ServiceManager;
 
@@ -72,7 +72,6 @@ class Container implements \Iterator, \Countable
         }
         $cache->setItem('finishedMigrations', $finishedMigrations);
     }
-
 
     /**
      * (PHP 5 &gt;= 5.0.0)<br/>

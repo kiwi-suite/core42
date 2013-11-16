@@ -4,16 +4,9 @@ namespace Core42\Model;
 use Core42\Hydrator\ModelHydrator;
 use Zend\InputFilter\Factory;
 use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\Stdlib\Hydrator\Filter\FilterComposite;
-use Zend\Stdlib\Hydrator\Filter\FilterProviderInterface;
-use Zend\Stdlib\Hydrator\Filter\GetFilter;
-use Zend\Stdlib\Hydrator\Filter\HasFilter;
-use Zend\Stdlib\Hydrator\Filter\IsFilter;
-use Zend\Stdlib\Hydrator\Filter\MethodMatchFilter;
-use Zend\Stdlib\Hydrator\Filter\OptionalParametersFilter;
+use Zend\InputFilter\InputFilterInterface;
 
-abstract class AbstractModel implements FilterProviderInterface,
-                                            InputFilterProviderInterface
+abstract class AbstractModel implements InputFilterProviderInterface
 {
     /**
      * @var array
@@ -35,6 +28,11 @@ abstract class AbstractModel implements FilterProviderInterface,
      */
     private $memento = null;
 
+    public function __construct()
+    {
+        $this->memento();
+    }
+
     /**
      * @return ModelHydrator
      */
@@ -45,6 +43,22 @@ abstract class AbstractModel implements FilterProviderInterface,
         }
 
         return $this->hydrator;
+    }
+
+    /**
+     * @param array $data
+     */
+    public function hydrate(array $data)
+    {
+        $this->getHydrator()->hydrate($data, $this);
+    }
+
+    /**
+     * @return array
+     */
+    public function extract()
+    {
+        return $this->getHydrator()->extract($this);
     }
 
     /**
@@ -66,33 +80,25 @@ abstract class AbstractModel implements FilterProviderInterface,
     }
 
     /**
-     * @return FilterComposite|\Zend\Stdlib\Hydrator\Filter\FilterInterface
-     */
-    public function getFilter()
-    {
-        $composite = new FilterComposite();
-        $composite->addFilter("is", new IsFilter())
-                    ->addFilter("has", new HasFilter())
-                    ->addFilter("get", new GetFilter())
-                    ->addFilter("parameter", new OptionalParametersFilter(), FilterComposite::CONDITION_AND)
-                    ->addFilter("getInputFilterSpecification", new MethodMatchFilter("getInputFilterSpecification"), FilterComposite::CONDITION_AND)
-                    ->addFilter("isValid", new MethodMatchFilter("isValid"), FilterComposite::CONDITION_AND)
-                    ->addFilter("isMemento", new MethodMatchFilter("isMemento"), FilterComposite::CONDITION_AND)
-                    ->addFilter("getHydrator", new MethodMatchFilter("getHydrator"), FilterComposite::CONDITION_AND)
-                    ->addFilter("getInputFilter", new MethodMatchFilter("getInputFilter"), FilterComposite::CONDITION_AND);
-
-        return $composite;
-    }
-
-    /**
+     * @param  string|array|null $options
      * @return bool
      */
-    public function isValid()
+    public function isValid($options = null)
     {
         $this->filter();
 
-        return $this->getInputFilter()
+        if (is_string($options)) {
+            $this->getInputFilter()->setValidationGroup(array($options));
+        } elseif (is_array($options)) {
+            $this->getInputFilter()->setValidationGroup($options);
+        }
+
+        $return = $this->getInputFilter()
                             ->isValid();
+
+        $this->getInputFilter()->setValidationGroup(InputFilterInterface::VALIDATE_ALL);
+
+        return $return;
     }
 
     /**
@@ -100,10 +106,9 @@ abstract class AbstractModel implements FilterProviderInterface,
      */
     public function filter()
     {
-        $this->getHydrator()->hydrate(
-            $this->getInputFilter()->setData($this->getHydrator()->extract($this))->getValues(),
-            $this
-        );
+        $values = $this->getInputFilter()->setData($this->diff())->getValues();
+        $hydrateValues = array_intersect_key($values, $this->diff());
+        $this->hydrate($hydrateValues);
     }
 
     /**
@@ -119,7 +124,7 @@ abstract class AbstractModel implements FilterProviderInterface,
      */
     public function memento()
     {
-        $this->memento = $this->getHydrator()->extract($this);
+        $this->memento = $this->extract();
 
         return $this;
     }
@@ -142,7 +147,7 @@ abstract class AbstractModel implements FilterProviderInterface,
             throw new \Exception("memento never called");
         }
 
-        return array_udiff_assoc($this->getHydrator()->extract($this), $this->memento, function ($value1, $value2) {
+        return array_udiff_assoc($this->extract(), $this->memento, function ($value1, $value2) {
             return ($value1 === $value2) ? 0 : 1;
         });
     }
