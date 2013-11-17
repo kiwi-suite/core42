@@ -33,6 +33,7 @@ return array(
         'invokables' => array(
             'params' => __NAMESPACE__.'\View\Helper\Params',
             'mobileDetect' => __NAMESPACE__ . '\View\Helper\MobileDetect',
+            'inputManager' => __NAMESPACE__ . '\View\Helper\InputManager',
         ),
     ),
 
