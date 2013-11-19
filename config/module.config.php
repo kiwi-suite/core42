@@ -20,6 +20,7 @@ return array(
             'Core42\Hydrator\Strategy\Database\MySQL\PluginManager' => 'Core42\Hydrator\Strategy\Database\MySQL\PluginManager'
         ),
         'aliases' => array(
+            'AuthenticationService' => 'Core42\Authentication\AuthenticationService',
             'Zend\Authentication\AuthenticationService' => 'Core42\Authentication\AuthenticationService',
         ),
     ),
