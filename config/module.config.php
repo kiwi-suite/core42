@@ -7,7 +7,8 @@ return array(
             'Core42\Db\TableGateway\Service\TableGatewayAbstractServiceFactory',
             'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
             'Zend\Db\Adapter\AdapterAbstractServiceFactory',
-            'Zend\Log\LoggerAbstractServiceFactory'
+            'Zend\Log\LoggerAbstractServiceFactory',
+            'Core42\Authentication\Service\PluginAbstractFactory',
         ),
         'factories' => array(
             'Zend\Session\Service\SessionManagerFactory' => 'Zend\Session\Service\SessionManagerFactory',
@@ -228,13 +229,17 @@ return array(
     ),
 
 //    'authentication' => array(
-//        'adapter' => array(
-//            'name' => 'Core42\Authentication\Adapter\DbTable\BCryptCheckAdapter',
-//            'options' => array(
-//                'table_gateway' => '',
-//                'identity_column' => '',
-//                'credential_column' => '',
-//              ),
+//        'plugins' => array(
+//            'Authentication\Plugin\TableGateway' => array(
+//                'name' => 'Core42\Authentication\Plugin\TableGateway',
+//                'options' => array(
+//                    'table_gateway' => 'Ecrm\UserTableGateway',
+//                    'identity_column' => 'username',
+//                    'credential_column' => 'password',
+//                ),
+//            ),
 //        ),
+//        'adapter' => 'Authentication\Plugin\TableGateway',
+//        'storage' => 'Authentication\Plugin\TableGateway',
 //    ),
 );
