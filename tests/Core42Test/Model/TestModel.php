@@ -27,23 +27,12 @@ class TestModel extends AbstractModel
     );
 
     /**
-     * @var int
-     */
-    private $id;
-
-    /**
-     * @var \DateTime
-     */
-    private $date;
-
-    /**
      * @param $id
      * @return $this
      */
     public function setId($id)
     {
-        $this->id = $id;
-        return $this;
+        return $this->set('id', $id);
     }
 
     /**
@@ -51,7 +40,7 @@ class TestModel extends AbstractModel
      */
     public function getId()
     {
-        return $this->id;
+        return $this->get('id');
     }
 
     /**
@@ -60,8 +49,7 @@ class TestModel extends AbstractModel
      */
     public function setDate(\DateTime $date)
     {
-        $this->date = $date;
-        return $this;
+        return $this->set('date', $date);
     }
 
     /**
@@ -69,6 +57,6 @@ class TestModel extends AbstractModel
      */
     public function getDate()
     {
-        return $this->date;
+        return $this->get('date');
     }
 }

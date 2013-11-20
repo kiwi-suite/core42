@@ -65,10 +65,10 @@ class AbstractModelTest extends \PHPUnit_Framework_TestCase
         $testModel->memento();
         $this->assertEquals(array(), $testModel->diff());
         $this->assertNotEquals(array('id' => 42,
-            'date', new \DateTime("2012-12-12 12:12:12")
+            'date' => new \DateTime("2012-12-12 12:12:12")
         ), $testModel->diff());
         $this->assertNotEquals(array('id' => "42",
-            'date', $dateTime
+            'date' => $dateTime
         ), $testModel->diff());
     }
 }
