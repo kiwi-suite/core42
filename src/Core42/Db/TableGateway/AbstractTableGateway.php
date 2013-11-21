@@ -149,7 +149,10 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
             if (empty($where)) {
                 throw new \Exception("no primary key set");
             }
-            $set = $set->diff();
+
+            $values = $this->getHydrator()->extract($set);
+            $set = array_intersect_key($values, $set->diff());
+
         } elseif (is_array($set)) {
             $set = array_intersect_key($this->getHydrator()->extract($this->getHydrator()->hydrate($set, $this->getModelPrototype())), $set);
             if (is_array($where)) {
