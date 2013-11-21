@@ -26,6 +26,14 @@ class InputManager
     }
 
     /**
+     * @return InputFilter
+     */
+    public function getInputFilter()
+    {
+        return $this->inputFilter;
+    }
+
+    /**
      * @param array $input
      * @return \Core42\InputManager\InputManager
      */

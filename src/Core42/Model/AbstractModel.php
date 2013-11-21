@@ -23,6 +23,8 @@ abstract class AbstractModel implements InputFilterProviderInterface
      */
     private $inputFilter;
 
+    private $modelProperties = array();
+
     /**
      * @var null|array
      */
@@ -31,6 +33,31 @@ abstract class AbstractModel implements InputFilterProviderInterface
     public function __construct()
     {
         $this->memento();
+    }
+
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    public function get($name)
+    {
+        if (array_key_exists($name, $this->modelProperties)) {
+            return $this->modelProperties[$name];
+        }
+
+        return null;
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $value
+     * @return \Core42\Model\AbstractModel
+     */
+    public function set($name, $value)
+    {
+        $this->modelProperties[$name] =  $value;
+
+        return $this;
     }
 
     /**
@@ -124,7 +151,7 @@ abstract class AbstractModel implements InputFilterProviderInterface
      */
     public function memento()
     {
-        $this->memento = $this->extract();
+        $this->memento = $this->modelProperties;
 
         return $this;
     }
@@ -138,6 +165,19 @@ abstract class AbstractModel implements InputFilterProviderInterface
     }
 
     /**
+     * @param null|string $property
+     * @return bool
+     */
+    public function hasChanged($property = null)
+    {
+        if ($property === null) {
+            return (count($this->diff()) > 0);
+        } else {
+            return array_key_exists($property, $this->modelProperties);
+        }
+    }
+
+    /**
      * @return array
      * @throws \Exception
      */
@@ -147,7 +187,7 @@ abstract class AbstractModel implements InputFilterProviderInterface
             throw new \Exception("memento never called");
         }
 
-        return array_udiff_assoc($this->extract(), $this->memento, function ($value1, $value2) {
+        return array_udiff_assoc($this->modelProperties, $this->memento, function ($value1, $value2) {
             return ($value1 === $value2) ? 0 : 1;
         });
     }

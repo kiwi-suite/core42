@@ -4,6 +4,7 @@ namespace Core42\Hydrator\Strategy\Database\MySQL;
 use Zend\ServiceManager\ServiceManager;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\Stdlib\Hydrator\Strategy\DefaultStrategy;
+use Core42\Hydrator\Strategy\Database\DatabaseStrategyInterface;
 
 class PluginManager implements ServiceManagerAwareInterface
 {
@@ -75,6 +76,6 @@ class PluginManager implements ServiceManagerAwareInterface
             $return = $this->defaultStrategy;
         }
 
-        return $return;
+        return clone $return;
     }
 }

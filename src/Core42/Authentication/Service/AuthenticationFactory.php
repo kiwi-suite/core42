@@ -1,6 +1,7 @@
 <?php
 namespace Core42\Authentication\Service;
 
+use Core42\Authentication\Adapter\TableGateway;
 use Zend\Authentication\AuthenticationService;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -20,21 +21,11 @@ class AuthenticationFactory implements FactoryInterface
 
         $config = $serviceLocator->get("Config");
         if (isset($config['authentication']['adapter'])) {
-            switch ($config['authentication']['adapter']['name']) {
-                case 'Core42\Authentication\Adapter\DbTable\BCryptCheckAdapter':
-                    $config['authentication']['adapter']['options']['table_gateway'] = $serviceLocator->get($config['authentication']['adapter']['options']['table_gateway']);
-                    $adapterName =  $config['authentication']['adapter']['name'];
-                    $adapterOptions =  $config['authentication']['adapter']['options'];
-                    $adapter = new $adapterName($adapterOptions);
-                    $authenticationService->setAdapter($adapter);
-                    break;
-                default:
-                    $adapterName =  $config['authentication']['adapter']['name'];
-                    $adapterOptions =  $config['authentication']['adapter']['options'];
-                    $adapter = new $adapterName($adapterOptions);
-                    $authenticationService->setAdapter($adapter);
-                    break;
-            }
+            $authenticationService->setAdapter($serviceLocator->get($config['authentication']['adapter']));
+        }
+
+        if (isset($config['authentication']['storage'])) {
+            $authenticationService->setStorage($serviceLocator->get($config['authentication']['storage']));
         }
 
         return $authenticationService;

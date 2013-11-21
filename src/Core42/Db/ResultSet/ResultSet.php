@@ -8,9 +8,7 @@ class ResultSet extends HydratingResultSet
     public function current()
     {
         $object = parent::current();
-        if (!$object->isMemento()) {
-            $object->memento();
-        }
+        $object->memento();
 
         return $object;
     }
