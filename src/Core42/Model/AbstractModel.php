@@ -165,6 +165,19 @@ abstract class AbstractModel implements InputFilterProviderInterface
     }
 
     /**
+     * @param null|string $property
+     * @return bool
+     */
+    public function hasChanged($property = null)
+    {
+        if ($property === null) {
+            return (count($this->diff()) > 0);
+        } else {
+            return array_key_exists($property, $this->modelProperties);
+        }
+    }
+
+    /**
      * @return array
      * @throws \Exception
      */
