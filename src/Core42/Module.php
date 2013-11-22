@@ -15,7 +15,14 @@ class Module implements BootstrapListenerInterface,
      */
     public function getConfig()
     {
-        return include __DIR__ . '/../../config/module.config.php';
+        return array_merge(
+            include __DIR__ . '/../../config/module.config.php',
+            include __DIR__ . '/../../config/database.config.php',
+            include __DIR__ . '/../../config/session.config.php',
+            include __DIR__ . '/../../config/log.config.php',
+            include __DIR__ . '/../../config/console.config.php',
+            include __DIR__ . '/../../config/caches.config.php'
+        );
     }
 
     /*
@@ -36,6 +43,18 @@ class Module implements BootstrapListenerInterface,
 
         $sessionInit = new SessionInitializer();
         $sessionInit->initialize($e->getApplication()->getServiceManager());
+
+        $aclConfig = $e->getApplication()->getServiceManager()->get('Core42\AclConfig');
+        if (!empty($aclConfig) && !empty($aclConfig['guards'])) {
+            foreach ($aclConfig['guards'] as $guard => $options) {
+                if (!$e->getApplication()->getServiceManager()->has($guard)) {
+                    continue;
+                }
+                $guard = $e->getApplication()->getServiceManager()->get($guard);
+                $guard->setOptions($options);
+                $e->getTarget()->getEventManager()->attach($guard);
+            }
+        }
     }
 
     /*

@@ -25,6 +25,7 @@ class PluginAbstractFactory implements AbstractFactoryInterface
         if (empty($config)) {
             return false;
         }
+
         return (isset($config[$requestedName]) && is_array($config[$requestedName]) && isset($config[$requestedName]['name']));
     }
 

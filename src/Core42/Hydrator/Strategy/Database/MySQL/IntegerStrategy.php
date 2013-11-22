@@ -18,7 +18,6 @@ class IntegerStrategy implements StrategyInterface, DatabaseStrategyInterface
     public function getStrategy(\Zend\Db\Metadata\Object\ColumnObject $column)
     {
         $this->isNullable = $column->getIsNullable();
-
         return (in_array($column->getDataType(), array('tinyint', 'smallint', 'mediumint', 'int', 'bigint'))) ? $this : null;
     }
 

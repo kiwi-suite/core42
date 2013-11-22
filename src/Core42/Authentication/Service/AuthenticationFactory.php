@@ -1,8 +1,7 @@
 <?php
 namespace Core42\Authentication\Service;
 
-use Core42\Authentication\Adapter\TableGateway;
-use Zend\Authentication\AuthenticationService;
+use Core42\Authentication\Authentication;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -13,11 +12,11 @@ class AuthenticationFactory implements FactoryInterface
      * Create service
      *
      * @param  ServiceLocatorInterface $serviceLocator
-     * @return AuthenticationService
+     * @return Authentication
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $authenticationService = new AuthenticationService();
+        $authenticationService = new Authentication();
 
         $config = $serviceLocator->get("Config");
         if (isset($config['authentication']['adapter'])) {

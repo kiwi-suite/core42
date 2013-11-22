@@ -1,6 +1,7 @@
 <?php
 namespace Core42\Authentication\Plugin;
 
+use Core42\Permissions\Acl\Role\RoleProviderInterface;
 use Zend\Authentication\Adapter\AdapterInterface;
 use Core42\Db\TableGateway\AbstractTableGateway;
 use Core42\Model\AbstractModel;
@@ -10,7 +11,7 @@ use Zend\Crypt\Password\Bcrypt;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Session\Container as SessionContainer;
 
-class TableGateway implements AdapterInterface, StorageInterface, PluginInterface
+class TableGateway implements AdapterInterface, StorageInterface, PluginInterface, RoleProviderInterface
 {
     /**
      * @var AbstractTableGateway
@@ -308,5 +309,11 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
     public function clear()
     {
         unset($this->getSessionContainer()->storage);
+    }
+
+    public function getIdentityRole()
+    {
+        //TODO logic for role
+        return null;
     }
 }
