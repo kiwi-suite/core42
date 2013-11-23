@@ -36,18 +36,35 @@ class Route extends AbstractListenerAggregate
 
     public function onRoute(MvcEvent $event)
     {
-        /** @var $authenticationService \Core42\Permissions\Acl\Acl */
-        $authenticationService = $event->getApplication()->getServiceManager()->get('Core42\Acl');
+        /** @var $acl \Core42\Permissions\Acl\Acl */
+        $acl = $event->getApplication()->getServiceManager()->get('Core42\Acl');
         $routeName = 'route/' . $event->getRouteMatch()->getMatchedRouteName();
-        if (!$authenticationService->hasResource($routeName) && isset($this->options['allow_on_no_resource']) && $this->options['allow_on_no_resource'] === true) {
+        if (!$acl->hasResource($routeName) && isset($this->options['allow_on_no_resource']) && $this->options['allow_on_no_resource'] === true) {
             return;
         }
 
-        if ($authenticationService->isIdentityAllowed($routeName)) {
+        do {
+            if ($acl->hasResource($routeName) && $acl->isIdentityAllowed($routeName)) {
+                return;
+            }
+
+            $tmpRoute = str_ireplace("route/", "", str_ireplace("/*", "", $routeName));
+            $parts = explode("/", $tmpRoute);
+            if (count($parts) <= 1) {
+                $routeName = null;
+            } else {
+                unset($parts[count($parts) - 1]);
+                $routeName = implode("/", $parts) . '/*';
+            }
+        } while ($routeName !== null);
+
+        if ($acl->isIdentityAllowed(null)) {
             return;
         }
 
-        $url = $event->getRouter()->assemble(array(), array('name' => 'admin/login'));
+        $options = $acl->getRole($acl->getIdentityRole())->getOptions();
+
+        $url = $event->getRouter()->assemble(array(), array('name' => $options['redirect_route']));
         $response=$event->getResponse();
         $response->getHeaders()->addHeaderLine('Location', $url);
         $response->setStatusCode(302);

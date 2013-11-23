@@ -1,6 +1,7 @@
 <?php
 namespace Core42\Permissions\Acl\Provider;
 
+use Core42\Permissions\Acl\Role\Role;
 use Zend\Permissions\Acl\Acl;
 use Zend\ServiceManager\ServiceManager;
 
@@ -16,10 +17,7 @@ class ArrayProvider implements AclProviderInterface
         $config = $serviceManager->get('Core42\AclConfig');
 
         if (isset($config['roles'])) {
-            //TODO Recursive iteration
-            foreach ($config['roles'] as $role => $roleValues) {
-                $acl->addRole($role);
-            }
+            $this->addRole($acl, $config['roles']);
         }
 
         if (isset($config['rules'])) {
@@ -38,6 +36,17 @@ class ArrayProvider implements AclProviderInterface
 
                     $acl->{$type}($role, $resource, $privilege);
                 }
+            }
+        }
+    }
+
+    protected function addRole(Acl $acl, $config, $parent = null)
+    {
+        foreach ($config as $role => $roleValues) {
+            $roleObject = new Role($role, $roleValues);
+            $acl->addRole($roleObject, $parent);
+            if (isset($roleValues['children'])) {
+                $this->addRole($acl, $roleValues['children'], $role);
             }
         }
     }

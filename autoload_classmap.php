@@ -44,6 +44,7 @@ return array(
     'Core42\Permissions\Acl\Guard\Route'                                => __DIR__ . '/src/Core42/Permissions/Acl/Guard/Route.php',
     'Core42\Permissions\Acl\Provider\AclProviderInterface'              => __DIR__ . '/src/Core42/Permissions/Acl/Provider/AclProviderInterface.php',
     'Core42\Permissions\Acl\Provider\ArrayProvider'                     => __DIR__ . '/src/Core42/Permissions/Acl/Provider/ArrayProvider.php',
+    'Core42\Permissions\Acl\Role\Role'                                  => __DIR__ . '/src/Core42/Permissions/Acl/Role/Role.php',
     'Core42\Permissions\Acl\Role\RoleProviderInterface'                 => __DIR__ . '/src/Core42/Permissions/Acl/Role/RoleProviderInterface.php',
     'Core42\Permissions\Acl\Service\AclConfigFactory'                   => __DIR__ . '/src/Core42/Permissions/Acl/Service/AclConfigFactory.php',
     'Core42\Permissions\Acl\Service\AclFactory'                         => __DIR__ . '/src/Core42/Permissions/Acl/Service/AclFactory.php',
