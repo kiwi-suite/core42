@@ -50,8 +50,10 @@ return array(
     'Core42\Permissions\Acl\Service\AclFactory'                         => __DIR__ . '/src/Core42/Permissions/Acl/Service/AclFactory.php',
     'Core42\ServiceManager\ServiceManagerStaticAwareInterface'          => __DIR__ . '/src/Core42/ServiceManager/ServiceManagerStaticAwareInterface.php',
     'Core42\Session\SessionInitializer'                                 => __DIR__ . '/src/Core42/Session/SessionInitializer.php',
+    'Core42\ValueManager\ValueManager'                                  => __DIR__ . '/src/Core42/ValueManager/ValueManager.php',
     'Core42\View\Helper\InputManager'                                   => __DIR__ . '/src/Core42/View/Helper/InputManager.php',
     'Core42\View\Helper\MobileDetect'                                   => __DIR__ . '/src/Core42/View/Helper/MobileDetect.php',
     'Core42\View\Helper\Params'                                         => __DIR__ . '/src/Core42/View/Helper/Params.php',
+    'Core42\View\Helper\ValueManager'                                   => __DIR__ . '/src/Core42/View/Helper/ValueManager.php',
     'Core42\View\Model\JsonModel'                                       => __DIR__ . '/src/Core42/View/Model/JsonModel.php',
 );
