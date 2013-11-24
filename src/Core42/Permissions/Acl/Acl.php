@@ -11,12 +11,13 @@ class Acl extends ZendAcl
     private $identityRole;
 
     /**
-     * @param string $identityRole
+     * @param  string                      $identityRole
      * @return \Core42\Permissions\Acl\Acl
      */
     public function setIdentityRole($identityRole)
     {
         $this->identityRole = $identityRole;
+
         return $this;
     }
 
@@ -30,7 +31,7 @@ class Acl extends ZendAcl
 
     /**
      * @param $resource
-     * @param null $permissions
+     * @param  null $permissions
      * @return bool
      */
     public function isIdentityAllowed($resource, $permissions = null)

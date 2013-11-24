@@ -15,7 +15,7 @@ class ValueManager
     private $errors = array();
 
     /**
-     * @param array $values
+     * @param  array                            $values
      * @return \Core42\ValueManager\FormManager
      */
     public function setValues(array $values)
@@ -23,22 +23,24 @@ class ValueManager
         foreach ($values as $name => $value) {
             $this->setValue($name, $value);
         }
+
         return $this;
     }
 
     /**
-     * @param string $name
-     * @param string $value
+     * @param  string                           $name
+     * @param  string                           $value
      * @return \Core42\ValueManager\FormManager
      */
     public function setValue($name, $value)
     {
         $this->values[$name] = $value;
+
         return $this;
     }
 
     /**
-     * @param string|null $name
+     * @param  string|null $name
      * @return array|null
      */
     public function getValue($name = null)
@@ -60,11 +62,12 @@ class ValueManager
     public function clearValues()
     {
         $this->values = array();
+
         return $this;
     }
 
     /**
-     * @param array $errors
+     * @param  array                            $errors
      * @return \Core42\ValueManager\FormManager
      */
     public function setErrors(array $errors)
@@ -77,8 +80,8 @@ class ValueManager
     }
 
     /**
-     * @param string $name
-     * @param string $error
+     * @param  string                           $name
+     * @param  string                           $error
      * @return \Core42\ValueManager\FormManager
      */
     public function setError($name, $error)
@@ -108,7 +111,7 @@ class ValueManager
     }
 
     /**
-     * @param string|null $name
+     * @param  string|null $name
      * @return array
      */
     public function getErrors($name = null)
@@ -125,7 +128,7 @@ class ValueManager
     }
 
     /**
-     * @param string|null $name
+     * @param  string|null $name
      * @return bool
      */
     public function hasErrors($name = null)

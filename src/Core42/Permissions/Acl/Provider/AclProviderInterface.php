@@ -7,7 +7,7 @@ use Zend\ServiceManager\ServiceManager;
 interface AclProviderInterface
 {
     /**
-     * @param Acl $acl
+     * @param  Acl  $acl
      * @return null
      */
     public function provideAcl(Acl $acl, ServiceManager $serviceManager);

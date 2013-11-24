@@ -45,7 +45,7 @@ class Module implements BootstrapListenerInterface,
         $sessionInit->initialize($e->getApplication()->getServiceManager());
 
         $aclConfig = $e->getApplication()->getServiceManager()->get('Core42\AclConfig');
-        if (!empty($aclConfig) && !empty($aclConfig['guards'])) {
+        if (php_sapi_name() !== 'cli' && !empty($aclConfig) && !empty($aclConfig['guards'])) {
             foreach ($aclConfig['guards'] as $guard => $options) {
                 if (!$e->getApplication()->getServiceManager()->has($guard)) {
                     continue;

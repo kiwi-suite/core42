@@ -16,12 +16,13 @@ class InputManager
     private $input = array();
 
     /**
-     * @param InputFilter $inputFilter
+     * @param  InputFilter                       $inputFilter
      * @return \Core42\InputManager\InputManager
      */
     public function setInputFilter(InputFilter $inputFilter)
     {
         $this->inputFilter = $inputFilter;
+
         return $this;
     }
 
@@ -34,17 +35,18 @@ class InputManager
     }
 
     /**
-     * @param array $input
+     * @param  array                             $input
      * @return \Core42\InputManager\InputManager
      */
     public function setInput(array $input)
     {
         $this->input = $input;
+
         return $this;
     }
 
     /**
-     * @param string $name
+     * @param  string $name
      * @return mixed
      */
     public function getValue($name)
@@ -52,6 +54,7 @@ class InputManager
         if (!array_key_exists($name, $this->input)) {
             return null;
         }
+
         return $this->input[$name];
     }
 
@@ -61,11 +64,12 @@ class InputManager
      */
     public function hasError($name)
     {
-        if (!$this->inputFilter->has($name)){
+        if (!$this->inputFilter->has($name)) {
             return false;
         }
 
         $errors = $this->inputFilter->get($name)->getMessages();
+
         return !empty($errors);
     }
 
@@ -75,7 +79,7 @@ class InputManager
      */
     public function getMessages($name)
     {
-        if (!$this->inputFilter->has($name)){
+        if (!$this->inputFilter->has($name)) {
             return array();
         }
 

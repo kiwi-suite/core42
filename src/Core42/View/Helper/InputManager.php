@@ -28,6 +28,7 @@ class InputManager extends AbstractHelper
         if ($name !== null) {
             $this->setName($name);
         }
+
         return $this;
     }
 
@@ -44,12 +45,13 @@ class InputManager extends AbstractHelper
     }
 
     /**
-     * @param \Core42\InputManager\InputManager $inputManager
+     * @param  \Core42\InputManager\InputManager $inputManager
      * @return \Core42\View\Helper\InputManager
      */
     public function setInputManager(\Core42\InputManager\InputManager $inputManager)
     {
         $this->inputManager = $inputManager;
+
         return $this;
     }
 
@@ -60,12 +62,14 @@ class InputManager extends AbstractHelper
     public function setPartial($partial)
     {
         $this->partial = $partial;
+
         return $this;
     }
 
     public function setName($name)
     {
         $this->name = $name;
+
         return $this;
     }
 

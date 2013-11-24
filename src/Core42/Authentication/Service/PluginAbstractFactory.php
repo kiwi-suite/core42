@@ -66,16 +66,19 @@ class PluginAbstractFactory implements AbstractFactoryInterface
 
         if (!$services->has('Config')) {
             $this->config = array();
+
             return $this->config;
         }
 
         $config = $services->get('Config');
         if (!isset($config['authentication']['plugins'])) {
             $this->config = array();
+
             return $this->config;
         }
 
         $this->config = $config['authentication']['plugins'];
+
         return $this->config;
     }
 }

@@ -36,7 +36,7 @@ abstract class AbstractModel implements InputFilterProviderInterface
     }
 
     /**
-     * @param string $name
+     * @param  string $name
      * @return mixed
      */
     public function get($name)
@@ -49,8 +49,8 @@ abstract class AbstractModel implements InputFilterProviderInterface
     }
 
     /**
-     * @param string $name
-     * @param mixed $value
+     * @param  string                      $name
+     * @param  mixed                       $value
      * @return \Core42\Model\AbstractModel
      */
     public function set($name, $value)
@@ -165,7 +165,7 @@ abstract class AbstractModel implements InputFilterProviderInterface
     }
 
     /**
-     * @param null|string $property
+     * @param  null|string $property
      * @return bool
      */
     public function hasChanged($property = null)

@@ -9,7 +9,7 @@ class ArrayProvider implements AclProviderInterface
 {
 
     /**
-     * @param Acl $acl
+     * @param  Acl  $acl
      * @return null
      */
     public function provideAcl(Acl $acl, ServiceManager $serviceManager)

@@ -1,7 +1,6 @@
 <?php
 namespace Core42\Permissions\Acl\Guard;
 
-
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\MvcEvent;
@@ -69,6 +68,7 @@ class Route extends AbstractListenerAggregate
         $response->getHeaders()->addHeaderLine('Location', $url);
         $response->setStatusCode(302);
         $response->sendHeaders();
+
         return $response;
     }
 }

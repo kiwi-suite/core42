@@ -68,12 +68,13 @@ abstract class AbstractCommand implements ServiceManagerStaticAwareInterface
     }
 
     /**
-     * @param bool $enable
+     * @param  bool                            $enable
      * @return \Core42\Command\AbstractCommand
      */
     final public function enableThrowExceptions($enable)
     {
         $this->throwCommandExceptions = (boolean) $enable;
+
         return $this;
     }
 
@@ -84,6 +85,7 @@ abstract class AbstractCommand implements ServiceManagerStaticAwareInterface
     final public function enablePublishToConsole($enable)
     {
         $this->publishToConsole = (boolean) $enable;
+
         return $this;
     }
 
@@ -106,7 +108,7 @@ abstract class AbstractCommand implements ServiceManagerStaticAwareInterface
     }
 
     /**
-     * @param array $arguments
+     * @param  array                           $arguments
      * @return \Core42\Command\AbstractCommand
      */
     public function setCommandArguments($arguments = array())
@@ -118,6 +120,7 @@ abstract class AbstractCommand implements ServiceManagerStaticAwareInterface
 
         $hydrator = new ClassMethods(false);
         $hydrator->hydrate($arguments, $this);
+
         return $this;
     }
 
@@ -177,7 +180,7 @@ abstract class AbstractCommand implements ServiceManagerStaticAwareInterface
     }
 
     /**
-     * @param array $errors
+     * @param  array                           $errors
      * @return \Core42\Command\AbstractCommand
      */
     final public function setCommandErrors(array $errors)
@@ -188,8 +191,8 @@ abstract class AbstractCommand implements ServiceManagerStaticAwareInterface
     }
 
     /**
-     * @param string $name
-     * @param string $error
+     * @param  string                          $name
+     * @param  string                          $error
      * @return \Core42\Command\AbstractCommand
      */
     final public function setCommandError($name, $error)

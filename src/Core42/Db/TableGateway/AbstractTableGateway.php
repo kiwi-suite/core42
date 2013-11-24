@@ -161,6 +161,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         if (empty($set)) {
             return 0;
         }
+
         return parent::update($set, $where);
     }
 

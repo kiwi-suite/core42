@@ -77,12 +77,13 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
     }
 
     /**
-     * @param AbstractTableGateway $tableGateway
+     * @param  AbstractTableGateway                       $tableGateway
      * @return \Core42\Authentication\Plugin\TableGateway
      */
     public function setTableGateway(AbstractTableGateway $tableGateway)
     {
         $this->tableGateway = $tableGateway;
+
         return $this;
     }
 
@@ -95,12 +96,13 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
     }
 
     /**
-     * @param string $identityColumn
+     * @param  string                                     $identityColumn
      * @return \Core42\Authentication\Plugin\TableGateway
      */
     public function setIdentityColumn($identityColumn)
     {
         $this->identityColumn = $identityColumn;
+
         return $this;
     }
 
@@ -113,12 +115,13 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
     }
 
     /**
-     * @param string $credentialColumn
+     * @param  string                                     $credentialColumn
      * @return \Core42\Authentication\Plugin\TableGateway
      */
     public function setCredentialColumn($credentialColumn)
     {
         $this->credentialColumn = $credentialColumn;
+
         return $this;
     }
 
@@ -137,6 +140,7 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
     public function setIdentity($identity)
     {
         $this->identity = $identity;
+
         return $this;
     }
 
@@ -155,6 +159,7 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
     public function setCredential($credential)
     {
         $this->credential = $credential;
+
         return $this;
     }
 
@@ -167,12 +172,13 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
     }
 
     /**
-     * @param AbstractModel $user
+     * @param  AbstractModel                              $user
      * @return \Core42\Authentication\Plugin\TableGateway
      */
     public function setUser(AbstractModel $user)
     {
         $this->user = $user;
+
         return $this;
     }
 
@@ -199,11 +205,13 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
         if ($resultSet->count() == 0) {
             //TODO Eventsystem
             $this->onIdentityNotFound();
+
             return new Result(Result::FAILURE_IDENTITY_NOT_FOUND, $this->getIdentity());
         }
         if ($resultSet->count() > 1) {
             //TODO Eventsystem
             $this->onIdentityAmbiguous();
+
             return new Result(Result::FAILURE_IDENTITY_AMBIGUOUS, $this->getIdentity());
         }
 
@@ -221,7 +229,6 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
         );
     }
 
-
     protected function onIdentityNotFound()
     {
         $bcrypt = new Bcrypt();
@@ -237,6 +244,7 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
     protected function matchPassword($realPassword, $inputPassword)
     {
         $bcrypt = new Bcrypt();
+
         return $bcrypt->verify($inputPassword, $realPassword);
     }
 
@@ -248,9 +256,9 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
         if ($this->session == null) {
             $this->session = new SessionContainer("Core42_Auth");
         }
+
         return $this->session;
     }
-
 
     /**
      * Returns true if and only if storage is empty
@@ -281,17 +289,19 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
         $user = $this->getTableGateway()->selectByPrimary($userId);
         if (empty($user)) {
             $this->clear();
+
             return null;
         }
 
         $this->setUser($user);
+
         return $this->getUser();
     }
 
     /**
      * Writes $contents to storage
      *
-     * @param  mixed $contents
+     * @param  mixed                                             $contents
      * @throws \Zend\Authentication\Exception\ExceptionInterface If writing $contents to storage is impossible
      * @return void
      */

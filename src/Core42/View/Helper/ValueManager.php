@@ -24,7 +24,7 @@ class ValueManager extends AbstractHelper
     }
 
     /**
-     * @param \Core42\ValueManager\ValueManager $valueManager
+     * @param  \Core42\ValueManager\ValueManager $valueManager
      * @return \Core42\View\Helper\ValueManager
      */
     public function setValueManager(\Core42\ValueManager\ValueManager $valueManager)
@@ -41,11 +41,12 @@ class ValueManager extends AbstractHelper
     public function setErrorPartial($partial)
     {
         $this->errorPartial = $partial;
+
         return $this;
     }
 
     /**
-     * @param string $name
+     * @param  string $name
      * @return string
      */
     public function renderError($name)
@@ -61,8 +62,8 @@ class ValueManager extends AbstractHelper
     }
 
     /**
-     * @param string $name
-     * @param bool $escape
+     * @param  string     $name
+     * @param  bool       $escape
      * @return array|null
      */
     public function getValue($name, $escape = true)
@@ -78,7 +79,7 @@ class ValueManager extends AbstractHelper
     }
 
     /**
-     * @param string|null $name
+     * @param  string|null $name
      * @return bool
      */
     public function hasError($name = null)

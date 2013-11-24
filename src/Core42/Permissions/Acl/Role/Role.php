@@ -21,7 +21,7 @@ class Role implements RoleInterface
      * Sets the Role identifier
      *
      * @param string $roleId
-     * @param array $options
+     * @param array  $options
      */
     public function __construct($roleId, $options = array())
     {
