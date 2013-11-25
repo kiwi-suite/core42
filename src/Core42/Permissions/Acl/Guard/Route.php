@@ -53,7 +53,7 @@ class Route extends AbstractListenerAggregate
                 $routeName = null;
             } else {
                 unset($parts[count($parts) - 1]);
-                $routeName = implode("/", $parts) . '/*';
+                $routeName = 'route/' . implode("/", $parts) . '/*';
             }
         } while ($routeName !== null);
 
