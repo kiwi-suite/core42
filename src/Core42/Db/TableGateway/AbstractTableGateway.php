@@ -129,7 +129,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
                 $where = $this->getPrimaryValues($set);
             }
             $tmpObject = $this->selectByPrimary($where);
-            $set->getHydrator()->hydrate($tmpObject->getHydrator()->extract($tmpObject), $set);
+            $this->getHydrator()->hydrate($this->getHydrator()->extract($tmpObject), $set);
             $set->memento();
 
             return $result;
