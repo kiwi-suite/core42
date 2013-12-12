@@ -113,8 +113,8 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     }
 
     /**
-     *
-     * @see \Zend\Db\TableGateway\AbstractTableGateway::insert()
+     * @param AbstractModel|array $set
+     * @return int
      */
     public function insert($set)
     {
