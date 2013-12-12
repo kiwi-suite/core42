@@ -26,6 +26,7 @@ class Role implements RoleInterface
     public function __construct($roleId, $options = array())
     {
         $this->roleId = (string) $roleId;
+        $this->options = $options;
     }
 
     /**
