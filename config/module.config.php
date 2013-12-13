@@ -9,8 +9,6 @@ return array(
             'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
             'Zend\Db\Adapter\AdapterAbstractServiceFactory',
             'Zend\Log\LoggerAbstractServiceFactory',
-
-            'Core42\Authentication\Service\PluginAbstractFactory',
         ),
         'factories' => array(
             'Zend\Session\Service\SessionManagerFactory' => 'Zend\Session\Service\SessionManagerFactory',
