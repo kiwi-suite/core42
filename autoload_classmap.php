@@ -5,6 +5,7 @@ return array(
     'Core42\Authentication\Plugin\PluginInterface'                      => __DIR__ . '/src/Core42/Authentication/Plugin/PluginInterface.php',
     'Core42\Authentication\Plugin\TableGateway'                         => __DIR__ . '/src/Core42/Authentication/Plugin/TableGateway.php',
     'Core42\Authentication\Service\AuthenticationFactory'               => __DIR__ . '/src/Core42/Authentication/Service/AuthenticationFactory.php',
+    'Core42\Authentication\Service\AuthenticationConfigFactory'         => __DIR__ . '/src/Core42/Authentication/Service/AuthenticationConfigFactory.php',
     'Core42\Authentication\Service\PluginAbstractFactory'               => __DIR__ . '/src/Core42/Authentication/Service/PluginAbstractFactory.php',
     'Core42\Command\AbstractCommand'                                    => __DIR__ . '/src/Core42/Command/AbstractCommand.php',
     'Core42\Command\ConsoleOutputInterface'                             => __DIR__ . '/src/Core42/Command/ConsoleOutputInterface.php',

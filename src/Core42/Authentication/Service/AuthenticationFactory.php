@@ -18,13 +18,13 @@ class AuthenticationFactory implements FactoryInterface
     {
         $authenticationService = new Authentication();
 
-        $config = $serviceLocator->get("Config");
-        if (isset($config['authentication']['adapter'])) {
-            $authenticationService->setAdapter($serviceLocator->get($config['authentication']['adapter']));
+        $config = $serviceLocator->get('Core42\AuthenticationConfig');
+        if (isset($config['adapter'])) {
+            $authenticationService->setAdapter($serviceLocator->get($config['adapter']));
         }
 
-        if (isset($config['authentication']['storage'])) {
-            $authenticationService->setStorage($serviceLocator->get($config['authentication']['storage']));
+        if (isset($config['storage'])) {
+            $authenticationService->setStorage($serviceLocator->get($config['storage']));
         }
 
         return $authenticationService;

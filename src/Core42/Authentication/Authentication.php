@@ -9,10 +9,14 @@ class Authentication extends AuthenticationService implements RoleProviderInterf
 
     public function getIdentityRole()
     {
-        if (!($this->getStorage() instanceof RoleProviderInterface)) {
-            return null;
+        if ($this->getStorage() instanceof RoleProviderInterface) {
+            return $this->getStorage()->getIdentityRole();
         }
 
-        return $this->getStorage()->getIdentityRole();
+        if ($this->hasIdentity() && $this->getIdentity() instanceof RoleProviderInterface) {
+            return $this->getIdentity()->getIdentityRole();
+        }
+
+        return null;
     }
 }

@@ -18,6 +18,7 @@ return array(
             'Zend\Session\Storage\StorageInterface' => 'Zend\Session\Service\StorageFactory',
 
             'Core42\Authentication' => 'Core42\Authentication\Service\AuthenticationFactory',
+            'Core42\AuthenticationConfig' => 'Core42\Authentication\Service\AuthenticationConfigFactory',
 
             'Core42\Acl' => 'Core42\Permissions\Acl\Service\AclFactory',
             'Core42\AclConfig' => 'Core42\Permissions\Acl\Service\AclConfigFactory',
@@ -72,17 +73,22 @@ return array(
     ),
 
 //    'authentication' => array(
-//        'plugins' => array(
-//            'Authentication\Plugin\TableGateway' => array(
-//                'name' => 'Core42\Authentication\Plugin\TableGateway',
-//                'options' => array(
-//                    'table_gateway' => 'Core42\UserTableGateway',
-//                    'identity_column' => 'username',
-//                    'credential_column' => 'password',
+//        'default' => array(
+//            'plugins' => array(
+//                'Authentication\Plugin\TableGateway' => array(
+//                    'name' => 'Core42\Authentication\Plugin\TableGateway',
+//                    'options' => array(
+//                        'table_gateway' => 'Core42\UserTableGateway',
+//                        'identity_column' => 'username',
+//                        'credential_column' => 'password',
+//                    ),
 //                ),
 //            ),
+//            'adapter' => 'Authentication\Plugin\TableGateway',
+//            'storage' => 'Authentication\Plugin\TableGateway',
 //        ),
-//        'adapter' => 'Authentication\Plugin\TableGateway',
-//        'storage' => 'Authentication\Plugin\TableGateway',
+//        'routes' => array(
+//            'route/you/want' => 'default',
+//        ),
 //    ),
 );

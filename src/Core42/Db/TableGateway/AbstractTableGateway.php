@@ -66,7 +66,8 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         if (!($this->modelPrototype instanceof AbstractModel)) {
             throw new \Exception("invalid model prototype");
         }
-        $this->hydrator = clone $this->modelPrototype->getHydrator();
+
+        $this->hydrator = new ModelHydrator();
 
         $this->resultSetPrototype = new ResultSet($this->hydrator, $this->modelPrototype);
 
@@ -113,8 +114,8 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     }
 
     /**
-     *
-     * @see \Zend\Db\TableGateway\AbstractTableGateway::insert()
+     * @param AbstractModel|array $set
+     * @return int
      */
     public function insert($set)
     {

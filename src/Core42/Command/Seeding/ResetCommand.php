@@ -2,9 +2,10 @@
 namespace Core42\Command\Seeding;
 
 use Core42\Command\AbstractCommand;
+use Core42\Command\ConsoleOutputInterface;
 use Zend\Validator\File\Extension;
 
-class ResetCommand extends AbstractCommand
+class ResetCommand extends AbstractCommand implements ConsoleOutputInterface
 {
     /**
      * @var string
@@ -41,8 +42,10 @@ class ResetCommand extends AbstractCommand
 
         $this->seedingDirectory = rtrim($config['seeding']['seeding_dir'], '/') . '/';
 
-        if (!empty($this->name) && file_exists($this->seedingDirectory . $this->name . '.php')) {
-            $this->files[] = $this->name . '.php';
+        if (!empty($this->name)) {
+            if (file_exists($this->seedingDirectory . $this->name . '.php')) {
+                $this->files[] = $this->name . '.php';
+            }
         } else {
             $fileValidator = new Extension("php");
             $dir = dir($this->seedingDirectory);
@@ -62,6 +65,21 @@ class ResetCommand extends AbstractCommand
             require_once $this->seedingDirectory . $file;
             $obj = new $className;
             $obj->reset($this->getServiceManager());
+        }
+    }
+
+    public function publishToConsole()
+    {
+        /** @var $console \Zend\Console\Adapter\AdapterInterface */
+        $console = $this->getServiceManager()->get("Console");
+
+        if (empty($this->files)) {
+            $console->writeLine("No seeding file(s) found");
+            return;
+        }
+
+        foreach ($this->files as $file) {
+            $console->writeLine("Seeding " . str_replace(".php", "", $file) . " reseted");
         }
     }
 }

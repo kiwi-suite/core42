@@ -8,6 +8,7 @@ interface AclProviderInterface
 {
     /**
      * @param  Acl  $acl
+     * @param ServiceManager $serviceManager
      * @return null
      */
     public function provideAcl(Acl $acl, ServiceManager $serviceManager);
