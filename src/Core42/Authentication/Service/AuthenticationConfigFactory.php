@@ -22,9 +22,9 @@ class AuthenticationConfigFactory implements FactoryInterface
             return array();
         }
         $authName = 'default';
-        if (isset($config[$this->configkey]['routes'])) {
+        if (isset($config[$this->configkey]['routes']) && !empty($config[$this->configkey]['routes'])) {
             $routeMatch = $serviceLocator->get('Application')->getMvcEvent()->getRouteMatch();
-            $currentRoute =  $routeMatch->getMatchedRouteName();
+            $currentRoute = $routeMatch->getMatchedRouteName();
 
             $foundRouteLen = 0;
             foreach ($config[$this->configkey]['routes'] as $route => $auth) {

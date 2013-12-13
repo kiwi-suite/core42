@@ -39,7 +39,7 @@ class PluginAbstractFactory implements AbstractFactoryInterface
      */
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
-        $config = $serviceLocator->get('Core42\AuthenticationConfig');
+        $config = $this->getConfig($serviceLocator);
         $config = $config[$requestedName];
 
         $className = $config['name'];
@@ -70,14 +70,14 @@ class PluginAbstractFactory implements AbstractFactoryInterface
             return $this->config;
         }
 
-        $config = $services->get('Config');
-        if (!isset($config['authentication']['plugins'])) {
+        $config = $services->get('Core42\AuthenticationConfig');
+        if (!isset($config['plugins'])) {
             $this->config = array();
 
             return $this->config;
         }
 
-        $this->config = $config['authentication']['plugins'];
+        $this->config = $config['plugins'];
 
         return $this->config;
     }
