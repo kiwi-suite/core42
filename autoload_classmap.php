@@ -52,6 +52,8 @@ return array(
     'Core42\ServiceManager\ServiceManagerStaticAwareInterface'          => __DIR__ . '/src/Core42/ServiceManager/ServiceManagerStaticAwareInterface.php',
     'Core42\Session\SessionInitializer'                                 => __DIR__ . '/src/Core42/Session/SessionInitializer.php',
     'Core42\ValueManager\ValueManager'                                  => __DIR__ . '/src/Core42/ValueManager/ValueManager.php',
+    'Core42\View\Helper\Acl'                                            => __DIR__ . '/src/Core42/View/Helper/Acl.php',
+    'Core42\View\Helper\Identity'                                       => __DIR__ . '/src/Core42/View/Helper/Identity.php',
     'Core42\View\Helper\InputManager'                                   => __DIR__ . '/src/Core42/View/Helper/InputManager.php',
     'Core42\View\Helper\MobileDetect'                                   => __DIR__ . '/src/Core42/View/Helper/MobileDetect.php',
     'Core42\View\Helper\Params'                                         => __DIR__ . '/src/Core42/View/Helper/Params.php',

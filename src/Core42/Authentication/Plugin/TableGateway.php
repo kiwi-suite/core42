@@ -96,13 +96,12 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
     }
 
     /**
-     * @param  string                                     $identityColumn
+     * @param  string $identityColumn
      * @return \Core42\Authentication\Plugin\TableGateway
      */
     public function setIdentityColumn($identityColumn)
     {
         $this->identityColumn = $identityColumn;
-
         return $this;
     }
 
@@ -115,13 +114,12 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
     }
 
     /**
-     * @param  string                                     $credentialColumn
+     * @param string $credentialColumn
      * @return \Core42\Authentication\Plugin\TableGateway
      */
     public function setCredentialColumn($credentialColumn)
     {
         $this->credentialColumn = $credentialColumn;
-
         return $this;
     }
 

@@ -49,7 +49,7 @@ class ValueManager extends AbstractHelper
      * @param  string $name
      * @return string
      */
-    public function renderError($name)
+    public function renderError($name = null)
     {
         $partialHelper = $this->view->plugin('partial');
 
