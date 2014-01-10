@@ -30,6 +30,7 @@ return array(
             'Core42\Permissions\Acl\Provider\ArrayProvider' => 'Core42\Permissions\Acl\Provider\ArrayProvider',
         ),
         'aliases' => array(
+            'Acl' => 'Core42\Acl',
             'AuthenticationService' => 'Core42\Authentication',
             'Zend\Authentication\AuthenticationService' => 'Core42\Authentication',
         ),
@@ -46,6 +47,8 @@ return array(
             'mobileDetect' => __NAMESPACE__ . '\View\Helper\MobileDetect',
             'inputManager' => __NAMESPACE__ . '\View\Helper\InputManager',
             'valueManager' => __NAMESPACE__ . '\View\Helper\ValueManager',
+            'acl' => __NAMESPACE__ . '\View\Helper\Acl',
+            'identity' => __NAMESPACE__ . '\View\Helper\Identity',
         ),
     ),
 
