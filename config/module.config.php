@@ -45,7 +45,6 @@ return array(
         'invokables' => array(
             'params' => __NAMESPACE__.'\View\Helper\Params',
             'mobileDetect' => __NAMESPACE__ . '\View\Helper\MobileDetect',
-            'inputManager' => __NAMESPACE__ . '\View\Helper\InputManager',
             'valueManager' => __NAMESPACE__ . '\View\Helper\ValueManager',
             'acl' => __NAMESPACE__ . '\View\Helper\Acl',
         ),
@@ -59,7 +58,6 @@ return array(
 
     'controllers' => array(
         'invokables' => array(
-            __NAMESPACE__.'\Controller\Cli\Migration' => __NAMESPACE__.'\Controller\Cli\MigrationController',
             __NAMESPACE__.'\Controller\Cli\Seeding' => __NAMESPACE__.'\Controller\Cli\SeedingController',
         ),
     ),
