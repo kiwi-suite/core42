@@ -39,7 +39,6 @@ return array(
   'Core42\Controller\Cli\SeedingController'                           => __DIR__ . '/src/Core42/Controller/Cli/SeedingController.php',
   'Core42\Controller\Cli\MigrationController'                         => __DIR__ . '/src/Core42/Controller/Cli/MigrationController.php',
   'Core42\View\Helper\InputManager'                                   => __DIR__ . '/src/Core42/View/Helper/InputManager.php',
-  'Core42\View\Helper\Identity'                                       => __DIR__ . '/src/Core42/View/Helper/Identity.php',
   'Core42\View\Helper\Acl'                                            => __DIR__ . '/src/Core42/View/Helper/Acl.php',
   'Core42\View\Helper\Params'                                         => __DIR__ . '/src/Core42/View/Helper/Params.php',
   'Core42\View\Helper\MobileDetect'                                   => __DIR__ . '/src/Core42/View/Helper/MobileDetect.php',

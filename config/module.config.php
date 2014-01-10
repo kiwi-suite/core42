@@ -48,7 +48,6 @@ return array(
             'inputManager' => __NAMESPACE__ . '\View\Helper\InputManager',
             'valueManager' => __NAMESPACE__ . '\View\Helper\ValueManager',
             'acl' => __NAMESPACE__ . '\View\Helper\Acl',
-            'identity' => __NAMESPACE__ . '\View\Helper\Identity',
         ),
     ),
 
