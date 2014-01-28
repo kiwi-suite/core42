@@ -321,6 +321,10 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
 
     public function getIdentityRole()
     {
+        if ($this->isEmpty()) {
+            return null;
+        }
+        
         $user = $this->read();
         if ($user instanceof RoleProviderInterface) {
             return $user->getIdentityRole();
