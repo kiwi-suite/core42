@@ -1,6 +1,6 @@
 {
     "name": "fruit42/core42",
-    "type": "zf-module",
+    "type": "zend-module",
     "require": {
         "php": ">=5.3.3",
         "firephp/firephp-core": "*",
