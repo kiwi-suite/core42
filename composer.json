@@ -1,6 +1,6 @@
 {
     "name": "fruit42/core42",
-    "type": "fruit42-module",
+    "type": "zf-module",
     "require": {
         "php": ">=5.3.3",
         "firephp/firephp-core": "*",
