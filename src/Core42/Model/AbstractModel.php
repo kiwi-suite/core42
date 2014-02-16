@@ -39,7 +39,7 @@ abstract class AbstractModel implements InputFilterProviderInterface
      * @param  string $name
      * @return mixed
      */
-    public function get($name)
+    protected function get($name)
     {
         if (array_key_exists($name, $this->modelProperties)) {
             return $this->modelProperties[$name];
@@ -53,7 +53,7 @@ abstract class AbstractModel implements InputFilterProviderInterface
      * @param  mixed                       $value
      * @return \Core42\Model\AbstractModel
      */
-    public function set($name, $value)
+    protected function set($name, $value)
     {
         $this->modelProperties[$name] =  $value;
 
