@@ -15,7 +15,6 @@ return array(
 
     'session_manager' => array(
         'enable_trans_sid_check' => false,
-        'validator' => array(
-        ),
+        'validator' => array(),
     ),
 );
