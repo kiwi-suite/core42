@@ -10,6 +10,7 @@ return array(
         'mysql' => array(
             'boolean'   => 'Core42\Hydrator\Strategy\Database\MySQL\BooleanStrategy',
             'datetime'  => 'Core42\Hydrator\Strategy\Database\MySQL\DatetimeStrategy',
+            'date'      => 'Core42\Hydrator\Strategy\Database\MySQL\DateStrategy',
             'integer'   => 'Core42\Hydrator\Strategy\Database\MySQL\IntegerStrategy',
             'float'     => 'Core42\Hydrator\Strategy\Database\MySQL\FloatStrategy',
         ),

@@ -4,7 +4,7 @@ namespace Core42\Hydrator\Strategy\Database\MySQL;
 use Core42\Hydrator\Strategy\Database\DatabaseStrategyInterface;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 
-class DatetimeStrategy implements StrategyInterface, DatabaseStrategyInterface
+class DateStrategy implements StrategyInterface, DatabaseStrategyInterface
 {
     /**
      * @var boolean
@@ -23,7 +23,7 @@ class DatetimeStrategy implements StrategyInterface, DatabaseStrategyInterface
         if ($this->isNullable && $value === null) return null;
 
         if ($value instanceof \DateTime) {
-            return date("Y-m-d H:i:s", $value->getTimestamp());
+            return date("Y-m-d", $value->getTimestamp());
         }
 
         return $value;
@@ -50,6 +50,6 @@ class DatetimeStrategy implements StrategyInterface, DatabaseStrategyInterface
     {
         $this->isNullable = $column->getIsNullable();
 
-        return (in_array($column->getDataType(), array('datetime', 'timestamp'))) ? $this : null;
+        return (in_array($column->getDataType(), array('date'))) ? $this : null;
     }
 }
