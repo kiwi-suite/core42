@@ -24,6 +24,7 @@ return array(
   'Core42\Hydrator\ModelHydrator'                                     => __DIR__ . '/src/Core42/Hydrator/ModelHydrator.php',
   'Core42\Hydrator\Strategy\Database\DatabaseStrategyInterface'       => __DIR__ . '/src/Core42/Hydrator/Strategy/Database/DatabaseStrategyInterface.php',
   'Core42\Hydrator\Strategy\Database\MySQL\BooleanStrategy'           => __DIR__ . '/src/Core42/Hydrator/Strategy/Database/MySQL/BooleanStrategy.php',
+  'Core42\Hydrator\Strategy\Database\MySQL\DateStrategy'              => __DIR__ . '/src/Core42/Hydrator/Strategy/Database/MySQL/DateStrategy.php',
   'Core42\Hydrator\Strategy\Database\MySQL\DatetimeStrategy'          => __DIR__ . '/src/Core42/Hydrator/Strategy/Database/MySQL/DatetimeStrategy.php',
   'Core42\Hydrator\Strategy\Database\MySQL\FloatStrategy'             => __DIR__ . '/src/Core42/Hydrator/Strategy/Database/MySQL/FloatStrategy.php',
   'Core42\Hydrator\Strategy\Database\MySQL\IntegerStrategy'           => __DIR__ . '/src/Core42/Hydrator/Strategy/Database/MySQL/IntegerStrategy.php',
