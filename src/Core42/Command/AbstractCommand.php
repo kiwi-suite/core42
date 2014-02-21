@@ -4,7 +4,6 @@ namespace Core42\Command;
 use Core42\ValueManager\ValueManager;
 use Zend\ServiceManager\ServiceManager;
 use Core42\ServiceManager\ServiceManagerStaticAwareInterface;
-use Zend\Stdlib\Hydrator\ClassMethods;
 
 abstract class AbstractCommand implements ServiceManagerStaticAwareInterface
 {
@@ -35,15 +34,9 @@ abstract class AbstractCommand implements ServiceManagerStaticAwareInterface
     private $valueManager;
 
     /**
-     *
-     * @return \Core42\Command\AbstractCommand
+     * @var bool
      */
-    public static function createCommand()
-    {
-        $className = get_called_class();
-
-        return new $className;
-    }
+    private $dryRun = false;
 
     /**
      *
@@ -65,6 +58,17 @@ abstract class AbstractCommand implements ServiceManagerStaticAwareInterface
         }
 
         $this->init();
+    }
+
+    /**
+     * @param boolean $dryRun
+     * @return \Core42\Command\AbstractCommand
+     */
+    public function setDryRun($dryRun)
+    {
+        $this->dryRun = (boolean) $dryRun;
+
+        return $this;
     }
 
     /**
@@ -108,23 +112,6 @@ abstract class AbstractCommand implements ServiceManagerStaticAwareInterface
     }
 
     /**
-     * @param  array                           $arguments
-     * @return \Core42\Command\AbstractCommand
-     */
-    public function setCommandArguments($arguments = array())
-    {
-        $arguments = (array) $arguments;
-        if (empty($arguments)) {
-            return $this;
-        }
-
-        $hydrator = new ClassMethods(false);
-        $hydrator->hydrate($arguments, $this);
-
-        return $this;
-    }
-
-    /**
      *
      */
     protected function init() {}
@@ -138,7 +125,7 @@ abstract class AbstractCommand implements ServiceManagerStaticAwareInterface
         try {
             $this->preExecute();
 
-            if (!$this->hasCommandErrors()) {
+            if (!$this->hasCommandErrors() && $this->dryRun === false) {
                 $this->execute();
                 $this->postExecute();
             }
