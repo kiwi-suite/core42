@@ -2,16 +2,16 @@
 namespace Core42\Command;
 
 use Core42\ValueManager\ValueManager;
-use Zend\ServiceManager\ServiceManager;
-use Core42\ServiceManager\ServiceManagerStaticAwareInterface;
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
-abstract class AbstractCommand implements CommandInterface
+abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareInterface
 {
     /**
      *
-     * @var ServiceManager
+     * @var ServiceLocatorInterface
      */
-    private static $serviceManager = null;
+    private $serviceLocator;
 
     /**
      * @var \Exception|null
@@ -22,11 +22,6 @@ abstract class AbstractCommand implements CommandInterface
      * @var bool
      */
     private $throwCommandExceptions = true;
-
-    /**
-     * @var bool
-     */
-    private $publishToConsole = false;
 
     /**
      * @var \Core42\ValueManager\ValueManager
@@ -41,21 +36,11 @@ abstract class AbstractCommand implements CommandInterface
     /**
      *
      */
-    final public function __construct(ServiceManager $manager = null)
+    final public function __construct()
     {
-        if ($manager !== null) {
-            self::$serviceManager = $manager;
-        }
-
         $this->valueManager = new ValueManager();
 
         $this->enableThrowExceptions(true);
-        $this->enablePublishToConsole(false);
-
-        $request = $this->getServiceManager()->get("Request");
-        if ($this instanceof ConsoleOutputInterface && $request instanceof \Zend\Console\Request) {
-            $this->enablePublishToConsole(true);
-        }
 
         $this->init();
     }
@@ -83,32 +68,32 @@ abstract class AbstractCommand implements CommandInterface
     }
 
     /**
-     * @param $enable
-     * @return \Core42\Command\AbstractCommand
+     * Set service locator
+     *
+     * @param ServiceLocatorInterface $serviceLocator
      */
-    final public function enablePublishToConsole($enable)
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
     {
-        $this->publishToConsole = (boolean) $enable;
-
-        return $this;
+        $this->serviceLocator = $serviceLocator;
     }
 
     /**
+     * Get service locator
      *
-     * @param ServiceManager $manager
+     * @return ServiceLocatorInterface
      */
-    public static function setServiceManager(ServiceManager $manager)
+    public function getServiceLocator()
     {
-        self::$serviceManager = $manager;
+        return $this->serviceLocator;
     }
 
     /**
      *
      * @return \Zend\ServiceManager\ServiceManager
      */
-    protected function getServiceManager()
+    public function getServiceManager()
     {
-        return self::$serviceManager;
+        return $this->getServiceLocator()->getServiceLocator();
     }
 
     /**
@@ -134,10 +119,6 @@ abstract class AbstractCommand implements CommandInterface
             if ($this->throwCommandExceptions === true) {
                 throw $e;
             }
-        }
-
-        if ($this->publishToConsole === true) {
-            $this->publishToConsole();
         }
 
         return $this;

@@ -3,7 +3,6 @@ namespace Core42;
 
 return array(
     'service_manager_static_aware' => array(
-        'AbstractCommand' => 'Core42\Command\AbstractCommand',
         'SqlQuery' => 'Core42\Db\SqlQuery\SqlQuery',
     ),
 
