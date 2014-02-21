@@ -1,9 +1,12 @@
 <?php
 namespace Core42\View\Helper;
 
+use Zend\ServiceManager\ServiceLocatorAwareInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\ServiceManager;
 use Zend\View\Helper\AbstractHelper;
 
-class ValueManager extends AbstractHelper
+class ValueManager extends AbstractHelper implements ServiceLocatorAwareInterface
 {
     /**
      * @var \Core42\ValueManager\ValueManager
@@ -11,9 +14,16 @@ class ValueManager extends AbstractHelper
     private $valueManager;
 
     /**
-     * @var string
+     * @var ServiceLocatorInterface
      */
-    private $errorPartial;
+    private $serviceLocator;
+
+    /**
+     * @var null|array
+     */
+    private $partialMapping = array(
+        '*' => 'partial/value-manager/input',
+    );
 
     /**
      * @return \Core42\View\Helper\ValueManager
@@ -35,55 +45,61 @@ class ValueManager extends AbstractHelper
     }
 
     /**
-     * @param $partial
-     * @return \Core42\View\Helper\InputManager
+     * @param string $name
+     * @param string $partial
+     * @param array $options
+     * @return mixed
      */
-    public function setErrorPartial($partial)
-    {
-        $this->errorPartial = $partial;
-
-        return $this;
-    }
-
-    /**
-     * @param  string $name
-     * @return string
-     */
-    public function renderError($name = null)
+    public function render($name, $partial, array $options = array())
     {
         $partialHelper = $this->view->plugin('partial');
 
-        $model = array(
-            'valueManager' => $this->valueManager,
-            'errorMessages' => $this->valueManager->getErrors($name),
-        );
-
-        return $partialHelper($this->errorPartial, $model);
-    }
-
-    /**
-     * @param  string     $name
-     * @param  bool       $escape
-     * @return array|null
-     */
-    public function getValue($name, $escape = true)
-    {
-        $value = $this->valueManager->getValue($name);
-
-        if ($escape === true && !empty($value)) {
-            $escapeHelper = $this->view->plugin('escapeHtml');
-            $value = $escapeHelper($value);
+        if ($this->partialMapping === null) {
+            $config = $this->getServiceManager()->get("Config");
+            $this->partialMapping = $config['value_manager']['template_map'];
         }
 
-        return $value;
+        if (!array_key_exists($partial, $this->partialMapping)) {
+            $partial = "*";
+        }
+
+        $partialName = $this->partialMapping[$partial];
+
+        $model = array(
+            'name'              => $name,
+            'valueManager'      => $this->valueManager,
+        );
+
+        $model = array_merge($model, $options);
+
+        return $partialHelper($partialName, $model);
     }
 
     /**
-     * @param  string|null $name
-     * @return bool
+     * Set service locator
+     *
+     * @param ServiceLocatorInterface $serviceLocator
      */
-    public function hasError($name = null)
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
     {
-        return $this->valueManager->hasErrors($name);
+        $this->serviceLocator = $serviceLocator;
+    }
+
+    /**
+     * Get service locator
+     *
+     * @return ServiceLocatorInterface
+     */
+    public function getServiceLocator()
+    {
+        return $this->serviceLocator;
+    }
+
+    /**
+     * @return ServiceManager
+     */
+    public function getServiceManager()
+    {
+        return $this->getServiceLocator()->getServiceLocator();
     }
 }
