@@ -1,14 +1,20 @@
 <?php
 namespace Core42;
 
+use Core42\Command\Service\CommandPluginManager;
 use Core42\Session\SessionInitializer;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
+use Zend\ModuleManager\Feature\InitProviderInterface;
+use Zend\ModuleManager\Listener\ServiceListenerInterface;
+use Zend\ModuleManager\ModuleManager;
+use Zend\ModuleManager\ModuleManagerInterface;
 
 class Module implements BootstrapListenerInterface,
                             ConfigProviderInterface,
-                            AutoloaderProviderInterface
+                            AutoloaderProviderInterface,
+                            InitProviderInterface
 {
     /*
      * @see \Zend\ModuleManager\Feature\ConfigProviderInterface::getConfig()
@@ -17,6 +23,7 @@ class Module implements BootstrapListenerInterface,
     {
         return array_merge(
             include __DIR__ . '/../../config/module.config.php',
+            include __DIR__ . '/../../config/service.config.php',
             include __DIR__ . '/../../config/database.config.php',
             include __DIR__ . '/../../config/session.config.php',
             include __DIR__ . '/../../config/log.config.php',
@@ -66,6 +73,36 @@ class Module implements BootstrapListenerInterface,
             'Zend\Loader\ClassMapAutoloader' => array(
                 __DIR__ . '/../../autoload_classmap.php'
             ),
+            'Zend\Loader\StandardAutoloader' => array(
+                'namespaces' => array(
+                    __NAMESPACE__ => __DIR__,
+                ),
+            ),
         );
+    }
+
+    private function addPeeringServiceManager(ServiceListenerInterface $serviceListener)
+    {
+        $serviceListener->addServiceManager(
+            'Core42\\CommandPluginManager',
+            'commands',
+            '\\Core42\\Command\\Service\\Feature\\CommandProviderInterface',
+            'getCommandConfig'
+        );
+    }
+
+    /**
+     * Initialize workflow
+     *
+     * @param  ModuleManagerInterface $manager
+     * @return void
+     */
+    public function init(ModuleManagerInterface $manager)
+    {
+        if (!($manager instanceof ModuleManager)) {
+            return;
+        }
+
+        $this->addPeeringServiceManager($manager->getEvent()->getParam("ServiceManager")->get("ServiceListener"));
     }
 }

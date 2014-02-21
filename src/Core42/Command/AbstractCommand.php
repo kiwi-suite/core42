@@ -5,7 +5,7 @@ use Core42\ValueManager\ValueManager;
 use Zend\ServiceManager\ServiceManager;
 use Core42\ServiceManager\ServiceManagerStaticAwareInterface;
 
-abstract class AbstractCommand implements ServiceManagerStaticAwareInterface
+abstract class AbstractCommand implements CommandInterface
 {
     /**
      *
