@@ -50,6 +50,14 @@ return array(
         ),
     ),
 
+    'view_manager' => array(
+        'template_map' => array(
+            'partial/value-manager/input' => __DIR__ . '/../view/partial/value-manager/input.phtml',
+        ),
+    ),
+
+    'value_manager' => array(),
+
     'controller_plugins' => array(
         'factories' => array(
             'mobileDetect' => 'Core42\Mvc\Controller\Plugin\Service\MobileDetectFactory',
@@ -60,10 +68,6 @@ return array(
         'invokables' => array(
             __NAMESPACE__.'\Controller\Cli\Seeding' => __NAMESPACE__.'\Controller\Cli\SeedingController',
         ),
-    ),
-
-    'migration' => array(
-        'migration_dir' => 'data/database/migrations/',
     ),
 
     'seeding' => array(
