@@ -56,20 +56,6 @@ return array(
         ),
     ),
 
-    'controllers' => array(
-        'invokables' => array(
-            __NAMESPACE__.'\Controller\Cli\Seeding' => __NAMESPACE__.'\Controller\Cli\SeedingController',
-        ),
-    ),
-
-    'migration' => array(
-        'migration_dir' => 'data/database/migrations/',
-    ),
-
-    'seeding' => array(
-        'seeding_dir' => 'data/database/seeding/',
-    ),
-
 //    'authentication' => array(
 //        'default' => array(
 //            'plugins' => array(
