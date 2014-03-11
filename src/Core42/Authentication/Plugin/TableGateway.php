@@ -66,7 +66,7 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
     public function setOptions(array $options = array(), ServiceManager $serviceManager)
     {
         if (isset($options['table_gateway'])) {
-            $this->setTableGateway($serviceManager->get($options['table_gateway']));
+            $this->setTableGateway($serviceManager->get('TableGateway')->get($options['table_gateway']));
         }
         if (isset($options['identity_column'])) {
             $this->setIdentityColumn($options['identity_column']);
@@ -324,7 +324,7 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
         if ($this->isEmpty()) {
             return null;
         }
-        
+
         $user = $this->read();
         if ($user instanceof RoleProviderInterface) {
             return $user->getIdentityRole();

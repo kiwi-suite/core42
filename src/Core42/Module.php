@@ -83,10 +83,17 @@ class Module implements BootstrapListenerInterface,
     private function addPeeringServiceManager(ServiceListenerInterface $serviceListener)
     {
         $serviceListener->addServiceManager(
-            'Core42\\CommandPluginManager',
+            'Core42\CommandPluginManager',
             'commands',
-            '\\Core42\\Command\\Service\\Feature\\CommandProviderInterface',
+            '\Core42\Command\Service\Feature\CommandProviderInterface',
             'getCommandConfig'
+        );
+
+        $serviceListener->addServiceManager(
+            'Core42\TableGatewayPluginManager',
+            'table_gateway',
+            '\Core42\Db\TableGateway\Service\Feature\TableGatewayProviderInterface',
+            'getTableGatewayConfig'
         );
     }
 

@@ -4,8 +4,6 @@ namespace Core42;
 return array(
     'service_manager' => array(
         'abstract_factories' => array(
-            'Core42\Db\TableGateway\Service\TableGatewayAbstractServiceFactory',
-
             'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
             'Zend\Db\Adapter\AdapterAbstractServiceFactory',
             'Zend\Log\LoggerAbstractServiceFactory',
@@ -22,6 +20,7 @@ return array(
             'Core42\AclConfig' => 'Core42\Permissions\Acl\Service\AclConfigFactory',
 
             'Core42\CommandPluginManager' => 'Core42\Command\Service\CommandPluginManagerFactory',
+            'Core42\TableGatewayPluginManager' => 'Core42\Db\TableGateway\Service\TableGatewayPluginManagerFactory',
         ),
         'invokables' => array(
             'MobileDetect' => '\Mobile_Detect',
@@ -37,6 +36,7 @@ return array(
             'Zend\Authentication\AuthenticationService' => 'Core42\Authentication',
 
             'Command' => 'Core42\CommandPluginManager',
+            'TableGateway' => 'Core42\TableGatewayPluginManager',
         ),
     ),
 );

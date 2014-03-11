@@ -2,10 +2,6 @@
 namespace Core42;
 
 return array(
-    'tablegateway' => array(
-
-    ),
-
     'database_hydrator_plugins' => array(
         'mysql' => array(
             'boolean'   => 'Core42\Hydrator\Strategy\Database\MySQL\BooleanStrategy',
