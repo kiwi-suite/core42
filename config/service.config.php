@@ -20,7 +20,8 @@ return array(
 
             'Core42\Acl' => 'Core42\Permissions\Acl\Service\AclFactory',
             'Core42\AclConfig' => 'Core42\Permissions\Acl\Service\AclConfigFactory',
-            'Core42\\CommandPluginManager' => 'Core42\\Command\\Service\\CommandPluginManagerFactory',
+
+            'Core42\CommandPluginManager' => 'Core42\Command\Service\CommandPluginManagerFactory',
         ),
         'invokables' => array(
             'MobileDetect' => '\Mobile_Detect',
@@ -34,7 +35,8 @@ return array(
             'Acl' => 'Core42\Acl',
             'AuthenticationService' => 'Core42\Authentication',
             'Zend\Authentication\AuthenticationService' => 'Core42\Authentication',
-            'Command' => 'Core42\\CommandPluginManager',
+
+            'Command' => 'Core42\CommandPluginManager',
         ),
     ),
 );
