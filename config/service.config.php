@@ -19,6 +19,8 @@ return array(
             'Core42\Acl' => 'Core42\Permissions\Acl\Service\AclFactory',
             'Core42\AclConfig' => 'Core42\Permissions\Acl\Service\AclConfigFactory',
 
+            'Core42\Mail\Transport' => 'Core42\Mail\Transport\Service\TransportFactory',
+
             'Core42\CommandPluginManager' => 'Core42\Command\Service\CommandPluginManagerFactory',
             'Core42\TableGatewayPluginManager' => 'Core42\Db\TableGateway\Service\TableGatewayPluginManagerFactory',
         ),
