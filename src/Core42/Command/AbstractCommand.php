@@ -107,6 +107,8 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
      */
     final public function run()
     {
+        $this->configure();
+
         try {
             $this->preExecute();
 
@@ -116,13 +118,21 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
             }
         } catch (\Exception $e) {
             $this->commandException = $e;
+            $this->shutdown();
             if ($this->throwCommandExceptions === true) {
                 throw $e;
             }
         }
 
+        if ($this->commandException !== null) {
+            $this->shutdown();
+        }
+
         return $this;
     }
+
+    protected function configure() {}
+
 
     /**
      *
@@ -138,6 +148,12 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
      *
      */
     protected function postExecute() {}
+
+    /**
+     *
+     */
+    protected function shutdown() {}
+
 
     /**
      * @return bool
