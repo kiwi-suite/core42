@@ -21,8 +21,6 @@ return array(
         ),
     ),
 
-    'value_manager' => array(),
-
     'controller_plugins' => array(
         'factories' => array(
             'mobileDetect' => 'Core42\Mvc\Controller\Plugin\Service\MobileDetectFactory',
@@ -34,7 +32,7 @@ return array(
             __NAMESPACE__.'\Controller\Cli\Seeding' => __NAMESPACE__.'\Controller\Cli\SeedingController',
         ),
     ),
-    
+
 //    'authentication' => array(
 //        'default' => array(
 //            'plugins' => array(
