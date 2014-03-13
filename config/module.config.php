@@ -28,8 +28,8 @@ return array(
     ),
 
     'controllers' => array(
-        'invokables' => array(
-            __NAMESPACE__.'\Controller\Cli\Seeding' => __NAMESPACE__.'\Controller\Cli\SeedingController',
+        'abstract_factories' => array(
+            'Core42\Controller\Service\ControllerFallbackAbstractFactory'
         ),
     ),
 
