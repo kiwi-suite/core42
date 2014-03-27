@@ -66,7 +66,7 @@ class Route extends AbstractListenerAggregate
         $url = $event->getRouter()->assemble(array(), array('name' => $options['redirect_route']));
         $response=$event->getResponse();
         $response->getHeaders()->addHeaderLine('Location', $url);
-        $response->setStatusCode(302);
+        $response->setStatusCode(403);
         $response->sendHeaders();
 
         return $response;
