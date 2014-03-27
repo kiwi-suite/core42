@@ -8,10 +8,10 @@ return array(
 
     'view_helpers' => array(
         'invokables' => array(
-            'params' => __NAMESPACE__.'\View\Helper\Params',
-            'mobileDetect' => __NAMESPACE__ . '\View\Helper\MobileDetect',
-            'valueManager' => __NAMESPACE__ . '\View\Helper\ValueManager',
-            'acl' => __NAMESPACE__ . '\View\Helper\Acl',
+            'params'            => __NAMESPACE__.'\View\Helper\Params',
+            'mobileDetect'      => __NAMESPACE__ . '\View\Helper\MobileDetect',
+            'acl'               => __NAMESPACE__ . '\View\Helper\Acl',
+            'formElementRender' => __NAMESPACE__ . '\View\Helper\FormElementRender',
         ),
     ),
 
@@ -32,24 +32,4 @@ return array(
             'Core42\Controller\Service\ControllerFallbackAbstractFactory'
         ),
     ),
-
-//    'authentication' => array(
-//        'default' => array(
-//            'plugins' => array(
-//                'Authentication\Plugin\TableGateway' => array(
-//                    'name' => 'Core42\Authentication\Plugin\TableGateway',
-//                    'options' => array(
-//                        'table_gateway' => 'Core42\UserTableGateway',
-//                        'identity_column' => 'username',
-//                        'credential_column' => 'password',
-//                    ),
-//                ),
-//            ),
-//            'adapter' => 'Authentication\Plugin\TableGateway',
-//            'storage' => 'Authentication\Plugin\TableGateway',
-//        ),
-//        'routes' => array(
-//            'route/you/want' => 'default',
-//        ),
-//    ),
 );
