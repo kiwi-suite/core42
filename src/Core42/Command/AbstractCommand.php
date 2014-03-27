@@ -1,9 +1,10 @@
 <?php
 namespace Core42\Command;
 
-use Core42\ValueManager\ValueManager;
+use Zend\Form\FormInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\Stdlib\Hydrator\ClassMethods;
 
 abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareInterface
 {
@@ -24,9 +25,9 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
     private $throwCommandExceptions = true;
 
     /**
-     * @var \Core42\ValueManager\ValueManager
+     * @var bool
      */
-    private $valueManager;
+    private $autoValidateForm = true;
 
     /**
      * @var bool
@@ -34,15 +35,21 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
     private $dryRun = false;
 
     /**
+     * @var FormInterface
+     */
+    private $form;
+
+    /**
+     * @var array
+     */
+    private $errors = array();
+
+    /**
      *
      */
     final public function __construct()
     {
-        $this->valueManager = new ValueManager();
-
         $this->enableThrowExceptions(true);
-
-        $this->init();
     }
 
     /**
@@ -65,6 +72,49 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
         $this->throwCommandExceptions = (boolean) $enable;
 
         return $this;
+    }
+
+    /**
+     * @param FormInterface $form
+     * @param boolean $autoValidateForm
+     * @return $this
+     */
+    public function setForm(FormInterface $form, $autoValidateForm = true)
+    {
+        $this->form = $form;
+
+        $this->autoValidateForm = $autoValidateForm;
+
+        return $this;
+    }
+
+    /**
+     * @return FormInterface
+     * @throws \Exception
+     */
+    public function getForm()
+    {
+        if (!$this->hasForm()) {
+            throw new \Exception('form not set');
+        }
+
+        return $this->form;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasForm()
+    {
+        return ($this->form !== null);
+    }
+
+    /**
+     * @return \Zend\InputFilter\InputFilterInterface
+     */
+    public function getInputFilter()
+    {
+        return $this->getForm()->getInputFilter();
     }
 
     /**
@@ -97,11 +147,6 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
     }
 
     /**
-     *
-     */
-    protected function init() {}
-
-    /**
      * @return \Core42\Command\AbstractCommand
      * @throws \Exception
      */
@@ -110,9 +155,12 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
         $this->configure();
 
         try {
+            if ($this->hasForm() && $this->autoValidateForm === true) {
+                $this->validateForm();
+            }
             $this->preExecute();
 
-            if (!$this->hasCommandErrors() && $this->dryRun === false) {
+            if (!$this->hasErrors() && $this->dryRun === false) {
                 $this->execute();
                 $this->postExecute();
             }
@@ -124,6 +172,7 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
             }
         }
 
+        //TODO might be more clean with PHP5.5 finally
         if ($this->commandException !== null) {
             $this->shutdown();
         }
@@ -131,8 +180,21 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
         return $this;
     }
 
+    /**
+     *
+     */
     protected function configure() {}
 
+
+    protected function validateForm()
+    {
+        if (!$this->getForm()->isValid()) {
+            $this->addErrors($this->getForm()->getMessages(), false);
+        }
+
+        $classMethodHydrator = new ClassMethods(false);
+        $classMethodHydrator->hydrate($this->getForm()->getData(), $this);
+    }
 
     /**
      *
@@ -154,44 +216,59 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
      */
     protected function shutdown() {}
 
+    /**
+     * @param string $name
+     * @param string $message
+     * @param bool $propagateForm
+     * @return $this
+     */
+    protected function addError($name, $message, $propagateForm = true)
+    {
+        if ($this->hasForm() && $propagateForm === true && $this->getForm()->has($name)) {
+            $formMessages = $this->getForm()->get($name)->getMessages();
+            $formMessages[] = $message;
+            $this->getForm()->get($name)->setMessages($formMessages);
+        }
+
+        if (!array_key_exists($name, $this->errors)) {
+            $this->errors[$name] = array();
+        }
+
+        $this->errors[$name][] = $message;
+
+        return $this;
+    }
+
+    /**
+     * @param array $errors
+     * @param boolean $propagateForm
+     * @return $this
+     */
+    protected function addErrors(array $errors, $propagateForm = true)
+    {
+        foreach ($errors as $name => $listErrors) {
+            foreach ($listErrors as $message) {
+                $this->addError($name, $message, $propagateForm);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getErrors()
+    {
+        return $this->errors;
+    }
 
     /**
      * @return bool
      */
-    final public function hasCommandErrors()
+    public function hasErrors()
     {
-        return $this->valueManager->hasErrors();
-    }
-
-    /**
-     * @param  array                           $errors
-     * @return \Core42\Command\AbstractCommand
-     */
-    final public function setCommandErrors(array $errors)
-    {
-        $this->valueManager->setErrors($errors);
-
-        return $this;
-    }
-
-    /**
-     * @param  string                          $name
-     * @param  string                          $error
-     * @return \Core42\Command\AbstractCommand
-     */
-    final public function setCommandError($name, $error)
-    {
-        $this->valueManager->setError($name, $error);
-
-        return $this;
-    }
-
-    /**
-     * @return ValueManager
-     */
-    final public function getValueManager()
-    {
-        return $this->valueManager;
+        return (count($this->errors) > 0);
     }
 
     /**
