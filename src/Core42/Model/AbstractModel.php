@@ -6,22 +6,12 @@ use Zend\InputFilter\Factory;
 use Zend\InputFilter\InputFilterProviderInterface;
 use Zend\InputFilter\InputFilterInterface;
 
-abstract class AbstractModel implements InputFilterProviderInterface
+abstract class AbstractModel
 {
-    /**
-     * @var array
-     */
-    protected $inputFilterSpecifications = array();
-
     /**
      * @var ModelHydrator
      */
     private $hydrator;
-
-    /**
-     * @var \Zend\InputFilter\InputFilterInterface
-     */
-    private $inputFilter;
 
     private $modelProperties = array();
 
@@ -89,64 +79,6 @@ abstract class AbstractModel implements InputFilterProviderInterface
     }
 
     /**
-     * @return \Zend\InputFilter\InputFilterInterface
-     */
-    public function getInputFilter()
-    {
-        if (!($this->inputFilter instanceof \Zend\InputFilter\InputFilterInterface)) {
-            $inputFilterSpecifications = $this->getInputFilterSpecification();
-            if (empty($inputFilterSpecifications)) {
-                return null;
-            }
-
-            $factory = new Factory();
-            $this->inputFilter = $factory->createInputFilter($inputFilterSpecifications);
-        }
-
-        return $this->inputFilter;
-    }
-
-    /**
-     * @param  string|array|null $options
-     * @return bool
-     */
-    public function isValid($options = null)
-    {
-        $this->filter();
-
-        if (is_string($options)) {
-            $this->getInputFilter()->setValidationGroup(array($options));
-        } elseif (is_array($options)) {
-            $this->getInputFilter()->setValidationGroup($options);
-        }
-
-        $return = $this->getInputFilter()
-                            ->isValid();
-
-        $this->getInputFilter()->setValidationGroup(InputFilterInterface::VALIDATE_ALL);
-
-        return $return;
-    }
-
-    /**
-     *
-     */
-    public function filter()
-    {
-        $values = $this->getInputFilter()->setData($this->diff())->getValues();
-        $hydrateValues = array_intersect_key($values, $this->diff());
-        $this->hydrate($hydrateValues);
-    }
-
-    /**
-     * @return array
-     */
-    public function getInputFilterSpecification()
-    {
-        return $this->inputFilterSpecifications;
-    }
-
-    /**
      * @return \Core42\Model\AbstractModel
      */
     public function memento()
@@ -154,14 +86,6 @@ abstract class AbstractModel implements InputFilterProviderInterface
         $this->memento = $this->modelProperties;
 
         return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isMemento()
-    {
-        return ($this->memento !== null);
     }
 
     /**
@@ -183,10 +107,6 @@ abstract class AbstractModel implements InputFilterProviderInterface
      */
     public function diff()
     {
-        if (!$this->isMemento()) {
-            throw new \Exception("memento never called");
-        }
-
         return array_udiff_assoc($this->modelProperties, $this->memento, function ($value1, $value2) {
             return ($value1 === $value2) ? 0 : 1;
         });

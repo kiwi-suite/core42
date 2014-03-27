@@ -1,13 +1,14 @@
 <?php
 namespace Core42\Hydrator;
 
-use Core42\Permissions\Acl\Role\RoleProviderInterface;
 use Zend\Stdlib\Hydrator\ClassMethods;
 use Zend\Stdlib\Hydrator\Filter\FilterComposite;
 use Zend\Stdlib\Hydrator\Filter\MethodMatchFilter;
 
 class ModelHydrator extends ClassMethods
 {
+    private $filterInitialized = false;
+
     /**
      *
      * @param boolean $underscoreSeparatedKeys
@@ -15,11 +16,9 @@ class ModelHydrator extends ClassMethods
     public function __construct($underscoreSeparatedKeys = false)
     {
         parent::__construct($underscoreSeparatedKeys);
-        $this->filterComposite->addFilter("getInputFilterSpecification", new MethodMatchFilter("getInputFilterSpecification"), FilterComposite::CONDITION_AND)
-            ->addFilter("isValid", new MethodMatchFilter("isValid"), FilterComposite::CONDITION_AND)
-            ->addFilter("isMemento", new MethodMatchFilter("isMemento"), FilterComposite::CONDITION_AND)
+        $this->filterComposite
+            ->addFilter("getFilter", new MethodMatchFilter("getFilter"), FilterComposite::CONDITION_AND)
             ->addFilter("getHydrator", new MethodMatchFilter("getHydrator"), FilterComposite::CONDITION_AND)
-            ->addFilter("getInputFilter", new MethodMatchFilter("getInputFilter"), FilterComposite::CONDITION_AND)
             ->addFilter("hasChanged", new MethodMatchFilter("hasChanged"), FilterComposite::CONDITION_AND);
     }
 
@@ -57,13 +56,18 @@ class ModelHydrator extends ClassMethods
      */
     public function addObjectDependedFilter($object)
     {
-        //TODO register object depended filter elsewhere (initialzer like)
         if (!is_object($object)) {
             return;
         }
 
-        if ($object instanceof RoleProviderInterface && !$this->hasFilter("getIdentityRole")) {
-            $this->addFilter("getIdentityRole", new MethodMatchFilter("getIdentityRole"), FilterComposite::CONDITION_AND);
+        if ($this->filterInitialized === true) {
+            return;
+        }
+
+        $this->filterInitialized = true;
+
+        if ($object instanceof FilterProviderInterface) {
+            $this->addFilter("objectFilter", $object->getFilter(), FilterComposite::CONDITION_AND);
         }
     }
 }
