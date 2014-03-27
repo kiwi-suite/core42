@@ -193,6 +193,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
      *
      * @param  string|int|array                 $values
      * @return \Core42\Model\AbstractModel|null
+     * @throws \Exception
      */
     public function selectByPrimary($values)
     {
