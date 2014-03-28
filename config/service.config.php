@@ -16,8 +16,8 @@ return array(
             'Core42\Authentication' => 'Core42\Authentication\Service\AuthenticationFactory',
             'Core42\AuthenticationConfig' => 'Core42\Authentication\Service\AuthenticationConfigFactory',
 
-            'Core42\Acl' => 'Core42\Permissions\Acl\Service\AclFactory',
-            'Core42\AclConfig' => 'Core42\Permissions\Acl\Service\AclConfigFactory',
+            'Core42\Permission\Config' => 'Core42\Permissions\Rbac\Service\RbacConfigFactory',
+            'Core42\Permission' => 'Core42\Permissions\Rbac\Service\RbacFactory',
 
             'Core42\Mail\Transport' => 'Core42\Mail\Transport\Service\TransportFactory',
 
@@ -29,13 +29,13 @@ return array(
 
             'Core42\Hydrator\Strategy\Database\MySQL\PluginManager' => 'Core42\Hydrator\Strategy\Database\MySQL\PluginManager',
 
-            'Core42\Permissions\Acl\Guard\Route' => 'Core42\Permissions\Acl\Guard\Route',
-            'Core42\Permissions\Acl\Provider\ArrayProvider' => 'Core42\Permissions\Acl\Provider\ArrayProvider',
+            'Core42\Permission\Provider\Role\Array' => 'Core42\Permissions\Rbac\Provider\Role\ArrayProvider',
         ),
         'aliases' => array(
-            'Acl' => 'Core42\Acl',
             'AuthenticationService' => 'Core42\Authentication',
             'Zend\Authentication\AuthenticationService' => 'Core42\Authentication',
+
+            'Permission' => 'Core42\Permission',
 
             'Command' => 'Core42\CommandPluginManager',
             'TableGateway' => 'Core42\TableGatewayPluginManager',

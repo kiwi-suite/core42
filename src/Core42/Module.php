@@ -28,7 +28,8 @@ class Module implements BootstrapListenerInterface,
             include __DIR__ . '/../../config/session.config.php',
             include __DIR__ . '/../../config/log.config.php',
             include __DIR__ . '/../../config/mail.config.php',
-            include __DIR__ . '/../../config/caches.config.php'
+            include __DIR__ . '/../../config/caches.config.php',
+            include __DIR__ . '/../../config/permission.config.php'
         );
     }
 
@@ -51,6 +52,8 @@ class Module implements BootstrapListenerInterface,
         $sessionInit = new SessionInitializer();
         $sessionInit->initialize($e->getApplication()->getServiceManager());
 
+        $e->getApplication()->getServiceManager()->get('Permission');
+        return;
         $aclConfig = $e->getApplication()->getServiceManager()->get('Core42\AclConfig');
         if (php_sapi_name() !== 'cli' && !empty($aclConfig) && !empty($aclConfig['guards'])) {
             foreach ($aclConfig['guards'] as $guard => $options) {
@@ -70,9 +73,9 @@ class Module implements BootstrapListenerInterface,
     public function getAutoloaderConfig()
     {
         return array(
-            'Zend\Loader\ClassMapAutoloader' => array(
+            /*'Zend\Loader\ClassMapAutoloader' => array(
                 __DIR__ . '/../../autoload_classmap.php'
-            ),
+            ),*/
             'Zend\Loader\StandardAutoloader' => array(
                 'namespaces' => array(
                     __NAMESPACE__ => __DIR__,
