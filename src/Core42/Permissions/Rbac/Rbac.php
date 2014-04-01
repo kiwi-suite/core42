@@ -1,7 +1,7 @@
 <?php
 namespace Core42\Permissions\Rbac;
 
-use Core42\Permissions\Guard\GuardInterface;
+use Core42\Permissions\Rbac\Role\RoleInterface;
 
 class Rbac extends \Zend\Permissions\Rbac\Rbac
 {
@@ -11,9 +11,10 @@ class Rbac extends \Zend\Permissions\Rbac\Rbac
     private $isEnabled = false;
 
     /**
-     * @var GuardInterface[]
+     * @var RoleInterface
      */
-    private $guards = array();
+    private $idenitiyRole;
+
 
     /**
      * @param $enabled
@@ -42,21 +43,42 @@ class Rbac extends \Zend\Permissions\Rbac\Rbac
     }
 
     /**
-     * @param GuardInterface $guard
-     *  @return \Core42\Permissions\Rbac\Rbac
+     * @param string|RoleInterface $identityRole
+     * @throws \Exception
      */
-    public function addGuard(GuardInterface $guard)
+    public function setIdentityRole($identityRole)
     {
-        $this->guards[] = $guard;
+        if (is_string($identityRole)) {
+            $identityRole = $this->getRole($identityRole);
+        }
 
-        return $this;
+        if (!$identityRole instanceof RoleInterface) {
+            throw new \Exception("Identity-role must be a string or an existing roles");
+        }
+
+        $this->idenitiyRole = $identityRole;
     }
 
     /**
-     * @return \Core42\Permissions\Guard\GuardInterface[]
+     * @return RoleInterface
      */
-    public function getGuards()
+    public function getIdentityRole()
     {
-        return $this->guards;
+        return $this->idenitiyRole;
+    }
+
+    /**
+     * @param $permission
+     * @param null $assert
+     * @return bool
+     * @throws \Exception
+     */
+    public function isIdentityGranted($permission, $assert = null)
+    {
+        if ($this->idenitiyRole === null) {
+            throw new \Exception('identity role not set');
+        }
+
+        return $this->isGranted($this->getIdentityRole(), $permission, $assert);
     }
 }

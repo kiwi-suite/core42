@@ -11,24 +11,12 @@ return array(
         'default_authenticated_role' => '',
 
         // provider to receive the identity of the (authenticated) user
-        'identity_provider' => 'Core42\Authentication',
+        'identity_provider' => '',
         // authentication service to check if the user ist authenticated
-        'authentication_service' => 'Core42\Authentication',
+        'authentication_service' => '',
 
-        'role_provider' => 'Core42\Permission\Provider\Role\Array',
+        'role_provider' => '',
 
-        'guards' => array(
-
-        ),
-
-        'roles' => array(
-            'guest' => array(
-
-                'options' => array(),
-            ),
-            'user' => array(
-                'options' => array(),
-            ),
-        ),
+        'guards' => array(),
     ),
 );

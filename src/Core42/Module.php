@@ -52,15 +52,11 @@ class Module implements BootstrapListenerInterface,
         $sessionInit = new SessionInitializer();
         $sessionInit->initialize($e->getApplication()->getServiceManager());
 
-        $e->getApplication()->getServiceManager()->get('Permission');
-        return;
-        $aclConfig = $e->getApplication()->getServiceManager()->get('Core42\AclConfig');
-        if (php_sapi_name() !== 'cli' && !empty($aclConfig) && !empty($aclConfig['guards'])) {
-            foreach ($aclConfig['guards'] as $guard => $options) {
-                if (!$e->getApplication()->getServiceManager()->has($guard)) {
-                    continue;
-                }
-                $guard = $e->getApplication()->getServiceManager()->get($guard);
+        $rbacConfig = $e->getApplication()->getServiceManager()->get('Core42\Permission\Config');
+        if (!empty($rbacConfig) && $rbacConfig['enabled'] === true) {
+            foreach ($rbacConfig['guards'] as $serviceName => $options) {
+                /** @var $guard GuardInterface */
+                $guard = $e->getApplication()->getServiceManager()->get($serviceName);
                 $guard->setOptions($options);
                 $e->getTarget()->getEventManager()->attach($guard);
             }
@@ -73,9 +69,9 @@ class Module implements BootstrapListenerInterface,
     public function getAutoloaderConfig()
     {
         return array(
-            /*'Zend\Loader\ClassMapAutoloader' => array(
+            'Zend\Loader\ClassMapAutoloader' => array(
                 __DIR__ . '/../../autoload_classmap.php'
-            ),*/
+            ),
             'Zend\Loader\StandardAutoloader' => array(
                 'namespaces' => array(
                     __NAMESPACE__ => __DIR__,

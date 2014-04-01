@@ -48,6 +48,12 @@ class ArrayProvider implements RoleProviderInterface,
                 }
             }
 
+            if (!empty($params['rules'])) {
+                foreach ($params['rules'] as $_rule) {
+                    $role->addPermission($_rule);
+                }
+            }
+
             $roles[] = $role;
         }
 

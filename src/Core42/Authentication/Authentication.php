@@ -1,19 +1,19 @@
 <?php
 namespace Core42\Authentication;
 
-use Core42\Permissions\Acl\Role\RoleProviderInterface;
+use Core42\Permissions\Rbac\Role\RoleAwareInterface;
 use Zend\Authentication\AuthenticationService;
 
-class Authentication extends AuthenticationService implements RoleProviderInterface
+class Authentication extends AuthenticationService implements RoleAwareInterface
 {
 
     public function getIdentityRole()
     {
-        if ($this->getStorage() instanceof RoleProviderInterface) {
+        if ($this->getStorage() instanceof RoleAwareInterface) {
             return $this->getStorage()->getIdentityRole();
         }
 
-        if ($this->hasIdentity() && $this->getIdentity() instanceof RoleProviderInterface) {
+        if ($this->hasIdentity() && $this->getIdentity() instanceof RoleAwareInterface) {
             return $this->getIdentity()->getIdentityRole();
         }
 

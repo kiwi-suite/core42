@@ -2,8 +2,9 @@
 namespace Core42\Permissions\Rbac\Guard;
 
 use Core42\Permissions\Guard\GuardInterface;
+use Zend\EventManager\AbstractListenerAggregate;
 
-abstract class AbstractGuard implements GuardInterface
+abstract class AbstractGuard extends AbstractListenerAggregate implements GuardInterface
 {
     protected $options = array();
 

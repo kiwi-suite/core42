@@ -1,7 +1,7 @@
 <?php
 namespace Core42\Authentication\Plugin;
 
-use Core42\Permissions\Acl\Role\RoleProviderInterface;
+use Core42\Permissions\Rbac\Role\RoleAwareInterface;
 use Zend\Authentication\Adapter\AdapterInterface;
 use Core42\Db\TableGateway\AbstractTableGateway;
 use Core42\Model\AbstractModel;
@@ -11,7 +11,7 @@ use Zend\Crypt\Password\Bcrypt;
 use Zend\ServiceManager\ServiceManager;
 use Zend\Session\Container as SessionContainer;
 
-class TableGateway implements AdapterInterface, StorageInterface, PluginInterface, RoleProviderInterface
+class TableGateway implements AdapterInterface, StorageInterface, PluginInterface, RoleAwareInterface
 {
     /**
      * @var AbstractTableGateway
@@ -326,7 +326,7 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
         }
 
         $user = $this->read();
-        if ($user instanceof RoleProviderInterface) {
+        if ($user instanceof RoleAwareInterface) {
             return $user->getIdentityRole();
         }
         return null;

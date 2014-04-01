@@ -40,7 +40,6 @@ class AuthenticationConfigFactory implements FactoryInterface
                 }
             }
         }
-
         return $config[$this->configkey][$authName];
     }
 
