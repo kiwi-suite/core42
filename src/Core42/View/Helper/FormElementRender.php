@@ -10,11 +10,15 @@ class FormElementRender extends AbstractHelper
 
     private $partial;
 
-    public function __invoke(ElementInterface $element, $partial = null)
+    private $extraParams = array();
+
+    public function __invoke(ElementInterface $element, $partial = null, $extraParams = array())
     {
         $this->element = $element;
 
         $this->partial = $partial;
+
+        $this->extraParams = $extraParams;
 
         return $this;
     }
@@ -35,9 +39,8 @@ class FormElementRender extends AbstractHelper
                 //TODO lookup for the right partial
             }
 
-            $model = array(
-                'element' => $this->element
-            );
+            $model = $this->extraParams;
+            $model['element'] = $this->element;
 
             $html = $partialHelper($partialFile, $model);
         } catch (\Exception $e) {}
