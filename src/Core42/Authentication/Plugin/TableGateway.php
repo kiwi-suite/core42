@@ -201,13 +201,11 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
         ));
 
         if ($resultSet->count() == 0) {
-            //TODO Eventsystem
             $this->onIdentityNotFound();
 
-            return new Result(Result::FAILURE_IDENTITY_NOT_FOUND, $this->getIdentity());
+            return new Result(Result::FAILURE_IDENTITY_NOT_FOUND, $this->getIdentity(), array('Supplied credential is invalid.'));
         }
         if ($resultSet->count() > 1) {
-            //TODO Eventsystem
             $this->onIdentityAmbiguous();
 
             return new Result(Result::FAILURE_IDENTITY_AMBIGUOUS, $this->getIdentity());
@@ -216,9 +214,8 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
         $this->setUser($resultSet->current());
         $userArray = $this->getUser()->extract();
 
-        //TODO Event System
         if (!$this->matchPassword($userArray[$this->getCredentialColumn()], $this->getCredential())) {
-            return new Result(Result::FAILURE_CREDENTIAL_INVALID, $this->getIdentity());
+            return new Result(Result::FAILURE_CREDENTIAL_INVALID, $this->getIdentity(), array('Supplied credential is invalid.'));
         }
 
         return new Result(
