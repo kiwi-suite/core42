@@ -158,6 +158,11 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
             if ($this->hasForm() && $this->autoValidateForm === true) {
                 $this->validateForm();
             }
+
+            if ($this->hasForm()) {
+                $this->extractForm();
+            }
+
             $this->preExecute();
 
             if (!$this->hasErrors() && $this->dryRun === false) {
@@ -186,6 +191,9 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
     protected function configure() {}
 
 
+    /**
+     *
+     */
     protected function validateForm()
     {
         if (!$this->getForm()->isValid()) {
@@ -195,6 +203,8 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
         $classMethodHydrator = new ClassMethods(false);
         $classMethodHydrator->hydrate($this->getForm()->getData(), $this);
     }
+
+    protected function extractForm() {}
 
     /**
      *
