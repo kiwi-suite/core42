@@ -9,6 +9,7 @@ return array(
   'Core42\Authentication\Service\PluginAbstractFactory'               => __DIR__ . '/src/Core42/Authentication/Service/PluginAbstractFactory.php',
   'Core42\Command\AbstractCommand'                                    => __DIR__ . '/src/Core42/Command/AbstractCommand.php',
   'Core42\Command\ConsoleOutputInterface'                             => __DIR__ . '/src/Core42/Command/ConsoleOutputInterface.php',
+  'Core42\Db\Metadata\Service\MetadataServiceFactory'                 => __DIR__ . '/src/Core42/Db/Metadata/Service/MetadataServiceFactory.php',
   'Core42\Db\ResultSet\JoinedResultSet'                               => __DIR__ . '/src/Core42/Db/ResultSet/JoinedResultSet.php',
   'Core42\Db\ResultSet\ResultSet'                                     => __DIR__ . '/src/Core42/Db/ResultSet/ResultSet.php',
   'Core42\Db\SqlQuery\SqlQuery'                                       => __DIR__ . '/src/Core42/Db/SqlQuery/SqlQuery.php',
