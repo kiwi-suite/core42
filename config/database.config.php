@@ -15,13 +15,13 @@ return array(
     'db' => array(
         'adapters' =>array(
             'Db\Master' => array(
-                'driver'    => 'mysqli',
+                'driver'    => 'pdo_mysql',
                 'database'  => '',
                 'username'  => 'root',
                 'password'  => '',
                 'hostname'  => '127.0.0.1',
                 'options'   => array(
-                    'buffer_results' => true
+                    'buffer_results' => false
                 ),
                 'charset'   => 'utf8',
             ),
