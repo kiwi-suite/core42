@@ -2,6 +2,7 @@
 namespace Core42\Db\TableGateway;
 
 use Core42\Db\ResultSet\ResultSet;
+use Zend\Db\Adapter\Adapter;
 use Zend\Db\TableGateway\AbstractTableGateway as ZendAbstractTableGateway;
 use Core42\Hydrator\ModelHydrator;
 use Zend\ServiceManager\ServiceManager;
@@ -39,24 +40,13 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     protected $metadata;
 
     /**
-     * @var ServiceManager
-     */
-    private $serviceManager;
-
-    /**
      *
      */
-    public function __construct(ServiceManager $serviceManager)
+    public function __construct(Adapter $adapter, Adapter $slave, Metadata $metadata, $hydratorStrategyPluginManager)
     {
-        $this->setServiceManager($serviceManager);
+        $this->adapter = $adapter;
 
-        $this->adapter = $this->getServiceManager()->get('Db\Master');
-        $slave = $this->adapter;
-        if ($this->getServiceManager()->has('Db\Slave')) {
-            $slave = $this->getServiceManager()->get('Db\Slave');
-        }
-
-        $this->metadata = new Metadata($this->adapter);
+        $this->metadata = $metadata;
 
         if (is_string($this->modelPrototype)) {
             $className = $this->modelPrototype;
@@ -74,27 +64,9 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         $this->featureSet = new FeatureSet();
         $this->featureSet->addFeature(new MasterSlaveFeature($slave));
         $this->featureSet->addFeature(new MetadataFeature($this->metadata));
-        $this->featureSet->addFeature(new HydratorFeature($this->metadata, $this->getServiceManager()));
+        $this->featureSet->addFeature(new HydratorFeature($this->metadata, $hydratorStrategyPluginManager));
 
         $this->initialize();
-    }
-
-    /**
-     *
-     * @param ServiceManager $manager
-     */
-    public function setServiceManager(ServiceManager $manager)
-    {
-        $this->serviceManager = $manager;
-    }
-
-    /**
-     *
-     * @return \Zend\ServiceManager\ServiceManager
-     */
-    protected function getServiceManager()
-    {
-        return $this->serviceManager;
     }
 
     /**

@@ -3,7 +3,6 @@ namespace Core42\Db\TableGateway\Feature;
 
 use Zend\Db\TableGateway\Feature\AbstractFeature;
 use Zend\Db\Metadata\MetadataInterface;
-use Zend\ServiceManager\ServiceManager;
 
 class HydratorFeature extends AbstractFeature
 {
@@ -12,19 +11,16 @@ class HydratorFeature extends AbstractFeature
      */
     protected $metadata = null;
 
-    /**
-     * @var ServiceManager
-     */
-    protected $serviceManager = null;
+    protected $hydratorStrategyPluginManager;
 
     /**
      *
      * @param MetadataInterface $metadata
      */
-    public function __construct(MetadataInterface $metadata, ServiceManager $serviceManager)
+    public function __construct(MetadataInterface $metadata, $hydratorStrategyPluginManager)
     {
         $this->metadata = $metadata;
-        $this->serviceManager = $serviceManager;
+        $this->hydratorStrategyPluginManager = $hydratorStrategyPluginManager;
     }
 
     /**
@@ -33,10 +29,10 @@ class HydratorFeature extends AbstractFeature
     public function postInitialize()
     {
         $columns = $this->metadata->getColumns($this->tableGateway->getTable());
-        $pluginManager = 'Core42\Hydrator\Strategy\Database\\' . $this->tableGateway->getAdapter()->getPlatform()->getName() . '\PluginManager';
+
         foreach ($columns as $_column) {
             /* @var $_column \Zend\Db\Metadata\Object\ColumnObject */
-            $strategy = $this->serviceManager->get($pluginManager)->getStrategy($_column);
+            $strategy = $this->hydratorStrategyPluginManager->getStrategy($_column);
             $this->tableGateway->getHydrator()->addStrategy($_column->getName(), $strategy);
         }
     }

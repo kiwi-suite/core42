@@ -37,7 +37,15 @@ class TableGatewayFallbackAbstractFactory implements AbstractFactoryInterface
     {
         $fqcn = $this->getFQCN($requestedName);
 
-        return new $fqcn($serviceLocator->getServiceLocator());
+        $adapter = $serviceLocator->getServiceLocator()->get('Db\Master');
+        $slave = $adapter;
+        if ( $serviceLocator->getServiceLocator()->has('Db\Slave')) {
+            $slave =  $serviceLocator->getServiceLocator()->get('Db\Slave');
+        }
+        $metadata = $serviceLocator->getServiceLocator()->get('Metadata');
+        $hydratorStrategyPluginManager = $serviceLocator->getServiceLocator()->get('Core42\Hydrator\Strategy\Database\\' . $adapter->getPlatform()->getName() . '\PluginManager');
+
+        return new $fqcn($adapter, $slave, $metadata, $hydratorStrategyPluginManager);
     }
 
     protected function getFQCN($name)
