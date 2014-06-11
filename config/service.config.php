@@ -23,6 +23,8 @@ return array(
 
             'Core42\CommandPluginManager' => 'Core42\Command\Service\CommandPluginManagerFactory',
             'Core42\TableGatewayPluginManager' => 'Core42\Db\TableGateway\Service\TableGatewayPluginManagerFactory',
+
+            'Metadata' => 'Core42\Db\Metadata\Service\MetadataServiceFactory',
         ),
         'invokables' => array(
             'MobileDetect' => '\Mobile_Detect',
