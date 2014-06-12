@@ -23,6 +23,7 @@ return array(
 
             'Core42\CommandPluginManager' => 'Core42\Command\Service\CommandPluginManagerFactory',
             'Core42\TableGatewayPluginManager' => 'Core42\Db\TableGateway\Service\TableGatewayPluginManagerFactory',
+            'Core42\SelectQueryPluginManager' => 'Core42\Db\SelectQuery\Service\SelectQueryPluginManagerFactory',
 
             'Metadata' => 'Core42\Db\Metadata\Service\MetadataServiceFactory',
         ),
@@ -41,6 +42,7 @@ return array(
 
             'Command' => 'Core42\CommandPluginManager',
             'TableGateway' => 'Core42\TableGatewayPluginManager',
+            'SelectQuery' => 'Core42\SelectQueryPluginManager',
         ),
     ),
 );

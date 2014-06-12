@@ -38,17 +38,6 @@ class Module implements BootstrapListenerInterface,
      */
     public function onBootstrap(\Zend\EventManager\EventInterface $e)
     {
-        $config = $e->getApplication()->getServiceManager()->get("Config");
-
-        if (!empty($config["service_manager_static_aware"])) {
-            foreach ($config["service_manager_static_aware"] as $_class) {
-                if (!is_callable($_class."::setServiceManager")) {
-                    throw new \Exception("{$_class} doesn't implement ServiceManagerStaticAwareInterface");
-                }
-                call_user_func($_class."::setServiceManager", $e->getApplication()->getServiceManager());
-            }
-        }
-
         $sessionInit = new SessionInitializer();
         $sessionInit->initialize($e->getApplication()->getServiceManager());
 
@@ -94,6 +83,13 @@ class Module implements BootstrapListenerInterface,
             'table_gateway',
             '\Core42\Db\TableGateway\Service\Feature\TableGatewayProviderInterface',
             'getTableGatewayConfig'
+        );
+
+        $serviceListener->addServiceManager(
+            'Core42\SelectQueryPluginManager',
+            'select_query',
+            '\Core42\Db\SelectQuery\Service\Feature\SelectQueryProviderInterface',
+            'getSqlQueryConfig'
         );
     }
 

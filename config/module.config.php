@@ -2,10 +2,6 @@
 namespace Core42;
 
 return array(
-    'service_manager_static_aware' => array(
-        'SqlQuery' => 'Core42\Db\SqlQuery\SqlQuery',
-    ),
-
     'view_helpers' => array(
         'invokables' => array(
             'params'            => __NAMESPACE__.'\View\Helper\Params',
