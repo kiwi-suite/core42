@@ -1,6 +1,7 @@
 <?php
 namespace Core42\Db\TableGateway\Feature;
 
+use Core42\Hydrator\Strategy\Database\DatabasePluginManagerInterface;
 use Zend\Db\TableGateway\Feature\AbstractFeature;
 use Zend\Db\Metadata\MetadataInterface;
 
@@ -11,13 +12,16 @@ class HydratorFeature extends AbstractFeature
      */
     protected $metadata = null;
 
+    /**
+     * @var DatabasePluginManagerInterface
+     */
     protected $hydratorStrategyPluginManager;
 
     /**
      *
      * @param MetadataInterface $metadata
      */
-    public function __construct(MetadataInterface $metadata, $hydratorStrategyPluginManager)
+    public function __construct(MetadataInterface $metadata, DatabasePluginManagerInterface $hydratorStrategyPluginManager)
     {
         $this->metadata = $metadata;
         $this->hydratorStrategyPluginManager = $hydratorStrategyPluginManager;

@@ -30,6 +30,7 @@ return array(
   'Core42\Db\TableGateway\Service\TableGatewayPluginManagerFactory'      => __DIR__ . '/src/Core42/Db/TableGateway/Service/TableGatewayPluginManagerFactory.php',
   'Core42\Hydrator\FilterProviderInterface'                              => __DIR__ . '/src/Core42/Hydrator/FilterProviderInterface.php',
   'Core42\Hydrator\ModelHydrator'                                        => __DIR__ . '/src/Core42/Hydrator/ModelHydrator.php',
+  'Core42\Hydrator\Strategy\Database\DatabasePluginManagerInterface'     => __DIR__ . '/src/Core42/Hydrator/Strategy/Database/DatabasePluginManagerInterface.php',
   'Core42\Hydrator\Strategy\Database\DatabaseStrategyInterface'          => __DIR__ . '/src/Core42/Hydrator/Strategy/Database/DatabaseStrategyInterface.php',
   'Core42\Hydrator\Strategy\Database\MySQL\BooleanStrategy'              => __DIR__ . '/src/Core42/Hydrator/Strategy/Database/MySQL/BooleanStrategy.php',
   'Core42\Hydrator\Strategy\Database\MySQL\DateStrategy'                 => __DIR__ . '/src/Core42/Hydrator/Strategy/Database/MySQL/DateStrategy.php',

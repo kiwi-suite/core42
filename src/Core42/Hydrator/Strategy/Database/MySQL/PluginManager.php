@@ -1,12 +1,13 @@
 <?php
 namespace Core42\Hydrator\Strategy\Database\MySQL;
 
+use Core42\Hydrator\Strategy\Database\DatabasePluginManagerInterface;
 use Zend\ServiceManager\ServiceManager;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 use Zend\Stdlib\Hydrator\Strategy\DefaultStrategy;
 use Core42\Hydrator\Strategy\Database\DatabaseStrategyInterface;
 
-class PluginManager implements ServiceManagerAwareInterface
+class PluginManager implements ServiceManagerAwareInterface, DatabasePluginManagerInterface
 {
     private $serviceManager = null;
 
@@ -71,6 +72,24 @@ class PluginManager implements ServiceManagerAwareInterface
                 break;
             }
         }
+
+        if ($return === null) {
+            $return = $this->defaultStrategy;
+        }
+
+        return clone $return;
+    }
+
+    public function loadStrategy($name)
+    {
+        $return = null;
+
+        $this->initialize();
+        $config = $this->serviceManager->get("Config");
+        $return = (isset($config["database_hydrator_plugins"]['mysql']) && array_key_exists($name, $config["database_hydrator_plugins"]['mysql']))
+                    ? $this->plugins[$config["database_hydrator_plugins"]['mysql'][$name]]
+                    : null;
+
 
         if ($return === null) {
             $return = $this->defaultStrategy;

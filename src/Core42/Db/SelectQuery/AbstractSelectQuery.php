@@ -3,6 +3,7 @@ namespace Core42\Db\SelectQuery;
 
 use Core42\Db\ResultSet\ResultSet;
 use Core42\Hydrator\ModelHydrator;
+use Core42\Hydrator\Strategy\Database\DatabasePluginManagerInterface;
 use Core42\Model\DefaultModel;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Select;
@@ -16,15 +17,37 @@ abstract class AbstractSelectQuery
     private $adapter;
 
     /**
+     * @var DatabasePluginManagerInterface
+     */
+    private $hydratorStrategyPluginManager;
+
+    /**
      * @var Sql
      */
     private $sql;
 
-    public function __construct(Adapter $adapter)
+    /**
+     * @var bool
+     */
+    private $isConfigured = false;
+
+    /**
+     * @var string
+     */
+    protected $modelPrototype = '\Core42\Model\DefaultModel';
+
+    /**
+     * @var ModelHydrator
+     */
+    private $hydrator;
+
+    public function __construct(Adapter $adapter, DatabasePluginManagerInterface $hydratorStrategyPluginManager)
     {
         $this->adapter = $adapter;
 
         $this->sql = new Sql($adapter);
+
+        $this->hydratorStrategyPluginManager = $hydratorStrategyPluginManager;
     }
 
     /**
@@ -44,11 +67,30 @@ abstract class AbstractSelectQuery
     }
 
     /**
+     * @return DatabasePluginManagerInterface
+     */
+    protected function getHydratorStrategyPluginManager()
+    {
+        return $this->hydratorStrategyPluginManager;
+    }
+
+    /**
      * @return DefaultModel
      */
     protected function getModel()
     {
-        return new DefaultModel();
+        return new $this->modelPrototype;
+    }
+
+    /**
+     * @return ModelHydrator
+     */
+    protected function getHydrator()
+    {
+        if ($this->hydrator === null) {
+            $this->hydrator = new ModelHydrator();
+        }
+        return $this->hydrator;
     }
 
     /**
@@ -57,15 +99,26 @@ abstract class AbstractSelectQuery
     abstract public function getSelect();
 
     /**
+     *
+     */
+    protected function configure()
+    {
+
+    }
+
+    /**
      * @return ResultSet
      */
     public function getResultSet()
     {
+        if ($this->isConfigured === false) {
+            $this->configure();
+            $this->isConfigured =  true;
+        }
+
         $select = $this->getSelect();
 
-        $modelHydrator = new ModelHydrator();
-
-        $resultSet = new ResultSet($modelHydrator, $this->getModel());
+        $resultSet = new ResultSet($this->getHydrator(), $this->getModel());
 
         if (is_string($select)) {
             $resultSet = $this->getAdapter()->query($select, Adapter::QUERY_MODE_EXECUTE, $resultSet);

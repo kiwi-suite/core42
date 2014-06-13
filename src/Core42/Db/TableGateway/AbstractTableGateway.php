@@ -2,6 +2,7 @@
 namespace Core42\Db\TableGateway;
 
 use Core42\Db\ResultSet\ResultSet;
+use Core42\Hydrator\Strategy\Database\DatabasePluginManagerInterface;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\TableGateway\AbstractTableGateway as ZendAbstractTableGateway;
 use Core42\Hydrator\ModelHydrator;
@@ -42,7 +43,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     /**
      *
      */
-    public function __construct(Adapter $adapter, Adapter $slave, Metadata $metadata, $hydratorStrategyPluginManager)
+    public function __construct(Adapter $adapter, Adapter $slave, Metadata $metadata, DatabasePluginManagerInterface $hydratorStrategyPluginManager)
     {
         $this->adapter = $adapter;
 
