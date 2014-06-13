@@ -22,10 +22,11 @@ class DefaultModel extends AbstractModel
 
         $variableName = lcfirst(substr($method, 3));
         if (strncasecmp($method, "get", 3) === 0) {
-            $return = $this->properties[$variableName];
+            $return = $this->get($variableName);
         } elseif (strncasecmp($method, "set", 3) === 0) {
-            $return = $this;
-            $this->properties[$variableName] = $params[0];
+            $this->properties[$variableName] = $variableName;
+
+            $return = $this->set($variableName, $params[0]);
         } else {
             throw new \Exception("Method {$method} not found");
         }
@@ -43,5 +44,26 @@ class DefaultModel extends AbstractModel
             $setter = "set".ucfirst($name);
             $this->$setter($value);
         }
+    }
+
+    /**
+     * @param array $data
+     */
+    public function hydrate(array $data)
+    {
+        $this->exchangeArray($data);
+    }
+
+    /**
+     * @return array
+     */
+    public function extract()
+    {
+        $array = array();
+        foreach ($this->properties as $variableName) {
+            $array[$variableName] = $this->get($variableName);
+        }
+
+        return $array;
     }
 }
