@@ -56,7 +56,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
             $slave = $this->getServiceManager()->get('Db\Slave');
         }
 
-        $this->metadata = new Metadata($this->adapter);
+        $this->metadata = $this->getServiceManager()->get('Metadata');
 
         if (is_string($this->modelPrototype)) {
             $className = $this->modelPrototype;

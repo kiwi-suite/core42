@@ -20,6 +20,8 @@ return array(
 
             'Core42\Acl' => 'Core42\Permissions\Acl\Service\AclFactory',
             'Core42\AclConfig' => 'Core42\Permissions\Acl\Service\AclConfigFactory',
+
+            'Metadata' => 'Core42\Db\Metadata\Service\MetadataServiceFactory',
         ),
         'invokables' => array(
             'MobileDetect' => '\Mobile_Detect',

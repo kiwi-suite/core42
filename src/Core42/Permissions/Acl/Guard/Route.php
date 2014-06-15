@@ -61,9 +61,15 @@ class Route extends AbstractListenerAggregate
             return;
         }
 
+        $query = array(
+            'redirect' => $event->getRouter()->assemble($event->getRouteMatch()->getParams(), array('name' => $event->getRouteMatch()->getMatchedRouteName()))
+        );
         $options = $acl->getRole($acl->getIdentityRole())->getOptions();
 
-        $url = $event->getRouter()->assemble(array(), array('name' => $options['redirect_route']));
+        $url = $event->getRouter()->assemble(array(), array(
+            'name' => $options['redirect_route'],
+            'query' => $query
+        ));
         $response=$event->getResponse();
         $response->getHeaders()->addHeaderLine('Location', $url);
         $response->setStatusCode(302);
