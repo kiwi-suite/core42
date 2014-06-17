@@ -3,6 +3,7 @@ namespace Core42\Session;
 
 use Zend\Mvc\MvcEvent;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\Uri\UriFactory;
 
 class SessionInitializer
 {
