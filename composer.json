@@ -5,6 +5,7 @@
         "php": ">=5.3.3",
         "firephp/firephp-core": "*",
         "ccampbell/chromephp": "*",
+        "zfcampus/zf-console": "~1.0-dev",
         "mobiledetect/mobiledetectlib": "*"
     },
     "extra": {
