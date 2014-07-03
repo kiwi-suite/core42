@@ -5,7 +5,7 @@ return array(
     'service_manager' => array(
         'abstract_factories' => array(
             'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
-            'Zend\Db\Adapter\AdapterAbstractServiceFactory',
+            'Core42\Db\Adapter\AdapterAbstractServiceFactory',
             'Zend\Log\LoggerAbstractServiceFactory',
         ),
         'factories' => array(
@@ -33,6 +33,8 @@ return array(
             'Core42\Hydrator\Strategy\Database\MySQL\PluginManager' => 'Core42\Hydrator\Strategy\Database\MySQL\PluginManager',
 
             'Core42\Permission\Provider\Role\Array' => 'Core42\Permissions\Rbac\Provider\Role\ArrayProvider',
+
+            'Core42\LoggingProfiler' => 'Core42\Db\Adapter\Profiler\LoggingProfiler',
         ),
         'aliases' => array(
             'AuthenticationService' => 'Core42\Authentication',
