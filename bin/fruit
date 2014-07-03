@@ -1,0 +1,30 @@
+#!/usr/bin/env php
+<?php
+use Zend\Console\Console;
+use ZF\Console\Application;
+use ZF\Console\Dispatcher;
+
+chdir(__DIR__
+        . DIRECTORY_SEPARATOR
+        . '..'
+        . DIRECTORY_SEPARATOR
+        . '..'
+        . DIRECTORY_SEPARATOR
+        . '..'
+        . DIRECTORY_SEPARATOR
+);
+
+require_once 'config/settings.php';
+require_once 'init_autoloader.php';
+
+$dispatcher = new Dispatcher();
+$application = new Application(
+    'fruit',
+    '1.0.0',
+    include 'module/Core42/config/fruit.config.php',
+    Console::getInstance(),
+    $dispatcher
+);
+
+$exit = $application->run();
+exit($exit);
