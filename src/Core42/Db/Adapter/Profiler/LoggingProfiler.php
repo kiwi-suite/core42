@@ -19,7 +19,6 @@ class LoggingProfiler extends Profiler
     public function profilerStart($target)
     {
         parent::profilerStart($target);
-        $this->logger->info(var_export($this->getLastProfile(), true));
     }
 
     public function profilerFinish()
