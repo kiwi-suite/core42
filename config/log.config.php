@@ -6,10 +6,30 @@ return array(
         'Log\Dev' => array(
             'writers' => array(
                 array(
-                    'name' => 'chromephp'
+                    'name' => 'chromephp',
+                    'options' => array(
+                        'filters' => array(
+                            'console' => array(
+                                'name'      => 'suppress',
+                                'options'   => array(
+                                    'suppress' => (PHP_SAPI === 'cli')
+                                ),
+                            )
+                        ),
+                    ),
                 ),
                 array(
-                    'name' => 'firephp'
+                    'name' => 'firephp',
+                    'options' => array(
+                        'filters' => array(
+                            'console' => array(
+                                'name'      => 'suppress',
+                                'options'   => array(
+                                    'suppress' => (PHP_SAPI === 'cli')
+                                ),
+                            )
+                        ),
+                    ),
                 ),
             ),
         ),
