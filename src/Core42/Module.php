@@ -29,6 +29,8 @@ class Module implements BootstrapListenerInterface,
             include __DIR__ . '/../../config/log.config.php',
             include __DIR__ . '/../../config/mail.config.php',
             include __DIR__ . '/../../config/caches.config.php',
+            include __DIR__ . '/../../config/cli.config.php',
+            include __DIR__ . '/../../config/migration.config.php',
             include __DIR__ . '/../../config/permission.config.php'
         );
     }

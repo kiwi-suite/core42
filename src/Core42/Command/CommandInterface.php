@@ -29,4 +29,14 @@ interface CommandInterface
      * @return FormInterface
      */
     public function getForm();
+
+    /**
+     * @return array
+     */
+    public function getErrors();
+
+    /**
+     * @return boolean
+     */
+    public function hasErrors();
 }

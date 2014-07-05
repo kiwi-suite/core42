@@ -1,6 +1,7 @@
 <?php
 namespace Core42\Command;
 
+use Zend\Console\Console;
 use Zend\Form\FormInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -287,5 +288,17 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
     final public function getException()
     {
         return $this->commandException;
+    }
+
+    /**
+     * @param string $message
+     */
+    protected function consoleOutput($message)
+    {
+        if (!Console::isConsole()) {
+            return;
+        }
+
+        Console::getInstance()->writeLine($message);
     }
 }

@@ -35,6 +35,8 @@ return array(
             'Core42\Permission\Provider\Role\Array' => 'Core42\Permissions\Rbac\Provider\Role\ArrayProvider',
 
             'Core42\LoggingProfiler' => 'Core42\Db\Adapter\Profiler\LoggingProfiler',
+
+            'Core42\ConsoleDispatcher' => 'Core42\Command\Console\ConsoleDispatcher'
         ),
         'aliases' => array(
             'AuthenticationService' => 'Core42\Authentication',
