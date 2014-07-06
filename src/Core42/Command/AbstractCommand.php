@@ -1,6 +1,7 @@
 <?php
 namespace Core42\Command;
 
+use Zend\Console\ColorInterface;
 use Zend\Console\Console;
 use Zend\Form\FormInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
@@ -299,6 +300,26 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
             return;
         }
 
+        $message = preg_replace_callback('#(\\\\?)<(/?)([a-z][a-z0-9_=;-]*)?>((?: [^<\\\\]+ | (?!<(?:/?[a-z]|/>)). | .(?<=\\\\<) )*)#isx', function($matches){
+            if ($matches[2] == '/') {
+                return $matches[4];
+            }
+
+            switch ($matches[3]) {
+                case 'error':
+                    return Console::getInstance()->colorize($matches[4], ColorInterface::WHITE, ColorInterface::RED);
+                case 'info':
+                    return Console::getInstance()->colorize($matches[4], ColorInterface::GREEN);
+                case 'comment':
+                    return Console::getInstance()->colorize($matches[4], ColorInterface::YELLOW);
+                case 'question':
+                    return Console::getInstance()->colorize($matches[4], ColorInterface::BLACK, ColorInterface::CYAN);
+                default:
+                    return $matches[4];
+            }
+        }, $message);
+
         Console::getInstance()->writeLine($message);
+
     }
 }
