@@ -6,6 +6,8 @@
         "firephp/firephp-core": "*",
         "ccampbell/chromephp": "*",
         "zfcampus/zf-console": "*",
+        "symfony/finder": "v2.5.0",
+        "symfony/filesystem": "v2.5.0",
         "mobiledetect/mobiledetectlib": "*"
     },
     "extra": {
