@@ -1,6 +1,7 @@
 <?php
 namespace Core42\Command\Migration;
 
+use Symfony\Component\Filesystem\Filesystem;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Ddl\Column\Date;
 use Zend\Db\Sql\Ddl\Column\Time;
@@ -61,7 +62,20 @@ abstract class AbstractCommand extends \Core42\Command\AbstractCommand
     {
         $migrationConfig = $this->getMigrationConfig();
         return array_map(function($dir){
-            return rtrim($dir, '/') . '/';
+            $dir = rtrim($dir, '/') . '/';
+
+            do {
+                $dir = preg_replace(
+                    array('#//|/\./#', '#/([^/]*)/\.\./#'),
+                    '/', $dir, -1, $count
+                );
+            } while($count > 0);
+
+            $filesystem = new Filesystem();
+            if ($filesystem->isAbsolutePath($dir)) {
+                $dir = str_replace(getcwd() . DIRECTORY_SEPARATOR, '', $dir);
+            }
+            return $dir;
         }, $migrationConfig['directory']);
     }
 
