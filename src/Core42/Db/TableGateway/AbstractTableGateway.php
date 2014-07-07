@@ -6,7 +6,6 @@ use Core42\Hydrator\Strategy\Database\DatabasePluginManagerInterface;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\TableGateway\AbstractTableGateway as ZendAbstractTableGateway;
 use Core42\Hydrator\ModelHydrator;
-use Zend\ServiceManager\ServiceManager;
 use Zend\Db\TableGateway\Feature\FeatureSet;
 use Zend\Db\TableGateway\Feature\MasterSlaveFeature;
 use Core42\Model\AbstractModel;

@@ -5,7 +5,6 @@ return array(
         'directory'     => array(
             __NAMESPACE__ => 'data/migrations',
         ),
-        'db_adapter'    => 'Db\Master',
         'table_name'    => 'migrations',
     ),
 );

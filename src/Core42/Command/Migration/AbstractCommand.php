@@ -1,0 +1,122 @@
+<?php
+namespace Core42\Command\Migration;
+
+use Zend\Db\Adapter\Adapter;
+use Zend\Db\Sql\Ddl\Column\Date;
+use Zend\Db\Sql\Ddl\Column\Time;
+use Zend\Db\Sql\Ddl\Column\Varchar;
+use Zend\Db\Sql\Ddl\Constraint\PrimaryKey;
+use Zend\Db\Sql\Ddl\CreateTable;
+use Zend\Db\Sql\Sql;
+
+abstract class AbstractCommand extends \Core42\Command\AbstractCommand
+{
+    /**
+     * @var array|null
+     */
+    private $migrationConfig;
+
+    /**
+     * @return array|null
+     */
+    protected function getMigrationConfig()
+    {
+        if ($this->migrationConfig === null) {
+            $config = $this->getServiceManager()->get('config');
+            $this->migrationConfig = $config['migration'];
+        }
+        return $this->migrationConfig;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    protected function setupTable()
+    {
+        $migrationConfig = $this->getMigrationConfig();
+
+        $metadata = $this->getServiceManager()->get('Metadata');
+        if (in_array($migrationConfig['table_name'], $metadata->getTableNames())) {
+            return;
+        }
+
+        /** @var Adapter $adapter */
+        $adapter = $this->getServiceManager()->get('Db\Master');
+
+        switch ($adapter->getPlatform()->getName()) {
+            case 'MySQL':
+                $sql = "CREATE TABLE `".$migrationConfig['table_name']."` (`name` VARCHAR(255) NOT NULL, `created` DATETIME NOT NULL, PRIMARY KEY (`name`))";
+                break;
+            default:
+                throw new \Exception("'".$adapter->getPlatform()->getName()."' isn't support by migrations");
+        }
+
+        $adapter->query($sql, Adapter::QUERY_MODE_EXECUTE);
+    }
+
+    /**
+     * @return array
+     */
+    protected function getMigrationDirectories()
+    {
+        $migrationConfig = $this->getMigrationConfig();
+        return array_map(function($dir){
+            return rtrim($dir, '/') . '/';
+        }, $migrationConfig['directory']);
+    }
+
+    /**
+     * @return array
+     */
+    protected function getAllMigrations()
+    {
+        /** @var \Core42\TableGateway\MigrationTableGateway $migrationTableGateway */
+        $migrationTableGateway = $this->getServiceManager()->get('TableGateway')->get('Core42\Migration');
+        $resultSet = $migrationTableGateway->select();
+
+        $migratedMigrations = array();
+        foreach ($resultSet as $mig) {
+            $migratedMigrations[$mig->getName()] = $mig;
+        }
+
+        $migrationDirs = $this->getMigrationDirectories();
+
+        $migrations = array();
+
+        foreach ($migrationDirs as $dir) {
+            foreach (glob($dir  . '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]t[0-9][0-9][0-9][0-9][0-9][0-9].php') as $filename) {
+                require_once $filename;
+                $class = $this->getClassnameByFilename(pathinfo($filename, PATHINFO_FILENAME));
+
+                $name = $this->getMigrationNameByFilename(pathinfo($filename, PATHINFO_FILENAME));
+
+                $migrations[] = array(
+                    'name'      => $name,
+                    'filename'  => $filename,
+                    'instance'  => new $class,
+                    'migrated'  => (isset($migratedMigrations[$name])) ? $migratedMigrations[$name] : null,
+                );
+            }
+        }
+
+        return $migrations;
+    }
+
+    /**
+     * @param string $filename
+     * @return string
+     */
+    protected function getMigrationNameByFilename($filename)
+    {
+        return str_replace(array('-', 't'), "", $filename);
+    }
+
+    /**
+     * @param string $filename
+     * @return string
+     */
+    protected function getClassnameByFilename($filename)
+    {
+        return 'Migration' . str_replace(array('-', 't'), "", $filename);
+    }
+}

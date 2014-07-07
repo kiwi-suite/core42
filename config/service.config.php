@@ -49,4 +49,10 @@ return array(
             'SelectQuery' => 'Core42\SelectQueryPluginManager',
         ),
     ),
+
+    'table_gateway' => array(
+        'factories' => array(
+            'Core42\Migration' => 'Core42\TableGateway\Service\MigrationTableGatewayFactory'
+        ),
+    ),
 );
