@@ -2,9 +2,7 @@
 namespace Core42;
 return array(
     'migration' => array(
-        'directory'     => array(
-            __NAMESPACE__ => 'data/migrations',
-        ),
+        'directory'     => array(),
         'table_name'    => 'migrations',
     ),
 );
