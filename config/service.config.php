@@ -26,6 +26,8 @@ return array(
             'Core42\SelectQueryPluginManager' => 'Core42\Db\SelectQuery\Service\SelectQueryPluginManagerFactory',
 
             'Metadata' => 'Core42\Db\Metadata\Service\MetadataServiceFactory',
+
+            'TreeRouteMatcher' => 'Core42\Mvc\TreeRouteMatcher\Service\TreeRouteMatcherFactory',
         ),
         'invokables' => array(
             'MobileDetect' => '\Mobile_Detect',
