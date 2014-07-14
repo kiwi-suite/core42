@@ -10,6 +10,9 @@
         "symfony/filesystem": "v2.5.0",
         "mobiledetect/mobiledetectlib": "*"
     },
+    "bin": [
+        "bin/fruit"
+    ],
     "extra": {
         "installer-name": "Core42"
     }
