@@ -40,5 +40,12 @@ return array(
             'description'               => 'Resets all Migrations. Synonym of migration-rollback with limit=amount of migrations',
             'short_description'         => 'Resets all Migrations',
         ),
+
+        'development' => array(
+            'route'                     => 'development (on|off)',
+            'command-name'              => 'Core42\Development\Development',
+            'description'               => 'Enables/Disables the development mode. Useful for loading dev-modules or disabling servicemanager caching',
+            'short_description'         => 'Enables/Disables the development mode',
+        ),
     ),
 );
