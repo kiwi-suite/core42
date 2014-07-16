@@ -13,7 +13,6 @@ use Zend\ModuleManager\ModuleManagerInterface;
 
 class Module implements BootstrapListenerInterface,
                             ConfigProviderInterface,
-                            AutoloaderProviderInterface,
                             InitProviderInterface
 {
     /*
@@ -54,23 +53,6 @@ class Module implements BootstrapListenerInterface,
                 $e->getTarget()->getEventManager()->attach($guard);
             }
         }
-    }
-
-    /*
-     * @see \Zend\ModuleManager\Feature\AutoloaderProviderInterface::getAutoloaderConfig()
-     */
-    public function getAutoloaderConfig()
-    {
-        return array(
-            'Zend\Loader\ClassMapAutoloader' => array(
-                __DIR__ . '/../../autoload_classmap.php'
-            ),
-            'Zend\Loader\StandardAutoloader' => array(
-                'namespaces' => array(
-                    __NAMESPACE__ => __DIR__,
-                ),
-            ),
-        );
     }
 
     private function addPeeringServiceManager(ServiceListenerInterface $serviceListener)
