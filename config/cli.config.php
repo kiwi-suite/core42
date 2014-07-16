@@ -47,5 +47,12 @@ return array(
             'description'               => 'Enables/Disables the development mode. Useful for loading dev-modules or disabling servicemanager caching',
             'short_description'         => 'Enables/Disables the development mode',
         ),
+
+        'assets' => array(
+            'route'                     => 'assets [--copy|-c]',
+            'command-name'              => 'Core42\Assets\Assets',
+            'description'               => 'Copy or symlink all registered assets into a target directory (for example public directory) to be accessible over the webserver',
+            'short_description'         => 'Copy or symlink all registered assets',
+        ),
     ),
 );
