@@ -2,13 +2,15 @@
 
 chdir(__DIR__);
 
+date_default_timezone_set("UTC");
+
 $loader = null;
 if (file_exists('../vendor/autoload.php')) {
     $loader = include '../vendor/autoload.php';
+    $loader->add('Core42Test', __DIR__);
 } elseif (file_exists('../../../vendor/autoload.php')) {
     $loader = include '../../../vendor/autoload.php';
-} else {
-    throw new RuntimeException('vendor/autoload.php could not be found. Did you run `php composer.phar install`?');
+    $loader->add('Core42Test', __DIR__);
 }
 
-$loader->add('Core42Test', __DIR__);
+
