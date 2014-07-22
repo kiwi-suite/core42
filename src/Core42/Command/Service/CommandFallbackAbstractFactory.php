@@ -1,6 +1,7 @@
 <?php
 namespace Core42\Command\Service;
 
+use Core42\Command\CommandInterface;
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -11,8 +12,8 @@ class CommandFallbackAbstractFactory implements AbstractFactoryInterface
      * Determine if we can create a service with name
      *
      * @param ServiceLocatorInterface $serviceLocator
-     * @param $name
-     * @param $requestedName
+     * @param string $name
+     * @param string $requestedName
      * @return bool
      */
     public function canCreateServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
@@ -29,9 +30,9 @@ class CommandFallbackAbstractFactory implements AbstractFactoryInterface
      * Create service with name
      *
      * @param ServiceLocatorInterface $serviceLocator
-     * @param $name
-     * @param $requestedName
-     * @return mixed
+     * @param string $name
+     * @param string $requestedName
+     * @return CommandInterface
      */
     public function createServiceWithName(ServiceLocatorInterface $serviceLocator, $name, $requestedName)
     {
@@ -40,6 +41,10 @@ class CommandFallbackAbstractFactory implements AbstractFactoryInterface
         return new $fqcn();
     }
 
+    /**
+     * @param string $name
+     * @return bool|string
+     */
     protected function getFQCN($name)
     {
         if (strpos($name, '\\') === false) {

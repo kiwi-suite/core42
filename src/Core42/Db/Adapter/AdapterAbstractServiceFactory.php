@@ -29,6 +29,7 @@ class AdapterAbstractServiceFactory extends \Zend\Db\Adapter\AdapterAbstractServ
             }
         }
         $this->config = $config;
+
         return $this->config;
     }
 }

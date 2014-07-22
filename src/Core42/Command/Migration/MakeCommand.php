@@ -2,7 +2,6 @@
 namespace Core42\Command\Migration;
 
 use Core42\Command\ConsoleAwareInterface;
-use Symfony\Component\Filesystem\Filesystem;
 use Zend\Code\Generator\ClassGenerator;
 use Zend\Code\Generator\MethodGenerator;
 use Zend\Code\Generator\ParameterGenerator;
@@ -15,6 +14,10 @@ class MakeCommand extends AbstractCommand implements ConsoleAwareInterface
      */
     private $directory;
 
+    /**
+     * @param string $directory
+     * @return $this
+     */
     public function setDirectory($directory)
     {
         $this->directory = $directory;
@@ -22,17 +25,22 @@ class MakeCommand extends AbstractCommand implements ConsoleAwareInterface
         return $this;
     }
 
+    /**
+     *
+     */
     protected function preExecute()
     {
         $this->directory = rtrim($this->directory, '/') . '/';
 
         if (!is_dir($this->directory)) {
             $this->addError('directory', "directory '".$this->directory."' doesn't exist");
+
             return;
         }
 
         if (!is_writable($this->directory)) {
             $this->addError("directory", "directory '".$this->directory."' isn't writeable");
+
             return;
         }
 
@@ -40,17 +48,21 @@ class MakeCommand extends AbstractCommand implements ConsoleAwareInterface
 
         if (!in_array($this->directory, $migrationDirs)) {
             $this->addError("directory", "directory '".$this->directory."' is not inside a migration directory");
+
             return;
         }
     }
 
+    /**
+     *
+     */
     protected function execute()
     {
         do {
             $date = new \DateTime();
             $migrationName = 'Migration' . $date->format('YmdHis');
             $filename = $this->directory . $date->format('Y-m-d\tHis') . '.php';
-        } while(file_exists($filename));
+        } while (file_exists($filename));
 
         $classGenerator = new ClassGenerator($migrationName);
 
@@ -67,6 +79,10 @@ class MakeCommand extends AbstractCommand implements ConsoleAwareInterface
         $this->consoleOutput("'{$migrationName}' created at '{$filename}'");
     }
 
+    /**
+     * @param Route $route
+     * @return void
+     */
     public function consoleSetup(Route $route)
     {
         $this->setDirectory($route->getMatchedParam('directory'));

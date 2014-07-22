@@ -29,6 +29,7 @@ class DefaultModelTest extends \PHPUnit_Framework_TestCase
             'null'          => null,
             'object'        => (object) 'test',
             'closure'       => function () {$test = "test";},
+
             'float'         => 5.43323232323,
         );
 

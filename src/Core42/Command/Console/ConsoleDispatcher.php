@@ -16,10 +16,10 @@ class ConsoleDispatcher implements ServiceManagerAwareInterface
      */
     private $serviceManager;
 
-    public function __construct()
-    {
-    }
-
+    /**
+     * @param Route $route
+     * @param AdapterInterface $console
+     */
     public function __invoke(Route $route, AdapterInterface $console)
     {
         $cliConfig = $this->serviceManager->get('config');
@@ -40,6 +40,7 @@ class ConsoleDispatcher implements ServiceManagerAwareInterface
 
         if (empty($commandName)) {
             $console->writeLine('"command-name" cant be empty', ColorInterface::RED);
+
             return;
         }
 
@@ -47,6 +48,7 @@ class ConsoleDispatcher implements ServiceManagerAwareInterface
         $command = $this->serviceManager->get('Command')->get($commandName);
         if (!($command instanceof ConsoleAwareInterface)) {
             $console->writeLine('command must implement interface "Core42\Command\CommandAwareInterface"', ColorInterface::RED);
+
             return;
         }
         $command->consoleSetup($route);

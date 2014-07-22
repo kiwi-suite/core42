@@ -7,6 +7,9 @@ use ZF\Console\Route;
 class ListCommand extends AbstractCommand implements ConsoleAwareInterface
 {
 
+    /**
+     * @throws \Exception
+     */
     protected function configure()
     {
         $this->setupTable();
@@ -32,5 +35,9 @@ class ListCommand extends AbstractCommand implements ConsoleAwareInterface
 
     }
 
-    public function consoleSetup(Route $route){}
+    /**
+     * @param Route $route
+     * @return void
+     */
+    public function consoleSetup(Route $route) {}
 }

@@ -4,11 +4,12 @@ namespace Core42\Command\Service;
 use Core42\Command\CommandInterface;
 use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\ConfigInterface;
-use Zend\ServiceManager\Exception;
 
 class CommandPluginManager extends AbstractPluginManager
 {
-
+    /**
+     * @param ConfigInterface $configuration
+     */
     public function __construct(ConfigInterface $configuration = null)
     {
         $this->setShareByDefault(false);

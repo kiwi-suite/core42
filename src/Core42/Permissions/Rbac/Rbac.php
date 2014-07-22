@@ -15,7 +15,6 @@ class Rbac extends \Zend\Permissions\Rbac\Rbac
      */
     private $idenitiyRole;
 
-
     /**
      * @param $enabled
      * @return \Core42\Permissions\Rbac\Rbac

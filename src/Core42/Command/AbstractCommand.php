@@ -192,7 +192,6 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
      */
     protected function configure() {}
 
-
     /**
      *
      */
@@ -300,7 +299,7 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
             return;
         }
 
-        $message = preg_replace_callback('#(\\\\?)<(/?)([a-z][a-z0-9_=;-]*)?>((?: [^<\\\\]+ | (?!<(?:/?[a-z]|/>)). | .(?<=\\\\<) )*)#isx', function($matches){
+        $message = preg_replace_callback('#(\\\\?)<(/?)([a-z][a-z0-9_=;-]*)?>((?: [^<\\\\]+ | (?!<(?:/?[a-z]|/>)). | .(?<=\\\\<) )*)#isx', function ($matches) {
             if ($matches[2] == '/') {
                 return $matches[4];
             }
@@ -320,6 +319,5 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
         }, $message);
 
         Console::getInstance()->writeLine($message);
-
     }
 }

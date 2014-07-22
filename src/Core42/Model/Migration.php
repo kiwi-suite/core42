@@ -1,7 +1,6 @@
 <?php
 namespace Core42\Model;
 
-
 class Migration extends AbstractModel
 {
     /**

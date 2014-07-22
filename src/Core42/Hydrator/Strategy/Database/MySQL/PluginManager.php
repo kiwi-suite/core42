@@ -90,7 +90,6 @@ class PluginManager implements ServiceManagerAwareInterface, DatabasePluginManag
                     ? $this->plugins[$config["database_hydrator_plugins"]['mysql'][$name]]
                     : null;
 
-
         if ($return === null) {
             $return = $this->defaultStrategy;
         }

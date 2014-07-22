@@ -20,12 +20,17 @@ class MigrateCommand extends AbstractCommand implements ConsoleAwareInterface
         return $this;
     }
 
-
+    /**
+     * @throws \Exception
+     */
     protected function configure()
     {
         $this->setupTable();
     }
 
+    /**
+     *
+     */
     protected function preExecute()
     {
         $this->limit = (int) $this->limit;
@@ -72,6 +77,10 @@ class MigrateCommand extends AbstractCommand implements ConsoleAwareInterface
         }
     }
 
+    /**
+     * @param Route $route
+     * @return mixed|void
+     */
     public function consoleSetup(Route $route)
     {
         $this->setLimit($route->getMatchedParam('limit', -1));

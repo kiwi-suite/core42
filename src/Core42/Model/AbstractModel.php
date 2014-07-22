@@ -2,9 +2,6 @@
 namespace Core42\Model;
 
 use Core42\Hydrator\ModelHydrator;
-use Zend\InputFilter\Factory;
-use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\InputFilter\InputFilterInterface;
 
 abstract class AbstractModel
 {
@@ -20,6 +17,9 @@ abstract class AbstractModel
      */
     private $memento = null;
 
+    /**
+     *
+     */
     public function __construct()
     {
         $this->memento();

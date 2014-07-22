@@ -1,11 +1,9 @@
 <?php
 namespace Core42;
 
-use Core42\Command\Service\CommandPluginManager;
 use Core42\Session\SessionInitializer;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
-use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 use Zend\ModuleManager\Feature\InitProviderInterface;
 use Zend\ModuleManager\Listener\ServiceListenerInterface;
 use Zend\ModuleManager\ModuleManager;
@@ -36,8 +34,9 @@ class Module implements BootstrapListenerInterface,
         );
     }
 
-    /*
-     * @see \Zend\ModuleManager\Feature\BootstrapListenerInterface::onBootstrap()
+    /**
+     * @param \Zend\EventManager\EventInterface $e
+     * @return array|void
      */
     public function onBootstrap(\Zend\EventManager\EventInterface $e)
     {
@@ -55,6 +54,9 @@ class Module implements BootstrapListenerInterface,
         }
     }
 
+    /**
+     * @param ServiceListenerInterface $serviceListener
+     */
     private function addPeeringServiceManager(ServiceListenerInterface $serviceListener)
     {
         $serviceListener->addServiceManager(

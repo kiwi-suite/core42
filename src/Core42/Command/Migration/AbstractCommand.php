@@ -3,12 +3,6 @@ namespace Core42\Command\Migration;
 
 use Symfony\Component\Filesystem\Filesystem;
 use Zend\Db\Adapter\Adapter;
-use Zend\Db\Sql\Ddl\Column\Date;
-use Zend\Db\Sql\Ddl\Column\Time;
-use Zend\Db\Sql\Ddl\Column\Varchar;
-use Zend\Db\Sql\Ddl\Constraint\PrimaryKey;
-use Zend\Db\Sql\Ddl\CreateTable;
-use Zend\Db\Sql\Sql;
 
 abstract class AbstractCommand extends \Core42\Command\AbstractCommand
 {
@@ -26,6 +20,7 @@ abstract class AbstractCommand extends \Core42\Command\AbstractCommand
             $config = $this->getServiceManager()->get('config');
             $this->migrationConfig = $config['migration'];
         }
+
         return $this->migrationConfig;
     }
 
@@ -61,7 +56,8 @@ abstract class AbstractCommand extends \Core42\Command\AbstractCommand
     protected function getMigrationDirectories()
     {
         $migrationConfig = $this->getMigrationConfig();
-        return array_map(function($dir){
+
+        return array_map(function ($dir) {
             $dir = rtrim($dir, '/') . '/';
 
             do {
@@ -69,12 +65,13 @@ abstract class AbstractCommand extends \Core42\Command\AbstractCommand
                     array('#//|/\./#', '#/([^/]*)/\.\./#'),
                     '/', $dir, -1, $count
                 );
-            } while($count > 0);
+            } while ($count > 0);
 
             $filesystem = new Filesystem();
             if ($filesystem->isAbsolutePath($dir)) {
                 $dir = str_replace(getcwd() . DIRECTORY_SEPARATOR, '', $dir);
             }
+
             return $dir;
         }, $migrationConfig['directory']);
     }

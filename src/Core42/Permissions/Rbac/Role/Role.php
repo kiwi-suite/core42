@@ -44,7 +44,6 @@ class Role extends \Zend\Permissions\Rbac\Role implements RoleInterface
     public function getOption($name, $default = null)
     {
         if (!array_key_exists($name, $this->options)) return $default;
-
         return $this->options[$name];
     }
 }

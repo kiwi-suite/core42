@@ -5,6 +5,9 @@ use Zend\Form\FormInterface;
 
 interface CommandInterface
 {
+    /**
+     * @return mixed
+     */
     public function run();
 
     /**

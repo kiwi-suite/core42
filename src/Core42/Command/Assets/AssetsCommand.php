@@ -1,7 +1,6 @@
 <?php
 namespace Core42\Command\Assets;
 
-
 use Core42\Command\AbstractCommand;
 use Core42\Command\ConsoleAwareInterface;
 use Symfony\Component\Filesystem\Filesystem;
@@ -14,6 +13,9 @@ class AssetsCommand extends AbstractCommand implements ConsoleAwareInterface
      */
     private $copy = false;
 
+    /**
+     * @var array|null
+     */
     private $assetConfig;
 
     /**
@@ -27,6 +29,9 @@ class AssetsCommand extends AbstractCommand implements ConsoleAwareInterface
         return $this;
     }
 
+    /**
+     *
+     */
     protected function preExecute()
     {
         $config = $this->getServiceManager()->get('config');
@@ -69,6 +74,9 @@ class AssetsCommand extends AbstractCommand implements ConsoleAwareInterface
         }
     }
 
+    /**
+     * @param Route $route
+     */
     public function consoleSetup(Route $route)
     {
         $this->setCopy($route->getMatchedParam("copy") || $route->getMatchedParam("c"));

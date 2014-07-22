@@ -13,7 +13,6 @@ class ArrayProvider implements RoleProviderInterface,
      */
     private $serviceManager;
 
-
     /**
      * @return RoleInterface[]
      */

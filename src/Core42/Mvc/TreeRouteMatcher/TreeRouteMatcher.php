@@ -16,6 +16,10 @@ class TreeRouteMatcher
      */
     protected $router;
 
+    /**
+     * @param RouteMatch $routeMatch
+     * @param RouteStackInterface $router
+     */
     public function __construct(RouteMatch $routeMatch = null, RouteStackInterface $router)
     {
         $this->routeMatch = $routeMatch;
@@ -23,6 +27,11 @@ class TreeRouteMatcher
         $this->router = $router;
     }
 
+    /**
+     * @param $config
+     * @param string $key
+     * @return string
+     */
     public function getConfigKey($config, $key = 'default')
     {
         if (empty($config) || empty($this->routeMatch)) {
@@ -41,6 +50,7 @@ class TreeRouteMatcher
                 }
             }
         }
+
         return $key;
     }
 }

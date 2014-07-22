@@ -4,7 +4,6 @@ namespace Core42\Db\TableGateway\Service;
 use Core42\Db\TableGateway\AbstractTableGateway;
 use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\ConfigInterface;
-use Zend\ServiceManager\Exception;
 
 class TableGatewayPluginManager extends AbstractPluginManager
 {

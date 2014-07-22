@@ -7,6 +7,9 @@ use Zend\Stdlib\Hydrator\Filter\MethodMatchFilter;
 
 class ModelHydrator extends ClassMethods
 {
+    /**
+     * @var bool
+     */
     private $filterInitialized = false;
 
     /**
@@ -34,6 +37,7 @@ class ModelHydrator extends ClassMethods
     public function hydrate(array $data, $object)
     {
         $this->addObjectDependedFilter($object);
+
         return parent::hydrate($data, $object);
     }
 
@@ -48,6 +52,7 @@ class ModelHydrator extends ClassMethods
     public function extract($object)
     {
         $this->addObjectDependedFilter($object);
+
         return parent::extract($object);
     }
 

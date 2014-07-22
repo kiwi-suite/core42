@@ -1,7 +1,6 @@
 <?php
 namespace Core42\Permissions\Rbac\Service;
 
-use Core42\Permissions\Guard\GuardInterface;
 use Core42\Permissions\Rbac\Provider\Role\RoleProviderInterface;
 use Core42\Permissions\Rbac\Rbac;
 use Core42\Permissions\Rbac\Role\RoleAwareInterface;

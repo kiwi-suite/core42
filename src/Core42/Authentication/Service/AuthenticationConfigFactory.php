@@ -2,7 +2,6 @@
 namespace Core42\Authentication\Service;
 
 use Core42\Mvc\TreeRouteMatcher\TreeRouteMatcher;
-use Zend\Mvc\Router\Http\RouteMatch;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 

@@ -90,6 +90,7 @@ abstract class AbstractSelectQuery
         if ($this->hydrator === null) {
             $this->hydrator = new ModelHydrator();
         }
+
         return $this->hydrator;
     }
 
@@ -101,10 +102,7 @@ abstract class AbstractSelectQuery
     /**
      *
      */
-    protected function configure()
-    {
-
-    }
+    protected function configure() {}
 
     /**
      * @return ResultSet
@@ -122,7 +120,7 @@ abstract class AbstractSelectQuery
 
         if (is_string($select)) {
             $resultSet = $this->getAdapter()->query($select, Adapter::QUERY_MODE_EXECUTE, $resultSet);
-        } else if ($select instanceof Select) {
+        } elseif ($select instanceof Select) {
             $statement = $this->getSql()->prepareStatementForSqlObject($select);
             $result = $statement->execute();
             $resultSet->initialize($result);

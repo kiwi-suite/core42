@@ -58,7 +58,7 @@ class FormRenderer extends AbstractHelper
     {
         $html = array();
 
-        foreach($this->form as $element) {
+        foreach ($this->form as $element) {
             $html[] = $this->renderElement($element);
         }
 

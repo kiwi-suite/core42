@@ -4,7 +4,6 @@ namespace Core42\Db\SelectQuery\Service;
 use Core42\Db\SelectQuery\AbstractSelectQuery;
 use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\ConfigInterface;
-use Zend\ServiceManager\Exception;
 
 class SelectQueryPluginManager extends AbstractPluginManager
 {

@@ -11,19 +11,31 @@ class LoggingProfiler extends Profiler
      */
     private $logger;
 
+    /**
+     * @param Logger $logger
+     */
     public function setLogger(Logger $logger)
     {
         $this->logger = $logger;
     }
 
+    /**
+     * @param string|\Zend\Db\Adapter\StatementContainerInterface $target
+     * @return Profiler
+     */
     public function profilerStart($target)
     {
-        parent::profilerStart($target);
+        return parent::profilerStart($target);
     }
 
+    /**
+     * @return Profiler
+     */
     public function profilerFinish()
     {
-        parent::profilerFinish();
+        $profiler = parent::profilerFinish();
         $this->logger->info(var_export($this->getLastProfile(), true));
+
+        return $profiler;
     }
 }

@@ -30,7 +30,7 @@ class TransportFactory implements FactoryInterface
     {
         $config = $serviceLocator->get("Config");
 
-        if (isset($config['mail']['transport'])){
+        if (isset($config['mail']['transport'])) {
             return $config['mail']['transport'];
         }
 

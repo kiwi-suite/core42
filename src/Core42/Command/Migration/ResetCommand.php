@@ -43,7 +43,9 @@ class ResetCommand extends AbstractCommand implements ConsoleAwareInterface
         }
     }
 
-    public function consoleSetup(Route $route)
-    {
-    }
+    /**
+     * @param Route $route
+     * @return mixed|void
+     */
+    public function consoleSetup(Route $route) {}
 }

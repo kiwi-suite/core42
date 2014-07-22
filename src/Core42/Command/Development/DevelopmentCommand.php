@@ -23,7 +23,10 @@ class DevelopmentCommand extends AbstractCommand implements ConsoleAwareInterfac
         return $this;
     }
 
-    protected  function preExecute()
+    /**
+     *
+     */
+    protected function preExecute()
     {
         if (!is_dir('data/development')) {
             $created = mkdir('data/development', 0777, true);
@@ -53,6 +56,9 @@ class DevelopmentCommand extends AbstractCommand implements ConsoleAwareInterfac
         }
     }
 
+    /**
+     * @param Route $route
+     */
     public function consoleSetup(Route $route)
     {
         $this->enableDevelopment($route->getMatchedParam("on"));

@@ -102,6 +102,7 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
     public function setIdentityColumn($identityColumn)
     {
         $this->identityColumn = $identityColumn;
+
         return $this;
     }
 
@@ -120,6 +121,7 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
     public function setCredentialColumn($credentialColumn)
     {
         $this->credentialColumn = $credentialColumn;
+
         return $this;
     }
 
@@ -326,6 +328,7 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
         if ($user instanceof RoleAwareInterface) {
             return $user->getIdentityRole();
         }
+
         return null;
     }
 }
