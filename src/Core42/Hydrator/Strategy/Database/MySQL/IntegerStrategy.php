@@ -50,7 +50,7 @@ class IntegerStrategy implements StrategyInterface, DatabaseStrategyInterface
         if ($this->isNullable && $value === null) {
             return null;
         }
-        
+
         return (int) $value;
     }
 }
