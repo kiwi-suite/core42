@@ -20,7 +20,9 @@ class DateStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function extract($value)
     {
-        if ($this->isNullable && $value === null) return null;
+        if ($this->isNullable && $value === null) {
+            return null;
+        }
 
         if ($value instanceof \DateTime) {
             return date("Y-m-d", $value->getTimestamp());
@@ -38,7 +40,10 @@ class DateStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function hydrate($value)
     {
-        if ($this->isNullable && $value === null) return null;
+        if ($this->isNullable && $value === null) {
+            return null;
+        }
+
         return new \DateTime($value);
     }
 

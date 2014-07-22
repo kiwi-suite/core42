@@ -20,7 +20,10 @@ class BooleanStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function extract($value)
     {
-        if ($this->isNullable && $value === null) return null;
+        if ($this->isNullable && $value === null) {
+            return null;
+        }
+
         return ($value === true) ? "true" : "false";
     }
 
@@ -33,7 +36,10 @@ class BooleanStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function hydrate($value)
     {
-        if ($this->isNullable && $value === null) return null;
+        if ($this->isNullable && $value === null) {
+            return null;
+        }
+
         return ($value === "true") ? true : false;
     }
 
@@ -43,7 +49,8 @@ class BooleanStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function getStrategy(\Zend\Db\Metadata\Object\ColumnObject $column)
     {
-        if ($column->getDataType() == "enum" && in_array($column->getErrata("permitted_values"), array(array("true", "false"), array("false", "true")))) {
+        $check = array(array("true", "false"), array("false", "true"));
+        if ($column->getDataType() == "enum" && in_array($column->getErrata("permitted_values"), $check)) {
             $this->isNullable = $column->getIsNullable();
 
             return $this;

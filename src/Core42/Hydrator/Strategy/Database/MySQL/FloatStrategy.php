@@ -31,7 +31,10 @@ class FloatStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function extract($value)
     {
-        if ($this->isNullable && $value === null) return null;
+        if ($this->isNullable && $value === null) {
+            return null;
+        }
+
         return (float) $value;
     }
 
@@ -44,7 +47,10 @@ class FloatStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function hydrate($value)
     {
-        if ($this->isNullable && $value === null) return null;
+        if ($this->isNullable && $value === null) {
+            return null;
+        }
+
         return (float) $value;
     }
 }
