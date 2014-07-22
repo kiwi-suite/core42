@@ -48,7 +48,8 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
      */
     protected $credential;
 
-    public function __construct(AbstractTableGateway $tableGateway = null, $identityColumn = null, $credentialColumn = null)
+    public function __construct(AbstractTableGateway $tableGateway = null,
+                                $identityColumn = null, $credentialColumn = null)
     {
         if ($tableGateway !== null) {
             $this->setTableGateway($tableGateway);
@@ -63,7 +64,7 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
         }
     }
 
-    public function setOptions(array $options = array(), ServiceManager $serviceManager)
+    public function setOptions(array $options, ServiceManager $serviceManager)
     {
         if (isset($options['table_gateway'])) {
             $this->setTableGateway($serviceManager->get('TableGateway')->get($options['table_gateway']));
@@ -205,7 +206,11 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
         if ($resultSet->count() == 0) {
             $this->onIdentityNotFound();
 
-            return new Result(Result::FAILURE_IDENTITY_NOT_FOUND, $this->getIdentity(), array('Supplied credential is invalid.'));
+            return new Result(
+                Result::FAILURE_IDENTITY_NOT_FOUND,
+                $this->getIdentity(),
+                array('Supplied credential is invalid.')
+            );
         }
         if ($resultSet->count() > 1) {
             $this->onIdentityAmbiguous();
@@ -217,7 +222,11 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
         $userArray = $this->getUser()->extract();
 
         if (!$this->matchPassword($userArray[$this->getCredentialColumn()], $this->getCredential())) {
-            return new Result(Result::FAILURE_CREDENTIAL_INVALID, $this->getIdentity(), array('Supplied credential is invalid.'));
+            return new Result(
+                Result::FAILURE_CREDENTIAL_INVALID,
+                $this->getIdentity(),
+                array('Supplied credential is invalid.')
+            );
         }
 
         return new Result(

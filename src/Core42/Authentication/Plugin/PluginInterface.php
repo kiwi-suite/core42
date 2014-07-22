@@ -5,5 +5,5 @@ use Zend\ServiceManager\ServiceManager;
 
 interface PluginInterface
 {
-    public function setOptions(array $options = array(), ServiceManager $serviceManager);
+    public function setOptions(array $options, ServiceManager $serviceManager);
 }

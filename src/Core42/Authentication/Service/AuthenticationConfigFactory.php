@@ -7,6 +7,9 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 class AuthenticationConfigFactory implements FactoryInterface
 {
+    /**
+     * @var string
+     */
     private $configkey = 'authentication';
 
     /**
@@ -30,5 +33,4 @@ class AuthenticationConfigFactory implements FactoryInterface
 
         return $config[$this->configkey]['auth'][$authName];
     }
-
 }
