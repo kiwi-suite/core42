@@ -1,6 +1,6 @@
 {
     "name": "fruit42/core42",
-    "type": "fruit42-module",
+    "type": "zend-module",
     "require": {
         "php": ">=5.3.3",
         "zendframework/zendframework": "=2.3.1",
@@ -21,8 +21,5 @@
         "classmap": [
             "./Module.php"
         ]
-    },
-    "extra": {
-        "installer-name": "Core42"
     }
 }
