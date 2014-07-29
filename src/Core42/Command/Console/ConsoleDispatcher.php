@@ -25,18 +25,7 @@ class ConsoleDispatcher implements ServiceManagerAwareInterface
         $cliConfig = $this->serviceManager->get('config');
         $cliConfig = $cliConfig['cli'];
 
-        $commandName = null;
-
-        foreach ($cliConfig as $name => $info) {
-            if (!array_key_exists('name', $info) && is_string($name)) {
-                $info['name'] = $name;
-            }
-
-            if ($route->getName() == $info['name']) {
-                $commandName = (array_key_exists('command-name', $info)) ? $info['command-name'] : null;
-                break;
-            }
-        }
+        $commandName = $this->getCommandName($cliConfig, $route->getName());
 
         if (empty($commandName)) {
             $console->writeLine('"command-name" cant be empty', ColorInterface::RED);
@@ -54,6 +43,38 @@ class ConsoleDispatcher implements ServiceManagerAwareInterface
         $command->consoleSetup($route);
         $command->run();
 
+        $this->outputErrors($console, $command);
+    }
+
+    /**
+     * @param array $cliConfig
+     * @param string $routeName
+     * @return null|string
+     */
+    protected function getCommandName($cliConfig, $routeName)
+    {
+        $commandName = null;
+
+        foreach ($cliConfig as $name => $info) {
+            if (!array_key_exists('name', $info) && is_string($name)) {
+                $info['name'] = $name;
+            }
+
+            if ($routeName == $info['name']) {
+                $commandName = (array_key_exists('command-name', $info)) ? $info['command-name'] : null;
+                break;
+            }
+        }
+
+        return $commandName;
+    }
+
+    /**
+     * @param AdapterInterface $console
+     * @param CommandInterface $command
+     */
+    protected function outputErrors(AdapterInterface $console, CommandInterface $command)
+    {
         if ($command->hasErrors()) {
             $errors = $command->getErrors();
             foreach ($errors as $_error) {
@@ -63,6 +84,7 @@ class ConsoleDispatcher implements ServiceManagerAwareInterface
             }
         }
     }
+
 
     /**
      * Set service manager
