@@ -7,6 +7,7 @@ return array(
             'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
             'Core42\Db\Adapter\AdapterAbstractServiceFactory',
             'Zend\Log\LoggerAbstractServiceFactory',
+            'Core42\Queue\Service\QueueAbstractFactory'
         ),
         'factories' => array(
             'Zend\Session\Service\SessionManagerFactory'                => 'Zend\Session\Service\SessionManagerFactory',
@@ -24,6 +25,7 @@ return array(
             'Core42\CommandPluginManager'                               => 'Core42\Command\Service\CommandPluginManagerFactory',
             'Core42\TableGatewayPluginManager'                          => 'Core42\Db\TableGateway\Service\TableGatewayPluginManagerFactory',
             'Core42\SelectQueryPluginManager'                           => 'Core42\Db\SelectQuery\Service\SelectQueryPluginManagerFactory',
+            'Core42\QueueAdapterPluginManager'                          => 'Core42\Queue\Service\AdapterPluginManagerFactory',
 
             'Metadata'                                                  => 'Core42\Db\Metadata\Service\MetadataServiceFactory',
 
@@ -51,6 +53,7 @@ return array(
             'Command'                                                   => 'Core42\CommandPluginManager',
             'TableGateway'                                              => 'Core42\TableGatewayPluginManager',
             'SelectQuery'                                               => 'Core42\SelectQueryPluginManager',
+            'QueueAdapter'                                              => 'Core42\QueueAdapterPluginManager',
         ),
     ),
 

@@ -79,6 +79,13 @@ class Module implements BootstrapListenerInterface,
             '\Core42\Db\SelectQuery\Service\Feature\SelectQueryProviderInterface',
             'getSqlQueryConfig'
         );
+
+        $serviceListener->addServiceManager(
+            'Core42\QueueAdapterPluginManager',
+            'queue_adapter',
+            'Core42\Queue\Service\Feature\QueueAdapterProviderInterface',
+            'getQueueAdapter'
+        );
     }
 
     /**
