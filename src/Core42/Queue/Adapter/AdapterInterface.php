@@ -16,7 +16,12 @@ interface AdapterInterface
     public function push(Job $job);
 
     /**
-     *
+     * @return Job|null
      */
     public function pop();
+
+    /**
+     * @return int
+     */
+    public function count();
 }

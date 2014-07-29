@@ -89,4 +89,12 @@ class Queue
         $job = $this->getJobFromCommand($command);
         $this->adapter->push($job);
     }
+
+    /**
+     * @return int
+     */
+    public function count()
+    {
+        return $this->adapter->count();
+    }
 }

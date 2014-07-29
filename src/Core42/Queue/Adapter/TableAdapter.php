@@ -5,6 +5,7 @@ use Core42\Queue\Job;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Metadata\Metadata;
 use Zend\Db\Sql\Delete;
+use Zend\Db\Sql\Expression;
 use Zend\Db\Sql\Insert;
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Sql;
@@ -104,7 +105,7 @@ class TableAdapter implements AdapterInterface
     }
 
     /**
-     *
+     * @return Job|null
      */
     public function pop()
     {
@@ -140,5 +141,29 @@ class TableAdapter implements AdapterInterface
         $job->setParams(Json::decode($res['params'], Json::TYPE_ARRAY));
 
         return $job;
+    }
+
+
+    /**
+     * @return int
+     */
+    public function count()
+    {
+        $this->initialize();
+
+        $select = new Select($this->tableName);
+        $select->columns(array(
+            'count' => new Expression('COUNT(*)'),
+        ));
+
+        $sql = new Sql($this->adpater);
+        $resultSet = $this->adpater->query(
+            $sql->getSqlStringForSqlObject($select),
+            Adapter::QUERY_MODE_EXECUTE
+        );
+
+        $res = $resultSet->current();
+
+        return (int)$res['count'];
     }
 }
