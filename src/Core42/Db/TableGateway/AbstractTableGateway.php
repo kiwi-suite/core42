@@ -164,12 +164,9 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
             );
             if (is_array($where)) {
                 $where = array_intersect_key(
-                    $this
-                        ->getHydrator()
-                        ->extract(
-                            $this->getModelPrototype()->getHydrator()->hydrate($where, $this->getModelPrototype()
-                            )
-                        ),
+                    $this->getHydrator()->extract(
+                        $this->getModelPrototype()->getHydrator()->hydrate($where, $this->getModelPrototype())
+                    ),
                     $where
                 );
             }

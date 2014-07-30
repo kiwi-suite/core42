@@ -29,8 +29,8 @@ class IntegerStrategy implements StrategyInterface, DatabaseStrategyInterface
 
         return (in_array(
             $column->getDataType(),
-            array('tinyint', 'smallint', 'mediumint', 'int', 'bigint'))
-        ) ? $this : null;
+            array('tinyint', 'smallint', 'mediumint', 'int', 'bigint')
+        )) ? $this : null;
     }
 
     /**
