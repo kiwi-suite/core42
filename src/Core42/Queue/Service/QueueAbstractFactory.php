@@ -52,6 +52,10 @@ class QueueAbstractFactory implements AbstractFactoryInterface
         return new Queue($serviceLocator->get('QueueAdapter'), $serviceLocator->get('Command'), $config);
     }
 
+    /**
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return array
+     */
     protected function getConfig(ServiceLocatorInterface $serviceLocator)
     {
         if ($this->config !== null) {
@@ -73,6 +77,10 @@ class QueueAbstractFactory implements AbstractFactoryInterface
         return $this->config;
     }
 
+    /**
+     * @param $config
+     * @param ServiceLocatorInterface $serviceLocator
+     */
     protected function processConfig(&$config, ServiceLocatorInterface $serviceLocator)
     {
         if (!isset($config['name']) || $config['name'] != 'table') {

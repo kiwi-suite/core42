@@ -7,6 +7,11 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 class MobileDetectFactory implements FactoryInterface
 {
+
+    /**
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return MobileDetect
+     */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $mobileDetectHelper = new MobileDetect();

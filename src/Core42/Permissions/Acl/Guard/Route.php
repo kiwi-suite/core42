@@ -28,11 +28,18 @@ class Route extends AbstractListenerAggregate
         $this->listeners[] = $events->attach(MvcEvent::EVENT_ROUTE, array($this, 'onRoute'));
     }
 
+    /**
+     * @param array $options
+     */
     public function setOptions(array $options = array())
     {
         $this->options = $options;
     }
 
+    /**
+     * @param MvcEvent $event
+     * @return \Zend\Stdlib\ResponseInterface
+     */
     public function onRoute(MvcEvent $event)
     {
         /** @var $acl \Core42\Permissions\Acl\Acl */

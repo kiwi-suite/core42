@@ -5,6 +5,9 @@ use Zend\Db\ResultSet\HydratingResultSet;
 
 class ResultSet extends HydratingResultSet
 {
+    /**
+     * @return object
+     */
     public function current()
     {
         $object = parent::current();

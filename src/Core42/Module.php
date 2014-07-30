@@ -9,12 +9,13 @@ use Zend\ModuleManager\Listener\ServiceListenerInterface;
 use Zend\ModuleManager\ModuleManager;
 use Zend\ModuleManager\ModuleManagerInterface;
 
-class Module implements BootstrapListenerInterface,
-                            ConfigProviderInterface,
-                            InitProviderInterface
+class Module implements
+ BootstrapListenerInterface,
+ ConfigProviderInterface,
+ InitProviderInterface
 {
-    /*
-     * @see \Zend\ModuleManager\Feature\ConfigProviderInterface::getConfig()
+    /**
+     * @return array|\Traversable
      */
     public function getConfig()
     {

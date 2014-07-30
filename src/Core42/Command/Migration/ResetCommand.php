@@ -6,7 +6,9 @@ use ZF\Console\Route;
 
 class ResetCommand extends AbstractCommand implements ConsoleAwareInterface
 {
-
+    /**
+     * @throws \Exception
+     */
     protected function configure()
     {
         $this->setupTable();

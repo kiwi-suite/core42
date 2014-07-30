@@ -28,6 +28,10 @@ class TableAdapter implements AdapterInterface
      */
     private $initialized = false;
 
+    /**
+     * @param array $options
+     * @throws \Exception
+     */
     public function __construct(array $options = array())
     {
         if (!empty($options)) {
@@ -56,6 +60,9 @@ class TableAdapter implements AdapterInterface
         $this->tableName = (string)$options['table_name'];
     }
 
+    /**
+     *
+     */
     protected function initialize()
     {
         if ($this->initialized === true) {

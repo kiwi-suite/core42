@@ -36,6 +36,12 @@ class FormRenderer extends AbstractHelper
         return $this;
     }
 
+    /**
+     * @param $element
+     * @param array $additionalParams
+     * @param null $partial
+     * @return mixed
+     */
     public function renderElement($element, $additionalParams = array(), $partial = null)
     {
         if (is_string($element)) {
@@ -54,6 +60,9 @@ class FormRenderer extends AbstractHelper
         return $partialHelper($partial, $model);
     }
 
+    /**
+     * @return string
+     */
     public function render()
     {
         $html = array();
@@ -65,6 +74,9 @@ class FormRenderer extends AbstractHelper
         return implode(PHP_EOL, $html);
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         try {

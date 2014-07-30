@@ -35,6 +35,9 @@ class PluginManager implements ServiceManagerAwareInterface, DatabasePluginManag
         return $this->serviceManager;
     }
 
+    /**
+     *
+     */
     public function initialize()
     {
         $config = $this->serviceManager->get("Config");
@@ -61,6 +64,10 @@ class PluginManager implements ServiceManagerAwareInterface, DatabasePluginManag
         $this->initialized = true;
     }
 
+    /**
+     * @param \Zend\Db\Metadata\Object\ColumnObject $column
+     * @return DatabaseStrategyInterface|null
+     */
     public function getStrategy(\Zend\Db\Metadata\Object\ColumnObject $column)
     {
         $return = null;
@@ -80,6 +87,10 @@ class PluginManager implements ServiceManagerAwareInterface, DatabasePluginManag
         return clone $return;
     }
 
+    /**
+     * @param $name
+     * @return DatabaseStrategyInterface|null
+     */
     public function loadStrategy($name)
     {
         $return = null;

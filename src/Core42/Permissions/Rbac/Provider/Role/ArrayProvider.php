@@ -27,6 +27,10 @@ class ArrayProvider implements RoleProviderInterface,
         return $this->getRolesRecursive($config['roles']);
     }
 
+    /**
+     * @param array $config
+     * @return array
+     */
     protected function getRolesRecursive($config)
     {
         $roles = array();

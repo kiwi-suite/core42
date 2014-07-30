@@ -13,6 +13,11 @@ class Job
      */
     private $params = array();
 
+    /**
+     * @param $serviceName
+     * @param array $parans
+     * @return Job
+     */
     public static function factory($serviceName, array $parans = array())
     {
         $job =  new Job();

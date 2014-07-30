@@ -8,6 +8,9 @@ use Zend\ServiceManager\ConfigInterface;
 class SelectQueryPluginManager extends AbstractPluginManager
 {
 
+    /**
+     * @param ConfigInterface $configuration
+     */
     public function __construct(ConfigInterface $configuration = null)
     {
         $this->setShareByDefault(false);

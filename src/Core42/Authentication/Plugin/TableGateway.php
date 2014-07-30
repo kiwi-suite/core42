@@ -48,6 +48,11 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
      */
     protected $credential;
 
+    /**
+     * @param AbstractTableGateway $tableGateway
+     * @param string $identityColumn
+     * @param string $credentialColumn
+     */
     public function __construct(AbstractTableGateway $tableGateway = null,
                                 $identityColumn = null, $credentialColumn = null)
     {
@@ -64,6 +69,10 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
         }
     }
 
+    /**
+     * @param array $options
+     * @param ServiceManager $serviceManager
+     */
     public function setOptions(array $options, ServiceManager $serviceManager)
     {
         if (isset($options['table_gateway'])) {
@@ -235,18 +244,29 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
         );
     }
 
+    /**
+     *
+     */
     protected function onIdentityNotFound()
     {
         $bcrypt = new Bcrypt();
         $bcrypt->create("test");
     }
 
+    /**
+     *
+     */
     protected function onIdentityAmbiguous()
     {
         $bcrypt = new Bcrypt();
         $bcrypt->create("test");
     }
 
+    /**
+     * @param string $realPassword
+     * @param string $inputPassword
+     * @return bool
+     */
     protected function matchPassword($realPassword, $inputPassword)
     {
         $bcrypt = new Bcrypt();
@@ -327,6 +347,9 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
         unset($this->getSessionContainer()->storage);
     }
 
+    /**
+     * @return null|string
+     */
     public function getIdentityRole()
     {
         if ($this->isEmpty()) {

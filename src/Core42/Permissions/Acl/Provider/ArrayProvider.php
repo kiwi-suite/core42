@@ -40,6 +40,11 @@ class ArrayProvider implements AclProviderInterface
         }
     }
 
+    /**
+     * @param Acl $acl
+     * @param $config
+     * @param null $parent
+     */
     protected function addRole(Acl $acl, $config, $parent = null)
     {
         foreach ($config as $role => $roleValues) {

@@ -48,6 +48,10 @@ class TableGatewayFallbackAbstractFactory implements AbstractFactoryInterface
         return new $fqcn($adapter, $slave, $metadata, $hydratorStrategyPluginManager);
     }
 
+    /**
+     * @param string $name
+     * @return bool|string
+     */
     protected function getFQCN($name)
     {
         if (strpos($name, '\\') === false) {

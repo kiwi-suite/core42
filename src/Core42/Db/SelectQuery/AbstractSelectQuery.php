@@ -41,6 +41,10 @@ abstract class AbstractSelectQuery
      */
     private $hydrator;
 
+    /**
+     * @param Adapter $adapter
+     * @param DatabasePluginManagerInterface $hydratorStrategyPluginManager
+     */
     public function __construct(Adapter $adapter, DatabasePluginManagerInterface $hydratorStrategyPluginManager)
     {
         $this->adapter = $adapter;

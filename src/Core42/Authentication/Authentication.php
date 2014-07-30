@@ -7,6 +7,9 @@ use Zend\Authentication\AuthenticationService;
 class Authentication extends AuthenticationService implements RoleAwareInterface
 {
 
+    /**
+     * @return string|null
+     */
     public function getIdentityRole()
     {
         if ($this->getStorage() instanceof RoleAwareInterface) {

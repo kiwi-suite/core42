@@ -50,6 +50,11 @@ class MobileDetect extends AbstractHelper implements ServiceLocatorAwareInterfac
         return $this;
     }
 
+    /**
+     * @param $method
+     * @param array $attributes
+     * @return mixed
+     */
     public function __call($method, $attributes)
     {
         return call_user_func_array(array($this->getServiceManager()->get('MobileDetect'), $method), $attributes);

@@ -7,7 +7,9 @@ use Zend\ServiceManager\ConfigInterface;
 
 class TableGatewayPluginManager extends AbstractPluginManager
 {
-
+    /**
+     * @param ConfigInterface $configuration
+     */
     public function __construct(ConfigInterface $configuration = null)
     {
         $this->setShareByDefault(false);

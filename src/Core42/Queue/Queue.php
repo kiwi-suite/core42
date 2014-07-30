@@ -23,13 +23,15 @@ class Queue
      */
     private $commandPluginManager;
 
-    public function __construct(AdapterPluginManager $adapterPluginManager, CommandPluginManager $commandPluginManager, array $options = array())
+    public function __construct(AdapterPluginManager $adapterPluginManager,
+                                CommandPluginManager $commandPluginManager,
+                                array $options = array())
     {
         $this->adapterPluginManager = $adapterPluginManager;
 
         $this->commandPluginManager = $commandPluginManager;
 
-        if (!empty($options)) {
+        if (!empty($options)){
             $this->setOptions($options);
         }
     }
@@ -47,7 +49,10 @@ class Queue
     protected function getJobFromCommand(CommandInterface $command)
     {
         if (!($command instanceof QueueAwareInterface)) {
-            throw new \Exception(sprintf("command '%s' doesn't implement Core42\\Queue\\QueueAwareInterface", get_class($command)));
+            throw new \Exception(sprintf(
+                "command '%s' doesn't implement Core42\\Queue\\QueueAwareInterface",
+                get_class($command)
+            ));
         }
 
         $job = $command->queueExtract();

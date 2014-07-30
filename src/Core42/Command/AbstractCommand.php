@@ -205,6 +205,9 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
         $classMethodHydrator->hydrate($this->getForm()->getData(), $this);
     }
 
+    /**
+     *
+     */
     protected function extractForm() {}
 
     /**
