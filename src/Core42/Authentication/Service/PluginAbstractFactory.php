@@ -34,7 +34,10 @@ class PluginAbstractFactory implements AbstractFactoryInterface
             return false;
         }
 
-        return (isset($config[$requestedName]) && is_array($config[$requestedName]) && isset($config[$requestedName]['name']));
+        return (isset($config[$requestedName])
+            && is_array($config[$requestedName])
+            && isset($config[$requestedName]['name'])
+        );
     }
 
     /**

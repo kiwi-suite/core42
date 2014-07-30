@@ -31,6 +31,11 @@ class Queue
      */
     private $commandPluginManager;
 
+    /**
+     * @param AdapterPluginManager $adapterPluginManager
+     * @param CommandPluginManager $commandPluginManager
+     * @param array $options
+     */
     public function __construct(
         AdapterPluginManager $adapterPluginManager,
         CommandPluginManager $commandPluginManager,
@@ -45,6 +50,9 @@ class Queue
         }
     }
 
+    /**
+     * @param array $options
+     */
     public function setOptions(array $options)
     {
         $this->adapter = $this->adapterPluginManager->get($options['name'], $options['params']);

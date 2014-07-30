@@ -198,7 +198,10 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
     /**
      *
      */
-    protected function configure() {}
+    protected function configure()
+    {
+
+    }
 
     /**
      *

@@ -50,7 +50,9 @@ class SelectQueryFallbackAbstractFactory implements AbstractFactoryInterface
             $adapter =  $serviceLocator->getServiceLocator()->get('Db\Slave');
         }
 
-        $hydratorStrategyPluginManager = $serviceLocator->getServiceLocator()->get('Core42\Hydrator\Strategy\Database\\' . $adapter->getPlatform()->getName() . '\PluginManager');
+        $hydratorStrategyPluginManager = $serviceLocator->getServiceLocator()->get(
+            'Core42\Hydrator\Strategy\Database\\' . $adapter->getPlatform()->getName() . '\PluginManager'
+        );
 
         return new $fqcn($adapter, $hydratorStrategyPluginManager);
     }

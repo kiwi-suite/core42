@@ -28,7 +28,9 @@ class AdapterAbstractServiceFactory extends \Zend\Db\Adapter\AdapterAbstractServ
         $config = parent::getConfig($services);
 
         foreach ($config as &$_config) {
-            if (array_key_exists('profiler', $_config) && is_array($_config['profiler']) && count($_config['profiler']) == 2) {
+            if (array_key_exists('profiler', $_config)
+                && is_array($_config['profiler'])
+                && count($_config['profiler']) == 2) {
                 $profilerConfig = $_config['profiler'];
                 if ($services->has($profilerConfig[0])) {
                     $_config['profiler'] = $services->get($profilerConfig[0]);

@@ -34,6 +34,11 @@ class MobileDetect extends AbstractPlugin
         return $this->mobileDetect;
     }
 
+    /**
+     * @param string $method
+     * @param array $attributes
+     * @return mixed
+     */
     public function __call($method, $attributes)
     {
         return call_user_func_array(array($this->getMobileDetect(), $method), $attributes);

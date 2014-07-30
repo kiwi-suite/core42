@@ -105,7 +105,8 @@ class PluginManager implements ServiceManagerAwareInterface, DatabasePluginManag
 
         $this->initialize();
         $config = $this->serviceManager->get("Config");
-        $return = (isset($config["database_hydrator_plugins"]['mysql']) && array_key_exists($name, $config["database_hydrator_plugins"]['mysql']))
+        $return = (isset($config["database_hydrator_plugins"]['mysql'])
+            && array_key_exists($name, $config["database_hydrator_plugins"]['mysql']))
                     ? $this->plugins[$config["database_hydrator_plugins"]['mysql'][$name]]
                     : null;
 

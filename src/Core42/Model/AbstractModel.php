@@ -104,9 +104,9 @@ abstract class AbstractModel
     {
         if ($property === null) {
             return (count($this->diff()) > 0);
-        } else {
-            return array_key_exists($property, $this->modelProperties);
         }
+
+        return array_key_exists($property, $this->modelProperties);
     }
 
     /**

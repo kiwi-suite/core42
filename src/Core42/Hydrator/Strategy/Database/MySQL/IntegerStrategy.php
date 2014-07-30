@@ -27,7 +27,10 @@ class IntegerStrategy implements StrategyInterface, DatabaseStrategyInterface
     {
         $this->isNullable = $column->getIsNullable();
 
-        return (in_array($column->getDataType(), array('tinyint', 'smallint', 'mediumint', 'int', 'bigint'))) ? $this : null;
+        return (in_array(
+            $column->getDataType(),
+            array('tinyint', 'smallint', 'mediumint', 'int', 'bigint'))
+        ) ? $this : null;
     }
 
     /**
