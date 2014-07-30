@@ -1,8 +1,15 @@
 <?php
+/**
+ * core42 (www.raum42.at)
+ *
+ * @link http://www.raum42.at
+ * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
+ *
+ */
+
 namespace Core42\Command\Queue;
 
 use Core42\Command\AbstractCommand;
-use Core42\Command\CommandInterface;
 use Core42\Command\ConsoleAwareInterface;
 use Core42\Queue\Queue;
 use ZF\Console\Route;

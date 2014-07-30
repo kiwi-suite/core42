@@ -5,7 +5,6 @@ interface GuardInterface
 {
     /**
      * @param array $options
-     * @return mixed
      */
     public function setOptions(array $options);
 }
