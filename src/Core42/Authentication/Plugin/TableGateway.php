@@ -61,9 +61,11 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
      * @param string $identityColumn
      * @param string $credentialColumn
      */
-    public function __construct(AbstractTableGateway $tableGateway = null,
-                                $identityColumn = null, $credentialColumn = null)
-    {
+    public function __construct(
+        AbstractTableGateway $tableGateway = null,
+        $identityColumn = null,
+        $credentialColumn = null
+    ) {
         if ($tableGateway !== null) {
             $this->setTableGateway($tableGateway);
         }

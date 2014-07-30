@@ -56,5 +56,4 @@ class Acl extends AbstractHelper implements ServiceLocatorAwareInterface
     {
         return $this->getServiceManager()->get('Acl');
     }
-
 }

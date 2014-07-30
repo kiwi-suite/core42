@@ -18,9 +18,9 @@ use Zend\ModuleManager\ModuleManager;
 use Zend\ModuleManager\ModuleManagerInterface;
 
 class Module implements
- BootstrapListenerInterface,
- ConfigProviderInterface,
- InitProviderInterface
+    BootstrapListenerInterface,
+    ConfigProviderInterface,
+    InitProviderInterface
 {
     /**
      * @return array|\Traversable

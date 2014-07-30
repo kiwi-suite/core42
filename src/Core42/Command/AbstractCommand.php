@@ -216,12 +216,18 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
     /**
      *
      */
-    protected function extractForm() {}
+    protected function extractForm()
+    {
+
+    }
 
     /**
      *
      */
-    protected function preExecute() {}
+    protected function preExecute()
+    {
+
+    }
 
     /**
      *
@@ -231,12 +237,18 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
     /**
      *
      */
-    protected function postExecute() {}
+    protected function postExecute()
+    {
+
+    }
 
     /**
      *
      */
-    protected function shutdown() {}
+    protected function shutdown()
+    {
+
+    }
 
     /**
      * @param string $name

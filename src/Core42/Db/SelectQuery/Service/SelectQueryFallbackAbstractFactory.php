@@ -46,7 +46,7 @@ class SelectQueryFallbackAbstractFactory implements AbstractFactoryInterface
         $fqcn = $this->getFQCN($requestedName);
 
         $adapter = $serviceLocator->getServiceLocator()->get('Db\Master');
-        if ( $serviceLocator->getServiceLocator()->has('Db\Slave')) {
+        if ($serviceLocator->getServiceLocator()->has('Db\Slave')) {
             $adapter =  $serviceLocator->getServiceLocator()->get('Db\Slave');
         }
 

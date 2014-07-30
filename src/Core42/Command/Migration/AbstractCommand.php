@@ -71,7 +71,10 @@ abstract class AbstractCommand extends \Core42\Command\AbstractCommand
             do {
                 $dir = preg_replace(
                     array('#//|/\./#', '#/([^/]*)/\.\./#'),
-                    '/', $dir, -1, $count
+                    '/',
+                    $dir,
+                    -1,
+                    $count
                 );
             } while ($count > 0);
 

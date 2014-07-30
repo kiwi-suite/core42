@@ -10,6 +10,7 @@
 namespace Core42\Db\TableGateway\Feature;
 
 use Zend\Db\TableGateway\Feature\MetadataFeature as ZendMetadataFeature;
+
 class MetadataFeature extends ZendMetadataFeature
 {
     /**

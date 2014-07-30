@@ -30,8 +30,11 @@ class HydratorFeature extends AbstractFeature
      * @param MetadataInterface $metadata
      * @param DatabasePluginManagerInterface $hydratorStrategyPluginManager
      */
-    public function __construct(MetadataInterface $metadata, DatabasePluginManagerInterface $hydratorStrategyPluginManager)
-    {
+    public function __construct(
+        MetadataInterface $metadata,
+        DatabasePluginManagerInterface
+        $hydratorStrategyPluginManager
+    ) {
         $this->metadata = $metadata;
         $this->hydratorStrategyPluginManager = $hydratorStrategyPluginManager;
     }

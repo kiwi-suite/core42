@@ -36,8 +36,13 @@ class MigrationTableGateway extends AbstractTableGateway
      * @param $tablename
      * @throws \Exception
      */
-    public function __construct(Adapter $adapter, Adapter $slave, Metadata $metadata, DatabasePluginManagerInterface $hydratorStrategyPluginManager, $tablename)
-    {
+    public function __construct(
+        Adapter $adapter,
+        Adapter $slave,
+        Metadata $metadata,
+        DatabasePluginManagerInterface $hydratorStrategyPluginManager,
+        $tablename
+    ) {
         $this->table = $tablename;
         parent::__construct($adapter, $slave, $metadata, $hydratorStrategyPluginManager);
     }

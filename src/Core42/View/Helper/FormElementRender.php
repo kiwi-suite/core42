@@ -14,12 +14,27 @@ use Zend\View\Helper\AbstractHelper;
 
 class FormElementRender extends AbstractHelper
 {
+    /**
+     * @var ElementInterface
+     */
     private $element;
 
+    /**
+     * @var string
+     */
     private $partial;
 
+    /**
+     * @var array
+     */
     private $extraParams = array();
 
+    /**
+     * @param ElementInterface $element
+     * @param null $partial
+     * @param array $extraParams
+     * @return $this
+     */
     public function __invoke(ElementInterface $element, $partial = null, $extraParams = array())
     {
         $this->element = $element;
@@ -31,11 +46,17 @@ class FormElementRender extends AbstractHelper
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function __toString()
     {
         return $this->render();
     }
 
+    /**
+     * @return string
+     */
     public function render()
     {
         $html = "";
@@ -51,7 +72,9 @@ class FormElementRender extends AbstractHelper
             $model['element'] = $this->element;
 
             $html = $partialHelper($partialFile, $model);
-        } catch (\Exception $e) {}
+        } catch (\Exception $e) {
+
+        }
 
         return $html;
     }

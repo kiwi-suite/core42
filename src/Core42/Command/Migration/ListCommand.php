@@ -47,5 +47,8 @@ class ListCommand extends AbstractCommand implements ConsoleAwareInterface
      * @param Route $route
      * @return void
      */
-    public function consoleSetup(Route $route) {}
+    public function consoleSetup(Route $route)
+    {
+
+    }
 }

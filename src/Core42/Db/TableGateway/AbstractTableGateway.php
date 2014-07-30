@@ -48,10 +48,18 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     protected $metadata;
 
     /**
-     *
+     * @param Adapter $adapter
+     * @param Adapter $slave
+     * @param Metadata $metadata
+     * @param DatabasePluginManagerInterface $hydratorStrategyPluginManager
+     * @throws \Exception
      */
-    public function __construct(Adapter $adapter, Adapter $slave, Metadata $metadata, DatabasePluginManagerInterface $hydratorStrategyPluginManager)
-    {
+    public function __construct(
+        Adapter $adapter,
+        Adapter $slave,
+        Metadata $metadata,
+        DatabasePluginManagerInterface $hydratorStrategyPluginManager
+    ) {
         $this->adapter = $adapter;
 
         $this->metadata = $metadata;
@@ -115,7 +123,14 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
 
             return $result;
         } elseif (is_array($set)) {
-            $set = array_intersect_key($this->getHydrator()->extract($this->getModelPrototype()->getHydrator()->hydrate($set, $this->getModelPrototype())), $set);
+            $set = array_intersect_key(
+                $this
+                    ->getHydrator()
+                    ->extract(
+                        $this->getModelPrototype()->getHydrator()->hydrate($set, $this->getModelPrototype())
+                    ),
+                $set
+            );
         }
         if (empty($set)) {
             return 0;
@@ -139,9 +154,24 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
             $values = $this->getHydrator()->extract($set);
             $set = array_intersect_key($values, $set->diff());
         } elseif (is_array($set)) {
-            $set = array_intersect_key($this->getHydrator()->extract($this->getModelPrototype()->getHydrator()->hydrate($set, $this->getModelPrototype())), $set);
+            $set = array_intersect_key(
+                $this
+                    ->getHydrator()
+                    ->extract(
+                        $this->getModelPrototype()->getHydrator()->hydrate($set, $this->getModelPrototype())
+                    ),
+                $set
+            );
             if (is_array($where)) {
-                $where = array_intersect_key($this->getHydrator()->extract($this->getModelPrototype()->getHydrator()->hydrate($where, $this->getModelPrototype())), $where);
+                $where = array_intersect_key(
+                    $this
+                        ->getHydrator()
+                        ->extract(
+                            $this->getModelPrototype()->getHydrator()->hydrate($where, $this->getModelPrototype()
+                            )
+                        ),
+                    $where
+                );
             }
         }
         if (empty($set)) {
@@ -163,7 +193,12 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
                 return 0;
             }
         } elseif (is_array($where)) {
-            $where = array_intersect_key($this->getHydrator()->extract($this->getHydrator()->hydrate($where, $this->getModelPrototype())), $where);
+            $where = array_intersect_key(
+                $this->getHydrator()->extract(
+                    $this->getHydrator()->hydrate($where, $this->getModelPrototype())
+                ),
+                $where
+            );
         }
 
         return parent::delete($where);

@@ -95,7 +95,7 @@ class QueueAbstractFactory implements AbstractFactoryInterface
             return;
         }
 
-        if (!isset($config['params']['db_adapter'])){
+        if (!isset($config['params']['db_adapter'])) {
             return;
         }
 

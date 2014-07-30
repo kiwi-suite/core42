@@ -28,7 +28,7 @@ class TreeRouteMatcher
      * @param RouteMatch $routeMatch
      * @param RouteStackInterface $router
      */
-    public function __construct(RouteMatch $routeMatch = null, RouteStackInterface $router)
+    public function __construct(RouteStackInterface $router, RouteMatch $routeMatch = null)
     {
         $this->routeMatch = $routeMatch;
 

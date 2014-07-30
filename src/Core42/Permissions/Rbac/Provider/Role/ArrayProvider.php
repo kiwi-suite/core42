@@ -13,8 +13,9 @@ use Core42\Permissions\Rbac\Role\RoleInterface;
 use Zend\ServiceManager\ServiceManager;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 
-class ArrayProvider implements RoleProviderInterface,
-                                ServiceManagerAwareInterface
+class ArrayProvider implements
+    RoleProviderInterface,
+    ServiceManagerAwareInterface
 {
     /**
      * @var ServiceManager

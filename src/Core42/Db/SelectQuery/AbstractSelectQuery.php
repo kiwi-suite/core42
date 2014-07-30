@@ -114,7 +114,10 @@ abstract class AbstractSelectQuery
     /**
      *
      */
-    protected function configure() {}
+    protected function configure()
+    {
+
+    }
 
     /**
      * @return ResultSet

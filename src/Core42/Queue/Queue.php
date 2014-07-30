@@ -31,15 +31,16 @@ class Queue
      */
     private $commandPluginManager;
 
-    public function __construct(AdapterPluginManager $adapterPluginManager,
-                                CommandPluginManager $commandPluginManager,
-                                array $options = array())
-    {
+    public function __construct(
+        AdapterPluginManager $adapterPluginManager,
+        CommandPluginManager $commandPluginManager,
+        array $options = array()
+    ) {
         $this->adapterPluginManager = $adapterPluginManager;
 
         $this->commandPluginManager = $commandPluginManager;
 
-        if (!empty($options)){
+        if (!empty($options)) {
             $this->setOptions($options);
         }
     }

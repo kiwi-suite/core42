@@ -27,6 +27,6 @@ class TreeRouteMatcherFactory implements FactoryInterface
         $routeMatch = $serviceLocator->get('Application')->getMvcEvent()->getRouteMatch();
         $router = $serviceLocator->get('Router');
 
-        return new TreeRouteMatcher($routeMatch, $router);
+        return new TreeRouteMatcher($router, $routeMatch);
     }
 }
