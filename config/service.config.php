@@ -43,12 +43,16 @@ return array(
             'Core42\ConsoleDispatcher'                                  => 'Core42\Command\Console\ConsoleDispatcher',
 
             'Zend\Authentication\Storage\NonPersistent'                 => 'Zend\Authentication\Storage\NonPersistent',
+
+            'Core42\TransactionManager'                                 => 'Core42\Db\Transaction\TransactionManager',
         ),
         'aliases' => array(
             'AuthenticationService'                                     => 'Core42\Authentication',
             'Zend\Authentication\AuthenticationService'                 => 'Core42\Authentication',
 
             'Permission'                                                => 'Core42\Permission',
+
+            'TransactionManager'                                        => 'Core42\TransactionManager',
 
             'Command'                                                   => 'Core42\CommandPluginManager',
             'TableGateway'                                              => 'Core42\TableGatewayPluginManager',

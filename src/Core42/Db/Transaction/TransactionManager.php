@@ -9,14 +9,16 @@
 
 namespace Core42\Db\Transaction;
 
-use Zend\Db\Adapter\Adapter;
+use Zend\Db\Adapter\AdapterInterface;
+use Zend\ServiceManager\ServiceManager;
+use Zend\ServiceManager\ServiceManagerAwareInterface;
 
-class TransactionManager
+class TransactionManager implements ServiceManagerAwareInterface
 {
     /**
-     * @var Adapter[]
+     * @var ServiceManager
      */
-    private $adapters = array();
+    private $serviceManager;
 
     /**
      * @var array
@@ -24,41 +26,41 @@ class TransactionManager
     private $transactions = array();
 
     /**
-     * @param $serviceName
-     * @param Adapter $adapter
+     * Set service manager
+     *
+     * @param ServiceManager $serviceManager
      */
-    public function addAdapter($serviceName, Adapter $adapter)
+    public function setServiceManager(ServiceManager $serviceManager)
     {
-        $this->adapters[$serviceName] = $adapter;
+        $this->serviceManager = $serviceManager;
     }
 
     /**
-     * @param string|null $name
-     * @return string|null
+     * @param string $name
+     * @return AdapterInterface
      * @throws \Exception
      */
-    protected function getAdapterName($name = null)
+    protected function getAdapter($name)
     {
-        if (count($this->adapters) === 0) {
-            throw new \Exception('no database adapter is registered for using transactions');
-        } elseif (count($this->adapters) === 1 && $name === null) {
-            $name = current(array_keys($this->adapters));
+        if (!$this->serviceManager->has($name)) {
+            throw new \Exception("database adapter named '{$name}' doesnt't exists");
         }
 
-        if (!array_key_exists($name, $this->adapters)) {
-            throw new \Exception(sprintf("there is no database adapter '%s' registered for using transactions", $name));
+        $adapter = $this->serviceManager->get($name);
+        if (!($adapter instanceof AdapterInterface)) {
+            throw new \Exception("given service '{$name}' doesn't implement 'Zend\\Db\\Adapter\\AdapterInterface'");
         }
 
-        return $name;
+        return $adapter;
     }
 
     /**
-     * @param string|null $name
+     * @param string $name
      * @throws \Exception
      */
-    public function begin($name = null)
+    public function begin($name)
     {
-        $name = $this->getAdapterName($name);
+        $adapter = $this->getAdapter($name);
 
         if (!array_key_exists($name, $this->transactions)) {
             $this->transactions[$name] = 0;
@@ -66,16 +68,16 @@ class TransactionManager
 
         $this->transactions[$name]++;
 
-        $this->adapters[$name]->getDriver()->getConnection()->beginTransaction();
+        $adapter->getDriver()->getConnection()->beginTransaction();
     }
 
     /**
-     * @param string|null $name
+     * @param string $name
      * @throws \Exception
      */
-    public function commit($name = null)
+    public function commit($name)
     {
-        $name = $this->getAdapterName($name);
+        $adapter = $this->getAdapter($name);
 
         if (!array_key_exists($name, $this->transactions) || !($this->transactions[$name] > 0)) {
             throw new \Exception("no transaction started for '{$name}'");
@@ -84,17 +86,17 @@ class TransactionManager
         $this->transactions[$name]--;
 
         if ($this->transactions[$name] == 0) {
-            $this->adapters[$name]->getDriver()->getConnection()->commit();
+            $adapter->getDriver()->getConnection()->commit();
         }
     }
 
     /**
-     * @param string|null $name
+     * @param string $name
      * @throws \Exception
      */
-    public function rollback($name = null)
+    public function rollback($name)
     {
-        $name = $this->getAdapterName($name);
+        $adapter = $this->getAdapter($name);
 
         if (!array_key_exists($name, $this->transactions)) {
             throw new \Exception("no transaction started for '{$name}'");
@@ -102,23 +104,19 @@ class TransactionManager
 
         $this->transactions[$name] = 0;
 
-        $this->adapters[$name]->getDriver()->getConnection()->rollback();
+        $adapter->getDriver()->getConnection()->rollback();
     }
 
     /**
      * @param callable $callback
-     * @param string|null $name
+     * @param string $name
      * @throws \Exception
      */
-    public function transaction($callback, $name = null)
+    public function transaction($name, $callback)
     {
-        $name = $this->getAdapterName($name);
-
+        $this->begin($name);
         try {
-            $this->begin($name);
-
             call_user_func($callback);
-
             $this->commit($name);
 
         } catch (\Exception $e) {
