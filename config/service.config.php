@@ -7,7 +7,8 @@ return array(
             'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
             'Core42\Db\Adapter\AdapterAbstractServiceFactory',
             'Zend\Log\LoggerAbstractServiceFactory',
-            'Core42\Queue\Service\QueueAbstractFactory'
+            'Core42\Queue\Service\QueueAbstractFactory',
+            'Core42\Authentication\Service\PluginAbstractFactory'
         ),
         'factories' => array(
             'Zend\Session\Service\SessionManagerFactory'                => 'Zend\Session\Service\SessionManagerFactory',

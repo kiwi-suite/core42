@@ -26,8 +26,6 @@ class AuthenticationFactory implements FactoryInterface
     {
         $authenticationService = new Authentication();
 
-        $serviceLocator->addAbstractFactory('Core42\Authentication\Service\PluginAbstractFactory');
-
         $config = $serviceLocator->get('Core42\AuthenticationConfig');
         if (isset($config['adapter'])) {
             $authenticationService->setAdapter($serviceLocator->get($config['adapter']));
