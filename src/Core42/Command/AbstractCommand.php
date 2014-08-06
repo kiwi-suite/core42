@@ -47,6 +47,7 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
     final public function __construct()
     {
         $this->enableThrowExceptions(true);
+        $this->init();
     }
 
     /**
@@ -138,6 +139,14 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
         }
 
         return $this;
+    }
+
+    /**
+     * 
+     */
+    protected function init()
+    {
+
     }
 
     /**
