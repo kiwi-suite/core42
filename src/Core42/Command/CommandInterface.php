@@ -9,12 +9,10 @@
 
 namespace Core42\Command;
 
-use Zend\Form\FormInterface;
-
 interface CommandInterface
 {
     /**
-     * @return mixed
+     * @return CommandInterface
      */
     public function run();
 
@@ -31,17 +29,6 @@ interface CommandInterface
     public function enableThrowExceptions($enable);
 
     /**
-     * @param FormInterface $form
-     * @return CommandInterface
-     */
-    public function setForm(FormInterface $form);
-
-    /**
-     * @return FormInterface
-     */
-    public function getForm();
-
-    /**
      * @return array
      */
     public function getErrors();
@@ -50,4 +37,9 @@ interface CommandInterface
      * @return boolean
      */
     public function hasErrors();
+
+    /**
+     * @param array $values
+     */
+    public function hydrate(array $values);
 }
