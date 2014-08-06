@@ -39,7 +39,7 @@ class FormCommand extends AbstractCommand
      */
     protected function init()
     {
-        $this->valueCallback = function($values) {
+        $this->valueCallback = function ($values) {
             return $values;
         };
     }
