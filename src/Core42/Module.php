@@ -95,6 +95,13 @@ class Module implements
             'Core42\Queue\Service\Feature\QueueAdapterProviderInterface',
             'getQueueAdapter'
         );
+
+        $serviceListener->addServiceManager(
+            'Core42\FormPluginManager',
+            'forms',
+            'Core42\Form\Service\Feature\FormProviderInterface',
+            'getFormConfig'
+        );
     }
 
     /**
