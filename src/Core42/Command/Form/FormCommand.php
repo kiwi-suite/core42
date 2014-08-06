@@ -1,0 +1,147 @@
+<?php
+/**
+ * core42 (www.raum42.at)
+ *
+ * @link http://www.raum42.at
+ * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
+ *
+ */
+
+namespace Core42\Command\Form;
+
+use Core42\Command\AbstractCommand;
+use Zend\Form\FormInterface;
+
+class FormCommand extends AbstractCommand
+{
+    /**
+     * @var FormInterface
+     */
+    private $form;
+
+    /**
+     * @var AbstractCommand
+     */
+    private $cmd;
+
+    /**
+     * @var callable
+     */
+    private $valueCallback;
+
+    /**
+     * @var bool
+     */
+    private $automaticFormFill = true;
+
+    /**
+     *
+     */
+    protected function init()
+    {
+        $this->valueCallback = function($values) {
+            return $values;
+        };
+    }
+
+    /**
+     * @param FormInterface $form
+     * @return $this
+     */
+    public function setForm(FormInterface $form)
+    {
+        $this->form = $form;
+
+        return $this;
+    }
+
+    /**
+     * @param AbstractCommand $cmd
+     * @return $this
+     */
+    public function setCommand(AbstractCommand $cmd)
+    {
+        $this->cmd = $cmd;
+
+        return $this;
+    }
+
+    /**
+     * @param callable $callback
+     * @return $this
+     */
+    public function setValueCallback($callback)
+    {
+        $this->valueCallback = $callback;
+
+        return $this;
+    }
+
+    /**
+     * @param bool $formFill
+     * @return $this
+     */
+    public function enableAutomaticFormFill($formFill)
+    {
+        $this->automaticFormFill = (bool) $formFill;
+
+        return $this;
+    }
+
+    /**
+     * @throws \Exception
+     */
+    protected function preExecute()
+    {
+        if ($this->automaticFormFill ===  true) {
+            $this->form->setData($this->getServiceManager()->get('request')->getPost()->toArray());
+        }
+
+        if (!$this->form->isValid()) {
+            $errors = $this->form->getInputFilter()->getMessages();
+            $this->addErrors($errors);
+        }
+
+
+        $values = call_user_func($this->valueCallback, $this->form->getInputFilter()->getValues());
+
+        $this->cmd->hydrate($values);
+
+        $this->cmd->configure();
+        $this->cmd->preExecute();
+
+        if ($this->cmd->hasErrors()) {
+            $this->addErrors($this->cmd->getErrors());
+        }
+    }
+
+    /**
+     *
+     */
+    protected function execute()
+    {
+        $this->cmd->execute();
+        $this->cmd->postExecute();
+    }
+
+    /**
+     *
+     */
+    protected function shutdown()
+    {
+        $this->cmd->shutdown();
+
+        if (!$this->hasErrors()) {
+            return;
+        }
+
+        $errors = $this->getErrors();
+        foreach ($errors as $elementName => $_errorList) {
+            if (!$this->form->has($elementName)) {
+                continue;
+            }
+
+            $this->form->get($elementName)->setMessages($_errorList);
+        }
+    }
+}

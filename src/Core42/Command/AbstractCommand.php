@@ -142,7 +142,7 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
     }
 
     /**
-     * 
+     *
      */
     protected function init()
     {
