@@ -6,7 +6,6 @@ return array(
         'invokables' => array(
             'params'            => __NAMESPACE__.'\View\Helper\Params',
             'mobileDetect'      => __NAMESPACE__ . '\View\Helper\MobileDetect',
-            'acl'               => __NAMESPACE__ . '\View\Helper\Acl',
         ),
     ),
 

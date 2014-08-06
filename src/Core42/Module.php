@@ -50,16 +50,6 @@ class Module implements
     public function onBootstrap(\Zend\EventManager\EventInterface $e)
     {
         $e->getApplication()->getServiceManager()->get('Zend\Session\Service\SessionManagerFactory');
-
-        $rbacConfig = $e->getApplication()->getServiceManager()->get('Core42\Permission\Config');
-        if (!empty($rbacConfig) && $rbacConfig['enabled'] === true) {
-            foreach ($rbacConfig['guards'] as $serviceName => $options) {
-                /** @var $guard GuardInterface */
-                $guard = $e->getApplication()->getServiceManager()->get($serviceName);
-                $guard->setOptions($options);
-                $e->getTarget()->getEventManager()->attach($guard);
-            }
-        }
     }
 
     /**
