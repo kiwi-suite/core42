@@ -49,8 +49,7 @@ class Module implements
      */
     public function onBootstrap(\Zend\EventManager\EventInterface $e)
     {
-        $sessionInit = new SessionInitializer();
-        $sessionInit->initialize($e->getApplication()->getServiceManager());
+        $e->getApplication()->getServiceManager()->get('Zend\Session\Service\SessionManagerFactory');
 
         $rbacConfig = $e->getApplication()->getServiceManager()->get('Core42\Permission\Config');
         if (!empty($rbacConfig) && $rbacConfig['enabled'] === true) {
