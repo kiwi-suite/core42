@@ -9,7 +9,7 @@
 
 namespace Core42\Db\Metadata\Service;
 
-use Zend\Db\Metadata\Metadata;
+use Core42\Db\Metadata\Metadata;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 

@@ -56,6 +56,7 @@ abstract class AbstractCommand extends \Core42\Command\AbstractCommand
         }
 
         $adapter->query($sql, Adapter::QUERY_MODE_EXECUTE);
+        $metadata->refresh();
     }
 
     /**
