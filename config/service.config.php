@@ -29,6 +29,8 @@ return array(
             'Core42\QueueAdapterPluginManager'                          => 'Core42\Queue\Service\AdapterPluginManagerFactory',
             'Core42\FormPluginManager'                                  => 'Core42\Form\Service\FormPluginManagerFactory',
 
+            'Core42\Form\ThemeManager'                                  => 'Core42\Form\Theme\Service\ThemeManagerFactory',
+
             'Metadata'                                                  => 'Core42\Db\Metadata\Service\MetadataServiceFactory',
 
             'TreeRouteMatcher'                                          => 'Core42\Mvc\TreeRouteMatcher\Service\TreeRouteMatcherFactory',

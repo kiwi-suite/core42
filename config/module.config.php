@@ -4,8 +4,20 @@ namespace Core42;
 return array(
     'view_helpers' => array(
         'invokables' => array(
-            'params'            => __NAMESPACE__.'\View\Helper\Params',
-            'mobileDetect'      => __NAMESPACE__ . '\View\Helper\MobileDetect',
+            'form-theme-delegator'  => __NAMESPACE__ . '\View\Helper\Form\Service\FormThemeDelegator',
+
+            'params'                => __NAMESPACE__ . '\View\Helper\Params',
+            'mobileDetect'          => __NAMESPACE__ . '\View\Helper\MobileDetect',
+            'formRender'            => __NAMESPACE__ . '\View\Helper\Form\FormRender',
+            'formElementRender'     => __NAMESPACE__ . '\View\Helper\Form\FormElementRender',
+        ),
+        'delegators' => array(
+            'formRender' => array(
+                'form-theme-delegator'
+            ),
+            'formElementRender' => array(
+                'form-theme-delegator'
+            ),
         ),
     ),
 
