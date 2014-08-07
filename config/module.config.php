@@ -29,7 +29,7 @@ return array(
 
     'controllers' => array(
         'abstract_factories' => array(
-            'Core42\Controller\Service\ControllerFallbackAbstractFactory'
+            'Core42\Mvc\Controller\Service\ControllerFallbackAbstractFactory'
         ),
     ),
 );

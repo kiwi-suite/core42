@@ -7,7 +7,7 @@
  *
  */
 
-namespace Core42\Controller\Service;
+namespace Core42\Mvc\Controller\Service;
 
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
