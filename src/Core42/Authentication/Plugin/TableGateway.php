@@ -299,7 +299,8 @@ class TableGateway implements AdapterInterface, StorageInterface, PluginInterfac
     /**
      * Returns true if and only if storage is empty
      *
-     * @throws \Zend\Authentication\Exception\ExceptionInterface If it is impossible to determine whether storage is empty
+     * @throws \Zend\Authentication\Exception\ExceptionInterface If it is impossible to determine whether
+     * storage is empty
      * @return bool
      */
     public function isEmpty()

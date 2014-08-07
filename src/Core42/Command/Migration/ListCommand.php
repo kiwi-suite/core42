@@ -34,7 +34,10 @@ class ListCommand extends AbstractCommand implements ConsoleAwareInterface
             if ($migration['migrated'] === null) {
                 $this->consoleOutput("<comment>" .$migration['name'].' (pending)</comment>');
             } else {
-                $this->consoleOutput("<info>" .$migration['name'].' ('.$migration['migrated']->getCreated()->format('Y-m-d H:i:s').')</info>');
+                $migrationDate = $migration['migrated']->getCreated()->format('Y-m-d H:i:s');
+                $this->consoleOutput(
+                    "<info>{$migration['name']} ({$migrationDate})</info>"
+                );
             }
 
             $this->consoleOutput($migration['filename']);
