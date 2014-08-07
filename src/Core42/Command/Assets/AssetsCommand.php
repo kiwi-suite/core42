@@ -74,14 +74,16 @@ class AssetsCommand extends AbstractCommand implements ConsoleAwareInterface
                     'copy_on_windows'   => true,
                 ));
                 $this->consoleOutput("created directory for '{$config['source']}'");
-            } else {
-                $source = $filesystem->makePathRelative(
-                    $config['source'],
-                    substr($config['target'], 0, strrpos($config['target'], '/'))
-                );
-                $filesystem->symlink($source, $config['target']);
-                $this->consoleOutput("created symlink for '{$config['source']}'");
+
+                continue;
             }
+
+            $source = $filesystem->makePathRelative(
+                $config['source'],
+                substr($config['target'], 0, strrpos($config['target'], '/'))
+            );
+            $filesystem->symlink($source, $config['target']);
+            $this->consoleOutput("created symlink for '{$config['source']}'");
         }
     }
 

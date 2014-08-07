@@ -46,11 +46,14 @@ class ResetCommand extends AbstractCommand implements ConsoleAwareInterface
             $this->consoleOutput("Migration {$migration['name']} rolled back");
         }
         $this->consoleOutput("");
-        if ($migrationCounter == 0) {
-            $this->consoleOutput("Nothing to reset");
-        } else {
+
+        if ($migrationCounter > 0) {
             $this->consoleOutput("All {$migrationCounter} Migrations reseted");
+
+            return;
         }
+
+        $this->consoleOutput("Nothing to reset");
     }
 
     /**
