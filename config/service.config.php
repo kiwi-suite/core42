@@ -8,15 +8,11 @@ return array(
             'Core42\Db\Adapter\AdapterAbstractServiceFactory',
             'Zend\Log\LoggerAbstractServiceFactory',
             'Core42\Queue\Service\QueueAbstractFactory',
-            'Core42\Authentication\Service\PluginAbstractFactory'
         ),
         'factories' => array(
-            'Zend\Session\Service\SessionManagerFactory'    => 'Zend\Session\Service\SessionManagerFactory',
+            'Zend\Session\Service\SessionManager'           => 'Zend\Session\Service\SessionManagerFactory',
             'Zend\Session\Config\ConfigInterface'           => 'Zend\Session\Service\SessionConfigFactory',
             'Zend\Session\Storage\StorageInterface'         => 'Zend\Session\Service\StorageFactory',
-
-            'Core42\Authentication'                         => 'Core42\Authentication\Service\AuthenticationFactory',
-            'Core42\AuthenticationConfig'                   => 'Core42\Authentication\Service\AuthenticationConfigFactory',
 
             'Core42\Permission\Config'                      => 'Core42\Permissions\Rbac\Service\RbacConfigFactory',
             'Core42\Permission'                             => 'Core42\Permissions\Rbac\Service\RbacFactory',
@@ -46,14 +42,9 @@ return array(
 
             'Core42\ConsoleDispatcher'                      => 'Core42\Command\Console\ConsoleDispatcher',
 
-            'Zend\Authentication\Storage\NonPersistent'     => 'Zend\Authentication\Storage\NonPersistent',
-
             'Core42\TransactionManager'                     => 'Core42\Db\Transaction\TransactionManager',
         ),
         'aliases' => array(
-            'AuthenticationService'                         => 'Core42\Authentication',
-            'Zend\Authentication\AuthenticationService'     => 'Core42\Authentication',
-
             'Permission'                                    => 'Core42\Permission',
 
             'TransactionManager'                            => 'Core42\TransactionManager',

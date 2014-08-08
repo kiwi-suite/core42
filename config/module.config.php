@@ -7,6 +7,7 @@ return array(
             'form-theme-delegator'  => __NAMESPACE__ . '\View\Helper\Form\Service\FormThemeDelegator',
 
             'params'                => __NAMESPACE__ . '\View\Helper\Params',
+            'auth'                  => __NAMESPACE__ . '\View\Helper\Auth',
             'mobileDetect'          => __NAMESPACE__ . '\View\Helper\MobileDetect',
             'formRender'            => __NAMESPACE__ . '\View\Helper\Form\FormRender',
             'formElementRender'     => __NAMESPACE__ . '\View\Helper\Form\FormElementRender',

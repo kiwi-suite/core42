@@ -50,7 +50,7 @@ class Module implements
      */
     public function onBootstrap(\Zend\EventManager\EventInterface $e)
     {
-        $e->getApplication()->getServiceManager()->get('Zend\Session\Service\SessionManagerFactory');
+        $e->getApplication()->getServiceManager()->get('Zend\Session\Service\SessionManager');
     }
 
     /**
