@@ -117,7 +117,10 @@ class FormRender extends AbstractHelper
             $elementHtml = array();
             foreach ($this->form as $element) {
                 $type = $element->getAttribute('type');
-                $elementPartial = $theme->getElementTemplate($type);
+
+                $elementPartial = (isset($this->partialMap[$element->getName()]))
+                    ? $this->partialMap[$element->getName()]
+                    : $theme->getElementTemplate($type);
 
                 $formElementRender->setElement($element);
                 $formElementRender->setPartial($elementPartial);
@@ -142,7 +145,7 @@ class FormRender extends AbstractHelper
             $this->themeName = null;
             $this->form = null;
         } catch (\Exception $e) {
-
+            $html = $e->getMessage();
         }
 
         return $html;

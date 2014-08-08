@@ -72,6 +72,10 @@ class FormElementRender extends AbstractHelper
         try {
             $partialHelper = $this->view->plugin('partial');
 
+            if (empty($this->partial)) {
+                $this->partial = $this->getTheme()->getElementTemplate($this->element->getAttribute('type'));
+            }
+
             $html = $partialHelper($this->partial, array(
                 'element'       => $this->element,
                 'hasErrors'     => count($this->element->getMessages()) > 0
@@ -81,7 +85,7 @@ class FormElementRender extends AbstractHelper
             $this->element = null;
             $this->themeName = null;
         } catch (\Exception $e) {
-
+            $html = $e->getMessage();
         }
 
         return $html;

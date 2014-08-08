@@ -76,10 +76,15 @@ class Theme
 
     /**
      * @param $elementType
+     * @throws \Exception
      * @return string
      */
     public function getElementTemplate($elementType)
     {
+        if (!isset($this->elementTemplateMap[$elementType])) {
+            throw new \Exception("'{$elementType}' not inside template map");
+        }
+
         return $this->elementTemplateMap[$elementType];
     }
 }
