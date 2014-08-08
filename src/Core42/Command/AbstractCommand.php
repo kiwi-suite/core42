@@ -10,6 +10,8 @@
 namespace Core42\Command;
 
 use Core42\Console\Console;
+use Core42\Db\SelectQuery\AbstractSelectQuery;
+use Core42\Db\TableGateway\AbstractTableGateway;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -254,5 +256,32 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
         }
 
         Console::outputFilter($message);
+    }
+
+    /**
+     * @param string $commandName
+     * @return AbstractCommand
+     */
+    public function getCommand($commandName)
+    {
+        return $this->getServiceLocator()->get($commandName);
+    }
+
+    /**
+     * @param string $selectQueryName
+     * @return AbstractSelectQuery
+     */
+    public function getSelectQuery($selectQueryName)
+    {
+        return $this->getServiceManager()->get('SelectQuery')->get($selectQueryName);
+    }
+
+    /**
+     * @param string $tableGatewayName
+     * @return AbstractTableGateway
+     */
+    public function getTableGateway($tableGatewayName)
+    {
+        return $this->getServiceManager()->get('TableGateway')->get($tableGatewayName);
     }
 }
