@@ -10,7 +10,6 @@
         "zfcampus/zf-console": "1.0.3",
         "symfony/finder": "v2.5.0",
         "symfony/filesystem": "v2.5.0",
-        "zf-commons/zfc-rbac": "~2.4",
         "mobiledetect/mobiledetectlib": "*"
     },
     "bin": [
