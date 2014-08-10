@@ -39,8 +39,7 @@ class Module implements
             include __DIR__ . '/../../config/migration.config.php',
             include __DIR__ . '/../../config/seeding.config.php',
             include __DIR__ . '/../../config/assets.config.php',
-            include __DIR__ . '/../../config/form.config.php',
-            include __DIR__ . '/../../config/permission.config.php'
+            include __DIR__ . '/../../config/form.config.php'
         );
     }
 

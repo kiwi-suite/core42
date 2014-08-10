@@ -14,9 +14,6 @@ return array(
             'Zend\Session\Config\ConfigInterface'           => 'Zend\Session\Service\SessionConfigFactory',
             'Zend\Session\Storage\StorageInterface'         => 'Zend\Session\Service\StorageFactory',
 
-            'Core42\Permission\Config'                      => 'Core42\Permissions\Rbac\Service\RbacConfigFactory',
-            'Core42\Permission'                             => 'Core42\Permissions\Rbac\Service\RbacFactory',
-
             'Core42\Mail\Transport'                         => 'Core42\Mail\Transport\Service\TransportFactory',
 
             'Core42\CommandPluginManager'                   => 'Core42\Command\Service\CommandPluginManagerFactory',
@@ -36,8 +33,6 @@ return array(
 
             'Core42\Hydrator\Strategy\Database\MySQL\PluginManager' => 'Core42\Hydrator\Strategy\Database\MySQL\PluginManager',
 
-            'Core42\Permission\Provider\Role\Array'         => 'Core42\Permissions\Rbac\Provider\Role\ArrayProvider',
-
             'Core42\LoggingProfiler'                        => 'Core42\Db\Adapter\Profiler\LoggingProfiler',
 
             'Core42\ConsoleDispatcher'                      => 'Core42\Command\Console\ConsoleDispatcher',
@@ -45,8 +40,6 @@ return array(
             'Core42\TransactionManager'                     => 'Core42\Db\Transaction\TransactionManager',
         ),
         'aliases' => array(
-            'Permission'                                    => 'Core42\Permission',
-
             'TransactionManager'                            => 'Core42\TransactionManager',
 
             'Command'                                       => 'Core42\CommandPluginManager',
