@@ -37,7 +37,7 @@ class HydratorStrategyPluginManager extends AbstractPluginManager
      */
     public function validatePlugin($plugin)
     {
-        if ($plugin instanceof \Core42\Hydrator\Strategy\Database\DatabaseStrategyInterface ) {
+        if ($plugin instanceof \Core42\Hydrator\Strategy\Database\DatabaseStrategyInterface) {
             return;
         }
 

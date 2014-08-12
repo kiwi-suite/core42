@@ -63,23 +63,22 @@ class HydratorFeature extends AbstractFeature
             /* @var \Zend\Db\Metadata\Object\ColumnObject $_column */
 
             if (isset($databaseTypeMap[$_column->getName()])) {
-                $strategy = $this->hydratorStrategyPluginManager->get( $databaseTypeMap[$_column->getName()] );
+                $strategy = $this->hydratorStrategyPluginManager->get(
+                    $databaseTypeMap[$_column->getName()]
+                );
                 $hydrator->addStrategy($_column->getName(), $strategy);
             } else {
-
-                foreach($services as $canonicalName => $name) {
+                foreach ($services as $canonicalName => $name) {
                     if (strpos($canonicalName, $platform) == 0) {
 
                         /* @var DatabaseStrategyInterface $strategy */
-                        $strategy = $this->hydratorStrategyPluginManager->get( $canonicalName );
+                        $strategy = $this->hydratorStrategyPluginManager->get($canonicalName);
                         if ($strategy->isResponsible($_column)) {
                             $hydrator->addStrategy($_column->getName(), $strategy);
                         }
                     }
                 }
-
             }
-
         }
     }
 }

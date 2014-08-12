@@ -50,5 +50,4 @@ class DatabaseHydrator extends AbstractHydrator
         }
         return $value;
     }
-
 }
