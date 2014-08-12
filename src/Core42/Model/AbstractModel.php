@@ -9,15 +9,8 @@
 
 namespace Core42\Model;
 
-use Core42\Hydrator\ModelHydrator;
-
 abstract class AbstractModel
 {
-    /**
-     * @var ModelHydrator
-     */
-    private $hydrator;
-
     private $modelProperties = array();
 
     /**
@@ -56,34 +49,6 @@ abstract class AbstractModel
         $this->modelProperties[$name] =  $value;
 
         return $this;
-    }
-
-    /**
-     * @return ModelHydrator
-     */
-    public function getHydrator()
-    {
-        if ($this->hydrator === null) {
-            $this->hydrator = new ModelHydrator();
-        }
-
-        return $this->hydrator;
-    }
-
-    /**
-     * @param array $data
-     */
-    public function hydrate(array $data)
-    {
-        $this->getHydrator()->hydrate($data, $this);
-    }
-
-    /**
-     * @return array
-     */
-    public function extract()
-    {
-        return $this->getHydrator()->extract($this);
     }
 
     /**

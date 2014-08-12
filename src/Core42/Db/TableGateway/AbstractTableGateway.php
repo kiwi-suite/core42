@@ -10,36 +10,43 @@
 namespace Core42\Db\TableGateway;
 
 use Core42\Db\ResultSet\ResultSet;
-use Core42\Hydrator\Strategy\Database\DatabasePluginManagerInterface;
+use Core42\Hydrator\DatabaseHydrator;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\TableGateway\AbstractTableGateway as ZendAbstractTableGateway;
-use Core42\Hydrator\ModelHydrator;
 use Zend\Db\TableGateway\Feature\FeatureSet;
 use Zend\Db\TableGateway\Feature\MasterSlaveFeature;
 use Core42\Model\AbstractModel;
 use Zend\Db\Metadata\Metadata;
 use Core42\Db\TableGateway\Feature\HydratorFeature;
 use Core42\Db\TableGateway\Feature\MetadataFeature;
+use Zend\ServiceManager\AbstractPluginManager;
 
 abstract class AbstractTableGateway extends ZendAbstractTableGateway
 {
     /**
-     *
      * @var string
      */
     protected $table = '';
 
     /**
-     *
      * @var string|AbstractModel
      */
     protected $modelPrototype = null;
 
     /**
-     *
-     * @var ModelHydrator
+     * @var array
+     */
+    protected $databaseTypeMap = array();
+
+    /**
+     * @var DatabaseHydrator
      */
     protected $hydrator;
+
+    /**
+     * @var bool
+     */
+    protected $underscoreSeparatedKeys = false;
 
     /**
      *
@@ -51,14 +58,14 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
      * @param Adapter $adapter
      * @param Adapter $slave
      * @param Metadata $metadata
-     * @param DatabasePluginManagerInterface $hydratorStrategyPluginManager
+     * @param AbstractPluginManager $hydratorStrategyPluginManager
      * @throws \Exception
      */
     public function __construct(
         Adapter $adapter,
-        Adapter $slave,
         Metadata $metadata,
-        DatabasePluginManagerInterface $hydratorStrategyPluginManager
+        AbstractPluginManager $hydratorStrategyPluginManager,
+        Adapter $slave = null
     ) {
         $this->adapter = $adapter;
 
@@ -73,12 +80,14 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
             throw new \Exception("invalid model prototype");
         }
 
-        $this->hydrator = new ModelHydrator();
+        $this->hydrator = new DatabaseHydrator($this->underscoreSeparatedKeys);
 
         $this->resultSetPrototype = new ResultSet($this->hydrator, $this->modelPrototype);
 
         $this->featureSet = new FeatureSet();
-        $this->featureSet->addFeature(new MasterSlaveFeature($slave));
+        if ($slave !== null) {
+            $this->featureSet->addFeature(new MasterSlaveFeature($slave));
+        }
         $this->featureSet->addFeature(new MetadataFeature($this->metadata));
         $this->featureSet->addFeature(new HydratorFeature($this->metadata, $hydratorStrategyPluginManager));
 
@@ -99,6 +108,14 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     public function getHydrator()
     {
         return $this->hydrator;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDatabaseTypeMap()
+    {
+        return $this->databaseTypeMap;
     }
 
     /**
@@ -127,7 +144,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
                 $this
                     ->getHydrator()
                     ->extract(
-                        $this->getModelPrototype()->getHydrator()->hydrate($set, $this->getModelPrototype())
+                        $this->getHydrator()->hydrate($set, $this->getModelPrototype())
                     ),
                 $set
             );
@@ -165,7 +182,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
             if (is_array($where)) {
                 $where = array_intersect_key(
                     $this->getHydrator()->extract(
-                        $this->getModelPrototype()->getHydrator()->hydrate($where, $this->getModelPrototype())
+                        $this->getHydrator()->hydrate($where, $this->getModelPrototype())
                     ),
                     $where
                 );

@@ -9,9 +9,11 @@
 
 namespace Core42\Db\TableGateway\Feature;
 
-use Core42\Hydrator\Strategy\Database\DatabasePluginManagerInterface;
+use Core42\Hydrator\Strategy\Database\DatabaseStrategyInterface;
 use Zend\Db\TableGateway\Feature\AbstractFeature;
 use Zend\Db\Metadata\MetadataInterface;
+use Zend\ServiceManager\AbstractPluginManager;
+use Zend\Stdlib\Hydrator\AbstractHydrator;
 
 class HydratorFeature extends AbstractFeature
 {
@@ -21,19 +23,18 @@ class HydratorFeature extends AbstractFeature
     protected $metadata = null;
 
     /**
-     * @var DatabasePluginManagerInterface
+     * @var AbstractPluginManager
      */
     protected $hydratorStrategyPluginManager;
 
     /**
      *
      * @param MetadataInterface $metadata
-     * @param DatabasePluginManagerInterface $hydratorStrategyPluginManager
+     * @param AbstractPluginManager $hydratorStrategyPluginManager
      */
     public function __construct(
         MetadataInterface $metadata,
-        DatabasePluginManagerInterface
-        $hydratorStrategyPluginManager
+        AbstractPluginManager $hydratorStrategyPluginManager
     ) {
         $this->metadata = $metadata;
         $this->hydratorStrategyPluginManager = $hydratorStrategyPluginManager;
@@ -46,10 +47,39 @@ class HydratorFeature extends AbstractFeature
     {
         $columns = $this->metadata->getColumns($this->tableGateway->getTable());
 
+        $platform = $this->tableGateway->adapter->getPlatform()->getName();
+        /* @var AbstractHydrator $hydrator */
+        $hydrator = $this->tableGateway->getHydrator();
+
+        $services = $this->hydratorStrategyPluginManager->getCanonicalNames(); // getRegisteredServices();
+
+        if (!$this->tableGateway instanceof \Core42\Db\TableGateway\AbstractTableGateway) {
+            throw new \Exception('HydratorFeature must only be used in Core42 TableGateways');
+        }
+
+        $databaseTypeMap = $this->tableGateway->getDatabaseTypeMap();
+
         foreach ($columns as $_column) {
-            /* @var $_column \Zend\Db\Metadata\Object\ColumnObject */
-            $strategy = $this->hydratorStrategyPluginManager->getStrategy($_column);
-            $this->tableGateway->getHydrator()->addStrategy($_column->getName(), $strategy);
+            /* @var \Zend\Db\Metadata\Object\ColumnObject $_column */
+
+            if (isset($databaseTypeMap[$_column->getName()])) {
+                $strategy = $this->hydratorStrategyPluginManager->get( $databaseTypeMap[$_column->getName()] );
+                $hydrator->addStrategy($_column->getName(), $strategy);
+            } else {
+
+                foreach($services as $canonicalName => $name) {
+                    if (strpos($canonicalName, $platform) == 0) {
+
+                        /* @var DatabaseStrategyInterface $strategy */
+                        $strategy = $this->hydratorStrategyPluginManager->get( $canonicalName );
+                        if ($strategy->isResponsible($_column)) {
+                            $hydrator->addStrategy($_column->getName(), $strategy);
+                        }
+                    }
+                }
+
+            }
+
         }
     }
 }

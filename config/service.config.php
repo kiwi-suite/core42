@@ -25,6 +25,7 @@ return array(
 
             'Core42\CommandPluginManager'                               => 'Core42\Command\Service\CommandPluginManagerFactory',
             'Core42\TableGatewayPluginManager'                          => 'Core42\Db\TableGateway\Service\TableGatewayPluginManagerFactory',
+            'Core42\HydratorStrategyPluginManager'                      => 'Core42\Hydrator\Strategy\Service\HydratorStrategyPluginManagerFactory',
             'Core42\SelectQueryPluginManager'                           => 'Core42\Db\SelectQuery\Service\SelectQueryPluginManagerFactory',
             'Core42\QueueAdapterPluginManager'                          => 'Core42\Queue\Service\AdapterPluginManagerFactory',
 
@@ -57,6 +58,7 @@ return array(
 
             'Command'                                                   => 'Core42\CommandPluginManager',
             'TableGateway'                                              => 'Core42\TableGatewayPluginManager',
+            'HydratorStrategy'                                          => 'Core42\HydratorStrategyPluginManager',
             'SelectQuery'                                               => 'Core42\SelectQueryPluginManager',
             'QueueAdapter'                                              => 'Core42\QueueAdapterPluginManager',
         ),

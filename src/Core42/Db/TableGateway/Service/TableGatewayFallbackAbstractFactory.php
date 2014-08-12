@@ -45,17 +45,18 @@ class TableGatewayFallbackAbstractFactory implements AbstractFactoryInterface
     {
         $fqcn = $this->getFQCN($requestedName);
 
+        /* @var \Zend\Db\Adapter\Adapter $adapter */
         $adapter = $serviceLocator->getServiceLocator()->get('Db\Master');
-        $slave = $adapter;
+        $slave = null;
         if ($serviceLocator->getServiceLocator()->has('Db\Slave')) {
             $slave =  $serviceLocator->getServiceLocator()->get('Db\Slave');
         }
         $metadata = $serviceLocator->getServiceLocator()->get('Metadata');
-        $hydratorStrategyPluginManager = $serviceLocator
-            ->getServiceLocator()
-            ->get('Core42\Hydrator\Strategy\Database\\' . $adapter->getPlatform()->getName() . '\PluginManager');
 
-        return new $fqcn($adapter, $slave, $metadata, $hydratorStrategyPluginManager);
+        $sm = $serviceLocator->getServiceLocator();
+        $hydratorStrategyPluginManager = $sm->get('Core42\HydratorStrategyPluginManager');
+
+        return new $fqcn($adapter, $metadata, $hydratorStrategyPluginManager, $slave);
     }
 
     /**

@@ -12,7 +12,7 @@ namespace Core42\Hydrator\Strategy\Database\MySQL;
 use Core42\Hydrator\Strategy\Database\DatabaseStrategyInterface;
 use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 
-class BooleanStrategy implements StrategyInterface, DatabaseStrategyInterface
+class BooleanTinyintStrategy implements StrategyInterface, DatabaseStrategyInterface
 {
     /**
      * Converts the given value so that it can be extracted by the hydrator.
@@ -23,7 +23,7 @@ class BooleanStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function extract($value)
     {
-        return ($value === true) ? "true" : "false";
+        return ($value === true) ? 1 : 0;
     }
 
     /**
@@ -35,20 +35,16 @@ class BooleanStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function hydrate($value)
     {
-        return ($value === "true") ? true : false;
+        $value = (int) $value;
+        return ($value > 0) ? true : false;
     }
 
     /**
      * @param  \Zend\Db\Metadata\Object\ColumnObject $column
-     * @return mixed
+     * @return bool
      */
     public function isResponsible(\Zend\Db\Metadata\Object\ColumnObject $column)
     {
-        $check = array(array("true", "false"), array("false", "true"));
-        if ($column->getDataType() == "enum" && in_array($column->getErrata("permitted_values"), $check)) {
-            return true;
-        }
-
-        return false;
+        return ($column->getDataType() == 'tinyint') ? true : false;
     }
 }

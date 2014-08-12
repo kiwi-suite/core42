@@ -95,6 +95,13 @@ class Module implements
             'Core42\Queue\Service\Feature\QueueAdapterProviderInterface',
             'getQueueAdapter'
         );
+
+        $serviceListener->addServiceManager(
+            'Core42\HydratorStrategyPluginManager',
+            'hydrator_strategy',
+            'Core42\Hydrator\Database\DatabaseStrategyInterface',
+            'getHydratorStrategy'
+        );
     }
 
     /**

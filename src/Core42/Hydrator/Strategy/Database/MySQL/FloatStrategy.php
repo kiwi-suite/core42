@@ -15,19 +15,12 @@ use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 class FloatStrategy implements StrategyInterface, DatabaseStrategyInterface
 {
     /**
-     * @var boolean
-     */
-    private $isNullable;
-
-    /**
      * @param  \Zend\Db\Metadata\Object\ColumnObject $column
      * @return mixed
      */
-    public function getStrategy(\Zend\Db\Metadata\Object\ColumnObject $column)
+    public function isResponsible(\Zend\Db\Metadata\Object\ColumnObject $column)
     {
-        $this->isNullable = $column->getIsNullable();
-
-        return (in_array($column->getDataType(), array('decimal', 'numeric', 'float', 'double'))) ? $this : null;
+        return (in_array($column->getDataType(), array('decimal', 'numeric', 'float', 'double')));
     }
 
     /**
@@ -39,10 +32,6 @@ class FloatStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function extract($value)
     {
-        if ($this->isNullable && $value === null) {
-            return null;
-        }
-
         return (float) $value;
     }
 
@@ -55,10 +44,6 @@ class FloatStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function hydrate($value)
     {
-        if ($this->isNullable && $value === null) {
-            return null;
-        }
-
         return (float) $value;
     }
 }

@@ -15,11 +15,6 @@ use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 class DatetimeStrategy implements StrategyInterface, DatabaseStrategyInterface
 {
     /**
-     * @var boolean
-     */
-    private $isNullable;
-
-    /**
      * Converts the given value so that it can be extracted by the hydrator.
      *
      * @param mixed $value The original value.
@@ -28,10 +23,6 @@ class DatetimeStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function extract($value)
     {
-        if ($this->isNullable && $value === null) {
-            return null;
-        }
-
         if ($value instanceof \DateTime) {
             return date("Y-m-d H:i:s", $value->getTimestamp());
         }
@@ -48,21 +39,15 @@ class DatetimeStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function hydrate($value)
     {
-        if ($this->isNullable && $value === null) {
-            return null;
-        }
-
         return new \DateTime($value);
     }
 
     /**
      * @param  \Zend\Db\Metadata\Object\ColumnObject $column
-     * @return mixed
+     * @return bool
      */
-    public function getStrategy(\Zend\Db\Metadata\Object\ColumnObject $column)
+    public function isResponsible(\Zend\Db\Metadata\Object\ColumnObject $column)
     {
-        $this->isNullable = $column->getIsNullable();
-
-        return (in_array($column->getDataType(), array('datetime', 'timestamp'))) ? $this : null;
+        return (in_array($column->getDataType(), array('datetime', 'timestamp')));
     }
 }

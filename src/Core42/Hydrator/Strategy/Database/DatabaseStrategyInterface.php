@@ -11,5 +11,9 @@ namespace Core42\Hydrator\Strategy\Database;
 
 interface DatabaseStrategyInterface
 {
-    public function getStrategy(\Zend\Db\Metadata\Object\ColumnObject $column);
+    /**
+     * @param \Zend\Db\Metadata\Object\ColumnObject $column
+     * @return boolean
+     */
+    public function isResponsible(\Zend\Db\Metadata\Object\ColumnObject $column);
 }
