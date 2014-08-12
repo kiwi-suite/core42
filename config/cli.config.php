@@ -83,5 +83,18 @@ return array(
                 '--sleep'           => 'Number of seconds to wait before polling for new jobs.',
             ),
         ),
+
+        'generate-model' => array(
+            'route'                     => 'generate-model --namespace= --directory= [--adapter=] [--overwrite] [--all] [--table=]',
+            'command-name'              => 'Core42\CodeGenerator\GenerateModel',
+            'description'               => 'generates model based on database schema',
+            'short_description'         => 'generate model from database',
+        ),
+        'generate-tablegateway' => array(
+            'route'                     => 'generate-tablegateway --namespace= --directory= [--adapter=] [--overwrite] [--all] [--table=]',
+            'command-name'              => 'Core42\CodeGenerator\GenerateTableGateway',
+            'description'               => 'generates model based on database schema',
+            'short_description'         => 'generate model from database',
+        ),
     ),
 );
