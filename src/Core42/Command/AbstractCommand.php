@@ -9,12 +9,11 @@
 
 namespace Core42\Command;
 
-use Zend\Console\ColorInterface;
-use Zend\Console\Console;
-use Zend\Form\FormInterface;
+use Core42\Console\Console;
+use Core42\Db\SelectQuery\AbstractSelectQuery;
+use Core42\Db\TableGateway\AbstractTableGateway;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\Stdlib\Hydrator\ClassMethods;
 
 abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareInterface
 {
@@ -37,17 +36,7 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
     /**
      * @var bool
      */
-    private $autoValidateForm = true;
-
-    /**
-     * @var bool
-     */
     private $dryRun = false;
-
-    /**
-     * @var FormInterface
-     */
-    private $form;
 
     /**
      * @var array
@@ -60,6 +49,7 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
     final public function __construct()
     {
         $this->enableThrowExceptions(true);
+        $this->init();
     }
 
     /**
@@ -82,49 +72,6 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
         $this->throwCommandExceptions = (boolean) $enable;
 
         return $this;
-    }
-
-    /**
-     * @param FormInterface $form
-     * @param boolean $autoValidateForm
-     * @return $this
-     */
-    public function setForm(FormInterface $form, $autoValidateForm = true)
-    {
-        $this->form = $form;
-
-        $this->autoValidateForm = $autoValidateForm;
-
-        return $this;
-    }
-
-    /**
-     * @return FormInterface
-     * @throws \Exception
-     */
-    public function getForm()
-    {
-        if (!$this->hasForm()) {
-            throw new \Exception('form not set');
-        }
-
-        return $this->form;
-    }
-
-    /**
-     * @return bool
-     */
-    public function hasForm()
-    {
-        return ($this->form !== null);
-    }
-
-    /**
-     * @return \Zend\InputFilter\InputFilterInterface
-     */
-    public function getInputFilter()
-    {
-        return $this->getForm()->getInputFilter();
     }
 
     /**
@@ -157,6 +104,15 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
     }
 
     /**
+     * @param array $values
+     * @throws \Exception
+     */
+    public function hydrate(array $values)
+    {
+        throw new \Exception("hydrate isn't implemented");
+    }
+
+    /**
      * @return \Core42\Command\AbstractCommand
      * @throws \Exception
      */
@@ -165,14 +121,6 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
         $this->configure();
 
         try {
-            if ($this->hasForm() && $this->autoValidateForm === true) {
-                $this->validateForm();
-            }
-
-            if ($this->hasForm()) {
-                $this->extractForm();
-            }
-
             $this->preExecute();
 
             if (!$this->hasErrors() && $this->dryRun === false) {
@@ -188,7 +136,7 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
         }
 
         //TODO might be more clean with PHP5.5 finally
-        if ($this->commandException !== null) {
+        if ($this->commandException === null) {
             $this->shutdown();
         }
 
@@ -198,28 +146,15 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
     /**
      *
      */
+    protected function init()
+    {
+
+    }
+
+    /**
+     *
+     */
     protected function configure()
-    {
-
-    }
-
-    /**
-     *
-     */
-    protected function validateForm()
-    {
-        if (!$this->getForm()->isValid()) {
-            $this->addErrors($this->getForm()->getMessages(), false);
-        }
-
-        $classMethodHydrator = new ClassMethods(false);
-        $classMethodHydrator->hydrate($this->getForm()->getData(), $this);
-    }
-
-    /**
-     *
-     */
-    protected function extractForm()
     {
 
     }
@@ -256,17 +191,10 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
     /**
      * @param string $name
      * @param string $message
-     * @param bool $propagateForm
      * @return $this
      */
-    protected function addError($name, $message, $propagateForm = true)
+    protected function addError($name, $message)
     {
-        if ($this->hasForm() && $propagateForm === true && $this->getForm()->has($name)) {
-            $formMessages = $this->getForm()->get($name)->getMessages();
-            $formMessages[] = $message;
-            $this->getForm()->get($name)->setMessages($formMessages);
-        }
-
         if (!array_key_exists($name, $this->errors)) {
             $this->errors[$name] = array();
         }
@@ -278,14 +206,13 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
 
     /**
      * @param array $errors
-     * @param boolean $propagateForm
      * @return $this
      */
-    protected function addErrors(array $errors, $propagateForm = true)
+    protected function addErrors(array $errors)
     {
         foreach ($errors as $name => $listErrors) {
             foreach ($listErrors as $message) {
-                $this->addError($name, $message, $propagateForm);
+                $this->addError($name, $message);
             }
         }
 
@@ -321,29 +248,40 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
      */
     protected function consoleOutput($message)
     {
+        if (!($this instanceof ConsoleAwareInterface)) {
+            return;
+        }
         if (!Console::isConsole()) {
             return;
         }
 
-        $message = preg_replace_callback('#(\\\\?)<(/?)([a-z][a-z0-9_=;-]*)?>((?: [^<\\\\]+ | (?!<(?:/?[a-z]|/>)). | .(?<=\\\\<) )*)#isx', function ($matches) {
-            if ($matches[2] == '/') {
-                return $matches[4];
-            }
+        Console::outputFilter($message);
+    }
 
-            switch ($matches[3]) {
-                case 'error':
-                    return Console::getInstance()->colorize($matches[4], ColorInterface::WHITE, ColorInterface::RED);
-                case 'info':
-                    return Console::getInstance()->colorize($matches[4], ColorInterface::GREEN);
-                case 'comment':
-                    return Console::getInstance()->colorize($matches[4], ColorInterface::YELLOW);
-                case 'question':
-                    return Console::getInstance()->colorize($matches[4], ColorInterface::BLACK, ColorInterface::CYAN);
-                default:
-                    return $matches[4];
-            }
-        }, $message);
+    /**
+     * @param string $commandName
+     * @return AbstractCommand
+     */
+    public function getCommand($commandName)
+    {
+        return $this->getServiceLocator()->get($commandName);
+    }
 
-        Console::getInstance()->writeLine($message);
+    /**
+     * @param string $selectQueryName
+     * @return AbstractSelectQuery
+     */
+    public function getSelectQuery($selectQueryName)
+    {
+        return $this->getServiceManager()->get('SelectQuery')->get($selectQueryName);
+    }
+
+    /**
+     * @param string $tableGatewayName
+     * @return AbstractTableGateway
+     */
+    public function getTableGateway($tableGatewayName)
+    {
+        return $this->getServiceManager()->get('TableGateway')->get($tableGatewayName);
     }
 }

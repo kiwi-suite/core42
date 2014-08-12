@@ -74,11 +74,14 @@ class RollbackCommand extends AbstractCommand implements ConsoleAwareInterface
             $this->consoleOutput("Migration {$migration['name']} rolled back");
         }
         $this->consoleOutput("");
-        if ($migrationCounter == 0) {
-            $this->consoleOutput("Nothing to rollback");
-        } else {
+
+        if ($migrationCounter > 0) {
             $this->consoleOutput("{$migrationCounter} Migrations rolled back");
+
+            return;
         }
+
+        $this->consoleOutput("Nothing to rollback");
     }
 
     /**

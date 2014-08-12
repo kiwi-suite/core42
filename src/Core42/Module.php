@@ -39,7 +39,7 @@ class Module implements
             include __DIR__ . '/../../config/migration.config.php',
             include __DIR__ . '/../../config/seeding.config.php',
             include __DIR__ . '/../../config/assets.config.php',
-            include __DIR__ . '/../../config/permission.config.php'
+            include __DIR__ . '/../../config/form.config.php'
         );
     }
 
@@ -49,18 +49,7 @@ class Module implements
      */
     public function onBootstrap(\Zend\EventManager\EventInterface $e)
     {
-        $sessionInit = new SessionInitializer();
-        $sessionInit->initialize($e->getApplication()->getServiceManager());
-
-        $rbacConfig = $e->getApplication()->getServiceManager()->get('Core42\Permission\Config');
-        if (!empty($rbacConfig) && $rbacConfig['enabled'] === true) {
-            foreach ($rbacConfig['guards'] as $serviceName => $options) {
-                /** @var $guard GuardInterface */
-                $guard = $e->getApplication()->getServiceManager()->get($serviceName);
-                $guard->setOptions($options);
-                $e->getTarget()->getEventManager()->attach($guard);
-            }
-        }
+        $e->getApplication()->getServiceManager()->get('Zend\Session\Service\SessionManager');
     }
 
     /**
@@ -94,6 +83,13 @@ class Module implements
             'queue_adapter',
             'Core42\Queue\Service\Feature\QueueAdapterProviderInterface',
             'getQueueAdapter'
+        );
+
+        $serviceListener->addServiceManager(
+            'Core42\FormPluginManager',
+            'forms',
+            'Core42\Form\Service\Feature\FormProviderInterface',
+            'getFormConfig'
         );
 
         $serviceListener->addServiceManager(

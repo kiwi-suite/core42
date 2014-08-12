@@ -56,12 +56,16 @@ class DevelopmentCommand extends AbstractCommand implements ConsoleAwareInterfac
         if ($this->enable === true && !file_exists('data/development/on')) {
             touch('data/development/on');
             $this->consoleOutput("development mode enabled");
+
+            return;
         } elseif ($this->enable === false && file_exists('data/development/on')) {
             unlink('data/development/on');
             $this->consoleOutput("development mode disabled");
-        } else {
-            $this->consoleOutput("<info>development mode already ".(($this->enable) ? 'enabled': 'disabled')."</info>");
+
+            return;
         }
+
+        $this->consoleOutput("<info>development mode already ".(($this->enable) ? 'enabled': 'disabled')."</info>");
     }
 
     /**

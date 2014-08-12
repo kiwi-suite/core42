@@ -78,11 +78,14 @@ class MigrateCommand extends AbstractCommand implements ConsoleAwareInterface
             $this->consoleOutput("Migration {$migration['name']} migrated");
         }
         $this->consoleOutput("");
-        if ($migrationCounter == 0) {
-            $this->consoleOutput("Nothing to migrate");
-        } else {
+
+        if ($migrationCounter > 0) {
             $this->consoleOutput("{$migrationCounter} Migrations migrated");
+
+            return;
         }
+
+        $this->consoleOutput("Nothing to migrate");
     }
 
     /**

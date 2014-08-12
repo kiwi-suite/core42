@@ -91,9 +91,11 @@ class ListenCommand extends AbstractCommand implements ConsoleAwareInterface
         while ($runDaemon) {
             if ($this->queueInstance->count()) {
                 exec(getcwd() . '/' . $this->request->getScriptName() .' queue-work --queue=' . $this->queue);
-            } else {
-                sleep($this->sleep);
+
+                continue;
             }
+
+            sleep($this->sleep);
         }
     }
 

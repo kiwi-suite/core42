@@ -7,28 +7,29 @@
  *
  */
 
-namespace Core42\Db\Metadata\Service;
+namespace Core42\Form\Theme\Service;
 
-use Core42\Db\Metadata\Metadata;
+use Core42\Form\Theme\ThemeManager;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class MetadataServiceFactory implements FactoryInterface
+class ThemeManagerFactory implements FactoryInterface
 {
 
     /**
      * Create service
      *
      * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
+     * @return ThemeManager
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $adapter = $serviceLocator->get('Db\Master');
-        if ($serviceLocator->has('Db\Slave')) {
-            $adapter = $serviceLocator->get('Db\Slave');
-        }
+        $config = $serviceLocator->get('config');
+        $config = $config['form_themes'];
 
-        return new Metadata($adapter);
+        $themeManager = new ThemeManager();
+        $themeManager->factory($config);
+
+        return $themeManager;
     }
 }

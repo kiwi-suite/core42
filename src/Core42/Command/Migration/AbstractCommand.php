@@ -49,13 +49,15 @@ abstract class AbstractCommand extends \Core42\Command\AbstractCommand
 
         switch ($adapter->getPlatform()->getName()) {
             case 'MySQL':
-                $sql = "CREATE TABLE `".$migrationConfig['table_name']."` (`name` VARCHAR(255) NOT NULL, `created` DATETIME NOT NULL, PRIMARY KEY (`name`))";
+                $sql = "CREATE TABLE `".$migrationConfig['table_name']."` "
+                    ."(`name` VARCHAR(255) NOT NULL, `created` DATETIME NOT NULL, PRIMARY KEY (`name`))";
                 break;
             default:
                 throw new \Exception("'".$adapter->getPlatform()->getName()."' isn't support by migrations");
         }
 
         $adapter->query($sql, Adapter::QUERY_MODE_EXECUTE);
+        $metadata->refresh();
     }
 
     /**
@@ -106,7 +108,8 @@ abstract class AbstractCommand extends \Core42\Command\AbstractCommand
         $migrations = array();
 
         foreach ($migrationDirs as $dir) {
-            foreach (glob($dir  . '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]t[0-9][0-9][0-9][0-9][0-9][0-9].php') as $filename) {
+            $globPattern = $dir  . '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]t[0-9][0-9][0-9][0-9][0-9][0-9].php';
+            foreach (glob($globPattern) as $filename) {
                 require_once $filename;
                 $class = $this->getClassnameByFilename(pathinfo($filename, PATHINFO_FILENAME));
 

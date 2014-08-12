@@ -44,7 +44,10 @@ class ConsoleDispatcher implements ServiceManagerAwareInterface
         /** @var CommandInterface $command */
         $command = $this->serviceManager->get('Command')->get($commandName);
         if (!($command instanceof ConsoleAwareInterface)) {
-            $console->writeLine('command must implement interface "Core42\Command\ConsoleAwareInterface"', ColorInterface::RED);
+            $console->writeLine(
+                'command must implement interface "Core42\Command\ConsoleAwareInterface"',
+                ColorInterface::RED
+            );
 
             return;
         }
