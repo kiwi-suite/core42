@@ -25,24 +25,24 @@ class MigrationTableGatewayFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $adapter = $serviceLocator->getServiceLocator()->get('Db\Master');
-        $slave = $adapter;
+        $slave = null;
         if ($serviceLocator->getServiceLocator()->has('Db\Slave')) {
             $slave = $serviceLocator->getServiceLocator()->get('Db\Slave');
         }
         $metadata = $serviceLocator->getServiceLocator()->get('Metadata');
-        $hydratorStrategyPluginManager = $serviceLocator->getServiceLocator()->get(
-            'Core42\Hydrator\Strategy\Database\\' . $adapter->getPlatform()->getName() . '\PluginManager'
-        );
+
+        $sm = $serviceLocator->getServiceLocator();
+        $hydratorStrategyPluginManager = $sm->get('Core42\HydratorStrategyPluginManager');
 
         $config = $serviceLocator->getServiceLocator()->get('config');
         $config = $config['migration'];
 
         return new MigrationTableGateway(
             $adapter,
-            $slave,
             $metadata,
             $hydratorStrategyPluginManager,
-            $config['table_name']
+            $config['table_name'],
+            $slave
         );
     }
 }
