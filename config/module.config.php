@@ -12,6 +12,9 @@ return array(
             'formRender'            => __NAMESPACE__ . '\View\Helper\Form\FormRender',
             'formElementRender'     => __NAMESPACE__ . '\View\Helper\Form\FormElementRender',
         ),
+        'factories' => array(
+            'permission'    => 'Core42\View\Helper\Service\PermissionFactory',
+        ),
         'delegators' => array(
             'formRender' => array(
                 'form-theme-delegator'
@@ -24,7 +27,8 @@ return array(
 
     'controller_plugins' => array(
         'factories' => array(
-            'mobileDetect' => 'Core42\Mvc\Controller\Plugin\Service\MobileDetectFactory',
+            'mobileDetect'  => 'Core42\Mvc\Controller\Plugin\Service\MobileDetectFactory',
+            'permission'    => 'Core42\Mvc\Controller\Plugin\Service\PermissionFactory',
         ),
     ),
 
@@ -32,5 +36,25 @@ return array(
         'abstract_factories' => array(
             'Core42\Mvc\Controller\Service\ControllerFallbackAbstractFactory'
         ),
+    ),
+
+    'permissions' => array(
+        'role_provider_manager' => array(
+            'invokables' => array(
+                'InMemoryRoleProvider' => 'Core42\Permission\Rbac\Role\InMemoryRoleProvider',
+            ),
+        ),
+        'guard_manager' => array(
+            'invokables' => array(
+                'RouteGuard' => 'Core42\Permission\Rbac\Guard\RouteGuard',
+            ),
+        ),
+        'assertion_manager' => array(
+            'invokables' => array(
+                'RouteAssertion' => 'Core42\Permission\Rbac\Assertion\RouteAssertion'
+            ),
+        ),
+
+        'service' => array(),
     ),
 );

@@ -50,6 +50,14 @@ class Module implements
     public function onBootstrap(\Zend\EventManager\EventInterface $e)
     {
         $e->getApplication()->getServiceManager()->get('Zend\Session\Service\SessionManager');
+
+        $e->getTarget()->getEventManager()->attach(
+            $e->getApplication()->getServiceManager()->get('Core42\Permission\RedirectStrategy')
+        );
+
+        $e->getTarget()->getEventManager()->attach(
+            $e->getApplication()->getServiceManager()->get('Core42\Permission\UnauthorizedStrategy')
+        );
     }
 
     /**

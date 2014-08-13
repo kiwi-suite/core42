@@ -15,6 +15,12 @@ use Core42\Db\SelectQuery\AbstractSelectQuery;
 use Core42\Db\TableGateway\AbstractTableGateway;
 use Zend\Form\Form;
 
+/**
+ * Class AbstractActionController
+ * @package Core42\Mvc\Controller
+ *
+ * @method \Core42\Mvc\Controller\Plugin\Permission permission(string $serviceName)
+ */
 class AbstractActionController extends \Zend\Mvc\Controller\AbstractActionController
 {
     /**

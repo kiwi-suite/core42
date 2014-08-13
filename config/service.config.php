@@ -28,6 +28,14 @@ return array(
             'Metadata'                                      => 'Core42\Db\Metadata\Service\MetadataServiceFactory',
 
             'TreeRouteMatcher'                              => 'Core42\Mvc\TreeRouteMatcher\Service\TreeRouteMatcherFactory',
+
+            'Core42\Rbac'                                   => 'Core42\Permission\Rbac\Service\RbacFactory',
+            'Core42\Permission'                             => 'Core42\Permission\Rbac\Service\RbacManagerFactory',
+            'Core42\Permission\RoleProviderPluginManager'   => 'Core42\Permission\Rbac\Service\RoleProviderPluginManagerFactory',
+            'Core42\Permission\GuardPluginManager'          => 'Core42\Permission\Rbac\Service\GuardPluginManagerFactory',
+            'Core42\Permission\AssertionPluginManager'      => 'Core42\Permission\Rbac\Service\AssertionPluginManagerFactory',
+            'Core42\Permission\RedirectStrategy'            => 'Core42\Permission\Rbac\Service\RedirectStrategyFactory',
+            'Core42\Permission\UnauthorizedStrategy'        => 'Core42\Permission\Rbac\Service\UnauthorizedStrategyFactory',
         ),
         'invokables' => array(
             'MobileDetect'                                  => '\Mobile_Detect',
