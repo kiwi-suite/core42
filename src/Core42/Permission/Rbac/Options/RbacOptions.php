@@ -160,6 +160,4 @@ class RbacOptions extends AbstractOptions
     {
         $this->unauthorizedStrategy = $unauthorizedStrategy;
     }
-
-
 }

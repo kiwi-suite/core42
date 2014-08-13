@@ -253,7 +253,8 @@ class AuthorizationService
         }
 
         throw new \Exception(sprintf(
-            'Assertion must be callable, string or implement Core42\Permission\Rbac\Assertion\AssertionInterface, "%s" given',
+            'Assertion must be callable, string or implement '
+            .'Core42\Permission\Rbac\Assertion\AssertionInterface, "%s" given',
             is_object($assertion) ? get_class($assertion) : gettype($assertion)
         ));
     }
