@@ -12,16 +12,18 @@ namespace Core42\Command;
 use Core42\Console\Console;
 use Core42\Db\SelectQuery\AbstractSelectQuery;
 use Core42\Db\TableGateway\AbstractTableGateway;
+use Core42\Selector\SelectorInterface;
 use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\ServiceManager;
 
-abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareInterface
+abstract class AbstractCommand implements CommandInterface
 {
     /**
      *
-     * @var ServiceLocatorInterface
+     * @var ServiceManager
      */
-    private $serviceLocator;
+    private $serviceManager;
 
     /**
      * @var \Exception|null
@@ -44,10 +46,11 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
     private $errors = array();
 
     /**
-     *
+     * @param ServiceManager $serviceManager
      */
-    final public function __construct()
+    final public function __construct(ServiceManager $serviceManager)
     {
+        $this->serviceManager = $serviceManager;
         $this->enableThrowExceptions(true);
         $this->init();
     }
@@ -75,32 +78,12 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
     }
 
     /**
-     * Set service locator
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->serviceLocator = $serviceLocator;
-    }
-
-    /**
-     * Get service locator
-     *
-     * @return ServiceLocatorInterface
-     */
-    public function getServiceLocator()
-    {
-        return $this->serviceLocator;
-    }
-
-    /**
      *
      * @return \Zend\ServiceManager\ServiceManager
      */
     public function getServiceManager()
     {
-        return $this->getServiceLocator()->getServiceLocator();
+        return $this->serviceManager;
     }
 
     /**
@@ -264,16 +247,7 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
      */
     public function getCommand($commandName)
     {
-        return $this->getServiceLocator()->get($commandName);
-    }
-
-    /**
-     * @param string $selectQueryName
-     * @return AbstractSelectQuery
-     */
-    public function getSelectQuery($selectQueryName)
-    {
-        return $this->getServiceManager()->get('SelectQuery')->get($selectQueryName);
+        return $this->getServiceManager()->get('Command')->get($commandName);
     }
 
     /**
@@ -283,5 +257,14 @@ abstract class AbstractCommand implements CommandInterface, ServiceLocatorAwareI
     public function getTableGateway($tableGatewayName)
     {
         return $this->getServiceManager()->get('TableGateway')->get($tableGatewayName);
+    }
+
+    /**
+     * @param string $selectorName
+     * @return SelectorInterface
+     */
+    public function getSelector($selectorName)
+    {
+        return $this->getServiceManager()->get('Selector')->get($selectorName);
     }
 }

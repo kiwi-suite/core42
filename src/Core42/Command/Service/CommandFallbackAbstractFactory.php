@@ -46,7 +46,7 @@ class CommandFallbackAbstractFactory implements AbstractFactoryInterface
     {
         $fqcn = $this->getFQCN($requestedName);
 
-        return new $fqcn();
+        return new $fqcn($serviceLocator->getServiceLocator());
     }
 
     /**
