@@ -35,6 +35,11 @@ class FormCommand extends AbstractCommand
     private $automaticFormFill = true;
 
     /**
+     * @var array
+     */
+    private $data;
+
+    /**
      *
      */
     protected function init()
@@ -89,12 +94,27 @@ class FormCommand extends AbstractCommand
     }
 
     /**
+     * @param array $data
+     * @return $this
+     */
+    public function setData(array $data)
+    {
+        $this->data = $data;
+
+        return $this;
+    }
+
+    /**
      * @throws \Exception
      */
     protected function preExecute()
     {
+        if (empty($this->data)) {
+            $this->data = $this->getServiceManager()->get('request')->getPost()->toArray();
+        }
+
         if ($this->automaticFormFill ===  true) {
-            $this->form->setData($this->getServiceManager()->get('request')->getPost()->toArray());
+            $this->form->setData($this->data);
         }
 
         if (!$this->form->isValid()) {

@@ -34,12 +34,17 @@ class FormRender extends AbstractHelper
     protected $partialMap = array();
 
     /**
+     * @var array
+     */
+    protected $params = array();
+
+    /**
      * @param FormInterface $form
      * @param null|string $action
-     * @param null|string $partial
+     * @param null|array $params
      * @return $this
      */
-    public function __invoke(FormInterface $form = null, $action = null, $partial = null)
+    public function __invoke(FormInterface $form = null, $action = null, array $params = null)
     {
         if ($form !== null) {
             $this->setForm($form);
@@ -49,8 +54,8 @@ class FormRender extends AbstractHelper
             $this->setAction($action);
         }
 
-        if ($partial !== null) {
-            $this->setPartial($partial);
+        if ($params !== null) {
+            $this->setParams($params);
         }
 
         return $this;
@@ -101,12 +106,21 @@ class FormRender extends AbstractHelper
     }
 
     /**
+     * @param array $params
+     * @return $this
+     */
+    public function setParams(array $params)
+    {
+        $this->params = $params;
+
+        return $this;
+    }
+
+    /**
      * @return string
      */
     public function render()
     {
-        $html = "";
-
         try {
 
             /** @var FormElementRender $formElementRender */
@@ -137,7 +151,8 @@ class FormRender extends AbstractHelper
                 'form'          => $this->form,
                 'elements'      => $elementHtml,
                 'action'        => $this->action,
-                'hasErrors'     => count($this->form->getMessages()) > 0
+                'hasErrors'     => count($this->form->getMessages()) > 0,
+                'params'        => $this->params
             ));
 
             $this->partial = null;
