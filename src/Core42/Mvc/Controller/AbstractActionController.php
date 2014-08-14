@@ -13,6 +13,7 @@ use Core42\Command\AbstractCommand;
 use Core42\Command\Form\FormCommand;
 use Core42\Db\SelectQuery\AbstractSelectQuery;
 use Core42\Db\TableGateway\AbstractTableGateway;
+use Core42\Selector\SelectorInterface;
 use Zend\Form\Form;
 
 /**
@@ -42,12 +43,12 @@ class AbstractActionController extends \Zend\Mvc\Controller\AbstractActionContro
     }
 
     /**
-     * @param string $selectQueryName
-     * @return AbstractSelectQuery
+     * @param string $selectorName
+     * @return SelectorInterface
      */
-    public function getSelectQuery($selectQueryName)
+    public function getSelector($selectorName)
     {
-        return $this->getServiceLocator()->get('SelectQuery')->get($selectQueryName);
+        return $this->getServiceLocator()->get('Selector')->get($selectorName);
     }
 
     /**
