@@ -9,22 +9,13 @@
 
 namespace Core42\Hydrator\Strategy\Service;
 
-use Core42\Db\TableGateway\AbstractTableGateway;
+use Core42\Hydrator\Strategy\Database\DatabaseStrategyInterface;
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\AbstractPluginManager;
-use Zend\ServiceManager\ConfigInterface;
 use Zend\ServiceManager\Exception;
 
 class HydratorStrategyPluginManager extends AbstractPluginManager
 {
-    /**
-     * @param ConfigInterface $configuration
-     */
-    public function __construct(ConfigInterface $configuration = null)
-    {
-        parent::__construct($configuration);
-    }
-
     /**
      * Validate the plugin
      *
@@ -37,12 +28,13 @@ class HydratorStrategyPluginManager extends AbstractPluginManager
      */
     public function validatePlugin($plugin)
     {
-        if ($plugin instanceof \Core42\Hydrator\Strategy\Database\DatabaseStrategyInterface) {
+        if ($plugin instanceof DatabaseStrategyInterface) {
             return;
         }
 
         throw new \RuntimeException(sprintf(
-            "Plugin of type %s is invalid; must implement \\Core42\\Hydrator\\Strategy\\Database\\DatabaseStrategyInterface",
+            "Plugin of type %s is invalid; must implement "
+            . "\\Core42\\Hydrator\\Strategy\\Database\\DatabaseStrategyInterface",
             (is_object($plugin) ? get_class($plugin) : gettype($plugin))
         ));
     }

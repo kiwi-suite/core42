@@ -9,9 +9,23 @@
 
 namespace Core42\Form\Service;
 
-use Zend\Mvc\Service\AbstractPluginManagerFactory;
+use Zend\ServiceManager\Config;
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
-class FormPluginManagerFactory extends AbstractPluginManagerFactory
+class FormPluginManagerFactory implements FactoryInterface
 {
-    const PLUGIN_MANAGER_CLASS = 'Core42\Form\Service\FormPluginManager';
+    /**
+     * Create service
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return mixed
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        $config = $serviceLocator->get('config');
+        $config = (array_key_exists('forms', $config)) ? $config['forms'] : array();
+
+        return new FormPluginManager(new Config($config));
+    }
 }

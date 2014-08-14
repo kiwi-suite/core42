@@ -9,9 +9,23 @@
 
 namespace Core42\Hydrator\Strategy\Service;
 
-use Zend\Mvc\Service\AbstractPluginManagerFactory;
+use Zend\ServiceManager\Config;
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
-class HydratorStrategyPluginManagerFactory extends AbstractPluginManagerFactory
+class HydratorStrategyPluginManagerFactory implements FactoryInterface
 {
-    const PLUGIN_MANAGER_CLASS = 'Core42\Hydrator\Strategy\Service\HydratorStrategyPluginManager';
+    /**
+     * Create service
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return mixed
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        $config = $serviceLocator->get('config');
+        $config = (array_key_exists('hydrator_strategy', $config)) ? $config['hydrator_strategy'] : array();
+
+        return new HydratorStrategyPluginManager(new Config($config));
+    }
 }

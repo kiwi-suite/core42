@@ -9,9 +9,24 @@
 
 namespace Core42\Command\Service;
 
-use Zend\Mvc\Service\AbstractPluginManagerFactory;
 
-class CommandPluginManagerFactory extends AbstractPluginManagerFactory
+use Zend\ServiceManager\Config;
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
+
+class CommandPluginManagerFactory implements FactoryInterface
 {
-    const PLUGIN_MANAGER_CLASS = 'Core42\Command\Service\CommandPluginManager';
+    /**
+     * Create service
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return mixed
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        $config = $serviceLocator->get('config');
+        $config = (array_key_exists('commands', $config)) ? $config['commands'] : array();
+
+        return new CommandPluginManager(new Config($config));
+    }
 }

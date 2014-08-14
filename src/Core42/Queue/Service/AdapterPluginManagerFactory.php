@@ -9,9 +9,23 @@
 
 namespace Core42\Queue\Service;
 
-use Zend\Mvc\Service\AbstractPluginManagerFactory;
+use Zend\ServiceManager\Config;
+use Zend\ServiceManager\FactoryInterface;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
-class AdapterPluginManagerFactory extends AbstractPluginManagerFactory
+class AdapterPluginManagerFactory implements FactoryInterface
 {
-    const PLUGIN_MANAGER_CLASS = 'Core42\Queue\Service\AdapterPluginManager';
+    /**
+     * Create service
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return mixed
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        $config = $serviceLocator->get('config');
+        $config = (array_key_exists('queue_adapter', $config)) ? $config['queue_adapter'] : array();
+
+        return new AdapterPluginManager(new Config($config));
+    }
 }
