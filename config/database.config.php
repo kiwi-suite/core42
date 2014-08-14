@@ -6,7 +6,6 @@ return array(
         'invokables' => array(
             'Mysql/Integer'        => 'Core42\Hydrator\Strategy\Database\MySQL\IntegerStrategy',
             'Mysql/Boolean'        => 'Core42\Hydrator\Strategy\Database\MySQL\BooleanStrategy',
-            'Mysql/BooleanTinyint' => 'Core42\Hydrator\Strategy\Database\MySQL\BooleanStrategy',
             'Mysql/Date'           => 'Core42\Hydrator\Strategy\Database\MySQL\DateStrategy',
             'Mysql/Datetime'       => 'Core42\Hydrator\Strategy\Database\MySQL\DatetimeStrategy',
             'Mysql/Float'          => 'Core42\Hydrator\Strategy\Database\MySQL\FloatStrategy',

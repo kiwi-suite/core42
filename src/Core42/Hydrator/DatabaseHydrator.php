@@ -9,26 +9,15 @@
 
 namespace Core42\Hydrator;
 
-use Zend\Stdlib\Hydrator\ClassMethods;
-use Zend\Stdlib\Hydrator\Filter\FilterComposite;
-use Zend\Stdlib\Hydrator\Filter\MethodMatchFilter;
+use Core42\Model\AbstractModel;
 
 class DatabaseHydrator extends AbstractHydrator
 {
-
     /**
-     *
-     * @param boolean $underscoreSeparatedKeys
-     */
-    public function __construct($underscoreSeparatedKeys = false)
-    {
-        parent::__construct($underscoreSeparatedKeys);
-        $this->filterComposite
-            ->addFilter("hasChanged", new MethodMatchFilter("hasChanged"), FilterComposite::CONDITION_AND);
-    }
-
-    /**
-     * @see \Zend\Stdlib\Hydrator\AbstractHydrator::extractValue
+     * @param string $name
+     * @param mixed $value
+     * @param null|AbstractModel $object
+     * @return mixed
      */
     public function extractValue($name, $value, $object = null)
     {
@@ -40,7 +29,10 @@ class DatabaseHydrator extends AbstractHydrator
     }
 
     /**
-     * @see \Zend\Stdlib\Hydrator\AbstractHydrator::hydrateValue
+     * @param string $name
+     * @param mixed $value
+     * @param null|array $data
+     * @return mixed
      */
     public function hydrateValue($name, $value, $data = null)
     {
