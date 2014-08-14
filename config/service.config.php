@@ -36,6 +36,9 @@ return array(
             'Core42\Permission\AssertionPluginManager'      => 'Core42\Permission\Rbac\Service\AssertionPluginManagerFactory',
             'Core42\Permission\RedirectStrategy'            => 'Core42\Permission\Rbac\Service\RedirectStrategyFactory',
             'Core42\Permission\UnauthorizedStrategy'        => 'Core42\Permission\Rbac\Service\UnauthorizedStrategyFactory',
+
+            'Core42\NavigationOptions'                      => 'Core42\Navigation\Service\NavigationOptionsFactory',
+            'Core42\Navigation'                             => 'Core42\Navigation\Service\NavigationFactory',
         ),
         'invokables' => array(
             'MobileDetect'                                  => '\Mobile_Detect',
@@ -55,6 +58,8 @@ return array(
             'SelectQuery'                                   => 'Core42\SelectQueryPluginManager',
             'QueueAdapter'                                  => 'Core42\QueueAdapterPluginManager',
             'Form'                                          => 'Core42\FormPluginManager',
+
+            'Navigation'                                    => 'Core42\Navigation'
         ),
     ),
 

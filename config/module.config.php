@@ -14,6 +14,8 @@ return array(
         ),
         'factories' => array(
             'permission'    => 'Core42\View\Helper\Service\PermissionFactory',
+            'menu'          => 'Core42\View\Helper\Navigation\Service\MenuFactory',
+            'breadcrumbs'   => 'Core42\View\Helper\Navigation\Service\BreadcrumbsFactory'
         ),
         'delegators' => array(
             'formRender' => array(
