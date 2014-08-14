@@ -30,7 +30,7 @@ class NavigationFactory implements FactoryInterface
 
         $navigation = new Navigation();
 
-        foreach($options->getContainers() as $containerName => $container) {
+        foreach ($options->getContainers() as $containerName => $container) {
             if (is_string($container)) {
                 if ($serviceLocator->has($container)) {
                     $provider = $serviceLocator->get($container);
@@ -49,8 +49,8 @@ class NavigationFactory implements FactoryInterface
             $navigation->addContainer($containerName, $container);
         }
 
-        foreach($options->getListeners() as $navName => $_listener) {
-            foreach($_listener as $priority => $listener) {
+        foreach ($options->getListeners() as $navName => $_listener) {
+            foreach ($_listener as $priority => $listener) {
                 if (is_string($listener)) {
                     if ($serviceLocator->has($listener)) {
                         $listener = $serviceLocator->get($listener);

@@ -18,6 +18,10 @@ class IsAllowedFilter extends \RecursiveFilterIterator
      */
     protected $navigation;
 
+    /**
+     * @param \RecursiveIterator $container
+     * @param Navigation $navigation
+     */
     public function __construct(\RecursiveIterator $container, Navigation $navigation)
     {
         $this->navigation = $navigation;

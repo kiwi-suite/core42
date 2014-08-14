@@ -147,7 +147,7 @@ class Container implements \RecursiveIterator
         $iterator = new \RecursiveIteratorIterator($this, \RecursiveIteratorIterator::SELF_FIRST);
 
         /** @var Page $page */
-        foreach($iterator as $page) {
+        foreach ($iterator as $page) {
             if ($page->getAttribute($attribute) == $value) {
                 return $page;
             }
@@ -167,7 +167,7 @@ class Container implements \RecursiveIterator
         $iterator = new \RecursiveIteratorIterator($this, \RecursiveIteratorIterator::SELF_FIRST);
 
         /** @var Page $page */
-        foreach($iterator as $page) {
+        foreach ($iterator as $page) {
             if ($page->getAttribute($attribute) == $value) {
                 $result[] = $page;
             }
@@ -186,7 +186,7 @@ class Container implements \RecursiveIterator
         $iterator = new \RecursiveIteratorIterator($this, \RecursiveIteratorIterator::SELF_FIRST);
 
         /** @var Page $page */
-        foreach($iterator as $page) {
+        foreach ($iterator as $page) {
             if ($page->getOption($option) == $value) {
                 return $page;
             }
@@ -206,7 +206,7 @@ class Container implements \RecursiveIterator
         $iterator = new \RecursiveIteratorIterator($this, \RecursiveIteratorIterator::SELF_FIRST);
 
         /** @var Page $page */
-        foreach($iterator as $page) {
+        foreach ($iterator as $page) {
             if ($page->getOption($option) == $value) {
                 $result[] = $page;
             }

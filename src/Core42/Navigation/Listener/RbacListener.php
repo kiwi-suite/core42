@@ -23,6 +23,9 @@ class RbacListener extends AbstractListenerAggregate
      */
     private $authorizationService;
 
+    /**
+     * @param AuthorizationService $authorizationService
+     */
     public function __construct(AuthorizationService $authorizationService)
     {
         $this->authorizationService = $authorizationService;

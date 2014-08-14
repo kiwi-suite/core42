@@ -290,8 +290,8 @@ class Navigation
         if ($page->getOption('uri')) {
             $href = $page->getOption('uri');
         } elseif ($page->getOption('route')) {
-            $href = $this->getRouter()->assemble((array)
-                $page->getOption('params'),
+            $href = $this->getRouter()->assemble(
+                (array) $page->getOption('params'),
                 array('name' => $page->getOption('route'))
             );
         } elseif ($page->getOption('href')) {
