@@ -84,4 +84,12 @@ abstract class AbstractModel
             return ($value1 === $value2) ? 0 : 1;
         });
     }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return $this->modelProperties;
+    }
 }

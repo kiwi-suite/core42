@@ -41,37 +41,4 @@ class DefaultModel extends AbstractModel
 
         return $return;
     }
-
-    /**
-     *
-     * @param array $data
-     */
-    public function exchangeArray($data)
-    {
-        foreach ($data as $name => $value) {
-            $setter = "set".ucfirst($name);
-            $this->$setter($value);
-        }
-    }
-
-    /**
-     * @param array $data
-     */
-    public function hydrate(array $data)
-    {
-        $this->exchangeArray($data);
-    }
-
-    /**
-     * @return array
-     */
-    public function extract()
-    {
-        $array = array();
-        foreach ($this->properties as $variableName) {
-            $array[$variableName] = $this->get($variableName);
-        }
-
-        return $array;
-    }
 }
