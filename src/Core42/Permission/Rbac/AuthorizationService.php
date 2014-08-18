@@ -123,6 +123,14 @@ class AuthorizationService
     }
 
     /**
+     * @return Role\RoleInterface[]|\string[]
+     */
+    public function getAllRoles()
+    {
+        return $this->identityRoleProvider->getRoles();
+    }
+
+    /**
      * Get the identity roles from the current identity, applying some more logic
      *
      * @return RoleInterface[]

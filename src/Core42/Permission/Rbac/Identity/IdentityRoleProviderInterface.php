@@ -9,10 +9,12 @@
 
 namespace Core42\Permission\Rbac\Identity;
 
+use Core42\Permission\Rbac\Role\RoleInterface;
+
 interface IdentityRoleProviderInterface
 {
     /**
-     * @return string[]|\Rbac\Role\RoleInterface[]
+     * @return string[]|RoleInterface[]
      */
     public function getRoles();
 }
