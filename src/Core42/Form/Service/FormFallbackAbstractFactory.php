@@ -9,6 +9,7 @@
 
 namespace Core42\Form\Service;
 
+use Zend\Form\Factory;
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -44,7 +45,14 @@ class FormFallbackAbstractFactory implements AbstractFactoryInterface
     {
         $fqcn = $this->getFQCN($requestedName);
 
-        return new $fqcn();
+        $form = new $fqcn();
+        $form->setFormFactory(new Factory($serviceLocator->getServiceLocator()->get('FormElementManager')));
+
+        if (method_exists($form, 'init')) {
+            $form->init();
+        }
+
+        return $form;
     }
 
     /**
