@@ -62,4 +62,12 @@ class InMemoryRoleProvider implements RoleProviderInterface
 
         return $roles;
     }
+
+    /**
+     * @return array|RoleInterface[]
+     */
+    public function getAllRoles()
+    {
+        return $this->getRoles(array_keys($this->rolesConfig));
+    }
 }

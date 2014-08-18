@@ -16,4 +16,9 @@ interface RoleProviderInterface
      * @return RoleInterface[]
      */
     public function getRoles(array $roleNames);
+
+    /**
+     * @return array|RoleInterface[]
+     */
+    public function getAllRoles();
 }

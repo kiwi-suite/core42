@@ -127,7 +127,7 @@ class AuthorizationService
      */
     public function getAllRoles()
     {
-        return $this->identityRoleProvider->getRoles();
+        return $this->roleProvider->getAllRoles();
     }
 
     /**
