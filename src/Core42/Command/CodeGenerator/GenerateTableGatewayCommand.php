@@ -140,7 +140,7 @@ class GenerateTableGatewayCommand extends AbstractCommand implements ConsoleAwar
 
         try {
             $this->adapter = $this->getServiceManager()->get($this->adapterName);
-        } catch(ServiceNotFoundException $e) {
+        } catch (ServiceNotFoundException $e) {
             $this->addError("adapter", "adapter '".$this->adapterName."' not found");
         }
 
@@ -156,7 +156,7 @@ class GenerateTableGatewayCommand extends AbstractCommand implements ConsoleAwar
         if ($this->all) {
             $tables = $metadata->getTableNames();
 
-            foreach($tables as $table){
+            foreach ($tables as $table){
                 $this->generateTableGatewayClass($table);
             }
 
@@ -234,12 +234,11 @@ class GenerateTableGatewayCommand extends AbstractCommand implements ConsoleAwar
         );
 
         $filename = $this->directory . "/" . $tableGatewayName . '.php';
-        if (!file_exists($filename) || $this->overwrite === true){
+        if (!file_exists($filename) || $this->overwrite === true) {
             file_put_contents($filename, $file->generate());
             $this->consoleOutput("Generated {$tableGatewayName}");
         } else {
             $this->consoleOutput("Skipped {$tableGatewayName} - it all ready exists. Use --override!");
         }
     }
-
 }

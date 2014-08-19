@@ -19,7 +19,6 @@ use Zend\Db\Adapter;
 use Zend\Db\Metadata\Metadata;
 use Zend\Filter\Word\UnderscoreToCamelCase;
 
-
 class GenerateModelCommand extends AbstractCommand implements ConsoleAwareInterface
 {
     /**
@@ -141,7 +140,7 @@ class GenerateModelCommand extends AbstractCommand implements ConsoleAwareInterf
 
         try {
             $this->adapter = $this->getServiceManager()->get($this->adapterName);
-        } catch(ServiceNotFoundException $e) {
+        } catch (ServiceNotFoundException $e) {
             $this->addError("adapter", "adapter '".$this->adapterName."' not found");
         }
     }
@@ -156,7 +155,7 @@ class GenerateModelCommand extends AbstractCommand implements ConsoleAwareInterf
         if ($this->all) {
             $tables = $metadata->getTableNames();
 
-            foreach($tables as $table){
+            foreach ($tables as $table){
                 $this->generateModelClass($table);
             }
 
@@ -221,7 +220,7 @@ class GenerateModelCommand extends AbstractCommand implements ConsoleAwareInterf
                     new Generator\ParameterGenerator(
                         $column->getName(),
                         null,
-                        $column->getColumnDefault()
+                        null
                     )
                 ),
                 Generator\MethodGenerator::FLAG_PUBLIC,
@@ -230,7 +229,9 @@ class GenerateModelCommand extends AbstractCommand implements ConsoleAwareInterf
                     'return $this;'
                 )),
                 new Generator\DocBlockGenerator(
-                    null, null, array(
+                    null,
+                    null,
+                    array(
                         $docBlockParam,
                         $docBlockReturn
                     )
@@ -247,7 +248,9 @@ class GenerateModelCommand extends AbstractCommand implements ConsoleAwareInterf
                 Generator\MethodGenerator::FLAG_PUBLIC,
                 "return \$this->get('".$column->getName()."');",
                 new Generator\DocBlockGenerator(
-                    null, null, array(
+                    null,
+                    null,
+                    array(
                         $docBlockReturn
                     )
                 )
@@ -264,7 +267,7 @@ class GenerateModelCommand extends AbstractCommand implements ConsoleAwareInterf
         );
 
         $filename = $this->directory . "/" . $modelName . '.php';
-        if (!file_exists($filename) || $this->overwrite === true){
+        if (!file_exists($filename) || $this->overwrite === true) {
             file_put_contents($filename, $file->generate());
             $this->consoleOutput("Generated {$modelName}");
         } else {
@@ -305,6 +308,4 @@ class GenerateModelCommand extends AbstractCommand implements ConsoleAwareInterf
                 return "string";
         }
     }
-
 }
-
