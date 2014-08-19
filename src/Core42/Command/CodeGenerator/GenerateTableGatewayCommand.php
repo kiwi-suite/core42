@@ -156,7 +156,7 @@ class GenerateTableGatewayCommand extends AbstractCommand implements ConsoleAwar
         if ($this->all) {
             $tables = $metadata->getTableNames();
 
-            foreach ($tables as $table){
+            foreach ($tables as $table) {
                 $this->generateTableGatewayClass($table);
             }
 
@@ -185,6 +185,9 @@ class GenerateTableGatewayCommand extends AbstractCommand implements ConsoleAwar
         $this->setDirectory($route->getMatchedParam('directory'));
     }
 
+    /**
+     * @param $table
+     */
     protected function generateTableGatewayClass($table)
     {
         $class = new Generator\ClassGenerator();
@@ -201,28 +204,56 @@ class GenerateTableGatewayCommand extends AbstractCommand implements ConsoleAwar
 
         $property = new Generator\PropertyGenerator("table");
         $property->setDefaultValue($table);
-        $property->setDocBlock(new Generator\DocBlockGenerator(null, null, array(new Generator\DocBlock\Tag\GenericTag('var', 'string'))));
+        $property->setDocBlock(
+            new Generator\DocBlockGenerator(
+                null,
+                null,
+                array(new Generator\DocBlock\Tag\GenericTag('var', 'string'))
+            )
+        );
         $property->setFlags(Generator\PropertyGenerator::FLAG_PROTECTED);
 
         $class->addPropertyFromGenerator($property);
 
         $property = new Generator\PropertyGenerator("modelPrototype");
         $property->setDefaultValue($this->namespace . "\\Model\\" . $className);
-        $property->setDocBlock(new Generator\DocBlockGenerator(null, null, array(new Generator\DocBlock\Tag\GenericTag('var', 'string'))));
+        $property->setDocBlock(
+            new Generator\DocBlockGenerator(
+                null,
+                null,
+                array(new Generator\DocBlock\Tag\GenericTag('var', 'string'))
+            )
+        );
         $property->setFlags(Generator\PropertyGenerator::FLAG_PROTECTED);
 
         $class->addPropertyFromGenerator($property);
 
         $property = new Generator\PropertyGenerator("databaseTypeMap");
-        $property->setDefaultValue(array(), Generator\ValueGenerator::TYPE_ARRAY, Generator\ValueGenerator::OUTPUT_SINGLE_LINE);
-        $property->setDocBlock(new Generator\DocBlockGenerator(null, null, array(new Generator\DocBlock\Tag\GenericTag('var', 'array'))));
+        $property->setDefaultValue(
+            array(),
+            Generator\ValueGenerator::TYPE_ARRAY,
+            Generator\ValueGenerator::OUTPUT_SINGLE_LINE
+        );
+        $property->setDocBlock(
+            new Generator\DocBlockGenerator(
+                null,
+                null,
+                array(new Generator\DocBlock\Tag\GenericTag('var', 'array'))
+            )
+        );
         $property->setFlags(Generator\PropertyGenerator::FLAG_PROTECTED);
 
         $class->addPropertyFromGenerator($property);
 
         $property = new Generator\PropertyGenerator("underscoreSeparatedKeys");
         $property->setDefaultValue(false);
-        $property->setDocBlock(new Generator\DocBlockGenerator(null, null, array(new Generator\DocBlock\Tag\GenericTag('var', 'bool'))));
+        $property->setDocBlock(
+            new Generator\DocBlockGenerator(
+                null,
+                null,
+                array(new Generator\DocBlock\Tag\GenericTag('var', 'bool'))
+            )
+        );
         $property->setFlags(Generator\PropertyGenerator::FLAG_PROTECTED);
 
         $class->addPropertyFromGenerator($property);

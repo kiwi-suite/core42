@@ -155,7 +155,7 @@ class GenerateModelCommand extends AbstractCommand implements ConsoleAwareInterf
         if ($this->all) {
             $tables = $metadata->getTableNames();
 
-            foreach ($tables as $table){
+            foreach ($tables as $table) {
                 $this->generateModelClass($table);
             }
 
@@ -184,6 +184,9 @@ class GenerateModelCommand extends AbstractCommand implements ConsoleAwareInterf
         $this->setDirectory($route->getMatchedParam('directory'));
     }
 
+    /**
+     * @param $table
+     */
     protected function generateModelClass($table)
     {
         $metadata = new Metadata($this->adapter);
@@ -201,7 +204,7 @@ class GenerateModelCommand extends AbstractCommand implements ConsoleAwareInterf
         $columns = $metadata->getColumns($table);
 
         $methods = array();
-        foreach($columns as $column){
+        foreach ($columns as $column) {
             /* @type \Zend\Db\Metadata\Object\ColumnObject $column */
 
             //setter
@@ -275,6 +278,10 @@ class GenerateModelCommand extends AbstractCommand implements ConsoleAwareInterf
         }
     }
 
+    /**
+     * @param \Zend\Db\Metadata\Object\ColumnObject $column
+     * @return string
+     */
     protected function getPropertyTypeByColumnObject(\Zend\Db\Metadata\Object\ColumnObject $column)
     {
         switch($column->getDataType()){
@@ -282,7 +289,8 @@ class GenerateModelCommand extends AbstractCommand implements ConsoleAwareInterf
             case "bool":
                 return "boolean";
             case "enum":
-                if (in_array($column->getErrata("permitted_values"), array(array("true", "false"), array("false", "true")))) {
+                $check = array(array("true", "false"), array("false", "true"));
+                if (in_array($column->getErrata("permitted_values"), $check)) {
                     return "boolean";
                 }
                 return "string";
