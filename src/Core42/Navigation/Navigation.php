@@ -12,6 +12,7 @@ namespace Core42\Navigation;
 use Core42\Navigation\Page\Page;
 use Zend\EventManager\EventManager;
 use Zend\EventManager\EventManagerInterface;
+use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\Router\RouteMatch;
 use Zend\Mvc\Router\RouteStackInterface;
 
@@ -290,8 +291,20 @@ class Navigation
         if ($page->getOption('uri')) {
             $href = $page->getOption('uri');
         } elseif ($page->getOption('route')) {
+            $rmParams = $this->getRouteMatch()->getParams();
+
+            if (isset($rmParams[ModuleRouteListener::ORIGINAL_CONTROLLER])) {
+                $rmParams['controller'] = $rmParams[ModuleRouteListener::ORIGINAL_CONTROLLER];
+                unset($rmParams[ModuleRouteListener::ORIGINAL_CONTROLLER]);
+            }
+
+            if (isset($rmParams[ModuleRouteListener::MODULE_NAMESPACE])) {
+                unset($rmParams[ModuleRouteListener::MODULE_NAMESPACE]);
+            }
+
+            $params = array_merge($rmParams, (array) $page->getOption('params'));
             $href = $this->getRouter()->assemble(
-                (array) $page->getOption('params'),
+                $params,
                 array('name' => $page->getOption('route'))
             );
         } elseif ($page->getOption('href')) {
