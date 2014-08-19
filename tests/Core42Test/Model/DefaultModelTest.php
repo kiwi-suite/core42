@@ -21,9 +21,7 @@ class DefaultModelTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @covers Core42\Model\DefaultModel::exchangeArray
-     * @covers Core42\Model\DefaultModel::hydrate
-     * @covers Core42\Model\DefaultModel::extract
+     * @covers Core42\Model\DefaultModel::__call
      */
     public function testExchangeExtractHydrateArray()
     {
@@ -32,8 +30,8 @@ class DefaultModelTest extends \PHPUnit_Framework_TestCase
             'string'        => 'test',
             'datetime'      => new \DateTime(),
             'array'         => array(1,2,3),
-            'boolean_true'  => true,
-            'boolean_false' => false,
+            'booleanTrue'   => true,
+            'booleanFalse'  => false,
             'null'          => null,
             'object'        => (object) 'test',
             'closure'       => function () {$test = "test";},
@@ -41,10 +39,13 @@ class DefaultModelTest extends \PHPUnit_Framework_TestCase
             'float'         => 5.43323232323,
         );
 
-        $this->defaultModel->hydrate($array);
-        $this->assertEquals($array, $this->defaultModel->extract());
+        foreach ($array as $name => $value) {
+            $setter = 'set' . ucfirst($name);
+            $getter = 'get' . ucfirst($name);
 
-        $this->defaultModel->exchangeArray($array);
-        $this->assertEquals($array, $this->defaultModel->extract());
+            $this->defaultModel->{$setter}($value);
+
+            $this->assertEquals($value, $this->defaultModel->{$getter}());
+        }
     }
 }
