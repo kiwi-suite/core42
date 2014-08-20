@@ -42,7 +42,7 @@ class Container implements \RecursiveIterator
         $sort = array();
 
         /** @var Page $page */
-        foreach($this->children as $hash => $page) {
+        foreach ($this->children as $hash => $page) {
             $order = $page->getOption('order');
             if ($order === null) {
                 $sort[$hash] = $index;
