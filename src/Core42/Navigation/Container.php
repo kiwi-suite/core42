@@ -29,6 +29,38 @@ class Container implements \RecursiveIterator
     protected $containerName;
 
     /**
+     * @var array
+     */
+    protected $sort = array();
+
+    /**
+     *
+     */
+    public function sort()
+    {
+        $index = 0;
+        $sort = array();
+
+        /** @var Page $page */
+        foreach($this->children as $hash => $page) {
+            $order = $page->getOption('order');
+            if ($order === null) {
+                $sort[$hash] = $index;
+                $index++;
+            } else {
+                $sort[$hash] = $order;
+            }
+
+            if ($page->hasChildren()) {
+                $page->sort();
+            }
+        }
+
+        asort($sort);
+        $this->sort = array_keys($sort);
+    }
+
+    /**
      * (PHP 5 &gt;= 5.0.0)<br/>
      * Return the current element
      * @link http://php.net/manual/en/iterator.current.php
@@ -36,7 +68,7 @@ class Container implements \RecursiveIterator
      */
     public function current()
     {
-        return $this->children[$this->index];
+        return $this->children[$this->sort[$this->index]];
     }
 
     /**
@@ -70,7 +102,7 @@ class Container implements \RecursiveIterator
      */
     public function valid()
     {
-        return isset($this->children[$this->index]);
+        return isset($this->sort[$this->index]);
     }
 
     /**
@@ -103,7 +135,7 @@ class Container implements \RecursiveIterator
      */
     public function getChildren()
     {
-        return $this->children[$this->index];
+        return $this->children[$this->sort[$this->index]];
     }
 
     /**
@@ -113,7 +145,11 @@ class Container implements \RecursiveIterator
     public function addPage(Page $page)
     {
         $page->setContainerName($this->getContainerName());
-        $this->children[] = $page;
+
+        $hash = spl_object_hash($page);
+
+        $this->children[$hash] = $page;
+        $this->sort[] = $hash;
 
         return $this;
     }
