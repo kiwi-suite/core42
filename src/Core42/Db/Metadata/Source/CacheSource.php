@@ -31,7 +31,7 @@ class CacheSource extends AbstractSource
             $source->loadSchemaData();
 
             $tableNames = $source->getTableNames($source->defaultSchema);
-            foreach($tableNames as $table) {
+            foreach ($tableNames as $table) {
 
                 $source->loadColumnData($table, $source->defaultSchema);
                 $source->loadConstraintData($table, $source->defaultSchema);
