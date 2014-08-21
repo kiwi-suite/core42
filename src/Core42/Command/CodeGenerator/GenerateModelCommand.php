@@ -110,10 +110,10 @@ class GenerateModelCommand extends AbstractCommand implements ConsoleAwareInterf
      */
     protected function preExecute()
     {
-        if (isset($this->all) && isset($this->tableName)) {
-            $this->addError('all', "both usage of name argument and --all argument is missing");
+        if ($this->all === true && !empty($this->tableName)) {
+            $this->addError('all', "both usage of name argument and --all argument is not allowed");
         }
-        if (!isset($this->all) && !isset($this->tableName)) {
+        if ($this->all === false && empty($this->tableName)) {
             $this->addError('all', "Whether name argument or --all argument is missing");
             return;
         }
@@ -171,7 +171,7 @@ class GenerateModelCommand extends AbstractCommand implements ConsoleAwareInterf
      */
     public function consoleSetup(Route $route)
     {
-        $this->setAll($route->getMatchedParam('all'));
+        $this->setAll($route->getMatchedParam('all', false));
         $this->setTableName($route->getMatchedParam('table'));
 
         $adapterName = $route->getMatchedParam('adapter');
