@@ -17,19 +17,5 @@ return array(
                 'Serializer'
             ),
         ),
-        'Cache\InternStatic' => array(
-            'adapter' => array(
-                'name' => 'filesystem',
-                'options' => array(
-                    'cache_dir' => 'data/cache/',
-                    'namespace' => 'cache_internstatic',
-                    'readable'  => !DEVELOPMENT_MODE,
-                    'writable'  => !DEVELOPMENT_MODE,
-                ),
-            ),
-            'plugins' => array(
-                'Serializer'
-            ),
-        ),
     ),
 );
