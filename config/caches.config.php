@@ -8,7 +8,9 @@ return array(
                 'name' => 'filesystem',
                 'options' => array(
                     'cache_dir' => 'data/cache/',
-                    'namespace' => 'cache_intern'
+                    'namespace' => 'cache_intern',
+                    'readable'  => !DEVELOPMENT_MODE,
+                    'writable'  => !DEVELOPMENT_MODE,
                 ),
             ),
             'plugins' => array(
@@ -20,7 +22,9 @@ return array(
                 'name' => 'filesystem',
                 'options' => array(
                     'cache_dir' => 'data/cache/',
-                    'namespace' => 'cache_internstatic'
+                    'namespace' => 'cache_internstatic',
+                    'readable'  => !DEVELOPMENT_MODE,
+                    'writable'  => !DEVELOPMENT_MODE,
                 ),
             ),
             'plugins' => array(

@@ -9,6 +9,7 @@
 
 namespace Core42\Db\Metadata\Service;
 
+use Core42\Db\Metadata\CacheMetadata;
 use Core42\Db\Metadata\Metadata;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -29,6 +30,15 @@ class MetadataServiceFactory implements FactoryInterface
             $adapter = $serviceLocator->get('Db\Slave');
         }
 
-        return new Metadata($adapter);
+        $config = $serviceLocator->get('Config');
+        $cache = null;
+        if (array_key_exists('metadata', $config)) {
+            if (array_key_exists('cache', $config['metadata'])) {
+                $cache = $serviceLocator->get($config['metadata']['cache']);
+            }
+        }
+
+        return new CacheMetadata($adapter, $cache);
+        //return new Metadata($adapter);
     }
 }

@@ -12,6 +12,10 @@ return array(
         ),
     ),
 
+    'metadata' => array(
+        'cache' => 'Cache\Intern',
+    ),
+
     'db' => array(
         'adapters' =>array(
             'Db\Master' => array(

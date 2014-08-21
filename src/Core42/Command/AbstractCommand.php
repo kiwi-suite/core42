@@ -10,11 +10,8 @@
 namespace Core42\Command;
 
 use Core42\Console\Console;
-use Core42\Db\SelectQuery\AbstractSelectQuery;
 use Core42\Db\TableGateway\AbstractTableGateway;
 use Core42\Selector\SelectorInterface;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceManager;
 
 abstract class AbstractCommand implements CommandInterface
