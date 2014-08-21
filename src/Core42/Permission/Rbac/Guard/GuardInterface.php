@@ -27,4 +27,9 @@ interface GuardInterface extends ListenerAggregateInterface
      * @param AuthorizationService $authorizationService
      */
     public function setAuthorizationService(AuthorizationService $authorizationService);
+
+    /**
+     * @param array $options
+     */
+    public function setOptions(array $options);
 }

@@ -38,6 +38,7 @@ class ArrayProvider extends AbstractProvider
         foreach ($this->options['config'] as $page) {
             $this->container->addPage(PageFactory::create($page, $containerName));
         }
+        $this->container->sort();
         return $this->container;
     }
 }

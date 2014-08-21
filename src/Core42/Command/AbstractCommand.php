@@ -93,18 +93,20 @@ abstract class AbstractCommand implements CommandInterface
     }
 
     /**
-     * @return \Core42\Command\AbstractCommand
+     * @return mixed
      * @throws \Exception
      */
     final public function run()
     {
+        $result = null;
+
         $this->configure();
 
         try {
             $this->preExecute();
 
             if (!$this->hasErrors() && $this->dryRun === false) {
-                $this->execute();
+                $result = $this->execute();
                 $this->postExecute();
             }
         } catch (\Exception $e) {
@@ -120,7 +122,7 @@ abstract class AbstractCommand implements CommandInterface
             $this->shutdown();
         }
 
-        return $this;
+        return $result;
     }
 
     /**
@@ -148,7 +150,7 @@ abstract class AbstractCommand implements CommandInterface
     }
 
     /**
-     *
+     * @return mixed
      */
     abstract protected function execute();
 

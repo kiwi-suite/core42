@@ -26,6 +26,11 @@ abstract class AbstractGuard extends AbstractListenerAggregate implements GuardI
     protected $authorizationService;
 
     /**
+     * @var array
+     */
+    protected $options = array();
+
+    /**
      * @param EventManagerInterface $events
      */
     public function attach(EventManagerInterface $events)
@@ -39,6 +44,14 @@ abstract class AbstractGuard extends AbstractListenerAggregate implements GuardI
     public function setAuthorizationService(AuthorizationService $authorizationService)
     {
         $this->authorizationService = $authorizationService;
+    }
+
+    /**
+     * @param array $options
+     */
+    public function setOptions(array $options)
+    {
+        $this->options = $options;
     }
 
     /**

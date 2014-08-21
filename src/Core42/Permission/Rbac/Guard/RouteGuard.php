@@ -14,35 +14,22 @@ use Zend\Mvc\MvcEvent;
 class RouteGuard extends AbstractGuard
 {
     /**
-     * @param  array $rules
-     * @return void
-     */
-    public function setRules(array $rules)
-    {
-        $this->rules = array();
-
-        foreach ($rules as $key => $value) {
-            if (is_int($key)) {
-                $routeRegex = $value;
-                $roles      = array();
-            } else {
-                $routeRegex = $key;
-                $roles      = (array) $value;
-            }
-
-            $this->rules[$routeRegex] = $roles;
-        }
-    }
-
-    /**
      * @param MvcEvent $event
      * @return bool
      */
     public function isGranted(MvcEvent $event)
     {
+        $routeName = $event->getRouteMatch()->getMatchedRouteName();
+
+        if (isset($this->options['protected_route'])) {
+            if (strpos($routeName, $this->options['protected_route']) !== 0) {
+                return true;
+            }
+        }
+
         return $this->authorizationService->isGranted(
             'RouteAssertion',
-            $event->getRouteMatch()->getMatchedRouteName()
+            $routeName
         );
     }
 }

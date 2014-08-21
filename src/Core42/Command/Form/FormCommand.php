@@ -40,6 +40,11 @@ class FormCommand extends AbstractCommand
     private $data;
 
     /**
+     * @var array
+     */
+    private $protectedData = array();
+
+    /**
      *
      */
     protected function init()
@@ -105,12 +110,27 @@ class FormCommand extends AbstractCommand
     }
 
     /**
+     * @param array $protectedData
+     * @return $this
+     */
+    public function setProtectedData(array $protectedData)
+    {
+        $this->protectedData = $protectedData;
+
+        return $this;
+    }
+
+    /**
      * @throws \Exception
      */
     protected function preExecute()
     {
         if (empty($this->data)) {
             $this->data = $this->getServiceManager()->get('request')->getPost()->toArray();
+        }
+
+        foreach ($this->protectedData as $protName) {
+            unset($this->data[$protName]);
         }
 
         if ($this->automaticFormFill ===  true) {
@@ -136,12 +156,14 @@ class FormCommand extends AbstractCommand
     }
 
     /**
-     *
+     * @return mixed
      */
     protected function execute()
     {
-        $this->cmd->execute();
+        $result = $this->cmd->execute();
         $this->cmd->postExecute();
+
+        return $result;
     }
 
     /**
