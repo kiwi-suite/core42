@@ -81,4 +81,28 @@ class AbstractHydrator extends ClassMethods
             $this->addFilter("objectFilter", $object->getFilter(), FilterComposite::CONDITION_AND);
         }
     }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function extractArray(array $data)
+    {
+        foreach ($data as $name => $value) {
+            $data[$name] = $this->extractValue($name, $value);
+        }
+        return $data;
+    }
+
+    /**
+     * @param array $data
+     * @return array
+     */
+    public function hydrateArray(array $data)
+    {
+        foreach ($data as $name => $value) {
+            $data[$name] = $this->hydrateValue($name, $value);
+        }
+        return $data;
+    }
 }
