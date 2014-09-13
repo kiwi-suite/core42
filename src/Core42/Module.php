@@ -9,6 +9,7 @@
 
 namespace Core42;
 
+use Core42\Console\Console;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\InitProviderInterface;
@@ -45,6 +46,9 @@ class Module implements
      */
     public function onBootstrap(\Zend\EventManager\EventInterface $e)
     {
+        if (Console::isConsole()) {
+            return;
+        }
         $e->getApplication()->getServiceManager()->get('Zend\Session\Service\SessionManager');
 
         $e->getTarget()->getEventManager()->attach(
