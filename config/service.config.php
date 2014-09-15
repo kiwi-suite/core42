@@ -39,6 +39,9 @@ return array(
 
             'Core42\NavigationOptions'                      => 'Core42\Navigation\Service\NavigationOptionsFactory',
             'Core42\Navigation'                             => 'Core42\Navigation\Service\NavigationFactory',
+
+            'MvcTranslator'                                 => 'Core42\I18n\Translator\Service\TranslatorFactory',
+            'MvcTranslatorPluginManager'                    => 'Core42\I18n\Translator\Service\TranslatorLoaderFactory',
         ),
         'invokables' => array(
             'MobileDetect'                                  => '\Mobile_Detect',
