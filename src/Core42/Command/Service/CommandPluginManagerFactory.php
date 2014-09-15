@@ -9,7 +9,6 @@
 
 namespace Core42\Command\Service;
 
-
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
