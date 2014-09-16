@@ -77,7 +77,7 @@ class RedirectStrategy extends AbstractStrategy
                 array(),
                 array(
                     'name' => $redirectRoute,
-                    'query' => [$redirectKey => $previousUri]
+                    'query' => array($redirectKey => $previousUri)
                 )
             );
         }

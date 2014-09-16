@@ -16,11 +16,11 @@ use Zend\Mvc\MvcEvent;
 abstract class AbstractStrategy extends AbstractListenerAggregate
 {
     /**
-     * @param EventManagerInterface $eventsCore42\Permission\Rbac\Strategy
+     * @param EventManagerInterface $events
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH_ERROR, [$this, 'onError']);
+        $this->listeners[] = $events->attach(MvcEvent::EVENT_DISPATCH_ERROR, array($this, 'onError'));
     }
 
     /**
