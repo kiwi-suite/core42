@@ -291,18 +291,23 @@ class Navigation
         if ($page->getOption('uri')) {
             $href = $page->getOption('uri');
         } elseif ($page->getOption('route')) {
-            $rmParams = $this->getRouteMatch()->getParams();
+            $params = array();
+            $routeMatch = $this->getRouteMatch();
+            if ($routeMatch !== null) {
+                $rmParams = $routeMatch->getParams();
 
-            if (isset($rmParams[ModuleRouteListener::ORIGINAL_CONTROLLER])) {
-                $rmParams['controller'] = $rmParams[ModuleRouteListener::ORIGINAL_CONTROLLER];
-                unset($rmParams[ModuleRouteListener::ORIGINAL_CONTROLLER]);
+                if (isset($rmParams[ModuleRouteListener::ORIGINAL_CONTROLLER])) {
+                    $rmParams['controller'] = $rmParams[ModuleRouteListener::ORIGINAL_CONTROLLER];
+                    unset($rmParams[ModuleRouteListener::ORIGINAL_CONTROLLER]);
+                }
+
+                if (isset($rmParams[ModuleRouteListener::MODULE_NAMESPACE])) {
+                    unset($rmParams[ModuleRouteListener::MODULE_NAMESPACE]);
+                }
+
+                $params = array_merge($rmParams, (array) $page->getOption('params'));
             }
 
-            if (isset($rmParams[ModuleRouteListener::MODULE_NAMESPACE])) {
-                unset($rmParams[ModuleRouteListener::MODULE_NAMESPACE]);
-            }
-
-            $params = array_merge($rmParams, (array) $page->getOption('params'));
             $href = $this->getRouter()->assemble(
                 $params,
                 array('name' => $page->getOption('route'))

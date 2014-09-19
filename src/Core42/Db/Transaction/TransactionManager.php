@@ -68,7 +68,9 @@ class TransactionManager implements ServiceManagerAwareInterface
 
         $this->transactions[$name]++;
 
-        $adapter->getDriver()->getConnection()->beginTransaction();
+        if ($this->transactions[$name] == 1) {
+            $adapter->getDriver()->getConnection()->beginTransaction();
+        }
     }
 
     /**
