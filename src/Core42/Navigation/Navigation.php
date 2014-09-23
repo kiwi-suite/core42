@@ -242,6 +242,8 @@ class Navigation
             $name = $this->getRouteMatch()->getMatchedRouteName();
 
             if ($page->getOption('route') == $name) {
+                $active = true;
+                /*
                 $reqParams = array_merge($this->getRouteMatch()->getParams(), $_GET);
                 $pageParams = array_merge(
                     $page->getOption('params') ? $page->getOption('params') : array(),
@@ -253,6 +255,7 @@ class Navigation
                 );
 
                 $active = $this->paramsAreEqual($pageParams, $reqParams, $ignoreParams);
+                */
             } elseif ($this->getIsActiveRecursion()) {
                 $iterator = new \RecursiveIteratorIterator($page, \RecursiveIteratorIterator::CHILD_FIRST);
 
@@ -365,6 +368,8 @@ class Navigation
                 unset($requiredParams[$unsetKey]);
             }
         }
+        var_dump($pageParams);
+        var_dump($requiredParams);
         $diff = array_diff($requiredParams, $pageParams);
 
         return empty($diff);
