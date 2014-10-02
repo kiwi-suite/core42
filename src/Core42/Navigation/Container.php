@@ -151,6 +151,8 @@ class Container implements \RecursiveIterator
         $this->children[$hash] = $page;
         $this->sort[] = $hash;
 
+        $page->setParent($this);
+
         return $this;
     }
 

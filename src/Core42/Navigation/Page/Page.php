@@ -56,9 +56,9 @@ class Page extends Container
 
     /**
      * @param $parent
-     * @return Page
+     * @return Container
      */
-    public function setParent(Page $parent)
+    public function setParent(Container $parent)
     {
         $this->parent = $parent;
 
@@ -66,7 +66,7 @@ class Page extends Container
     }
 
     /**
-     * @return null|Page
+     * @return null|Container
      */
     public function getParent()
     {
