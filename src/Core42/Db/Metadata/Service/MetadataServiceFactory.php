@@ -32,13 +32,17 @@ class MetadataServiceFactory implements FactoryInterface
 
         $config = $serviceLocator->get('Config');
         $cache = null;
-        if (array_key_exists('metadata', $config)) {
-            if (array_key_exists('cache', $config['metadata'])) {
-                $cache = $serviceLocator->get($config['metadata']['cache']);
-            }
+        if (array_key_exists('metadata', $config)
+            && array_key_exists('cache', $config['metadata'])
+            && !empty($config['metadata']['cache'])
+        ) {
+            $cache = $serviceLocator->get($config['metadata']['cache']);
         }
 
-        return new CacheMetadata($adapter, $cache);
-        //return new Metadata($adapter);
+        if (!empty($cache)) {
+            return new CacheMetadata($adapter, $cache);
+        }
+
+        return new Metadata($adapter);
     }
 }

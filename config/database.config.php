@@ -13,7 +13,7 @@ return array(
     ),
 
     'metadata' => array(
-        'cache' => 'Cache\Intern',
+        'cache' => (DEVELOPMENT_MODE) ? false : 'Cache\Intern',
     ),
 
     'db' => array(
