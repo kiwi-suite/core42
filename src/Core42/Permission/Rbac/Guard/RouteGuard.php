@@ -27,6 +27,8 @@ class RouteGuard extends AbstractGuard
             }
         }
 
+        $this->loadAuthorizationService();
+
         return $this->authorizationService->isGranted(
             'RouteAssertion',
             $routeName

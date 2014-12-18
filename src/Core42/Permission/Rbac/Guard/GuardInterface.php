@@ -10,6 +10,7 @@
 namespace Core42\Permission\Rbac\Guard;
 
 use Core42\Permission\Rbac\AuthorizationService;
+use Core42\Permission\Rbac\RbacManager;
 use Zend\EventManager\ListenerAggregateInterface;
 use Zend\Mvc\MvcEvent;
 
@@ -24,9 +25,14 @@ interface GuardInterface extends ListenerAggregateInterface
     public function isGranted(MvcEvent $event);
 
     /**
-     * @param AuthorizationService $authorizationService
+     * @param string $authorizationServiceName
      */
-    public function setAuthorizationService(AuthorizationService $authorizationService);
+    public function setAuthorizationServiceName($authorizationServiceName);
+
+    /**
+     * @param RbacManager $rbacManager
+     */
+    public function setRbacManager(RbacManager $rbacManager);
 
     /**
      * @param array $options

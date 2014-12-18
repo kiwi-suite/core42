@@ -11,6 +11,7 @@ namespace Core42\Permission\Rbac\Guard;
 
 use Core42\Permission\Rbac\AuthorizationService;
 use Core42\Permission\Rbac\Exception\UnauthorizedException;
+use Core42\Permission\Rbac\RbacManager;
 use Zend\EventManager\AbstractListenerAggregate;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\MvcEvent;
@@ -21,9 +22,19 @@ abstract class AbstractGuard extends AbstractListenerAggregate implements GuardI
     const EVENT_NAME = MvcEvent::EVENT_ROUTE;
 
     /**
+     * @var string
+     */
+    protected $authorizationServiceName;
+
+    /**
      * @var AuthorizationService
      */
     protected $authorizationService;
+
+    /**
+     * @var RbacManager
+     */
+    protected $rbacManager;
 
     /**
      * @var array
@@ -39,11 +50,19 @@ abstract class AbstractGuard extends AbstractListenerAggregate implements GuardI
     }
 
     /**
-     * @param AuthorizationService $authorizationService
+     * @param string $authorizationServiceNameName
      */
-    public function setAuthorizationService(AuthorizationService $authorizationService)
+    public function setAuthorizationServiceName($authorizationServiceNameName)
     {
-        $this->authorizationService = $authorizationService;
+        $this->authorizationServiceName = $authorizationServiceNameName;
+    }
+
+    /**
+     * @param RbacManager $rbacManager
+     */
+    public function setRbacManager(RbacManager $rbacManager)
+    {
+        $this->rbacManager = $rbacManager;
     }
 
     /**
@@ -77,5 +96,12 @@ abstract class AbstractGuard extends AbstractListenerAggregate implements GuardI
         $eventManager = $application->getEventManager();
 
         $eventManager->trigger(MvcEvent::EVENT_DISPATCH_ERROR, $event);
+    }
+
+    protected function loadAuthorizationService()
+    {
+        if ($this->authorizationService === null) {
+            $this->authorizationService = $this->rbacManager->getService($this->authorizationServiceName);
+        }
     }
 }

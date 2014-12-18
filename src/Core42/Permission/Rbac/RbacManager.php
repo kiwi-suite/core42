@@ -103,14 +103,13 @@ class RbacManager
 
         $guards = $options->getGuards();
 
-        $authorizationService = $this->getService($name);
-
         $guardPluginManager = $this->serviceManager->get('Core42\Permission\GuardPluginManager');
 
-        foreach ($guards as $name => $options) {
+        foreach ($guards as $guardName => $options) {
             /** @var GuardInterface $currentGuard */
-            $currentGuard = $guardPluginManager->get($name);
-            $currentGuard->setAuthorizationService($authorizationService);
+            $currentGuard = $guardPluginManager->get($guardName);
+            $currentGuard->setAuthorizationServiceName($name);
+            $currentGuard->setRbacManager($this);
             $currentGuard->setOptions($options);
 
             $initializedGuards[] = $currentGuard;
