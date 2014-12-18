@@ -48,10 +48,6 @@ class FormFallbackAbstractFactory implements AbstractFactoryInterface
         $form = new $fqcn();
         $form->setFormFactory(new Factory($serviceLocator->getServiceLocator()->get('FormElementManager')));
 
-        if (method_exists($form, 'init')) {
-            $form->init();
-        }
-
         return $form;
     }
 

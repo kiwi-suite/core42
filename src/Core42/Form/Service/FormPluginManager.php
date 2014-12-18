@@ -23,7 +23,11 @@ class FormPluginManager extends AbstractPluginManager
         $this->setShareByDefault(false);
 
         parent::__construct($configuration);
-
+        $this->addInitializer(function ($instance) {
+            if (method_exists($instance, 'init')) {
+                $instance->init();
+            }
+        }, false);
         $this->addAbstractFactory(new FormFallbackAbstractFactory(), false);
     }
 
