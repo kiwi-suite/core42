@@ -11,33 +11,27 @@ namespace Core42\Db\TableGateway;
 
 use Core42\Db\ResultSet\ResultSet;
 use Core42\Hydrator\DatabaseHydrator;
-use Zend\Db\Adapter\Adapter;
+use Core42\Model\NestedSetInterface;
 use Zend\Db\Sql\Expression;
-use Zend\Db\TableGateway\Feature\FeatureSet;
-use Zend\Db\TableGateway\Feature\MasterSlaveFeature;
+use Zend\Db\Sql\Select;
 use Core42\Model\AbstractModel;
-use Zend\Db\Metadata\Metadata;
 use Core42\Db\TableGateway\Feature\HydratorFeature;
 use Core42\Db\TableGateway\Feature\MetadataFeature;
-use Zend\ServiceManager\AbstractPluginManager;
 
 abstract class AbstractNestedSetTableGateway extends AbstractTableGateway
 {
-
-    protected $parentFieldName = 'parent_id';
-    protected $sortFieldName = 'sort';
-
-    protected $leftFieldName = 'nested_left';
-    protected $rightFieldName = 'nested_right';
 
     public function checkNestedSet()
     {
         $primary = $this->getPrimaryKey();
 
+        /* @var NestedSetInterface $model */
+        $model = $this->getModelPrototype();
+
         $select = $this->sql->select();
         $select->columns(array(
-            'max' => new Expression("MAX({$this->rightFieldName})"),
-            'count' => new Expression("COUNT({$this->rightFieldName})"),
+            'max' => new Expression("MAX({$model->getNestedRightFieldName()})"),
+            'count' => new Expression("COUNT({$model->getNestedRightFieldName()})"),
         ));
 
         $statement = $this->sql->prepareStatementForSqlObject($select);
@@ -51,13 +45,13 @@ abstract class AbstractNestedSetTableGateway extends AbstractTableGateway
 
         // detect gaps or duplicate values
         $selectLeft = $this->sql->select();
-        $selectLeft->columns(array_merge(array_values($primary), array('nested' => $this->leftFieldName)));
+        $selectLeft->columns(array_merge(array_values($primary), array('nested' => $model->getNestedLeftFieldName())));
 
         $selectRight = $this->sql->select();
-        $selectRight->columns(array_merge(array_values($primary), array('nested' => $this->rightFieldName)));
+        $selectRight->columns(array_merge(array_values($primary), array('nested' => $model->getNestedRightFieldName())));
 
         $selectLeft->combine($selectRight);
-        $selectCombined = (new \Zend\Db\Sql\Select)->from(['sub' => $selectLeft])->order('nested');
+        $selectCombined = (new Select())->from(['sub' => $selectLeft])->order('nested');
 
         $statement = $this->sql->prepareStatementForSqlObject($selectCombined);
         $result = $statement->execute();
@@ -88,7 +82,8 @@ abstract class AbstractNestedSetTableGateway extends AbstractTableGateway
         $rootItems = array();
 
         foreach ($result as $row) {
-            $parentId = $row->get($this->parentFieldName);
+            /* @var NestedSetInterface $row */
+            $parentId = $row->getParentId();
             if (!empty($parentId)) {
                 if (!array_key_exists($parentId, $children)) {
                     $children[$parentId] = array();
@@ -130,9 +125,10 @@ abstract class AbstractNestedSetTableGateway extends AbstractTableGateway
             $myRight = $left;
         }
 
+        /* @var NestedSetInterface $row */
         $row = $items[$itemId];
-        $row->set($this->leftFieldName, $myLeft);
-        $row->set($this->rightFieldName, $myRight);
+        $row->setNestedLeft($myLeft);
+        $row->setNestedRight($myRight);
 
         parent::update($row);
 
