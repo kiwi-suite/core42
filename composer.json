@@ -1,13 +1,16 @@
 {
     "name": "fruit42/core42",
-    "type": "fruit42-module",
+    "type": "zend-module",
     "require": {
         "php": ">=5.3.3",
         "firephp/firephp-core": "*",
         "ccampbell/chromephp": "*",
+        "composer/installers": "~1.0",
         "mobiledetect/mobiledetectlib": "*"
     },
-    "extra": {
-        "installer-name": "Core42"
+    "autoload": {
+        "psr-0": {
+            "Core42": "src/"
+        }
     }
 }
