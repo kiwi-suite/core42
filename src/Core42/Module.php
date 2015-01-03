@@ -7,8 +7,7 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\AutoloaderProviderInterface;
 
 class Module implements BootstrapListenerInterface,
-                            ConfigProviderInterface,
-                            AutoloaderProviderInterface
+                            ConfigProviderInterface
 {
     /*
      * @see \Zend\ModuleManager\Feature\ConfigProviderInterface::getConfig()
@@ -54,17 +53,5 @@ class Module implements BootstrapListenerInterface,
                 $e->getTarget()->getEventManager()->attach($guard);
             }
         }
-    }
-
-    /*
-     * @see \Zend\ModuleManager\Feature\AutoloaderProviderInterface::getAutoloaderConfig()
-     */
-    public function getAutoloaderConfig()
-    {
-        return array(
-            'Zend\Loader\ClassMapAutoloader' => array(
-                __DIR__ . '/../../autoload_classmap.php'
-            ),
-        );
     }
 }
