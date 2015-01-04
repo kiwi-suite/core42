@@ -17,7 +17,15 @@ chdir(__DIR__
 require_once 'config/settings.php';
 require_once 'init_autoloader.php';
 
-$application = Zend\Mvc\Application::init(require 'config/application.config.php');
+//just for downward compatibility
+if (file_exists('config/application.config.php')) {
+    $application = Zend\Mvc\Application::init(require 'config/application.config.php');
+} elseif (DEVELOPMENT_MODE === true) {
+    $application = Zend\Mvc\Application::init(require 'config/application/development.config.php');
+} else {
+    $application = Zend\Mvc\Application::init(require 'config/application/application.config.php');
+}
+
 $serviceManager = $application->getServiceManager();
 
 $cliConfig = $serviceManager->get('config');
