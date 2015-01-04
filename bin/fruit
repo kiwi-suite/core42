@@ -19,12 +19,21 @@ require_once 'init_autoloader.php';
 
 //just for downward compatibility
 if (file_exists('config/application.config.php')) {
-    $application = Zend\Mvc\Application::init(require 'config/application.config.php');
+    $applicationConfig = require 'config/application.config.php';
 } elseif (DEVELOPMENT_MODE === true) {
-    $application = Zend\Mvc\Application::init(require 'config/application/development.config.php');
+    $applicationConfig = require 'config/application/development.config.php';
 } else {
-    $application = Zend\Mvc\Application::init(require 'config/application/application.config.php');
+    $applicationConfig = require 'config/application/application.config.php';
 }
+
+if ($argv[1] == 'clear-app-cache') {
+    $dir = rtrim($applicationConfig['module_listener_options']['cache_dir'], '/') . '/';
+    unlink($dir . 'module-classmap-cache.' . $applicationConfig['module_listener_options']['module_map_cache_key'] . '.php');
+    unlink($dir . 'module-config-cache.' . $applicationConfig['module_listener_options']['config_cache_key'] . '.php');
+    return;
+}
+
+$application = Zend\Mvc\Application::init($applicationConfig);
 
 $serviceManager = $application->getServiceManager();
 

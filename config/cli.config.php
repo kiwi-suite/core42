@@ -96,5 +96,12 @@ return array(
             'description'               => 'generates model based on database schema',
             'short_description'         => 'generate model from database',
         ),
+
+        'clear-app-cache' => array(
+            'route'                     => 'clear-app-cache',
+            'command-name'              => '',
+            'description'               => 'Clears config cache and module map cache',
+            'short_description'         => 'Clears config cache and module map cache',
+        ),
     ),
 );
