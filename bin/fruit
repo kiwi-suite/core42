@@ -26,7 +26,7 @@ if (file_exists('config/application.config.php')) {
     $applicationConfig = require 'config/application/application.config.php';
 }
 
-if ($argv[1] == 'clear-app-cache') {
+if (!empty($argv[1]) && $argv[1] == 'clear-app-cache') {
     $dir = rtrim($applicationConfig['module_listener_options']['cache_dir'], '/') . '/';
     unlink($dir . 'module-classmap-cache.' . $applicationConfig['module_listener_options']['module_map_cache_key'] . '.php');
     unlink($dir . 'module-config-cache.' . $applicationConfig['module_listener_options']['config_cache_key'] . '.php');
