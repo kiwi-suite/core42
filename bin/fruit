@@ -1,7 +1,7 @@
 #!/usr/bin/env php
 <?php
 use Zend\Console\Console;
-use ZF\Console\Application;
+use Core42\Console\Application;
 use ZF\Console\Dispatcher;
 
 chdir(__DIR__
