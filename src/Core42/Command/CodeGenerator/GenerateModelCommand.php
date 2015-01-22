@@ -10,16 +10,14 @@
 namespace Core42\Command\CodeGenerator;
 
 use Core42\Command\AbstractCommand;
-use Core42\Command\ConsoleAwareInterface;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
-use ZF\Console\Route;
 use Zend\Code\Generator;
 use Zend\Code\Reflection;
 use Zend\Db\Adapter;
 use Zend\Db\Metadata\Metadata;
 use Zend\Filter\Word\UnderscoreToCamelCase;
 
-class GenerateModelCommand extends AbstractCommand implements ConsoleAwareInterface
+class GenerateModelCommand extends AbstractCommand
 {
     /**
      * @type \Zend\Db\Adapter\Adapter
@@ -34,7 +32,7 @@ class GenerateModelCommand extends AbstractCommand implements ConsoleAwareInterf
     /**
      * @type string
      */
-    private $namespace;
+    private $className;
 
     /**
      * @type string
@@ -42,67 +40,52 @@ class GenerateModelCommand extends AbstractCommand implements ConsoleAwareInterf
     private $directory;
 
     /**
-     * @type boolean
-     */
-    private $all;
-
-    /**
      * @type string
      */
     private $tableName;
 
     /**
-     * @type boolean
-     */
-    private $overwrite;
-
-    /**
      * @param mixed $adapterName
+     * @return $this
      */
     public function setAdapterName($adapterName)
     {
         $this->adapterName = $adapterName;
-    }
 
-    /**
-     * @param mixed $all
-     */
-    public function setAll($all)
-    {
-        $this->all = (boolean) $all;
+        return $this;
     }
 
     /**
      * @param mixed $directory
+     * @return $this
      */
     public function setDirectory($directory)
     {
-        $directory = rtrim($directory, '/');
         $this->directory = $directory;
+
+        return $this;
     }
 
     /**
      * @param mixed $tableName
+     * @return $this
      */
     public function setTableName($tableName)
     {
         $this->tableName = $tableName;
+
+        return $this;
     }
 
     /**
-     * @param string $namespace
+     * @param string $className
+     * @return $this
      */
-    public function setNamespace($namespace)
+    public function setClassName($className)
     {
-        $this->namespace = $namespace;
-    }
+        $this->className = $className;
 
-    /**
-     * @param boolean $overwrite
-     */
-    public function setOverwrite($overwrite)
-    {
-        $this->overwrite = (boolean) $overwrite;
+        return $this;
     }
 
     /**
@@ -110,21 +93,18 @@ class GenerateModelCommand extends AbstractCommand implements ConsoleAwareInterf
      */
     protected function preExecute()
     {
-        if ($this->all === true && !empty($this->tableName)) {
-            $this->addError('all', "both usage of name argument and --all argument is not allowed");
-        }
-        if ($this->all === false && empty($this->tableName)) {
-            $this->addError('all', "Whether name argument or --all argument is missing");
-            return;
-        }
-
-        if (!isset($this->namespace)) {
-            $this->addError('namespace', "namespace parameter not set");
+        if (!isset($this->className)) {
+            $this->addError('className', "className parameter not set");
             return;
         }
 
         if (!isset($this->directory)) {
             $this->addError('directory', "directory parameter not set");
+            return;
+        }
+
+        if (empty($this->tableName)) {
+            $this->addError('tableName', "tableName parameter not set");
             return;
         }
 
@@ -143,6 +123,8 @@ class GenerateModelCommand extends AbstractCommand implements ConsoleAwareInterf
         } catch (ServiceNotFoundException $e) {
             $this->addError("adapter", "adapter '".$this->adapterName."' not found");
         }
+
+        $this->directory = rtrim($this->directory, '/') . '/';
     }
 
     /**
@@ -151,131 +133,59 @@ class GenerateModelCommand extends AbstractCommand implements ConsoleAwareInterf
     protected function execute()
     {
         $metadata = new Metadata($this->adapter);
+        $columns = $metadata->getColumns($this->tableName);
 
-        if ($this->all) {
-            $tables = $metadata->getTableNames();
-
-            foreach ($tables as $table) {
-                $this->generateModelClass($table);
-            }
-
-        } else {
-            $metadata->getTable($this->tableName);
-            $this->generateModelClass($this->tableName);
-        }
-    }
-
-    /**
-     * @param Route $route
-     * @return mixed|void
-     */
-    public function consoleSetup(Route $route)
-    {
-        $this->setAll($route->getMatchedParam('all', false));
-        $this->setTableName($route->getMatchedParam('table'));
-
-        $adapterName = $route->getMatchedParam('adapter');
-        if (!empty($adapterName)) {
-            $this->setAdapterName($adapterName);
-        }
-
-        $this->setNamespace($route->getMatchedParam('namespace'));
-        $this->setOverwrite($route->getMatchedParam('overwrite'));
-        $this->setDirectory($route->getMatchedParam('directory'));
-    }
-
-    /**
-     * @param $table
-     */
-    protected function generateModelClass($table)
-    {
-        $metadata = new Metadata($this->adapter);
+        $parts =  explode("\\", $this->className);
+        $class = array_pop($parts);
+        $namespace = implode("\\", $parts);
 
         $modelClass = new Generator\ClassGenerator();
-        $modelClass->setNamespaceName($this->namespace . "\\Model")
-            ->addUse('Core42\Model\AbstractModel');
-
-        $filter = new UnderscoreToCamelCase();
-        $modelName = ucfirst($filter->filter(strtolower($table)));
-
-        $modelClass->setName($modelName)
+        $modelClass->setNamespaceName($namespace)
+            ->addUse('Core42\Model\AbstractModel')
+            ->setName($class)
             ->setExtendedClass('AbstractModel');
 
-        $columns = $metadata->getColumns($table);
+        $filter = new UnderscoreToCamelCase();
 
-        $methods = array();
+        $tags = array();
+        $properties = array();
         foreach ($columns as $column) {
-            /* @type \Zend\Db\Metadata\Object\ColumnObject $column */
-
-            //setter
             $method = ucfirst($filter->filter($column->getName()));
 
-            $docBlockParam = new Generator\DocBlock\Tag\ParamTag();
-            $docBlockParam->setVariableName($column->getName());
-            $docBlockParam->setTypes($this->getPropertyTypeByColumnObject($column));
+            $properties[] = $column->getName();
 
-            $docBlockReturn = new Generator\DocBlock\Tag\ReturnTag();
-            $docBlockReturn->setTypes('\\' . $this->namespace. '\\Model\\' . $modelName);
+            $type = $this->getPropertyTypeByColumnObject($column);
 
-            $methods[] = new Generator\MethodGenerator(
-                'set'.$method,
-                array(
-                    new Generator\ParameterGenerator(
-                        $column->getName(),
-                        null,
-                        null
-                    )
-                ),
-                Generator\MethodGenerator::FLAG_PUBLIC,
-                implode("\n", array(
-                    '$this->set(\''.$column->getName().'\', $'.$column->getName().');',
-                    'return $this;'
-                )),
-                new Generator\DocBlockGenerator(
-                    null,
-                    null,
-                    array(
-                        $docBlockParam,
-                        $docBlockReturn
-                    )
-                )
+            $setterMethodDocBlock = new Generator\DocBlock\Tag\MethodTag(
+                "set".$method,
+                array($class),
+                "set".$method."(".$type." \$".$column->getName().")"
             );
+            $tags[] = $setterMethodDocBlock;
 
-            //getter
-            $docBlockReturn = new Generator\DocBlock\Tag\ReturnTag();
-            $docBlockReturn->setTypes($this->getPropertyTypeByColumnObject($column));
-
-            $methods[] = new Generator\MethodGenerator(
-                'get'.$method,
-                array(),
-                Generator\MethodGenerator::FLAG_PUBLIC,
-                "return \$this->get('".$column->getName()."');",
-                new Generator\DocBlockGenerator(
-                    null,
-                    null,
-                    array(
-                        $docBlockReturn
-                    )
-                )
+            $getterMethodDocBlock = new Generator\DocBlock\Tag\MethodTag(
+                "get".$method,
+                array($type),
+                "get".$method."()"
             );
-
+            $tags[] = $getterMethodDocBlock;
         }
 
-        $modelClass->addMethods($methods);
+        $docBlock = new Generator\DocBlockGenerator();
+        $docBlock->setTags($tags);
 
-        $file = new Generator\FileGenerator(
-            array(
-                'classes'  => array($modelClass),
-            )
-        );
+        $propertyGenerator = new Generator\PropertyGenerator("properties", $properties, Generator\PropertyGenerator::FLAG_PROTECTED);
+        $propertyGenerator->setDocBlock(new Generator\DocBlockGenerator(
+            null,
+            null,
+            array(new Generator\DocBlock\Tag\GenericTag('var', 'array'))
+        ));
+        $modelClass->addPropertyFromGenerator($propertyGenerator);
 
-        $filename = $this->directory . "/" . $modelName . '.php';
-        if (!file_exists($filename) || $this->overwrite === true) {
-            file_put_contents($filename, $file->generate());
-            $this->consoleOutput("Generated {$modelName}");
-        } else {
-            $this->consoleOutput("Skipped {$modelName} - it all ready exists. Use --override!");
-        }
+        $modelClass->setDocBlock($docBlock);
+
+        $filename = $this->directory . $class . '.php';
+        file_put_contents($filename, "<?php\n" . $modelClass->generate());
     }
 
     /**

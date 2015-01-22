@@ -84,17 +84,18 @@ return array(
             ),
         ),
 
-        'generate-model' => array(
-            'route'                     => 'generate-model --namespace= --directory= [--adapter=] [--overwrite] [--all] [--table=]',
-            'command-name'              => 'Core42\CodeGenerator\GenerateModel',
+        'generate-db-classes' => array(
+            'route'                     => 'generate-db-classes --name= --namespace= --directory= --table= [--adapter=]',
+            'command-name'              => 'Core42\CodeGenerator\GenerateDbClasses',
             'description'               => 'generates model based on database schema',
             'short_description'         => 'generate model from database',
-        ),
-        'generate-tablegateway' => array(
-            'route'                     => 'generate-tablegateway --namespace= --directory= [--adapter=] [--overwrite] [--all] [--table=]',
-            'command-name'              => 'Core42\CodeGenerator\GenerateTableGateway',
-            'description'               => 'generates model based on database schema',
-            'short_description'         => 'generate model from database',
+            'options_descriptions'      => array(
+                '--name'                => 'Name of the model or tablegateway (for example \'User\')',
+                '--namespace'           => 'Namespace of the classes. (In most cases the same as the module name)',
+                '--directory'           => 'Root-Directory of the namespace (eg. module/<modulename>/src/<modulename>)',
+                '--table'               => 'tablename where to fetch informations from from',
+                '--adapter'             => 'Optional adapter name',
+            ),
         ),
 
         'clear-app-cache' => array(

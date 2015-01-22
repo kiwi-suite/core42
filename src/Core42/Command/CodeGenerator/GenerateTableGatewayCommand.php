@@ -10,16 +10,13 @@
 namespace Core42\Command\CodeGenerator;
 
 use Core42\Command\AbstractCommand;
-use Core42\Command\ConsoleAwareInterface;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
-use ZF\Console\Route;
 use Zend\Code\Generator;
 use Zend\Code\Reflection;
 use Zend\Db\Adapter;
 use Zend\Db\Metadata\Metadata;
-use Zend\Filter\Word\UnderscoreToCamelCase;
 
-class GenerateTableGatewayCommand extends AbstractCommand implements ConsoleAwareInterface
+class GenerateTableGatewayCommand extends AbstractCommand
 {
     /**
      * @type \Zend\Db\Adapter\Adapter
@@ -34,7 +31,7 @@ class GenerateTableGatewayCommand extends AbstractCommand implements ConsoleAwar
     /**
      * @type string
      */
-    private $namespace;
+    private $className;
 
     /**
      * @type string
@@ -42,67 +39,69 @@ class GenerateTableGatewayCommand extends AbstractCommand implements ConsoleAwar
     private $directory;
 
     /**
-     * @type boolean
-     */
-    private $all;
-
-    /**
      * @type string
      */
     private $tableName;
 
     /**
-     * @type boolean
+     * @var string
      */
-    private $overwrite;
+    private $model;
+
 
     /**
      * @param mixed $adapterName
+     * @return $this
      */
     public function setAdapterName($adapterName)
     {
         $this->adapterName = $adapterName;
-    }
 
-    /**
-     * @param mixed $all
-     */
-    public function setAll($all)
-    {
-        $this->all = (boolean) $all;
+        return $this;
     }
 
     /**
      * @param mixed $directory
+     * @return $this
      */
     public function setDirectory($directory)
     {
-        $directory = rtrim($directory, '/');
         $this->directory = $directory;
+
+        return $this;
     }
 
     /**
      * @param mixed $tableName
+     * @return $this
      */
     public function setTableName($tableName)
     {
         $this->tableName = $tableName;
+
+        return $this;
     }
 
     /**
-     * @param string $namespace
+     * @param string $className
+     * @return $this
      */
-    public function setNamespace($namespace)
+    public function setClassName($className)
     {
-        $this->namespace = $namespace;
+        $this->className = $className;
+
+        return $this;
     }
 
     /**
-     * @param boolean $overwrite
+     * @param string $model
+     * @return $this
      */
-    public function setOverwrite($overwrite)
+    public function setModel($model)
     {
-        $this->overwrite = (boolean) $overwrite;
+        $this->model = $model;
+
+        return $this;
     }
 
     /**
@@ -110,21 +109,23 @@ class GenerateTableGatewayCommand extends AbstractCommand implements ConsoleAwar
      */
     protected function preExecute()
     {
-        if ($this->all === true && !empty($this->tableName)) {
-            $this->addError('all', "both usage of name argument and --all argument is not allowed");
-        }
-        if ($this->all === false && empty($this->tableName)) {
-            $this->addError('all', "Whether name argument or --all argument is missing");
+        if (empty($this->className)) {
+            $this->addError('className', "className parameter not set");
             return;
         }
 
-        if (!isset($this->namespace)) {
-            $this->addError('namespace', "namespace parameter not set");
-            return;
-        }
-
-        if (!isset($this->directory)) {
+        if (empty($this->directory)) {
             $this->addError('directory', "directory parameter not set");
+            return;
+        }
+
+        if (empty($this->tableName)) {
+            $this->addError('tableName', "tableName parameter not set");
+            return;
+        }
+
+        if (empty($this->model)) {
+            $this->addError('model', "model parameter not set");
             return;
         }
 
@@ -144,6 +145,7 @@ class GenerateTableGatewayCommand extends AbstractCommand implements ConsoleAwar
             $this->addError("adapter", "adapter '".$this->adapterName."' not found");
         }
 
+        $this->directory = rtrim($this->directory, '/') . '/';
     }
 
     /**
@@ -152,124 +154,59 @@ class GenerateTableGatewayCommand extends AbstractCommand implements ConsoleAwar
     protected function execute()
     {
         $metadata = new Metadata($this->adapter);
+        $metadata->getTable($this->tableName);
 
-        if ($this->all) {
-            $tables = $metadata->getTableNames();
+        $parts =  explode("\\", $this->className);
+        $class = array_pop($parts);
+        $namespace = implode("\\", $parts);
 
-            foreach ($tables as $table) {
-                $this->generateTableGatewayClass($table);
-            }
-
-        } else {
-            $metadata->getTable($this->tableName);
-            $this->generateTableGatewayClass($this->tableName);
-        }
-    }
-
-    /**
-     * @param Route $route
-     * @return mixed|void
-     */
-    public function consoleSetup(Route $route)
-    {
-        $this->setAll($route->getMatchedParam('all', false));
-        $this->setTableName($route->getMatchedParam('table'));
-
-        $adapterName = $route->getMatchedParam('adapter');
-        if (!empty($adapterName)) {
-            $this->setAdapterName($adapterName);
-        }
-
-        $this->setNamespace($route->getMatchedParam('namespace'));
-        $this->setOverwrite($route->getMatchedParam('overwrite'));
-        $this->setDirectory($route->getMatchedParam('directory'));
-    }
-
-    /**
-     * @param $table
-     */
-    protected function generateTableGatewayClass($table)
-    {
-        $class = new Generator\ClassGenerator();
-        $class->setNamespaceName($this->namespace . "\\TableGateway")
-            ->addUse('Core42\Db\TableGateway\AbstractTableGateway');
-
-        $filter = new UnderscoreToCamelCase();
-        $className = ucfirst($filter->filter(strtolower($table)));
-
-        $tableGatewayName = $className . "TableGateway";
-
-        $class->setName($tableGatewayName)
+        $classGenerator = new Generator\ClassGenerator();
+        $classGenerator->setNamespaceName($namespace)
+            ->addUse('Core42\Db\TableGateway\AbstractTableGateway')
+            ->setName($class)
             ->setExtendedClass('AbstractTableGateway');
 
         $property = new Generator\PropertyGenerator("table");
-        $property->setDefaultValue($table);
-        $property->setDocBlock(
-            new Generator\DocBlockGenerator(
-                null,
-                null,
-                array(new Generator\DocBlock\Tag\GenericTag('var', 'string'))
+        $property->setDefaultValue($this->tableName)
+            ->setDocBlock(
+                new Generator\DocBlockGenerator(
+                    null,
+                    null,
+                    array(new Generator\DocBlock\Tag\GenericTag('var', 'string'))
+                )
             )
-        );
-        $property->setFlags(Generator\PropertyGenerator::FLAG_PROTECTED);
-
-        $class->addPropertyFromGenerator($property);
-
-        $property = new Generator\PropertyGenerator("modelPrototype");
-        $property->setDefaultValue($this->namespace . "\\Model\\" . $className);
-        $property->setDocBlock(
-            new Generator\DocBlockGenerator(
-                null,
-                null,
-                array(new Generator\DocBlock\Tag\GenericTag('var', 'string'))
-            )
-        );
-        $property->setFlags(Generator\PropertyGenerator::FLAG_PROTECTED);
-
-        $class->addPropertyFromGenerator($property);
+            ->setFlags(Generator\PropertyGenerator::FLAG_PROTECTED);
+        $classGenerator->addPropertyFromGenerator($property);
 
         $property = new Generator\PropertyGenerator("databaseTypeMap");
         $property->setDefaultValue(
-            array(),
-            Generator\ValueGenerator::TYPE_ARRAY,
-            Generator\ValueGenerator::OUTPUT_SINGLE_LINE
-        );
-        $property->setDocBlock(
-            new Generator\DocBlockGenerator(
-                null,
-                null,
-                array(new Generator\DocBlock\Tag\GenericTag('var', 'array'))
+                array(),
+                Generator\ValueGenerator::TYPE_ARRAY,
+                Generator\ValueGenerator::OUTPUT_SINGLE_LINE
             )
-        );
-        $property->setFlags(Generator\PropertyGenerator::FLAG_PROTECTED);
-
-        $class->addPropertyFromGenerator($property);
-
-        $property = new Generator\PropertyGenerator("underscoreSeparatedKeys");
-        $property->setDefaultValue(false);
-        $property->setDocBlock(
-            new Generator\DocBlockGenerator(
-                null,
-                null,
-                array(new Generator\DocBlock\Tag\GenericTag('var', 'bool'))
+            ->setDocBlock(
+                new Generator\DocBlockGenerator(
+                    null,
+                    null,
+                    array(new Generator\DocBlock\Tag\GenericTag('var', 'array'))
+                )
             )
-        );
-        $property->setFlags(Generator\PropertyGenerator::FLAG_PROTECTED);
+            ->setFlags(Generator\PropertyGenerator::FLAG_PROTECTED);
+        $classGenerator->addPropertyFromGenerator($property);
 
-        $class->addPropertyFromGenerator($property);
-
-        $file = new Generator\FileGenerator(
-            array(
-                'classes'  => array($class),
+        $property = new Generator\PropertyGenerator("modelPrototype");
+        $property->setDefaultValue($this->model)
+            ->setDocBlock(
+                new Generator\DocBlockGenerator(
+                    null,
+                    null,
+                    array(new Generator\DocBlock\Tag\GenericTag('var', 'string'))
+                )
             )
-        );
+            ->setFlags(Generator\PropertyGenerator::FLAG_PROTECTED);
+        $classGenerator->addPropertyFromGenerator($property);
 
-        $filename = $this->directory . "/" . $tableGatewayName . '.php';
-        if (!file_exists($filename) || $this->overwrite === true) {
-            file_put_contents($filename, $file->generate());
-            $this->consoleOutput("Generated {$tableGatewayName}");
-        } else {
-            $this->consoleOutput("Skipped {$tableGatewayName} - it all ready exists. Use --override!");
-        }
+        $filename = $this->directory . $class . '.php';
+        file_put_contents($filename, "<?php\n".$classGenerator->generate());
     }
 }
