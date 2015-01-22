@@ -11,11 +11,11 @@ namespace Core42\Db\TableGateway;
 
 use Core42\Db\ResultSet\ResultSet;
 use Core42\Hydrator\DatabaseHydrator;
+use Core42\Model\ModelInterface;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\TableGateway\AbstractTableGateway as ZendAbstractTableGateway;
 use Zend\Db\TableGateway\Feature\FeatureSet;
 use Zend\Db\TableGateway\Feature\MasterSlaveFeature;
-use Core42\Model\AbstractModel;
 use Zend\Db\Metadata\Metadata;
 use Core42\Db\TableGateway\Feature\HydratorFeature;
 use Core42\Db\TableGateway\Feature\MetadataFeature;
@@ -29,7 +29,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     protected $table = '';
 
     /**
-     * @var string|AbstractModel
+     * @var string|ModelInterface
      */
     protected $modelPrototype = null;
 
@@ -76,7 +76,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
             $this->modelPrototype = new $className;
         }
 
-        if (!($this->modelPrototype instanceof AbstractModel)) {
+        if (!($this->modelPrototype instanceof ModelInterface)) {
             throw new \Exception("invalid model prototype");
         }
 
@@ -95,7 +95,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     }
 
     /**
-     * @return AbstractModel|string
+     * @return ModelInterface|string
      */
     public function getModelPrototype()
     {
@@ -103,7 +103,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     }
 
     /**
-     * @return AbstractModel
+     * @return ModelInterface
      */
     public function getModel()
     {
@@ -130,12 +130,12 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     }
 
     /**
-     * @param AbstractModel|array $set
+     * @param ModelInterface|array $set
      * @return int
      */
     public function insert($set)
     {
-        if ($set instanceof AbstractModel) {
+        if ($set instanceof ModelInterface) {
             $insertSet = $this->getHydrator()->extract($set);
             $result = parent::insert($insertSet);
             if (($primaryKeyValue = $this->lastInsertValue) && count($this->getPrimaryKey()) == 1) {
@@ -166,7 +166,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
      */
     public function update($set, $where = null)
     {
-        if ($set instanceof AbstractModel) {
+        if ($set instanceof ModelInterface) {
             $where = $this->getPrimaryValues($set);
             if (empty($where)) {
                 throw new \Exception("no primary key set");
@@ -194,7 +194,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
      */
     public function delete($where)
     {
-        if ($where instanceof AbstractModel) {
+        if ($where instanceof ModelInterface) {
             $where = $this->getPrimaryValues($where);
             if (empty($where)) {
                 return 0;
@@ -251,10 +251,10 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     }
 
     /**
-     * @param  AbstractModel $model
+     * @param  ModelInterface $model
      * @return array
      */
-    public function getPrimaryValues(AbstractModel $model)
+    public function getPrimaryValues(ModelInterface $model)
     {
         $values = $this->getHydrator()->extract($model);
 

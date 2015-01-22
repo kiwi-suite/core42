@@ -13,6 +13,7 @@ use Core42\Db\ResultSet\ResultSet;
 use Core42\Hydrator\ModelHydrator;
 use Core42\Hydrator\Strategy\Service\HydratorStrategyPluginManager;
 use Core42\Model\DefaultModel;
+use Core42\Model\GenericModel;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Sql;
@@ -47,11 +48,11 @@ abstract class AbstractDatabaseSelector extends AbstractSelector
     }
 
     /**
-     * @return DefaultModel
+     * @return GenericModel
      */
     protected function getModel()
     {
-        return new DefaultModel();
+        return new GenericModel();
     }
 
     /**

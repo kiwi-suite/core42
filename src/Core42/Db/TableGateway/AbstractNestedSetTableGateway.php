@@ -9,14 +9,9 @@
 
 namespace Core42\Db\TableGateway;
 
-use Core42\Db\ResultSet\ResultSet;
-use Core42\Hydrator\DatabaseHydrator;
 use Core42\Model\NestedSetInterface;
 use Zend\Db\Sql\Expression;
 use Zend\Db\Sql\Select;
-use Core42\Model\AbstractModel;
-use Core42\Db\TableGateway\Feature\HydratorFeature;
-use Core42\Db\TableGateway\Feature\MetadataFeature;
 
 abstract class AbstractNestedSetTableGateway extends AbstractTableGateway
 {

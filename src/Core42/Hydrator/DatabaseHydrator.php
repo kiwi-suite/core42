@@ -9,14 +9,14 @@
 
 namespace Core42\Hydrator;
 
-use Core42\Model\AbstractModel;
+use Core42\Model\ModelInterface;
 
 class DatabaseHydrator extends AbstractHydrator
 {
     /**
      * @param string $name
      * @param mixed $value
-     * @param null|AbstractModel $object
+     * @param null|ModelInterface $object
      * @return mixed
      */
     public function extractValue($name, $value, $object = null)

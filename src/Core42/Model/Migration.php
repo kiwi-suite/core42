@@ -11,6 +11,11 @@ namespace Core42\Model;
 
 class Migration extends AbstractModel
 {
+    protected $properties = array(
+        'name',
+        'created',
+    );
+
     /**
      * @param string $name
      * @return Migration

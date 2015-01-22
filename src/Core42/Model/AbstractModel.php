@@ -9,61 +9,55 @@
 
 namespace Core42\Model;
 
-abstract class AbstractModel
+abstract class AbstractModel implements ModelInterface
 {
-    private $modelProperties = array();
+    /**
+     * @var array
+     */
+    protected $properties = array();
 
     /**
-     * @var null|array
+     * @var array
      */
-    private $memento = null;
+    protected $data = array();
 
     /**
-     *
+     * @var array
      */
-    public function __construct()
+    protected $memento = array();
+
+    /**
+     * @param array $data
+     */
+    public function __construct(array $data = array())
     {
+        $this->data = array_fill_keys($this->properties, null);
+        if (!empty($data)) {
+            $this->populate($data);
+        }
         $this->memento();
     }
 
     /**
-     * @param  string $name
-     * @return mixed
+     * @return array
      */
-    protected function get($name)
+    public function getProperties()
     {
-        if (array_key_exists($name, $this->modelProperties)) {
-            return $this->modelProperties[$name];
-        }
-
-        return null;
+        return $this->properties;
     }
 
     /**
-     * @param  string                      $name
-     * @param  mixed                       $value
-     * @return \Core42\Model\AbstractModel
-     */
-    protected function set($name, $value)
-    {
-        $this->modelProperties[$name] =  $value;
-
-        return $this;
-    }
-
-    /**
-     * @return \Core42\Model\AbstractModel
+     * @return void
      */
     public function memento()
     {
-        $this->memento = $this->modelProperties;
-
-        return $this;
+        $this->memento = $this->data;
     }
 
     /**
-     * @param  null|string $property
-     * @return bool
+     * @param null|string $property
+     * @return true
+     * @throws \Exception
      */
     public function hasChanged($property = null)
     {
@@ -71,16 +65,19 @@ abstract class AbstractModel
             return (count($this->diff()) > 0);
         }
 
-        return array_key_exists($property, $this->modelProperties);
+        if (!in_array($property, $this->properties)) {
+            throw new \Exception(sprintf("'%s' not set in property array", $property));
+        }
+
+        return !($this->memento[$property] === $this->data[$property]);
     }
 
     /**
      * @return array
-     * @throws \Exception
      */
     public function diff()
     {
-        return array_udiff_assoc($this->modelProperties, $this->memento, function ($value1, $value2) {
+        return array_udiff_assoc($this->data, $this->memento, function ($value1, $value2) {
             return ($value1 === $value2) ? 0 : 1;
         });
     }
@@ -90,6 +87,89 @@ abstract class AbstractModel
      */
     public function toArray()
     {
-        return $this->modelProperties;
+        return $this->data;
+    }
+
+    /**
+     * @return array
+     */
+    public function getArrayCopy()
+    {
+        return $this->toArray();
+    }
+
+    /**
+     * @param array $data
+     * @return void
+     */
+    public function exchangeArray(array $data)
+    {
+        $this->populate($data);
+    }
+
+    /**
+     * @param array $data
+     * @return void
+     */
+    public function populate(array $data)
+    {
+        foreach ($data as $name => $value) {
+            $this->set($name, $value);
+        }
+    }
+
+    /**
+     * @param  string $name
+     * @return mixed
+     * @throws \Exception
+     */
+    protected function get($name)
+    {
+        if (!in_array($name, $this->properties)) {
+            throw new \Exception(sprintf("'%s' not set in property array", $name));
+        }
+
+        return $this->data[$name];
+    }
+
+    /**
+     * @param  string $name
+     * @param  mixed $value
+     * @param bool $strict
+     * @return $this
+     * @throws \Exception
+     */
+    protected function set($name, $value, $strict = false)
+    {
+        if (!in_array($name, $this->properties)) {
+            if ($strict === true) {
+                throw new \Exception(sprintf("'%s' not set in property array", $name));
+            }
+
+            return $this;
+        }
+        $this->data[$name] =  $value;
+
+        return $this;
+    }
+
+    /**
+     * @param $method
+     * @param $params
+     * @return BaseModel|mixed|null
+     * @throws \Exception
+     */
+    public function __call($method, $params)
+    {
+        $return = null;
+
+        $variableName = lcfirst(substr($method, 3));
+        if (strncasecmp($method, "get", 3) === 0) {
+            return $this->get($variableName);
+        } elseif (strncasecmp($method, "set", 3) === 0) {
+            return $this->set($variableName, $params[0], true);
+        }
+
+        throw new \Exception("Method {$method} not found");
     }
 }
