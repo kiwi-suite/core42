@@ -7,7 +7,6 @@ return array(
             'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
             'Core42\Db\Adapter\AdapterAbstractServiceFactory',
             'Zend\Log\LoggerAbstractServiceFactory',
-            'Core42\Queue\Service\QueueAbstractFactory',
         ),
         'factories' => array(
             'Zend\Session\Service\SessionManager'           => 'Zend\Session\Service\SessionManagerFactory',
@@ -20,7 +19,6 @@ return array(
             'Core42\TableGatewayPluginManager'              => 'Core42\Db\TableGateway\Service\TableGatewayPluginManagerFactory',
             'Core42\HydratorStrategyPluginManager'          => 'Core42\Hydrator\Strategy\Service\HydratorStrategyPluginManagerFactory',
             'Core42\SelectorPluginManager'                  => 'Core42\Selector\Service\SelectorPluginManagerFactory',
-            'Core42\QueueAdapterPluginManager'              => 'Core42\Queue\Service\AdapterPluginManagerFactory',
             'Core42\FormPluginManager'                      => 'Core42\Form\Service\FormPluginManagerFactory',
 
             'Core42\Form\ThemeManager'                      => 'Core42\Form\Theme\Service\ThemeManagerFactory',
@@ -59,7 +57,6 @@ return array(
             'TableGateway'                                  => 'Core42\TableGatewayPluginManager',
             'HydratorStrategy'                              => 'Core42\HydratorStrategyPluginManager',
             'Selector'                                      => 'Core42\SelectorPluginManager',
-            'QueueAdapter'                                  => 'Core42\QueueAdapterPluginManager',
             'Form'                                          => 'Core42\FormPluginManager',
 
             'Navigation'                                    => 'Core42\Navigation'

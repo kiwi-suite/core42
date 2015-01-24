@@ -60,30 +60,6 @@ return array(
             'short_description'         => 'Copy or symlink all registered assets',
         ),
 
-        'queue-work' => array(
-            'route'                     => 'queue-work --queue=',
-            'command-name'              => 'Core42\Queue\Work',
-            'description'               => 'Starts the Worker for the Queue',
-            'short_description'         => 'Starts the Worker for the Queue',
-            'options_descriptions'      => array(
-                '--queue'           => 'Which queue should be processed',
-            ),
-        ),
-
-        'queue-listen' => array(
-            'route'                     => 'queue-listen --queue= [--sleep=]',
-            'command-name'              => 'Core42\Queue\Listen',
-            'description'               => 'Listens on the queue and calls the command',
-            'short_description'         => 'Listens on the queue and calls the command',
-            'defaults'                  => array(
-                'sleep'             => 3,
-            ),
-            'options_descriptions'      => array(
-                '--queue'           => 'Which queue should be processed',
-                '--sleep'           => 'Number of seconds to wait before polling for new jobs.',
-            ),
-        ),
-
         'generate-db-classes' => array(
             'route'                     => 'generate-db-classes --name= --namespace= --directory= --table= [--adapter=]',
             'command-name'              => 'Core42\CodeGenerator\GenerateDbClasses',
