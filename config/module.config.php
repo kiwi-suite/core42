@@ -8,7 +8,6 @@ return array(
 
             'params'                => __NAMESPACE__ . '\View\Helper\Params',
             'auth'                  => __NAMESPACE__ . '\View\Helper\Auth',
-            'mobileDetect'          => __NAMESPACE__ . '\View\Helper\MobileDetect',
             'formRender'            => __NAMESPACE__ . '\View\Helper\Form\FormRender',
             'formElementRender'     => __NAMESPACE__ . '\View\Helper\Form\FormElementRender',
         ),
@@ -29,7 +28,6 @@ return array(
 
     'controller_plugins' => array(
         'factories' => array(
-            'mobileDetect'  => 'Core42\Mvc\Controller\Plugin\Service\MobileDetectFactory',
             'permission'    => 'Core42\Mvc\Controller\Plugin\Service\PermissionFactory',
         ),
     ),

@@ -42,8 +42,6 @@ return array(
             'MvcTranslatorPluginManager'                    => 'Core42\I18n\Translator\Service\TranslatorLoaderFactory',
         ),
         'invokables' => array(
-            'MobileDetect'                                  => '\Mobile_Detect',
-
             'Core42\LoggingProfiler'                        => 'Core42\Db\Adapter\Profiler\LoggingProfiler',
 
             'Core42\ConsoleDispatcher'                      => 'Core42\Command\Console\ConsoleDispatcher',
