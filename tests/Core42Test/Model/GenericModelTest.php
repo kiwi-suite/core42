@@ -9,15 +9,15 @@
 
 namespace Core42Test\Model;
 
-use Core42\Model\DefaultModel;
+use Core42\Model\GenericModel;
 
-class DefaultModelTest extends \PHPUnit_Framework_TestCase
+class GenericModelTest extends \PHPUnit_Framework_TestCase
 {
     private $defaultModel;
 
     public function setUp()
     {
-        $this->defaultModel = new DefaultModel();
+        $this->defaultModel = new GenericModel();
     }
 
     /**
