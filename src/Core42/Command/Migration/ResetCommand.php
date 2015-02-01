@@ -43,6 +43,9 @@ class ResetCommand extends AbstractCommand implements ConsoleAwareInterface
 
             $migrationTableGateway->delete(array('name' => $migration['name']));
             $migrationCounter++;
+
+            $this->getServiceManager()->get('Metadata')->refresh();
+
             $this->consoleOutput("Migration {$migration['name']} rolled back");
         }
         $this->consoleOutput("");
