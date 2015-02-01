@@ -180,10 +180,10 @@ class GenerateTableGatewayCommand extends AbstractCommand
 
         $property = new Generator\PropertyGenerator("databaseTypeMap");
         $property->setDefaultValue(
-                array(),
-                Generator\ValueGenerator::TYPE_ARRAY,
-                Generator\ValueGenerator::OUTPUT_SINGLE_LINE
-            )
+            array(),
+            Generator\ValueGenerator::TYPE_ARRAY,
+            Generator\ValueGenerator::OUTPUT_SINGLE_LINE
+        )
             ->setDocBlock(
                 new Generator\DocBlockGenerator(
                     null,
