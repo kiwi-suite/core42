@@ -34,7 +34,7 @@ class CacheMetadata extends Metadata
         $this->source = $this->createSourceFromAdapter($adapter);
 
         if ($storage !== null) {
-            $cacheSource = new CacheSource($this->source, $storage);
+            new CacheSource($this->source, $storage);
         }
     }
 }
