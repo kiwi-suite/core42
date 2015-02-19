@@ -63,7 +63,8 @@ return array(
 
     'table_gateway' => array(
         'factories' => array(
-            'Core42\Migration' => 'Core42\TableGateway\Service\MigrationTableGatewayFactory'
+            'Core42\Migration' => 'Core42\TableGateway\Service\MigrationTableGatewayFactory',
+            'Core42\Seeding' => 'Core42\TableGateway\Service\SeedingTableGatewayFactory',
         ),
     ),
 );

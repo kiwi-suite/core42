@@ -19,8 +19,8 @@ return array(
         'migration-migrate' => array(
             'route'                     => 'migration-migrate [--limit=]',
             'command-name'              => 'Core42\Migration\Migrate',
-            'description'               => 'Create a migration file into the configured migration directory',
-            'short_description'         => 'Create a migration file',
+            'description'               => 'Run migrations',
+            'short_description'         => 'Run migrations',
             'options_descriptions'      => array(
                 '--limit'           => 'Only the given number of pending migrations will be migrated. Default: '
                                             .'All pending migrations will be migrated'
@@ -42,6 +42,33 @@ return array(
             'description'               => 'Resets all Migrations. Synonym of migration-rollback with limit=amount '
                                                 .'of migrations',
             'short_description'         => 'Resets all Migrations',
+        ),
+
+        'seeding-make' => array(
+            'route'                     => 'seeding-make --directory= --name=',
+            'command-name'              => 'Core42\Seeding\Make',
+            'description'               => 'Create a seeding file into the configured seeding directory',
+            'short_description'         => 'Create a seeding file',
+            'options_descriptions'      => array(
+                '--directory'       => 'directory where seeding will be created',
+                '--name'            => 'name of the seeding',
+            ),
+        ),
+        'seeding-list' => array(
+            'route'                     => 'seeding-list',
+            'command-name'              => 'Core42\Seeding\List',
+            'description'               => 'List all seeded and available seeds',
+            'short_description'         => 'List of seeds',
+        ),
+        'seeding-seed' => array(
+            'route'                     => 'seeding-seed --name= [-f]',
+            'command-name'              => 'Core42\Seeding\Seed',
+            'description'               => 'Seed a seeding',
+            'short_description'         => 'Seed a seeding',
+            'options_descriptions'      => array(
+                '--name'           => 'Name of the seeding which should be seeded',
+                '-f'               => 'Force the seeding'
+            ),
         ),
 
         'development' => array(
