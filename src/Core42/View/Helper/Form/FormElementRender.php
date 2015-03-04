@@ -73,7 +73,7 @@ class FormElementRender extends AbstractHelper
             $partialHelper = $this->view->plugin('partial');
 
             if (empty($this->partial)) {
-                $this->partial = $this->getTheme()->getElementTemplate($this->element->getAttribute('type'));
+                $this->partial = $this->getElementTemplate($this->element->getAttribute('type'));
             }
 
             $html = $partialHelper($this->partial, array(

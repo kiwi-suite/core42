@@ -7,29 +7,27 @@
  *
  */
 
-namespace Core42\Form\Theme\Service;
+namespace Core42\View\Helper\Form\Service;
 
-use Core42\Form\Theme\ThemeManager;
+use Core42\View\Helper\Form\FormRender;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class ThemeManagerFactory implements FactoryInterface
+class FormRenderFactory implements FactoryInterface
 {
 
     /**
      * Create service
      *
      * @param ServiceLocatorInterface $serviceLocator
-     * @return ThemeManager
+     * @return FormRender
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $serviceLocator->get('config');
+        $config = $serviceLocator->getServiceLocator()->get('config');
         $config = $config['form_themes'];
 
-        $themeManager = new ThemeManager();
-        $themeManager->factory($config);
-
-        return $themeManager;
+        $formRender = new FormRender($config);
+        return $formRender;
     }
 }

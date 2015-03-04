@@ -126,15 +126,13 @@ class FormRender extends AbstractHelper
             /** @var FormElementRender $formElementRender */
             $formElementRender = $this->getView()->plugin('formElementRender');
 
-            $theme =  $this->getTheme();
-
             $elementHtml = array();
             foreach ($this->form as $element) {
                 $type = $element->getAttribute('type');
 
                 $elementPartial = (isset($this->partialMap[$element->getName()]))
                     ? $this->partialMap[$element->getName()]
-                    : $theme->getElementTemplate($type);
+                    : $this->getElementTemplate($type);
 
                 $formElementRender->setElement($element);
                 $formElementRender->setPartial($elementPartial);
@@ -143,7 +141,7 @@ class FormRender extends AbstractHelper
             }
 
             if (empty($this->partial)) {
-                $this->partial = $theme->getFormLayout();
+                $this->partial = $this->getFormLayout();
             }
 
             $partialHelper = $this->view->plugin('partial');

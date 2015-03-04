@@ -9,68 +9,78 @@
 
 namespace Core42\View\Helper\Form;
 
-use Core42\Form\Theme\Theme;
-use Core42\Form\Theme\ThemeManager;
-
 class AbstractHelper extends \Zend\View\Helper\AbstractHelper
 {
     /**
-     * @var ThemeManager
-     */
-    protected $themeManager;
-
-    /**
      * @var string
      */
-    protected $themeName;
+    protected $formLayout;
 
     /**
-     * @return ThemeManager
+     * @var array
      */
-    public function getThemeManager()
+    protected $elementTemplateMap = array();
+
+    /**
+     * @param array $config
+     * @throws \Exception
+     */
+    public function __construct(array $config)
     {
-        return $this->themeManager;
+        if (!isset($config['layout_template'])) {
+            throw new \Exception("'layout_template' not set");
+        }
+        $this->setFormLayout($config['layout_template']);
+
+        if (!isset($config['element_template_map'])) {
+            throw new \Exception("'element_template_map' not set");
+        }
+        $this->setElementTemplateMap($config['element_template_map']);
     }
 
     /**
-     * @param ThemeManager $themeManager
-     * @return $this
+     * @return array
      */
-    public function setThemeManager($themeManager)
+    public function getElementTemplateMap()
     {
-        $this->themeManager = $themeManager;
-
-        return $this;
+        return $this->elementTemplateMap;
     }
 
     /**
-     * @param string $themeName
-     * @return $this
+     * @param array $elementTemplateMap
      */
-    public function setThemeName($themeName)
+    public function setElementTemplateMap($elementTemplateMap)
     {
-        $this->themeName = $themeName;
-
-        return $this;
+        $this->elementTemplateMap = $elementTemplateMap;
     }
 
     /**
      * @return string
      */
-    public function getThemeName()
+    public function getFormLayout()
     {
-        return $this->themeName;
+        return $this->formLayout;
     }
 
     /**
-     * @return Theme
+     * @param string $formLayout
      */
-    public function getTheme()
+    public function setFormLayout($formLayout)
     {
-        if (empty($this->themeName)) {
-            return $this->getThemeManager()->getDefaultTheme();
+        $this->formLayout = $formLayout;
+    }
+
+    /**
+     * @param $elementType
+     * @throws \Exception
+     * @return string
+     */
+    public function getElementTemplate($elementType)
+    {
+        if (!isset($this->elementTemplateMap[$elementType])) {
+            throw new \Exception("'{$elementType}' not inside template map");
         }
 
-        return $this->getThemeManager()->getTheme($this->getThemeName());
+        return $this->elementTemplateMap[$elementType];
     }
 }
