@@ -45,6 +45,11 @@ class GenerateModelCommand extends AbstractCommand
     private $tableName;
 
     /**
+     * @var bool
+     */
+    private $generateSetterGetter = false;
+
+    /**
      * @param mixed $adapterName
      * @return $this
      */
@@ -86,6 +91,14 @@ class GenerateModelCommand extends AbstractCommand
         $this->className = $className;
 
         return $this;
+    }
+
+    /**
+     * @param boolean $generateSetterGetter
+     */
+    public function setGenerateSetterGetter($generateSetterGetter)
+    {
+        $this->generateSetterGetter = $generateSetterGetter;
     }
 
     /**
@@ -149,30 +162,90 @@ class GenerateModelCommand extends AbstractCommand
 
         $tags = array();
         $properties = array();
+        $methods = array();
         foreach ($columns as $column) {
+            /* @type \Zend\Db\Metadata\Object\ColumnObject $column */
+
             $method = ucfirst($filter->filter($column->getName()));
 
             $properties[] = $column->getName();
 
             $type = $this->getPropertyTypeByColumnObject($column);
 
-            $setterMethodDocBlock = new Generator\DocBlock\Tag\MethodTag(
-                "set".$method,
-                array($class),
-                "set".$method."(".$type." \$".$column->getName().")"
-            );
-            $tags[] = $setterMethodDocBlock;
+            if ($this->generateSetterGetter === false) {
+                $setterMethodDocBlock = new Generator\DocBlock\Tag\MethodTag(
+                    "set".$method,
+                    array($class),
+                    "set".$method."(".$type." \$".$column->getName().")"
+                );
 
-            $getterMethodDocBlock = new Generator\DocBlock\Tag\MethodTag(
-                "get".$method,
-                array($type),
-                "get".$method."()"
-            );
-            $tags[] = $getterMethodDocBlock;
+                $getterMethodDocBlock = new Generator\DocBlock\Tag\MethodTag(
+                    "get".$method,
+                    array($type),
+                    "get".$method."()"
+                );
+
+                $tags[] = $setterMethodDocBlock;
+                $tags[] = $getterMethodDocBlock;
+            } else {
+
+                $docBlockParam = new Generator\DocBlock\Tag\ParamTag();
+                $docBlockParam->setVariableName($column->getName());
+                $docBlockParam->setTypes($this->getPropertyTypeByColumnObject($column));
+
+                $docBlockReturn = new Generator\DocBlock\Tag\ReturnTag();
+                $docBlockReturn->setTypes('$this');
+
+                $methods[] = new Generator\MethodGenerator(
+                    'set'.$method,
+                    array(
+                        new Generator\ParameterGenerator(
+                            $column->getName(),
+                            null,
+                            null
+                        )
+                    ),
+                    Generator\MethodGenerator::FLAG_PUBLIC,
+                    implode("\n", array(
+                        '$this->set(\''.$column->getName().'\', $'.$column->getName().');',
+                        'return $this;'
+                    )),
+                    new Generator\DocBlockGenerator(
+                        null,
+                        null,
+                        array(
+                            $docBlockParam,
+                            $docBlockReturn
+                        )
+                    )
+                );
+
+                //getter
+                $docBlockReturn = new Generator\DocBlock\Tag\ReturnTag();
+                $docBlockReturn->setTypes($this->getPropertyTypeByColumnObject($column));
+
+                $methods[] = new Generator\MethodGenerator(
+                    'get'.$method,
+                    array(),
+                    Generator\MethodGenerator::FLAG_PUBLIC,
+                    "return \$this->get('".$column->getName()."');",
+                    new Generator\DocBlockGenerator(
+                        null,
+                        null,
+                        array(
+                            $docBlockReturn
+                        )
+                    )
+                );
+            }
         }
 
-        $docBlock = new Generator\DocBlockGenerator();
-        $docBlock->setTags($tags);
+        if (!empty($tags)) {
+            $docBlock = new Generator\DocBlockGenerator();
+            $docBlock->setTags($tags);
+
+            $modelClass->setDocBlock($docBlock);
+        }
 
         $propertyGenerator = new Generator\PropertyGenerator("properties", $properties, Generator\PropertyGenerator::FLAG_PROTECTED);
         $propertyGenerator->setDocBlock(new Generator\DocBlockGenerator(
@@ -182,7 +255,7 @@ class GenerateModelCommand extends AbstractCommand
         ));
         $modelClass->addPropertyFromGenerator($propertyGenerator);
 
-        $modelClass->setDocBlock($docBlock);
+        $modelClass->addMethods($methods);
 
         $filename = $this->directory . $class . '.php';
         file_put_contents($filename, "<?php\n" . $modelClass->generate());

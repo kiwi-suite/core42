@@ -9,12 +9,14 @@
 
 namespace Core42\Command\Development;
 
-use Core42\Command\ConsoleAwareInterface;
+use Core42\Command\ConsoleAwareTrait;
 use Core42\Command\Migration\AbstractCommand;
 use ZF\Console\Route;
 
-class DevelopmentCommand extends AbstractCommand implements ConsoleAwareInterface
+class DevelopmentCommand extends AbstractCommand
 {
+    use ConsoleAwareTrait;
+
     /**
      * @var boolean
      */

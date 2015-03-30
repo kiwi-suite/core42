@@ -88,7 +88,7 @@ return array(
         ),
 
         'generate-db-classes' => array(
-            'route'                     => 'generate-db-classes --name= --namespace= --directory= --table= [--adapter=]',
+            'route'                     => 'generate-db-classes --namespace= --directory= [--name=] [--table=] [--all=] [--adapter=]',
             'command-name'              => 'Core42\CodeGenerator\GenerateDbClasses',
             'description'               => 'generates model based on database schema',
             'short_description'         => 'generate model from database',
@@ -97,6 +97,7 @@ return array(
                 '--namespace'           => 'Namespace of the classes. (In most cases the same as the module name)',
                 '--directory'           => 'Root-Directory of the namespace (eg. module/<modulename>/src/<modulename>)',
                 '--table'               => 'tablename where to fetch informations from from',
+                '--all'                 => 'generate db classes for all tables with the given prefix',
                 '--adapter'             => 'Optional adapter name',
             ),
         ),
@@ -106,6 +107,13 @@ return array(
             'command-name'              => '',
             'description'               => 'Clears config cache and module map cache',
             'short_description'         => 'Clears config cache and module map cache',
+        ),
+
+        'cron' => array(
+            'route'                     => 'cron [<name>] [--ignorelock|-i] [--silent]',
+            'command-name'              => 'Core42\Cron\Cron',
+            'description'               => 'Start the cron tasks',
+            'short_description'         => 'Start the cron tasks',
         ),
     ),
 );

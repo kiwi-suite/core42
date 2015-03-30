@@ -10,11 +10,15 @@
 namespace Core42\Command\CodeGenerator;
 
 use Core42\Command\AbstractCommand;
-use Core42\Command\ConsoleAwareInterface;
+use Core42\Command\ConsoleAwareTrait;
+use Core42\Db\Metadata\Metadata;
+use Zend\Filter\Word\UnderscoreToCamelCase;
 use ZF\Console\Route;
 
-class GenerateDbClassesCommand extends AbstractCommand implements ConsoleAwareInterface
+class GenerateDbClassesCommand extends AbstractCommand
 {
+    use ConsoleAwareTrait;
+
     /**
      * @var string
      */
@@ -34,6 +38,11 @@ class GenerateDbClassesCommand extends AbstractCommand implements ConsoleAwareIn
      * @var string
      */
     protected $name;
+
+    /**
+     * @var string
+     */
+    protected $all;
 
     /**
      * @var string
@@ -95,15 +104,18 @@ class GenerateDbClassesCommand extends AbstractCommand implements ConsoleAwareIn
         return $this;
     }
 
+    /**
+     * @param string $all
+     */
+    public function setAll($all)
+    {
+        $this->all = $all;
+    }
+
     protected function preExecute()
     {
         if (empty($this->directory)) {
             $this->addError('directory', "directory parameter not set");
-            return;
-        }
-
-        if (empty($this->table)) {
-            $this->addError('table', "table parameter not set");
             return;
         }
 
@@ -112,8 +124,11 @@ class GenerateDbClassesCommand extends AbstractCommand implements ConsoleAwareIn
             return;
         }
 
-        if (empty($this->name)) {
-            $this->addError('name', "name parameter not set");
+        if ($this->all !== null && !empty($this->table) && !empty($this->name)) {
+            $this->addError('all', "both usage of name/table arguments and --all argument is not allowed");
+        }
+        if ($this->all === null && empty($this->table) && empty($this->name)) {
+            $this->addError('all', "Whether name/table arguments or --all argument are missing");
             return;
         }
 
@@ -153,8 +168,36 @@ class GenerateDbClassesCommand extends AbstractCommand implements ConsoleAwareIn
 
     protected function execute()
     {
-        $modelClassName = $this->namespace . '\\Model\\' . $this->name;
-        $tableGatewayClassName = $this->namespace . '\\TableGateway\\' . $this->name . 'TableGateway';
+        if ($this->all !== null) {
+            $adapter = $this->getServiceManager()->get($this->adapterName);
+            $metadata = new Metadata($adapter);
+            $tables = $metadata->getTableNames();
+
+            $filter = new UnderscoreToCamelCase();
+
+            foreach ($tables as $table) {
+
+                if (in_array($table, array('migrations'))) {
+                    continue;
+                }
+                if ($this->all != '*' && substr($table, 0, strlen($this->all)) != $this->all ) {
+                    continue;
+                }
+
+                $this->consoleOutput('Generate files for: ' . $table);
+
+                $name = ucfirst($filter->filter(strtolower($table)));
+                $this->generate($name, $table);
+            }
+        } else {
+            $this->generate($this->name, $this->table);
+        }
+    }
+
+    protected function generate($name, $table)
+    {
+        $modelClassName = $this->namespace . '\\Model\\' . $name;
+        $tableGatewayClassName = $this->namespace . '\\TableGateway\\' . $name . 'TableGateway';
 
         $modelDirectory = $this->directory . 'Model/';
         $tableGatewayDirectory = $this->directory . 'TableGateway/';
@@ -164,7 +207,8 @@ class GenerateDbClassesCommand extends AbstractCommand implements ConsoleAwareIn
         $generateModel->setAdapterName($this->adapterName)
             ->setDirectory($modelDirectory)
             ->setClassName($modelClassName)
-            ->setTableName($this->table)
+            ->setTableName($table)
+            ->setGenerateSetterGetter(false)
             ->run();
 
         /** @var GenerateTableGatewayCommand $generateTableGateway */
@@ -172,7 +216,7 @@ class GenerateDbClassesCommand extends AbstractCommand implements ConsoleAwareIn
         $generateTableGateway->setAdapterName($this->adapterName)
             ->setDirectory($tableGatewayDirectory)
             ->setClassName($tableGatewayClassName)
-            ->setTableName($this->table)
+            ->setTableName($table)
             ->setModel($modelClassName)
             ->run();
     }
@@ -183,10 +227,20 @@ class GenerateDbClassesCommand extends AbstractCommand implements ConsoleAwareIn
      */
     public function consoleSetup(Route $route)
     {
-        $this->setTable($route->getMatchedParam("table"));
         $this->setDirectory($route->getMatchedParam("directory"));
-        $this->setName($route->getMatchedParam("name"));
         $this->setNamespace($route->getMatchedParam("namespace"));
+
+        $table = $route->getMatchedParam("table");
+        if (!empty($table)) {
+            $this->setTable($table);
+        }
+
+        $name = $route->getMatchedParam("name");
+        if (!empty($name)) {
+            $this->setName($name);
+        }
+
+        $this->setAll($route->getMatchedParam('all', null));
 
         $adapterName = $route->getMatchedParam('adapter');
         if (!empty($adapterName)) {
