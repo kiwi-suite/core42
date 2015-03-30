@@ -9,14 +9,16 @@
 
 namespace Core42\Command\Migration;
 
-use Core42\Command\ConsoleAwareInterface;
+use Core42\Command\ConsoleAwareTrait;
 use Zend\Code\Generator\ClassGenerator;
 use Zend\Code\Generator\MethodGenerator;
 use Zend\Code\Generator\ParameterGenerator;
 use ZF\Console\Route;
 
-class MakeCommand extends AbstractCommand implements ConsoleAwareInterface
+class MakeCommand extends AbstractCommand
 {
+    use ConsoleAwareTrait;
+
     /**
      * @var string
      */

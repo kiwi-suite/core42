@@ -9,11 +9,16 @@
 
 namespace Core42\Command\Migration;
 
-use Core42\Command\ConsoleAwareInterface;
+use Core42\Command\ConsoleAwareTrait;
 use ZF\Console\Route;
 
-class RollbackCommand extends AbstractCommand implements ConsoleAwareInterface
+class RollbackCommand extends AbstractCommand
 {
+    use ConsoleAwareTrait;
+
+    /**
+     * @var int
+     */
     private $limit = 1;
 
     /**

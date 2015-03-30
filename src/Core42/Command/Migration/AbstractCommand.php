@@ -9,6 +9,7 @@
 
 namespace Core42\Command\Migration;
 
+use Core42\Model\Migration;
 use Symfony\Component\Filesystem\Filesystem;
 use Zend\Db\Adapter\Adapter;
 
@@ -100,6 +101,7 @@ abstract class AbstractCommand extends \Core42\Command\AbstractCommand
 
         $migratedMigrations = array();
         foreach ($resultSet as $mig) {
+            /* @var Migration $mig */
             $migratedMigrations[$mig->getName()] = $mig;
         }
 

@@ -10,7 +10,6 @@
 namespace Core42\Command\Console;
 
 use Core42\Command\CommandInterface;
-use Core42\Command\ConsoleAwareInterface;
 use Zend\Console\Adapter\AdapterInterface;
 use Zend\Console\ColorInterface;
 use Zend\ServiceManager\ServiceManager;
@@ -43,9 +42,9 @@ class ConsoleDispatcher implements ServiceManagerAwareInterface
 
         /** @var CommandInterface $command */
         $command = $this->serviceManager->get('Command')->get($commandName);
-        if (!($command instanceof ConsoleAwareInterface)) {
+        if (!(in_array('Core42\Command\ConsoleAwareTrait', class_uses($command)))) {
             $console->writeLine(
-                'command must implement interface "Core42\Command\ConsoleAwareInterface"',
+                'command must use "Core42\Command\ConsoleAwareTrait"',
                 ColorInterface::RED
             );
 

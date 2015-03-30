@@ -9,7 +9,6 @@
 
 namespace Core42\Command;
 
-use Core42\Console\Console;
 use Core42\Db\TableGateway\AbstractTableGateway;
 use Core42\Selector\SelectorInterface;
 use Zend\ServiceManager\ServiceManager;
@@ -223,21 +222,6 @@ abstract class AbstractCommand implements CommandInterface
     final public function getException()
     {
         return $this->commandException;
-    }
-
-    /**
-     * @param string $message
-     */
-    protected function consoleOutput($message)
-    {
-        if (!($this instanceof ConsoleAwareInterface)) {
-            return;
-        }
-        if (!Console::isConsole()) {
-            return;
-        }
-
-        Console::outputFilter($message);
     }
 
     /**

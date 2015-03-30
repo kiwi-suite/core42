@@ -10,12 +10,14 @@
 namespace Core42\Command\Assets;
 
 use Core42\Command\AbstractCommand;
-use Core42\Command\ConsoleAwareInterface;
+use Core42\Command\ConsoleAwareTrait;
 use Symfony\Component\Filesystem\Filesystem;
 use ZF\Console\Route;
 
-class AssetsCommand extends AbstractCommand implements ConsoleAwareInterface
+class AssetsCommand extends AbstractCommand
 {
+    use ConsoleAwareTrait;
+
     /**
      * @var bool
      */

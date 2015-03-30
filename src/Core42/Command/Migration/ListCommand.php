@@ -9,11 +9,12 @@
 
 namespace Core42\Command\Migration;
 
-use Core42\Command\ConsoleAwareInterface;
+use Core42\Command\ConsoleAwareTrait;
 use ZF\Console\Route;
 
-class ListCommand extends AbstractCommand implements ConsoleAwareInterface
+class ListCommand extends AbstractCommand
 {
+    use ConsoleAwareTrait;
 
     /**
      * @throws \Exception

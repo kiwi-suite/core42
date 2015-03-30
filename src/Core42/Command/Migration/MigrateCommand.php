@@ -9,12 +9,17 @@
 
 namespace Core42\Command\Migration;
 
-use Core42\Command\ConsoleAwareInterface;
+use Core42\Command\ConsoleAwareTrait;
 use Core42\Model\Migration;
 use ZF\Console\Route;
 
-class MigrateCommand extends AbstractCommand implements ConsoleAwareInterface
+class MigrateCommand extends AbstractCommand
 {
+    use ConsoleAwareTrait;
+
+    /**
+     * @var int
+     */
     private $limit = -1;
 
     /**
