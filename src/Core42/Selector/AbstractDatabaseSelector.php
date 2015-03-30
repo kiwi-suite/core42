@@ -15,6 +15,7 @@ use Core42\Hydrator\Strategy\Service\HydratorStrategyPluginManager;
 use Core42\Model\DefaultModel;
 use Core42\Model\GenericModel;
 use Zend\Db\Adapter\Adapter;
+use Zend\Db\Sql\Expression;
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Sql;
 
@@ -28,7 +29,12 @@ abstract class AbstractDatabaseSelector extends AbstractSelector
     /**
      * @var Sql
      */
-    private $sql;
+    protected $sql;
+
+    /**
+     * @var int
+     */
+    protected $rowCount;
 
     /**
      * @return Select|string|ResultSet
@@ -93,6 +99,34 @@ abstract class AbstractDatabaseSelector extends AbstractSelector
         }
 
         return $resultSet;
+    }
+
+    /**
+     * @return int|null
+     */
+    public function count()
+    {
+        if ($this->rowCount !== null) {
+            return $this->rowCount;
+        }
+
+        $select = $this->getSelect();
+
+        if ($select instanceof Select) {
+            $countSelect = new Select();
+            $countSelect->columns(array('c' => new Expression('COUNT(1)')));
+            $countSelect->from(array('original_select' => $select));
+
+            $statement = $this->sql->prepareStatementForSqlObject($countSelect);
+            $result    = $statement->execute();
+            $row       = $result->current();
+
+            $this->rowCount = $row['c'];
+
+            return $this->rowCount;
+        }
+
+        return null;
     }
 
     /**

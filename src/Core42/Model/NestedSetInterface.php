@@ -13,8 +13,14 @@ namespace Core42\Model;
 interface NestedSetInterface
 {
 
+    /**
+     * @return int
+     */
     public function getId();
 
+    /**
+     * @return int
+     */
     public function getParentId();
 
     /**
@@ -29,7 +35,7 @@ interface NestedSetInterface
     public function getNestedLeft();
 
     /**
-     * string
+     * @return string
      */
     public function getNestedLeftFieldName();
 

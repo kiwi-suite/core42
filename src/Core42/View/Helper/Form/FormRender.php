@@ -9,12 +9,14 @@
 
 namespace Core42\View\Helper\Form;
 
+use Zend\Form\Fieldset;
+use Zend\Form\FieldsetInterface;
 use Zend\Form\FormInterface;
 
 class FormRender extends AbstractHelper
 {
     /**
-     * @var FormInterface
+     * @var FieldsetInterface
      */
     protected $form;
 
@@ -39,12 +41,12 @@ class FormRender extends AbstractHelper
     protected $params = array();
 
     /**
-     * @param FormInterface $form
+     * @param FieldsetInterface $form
      * @param null|string $action
      * @param null|array $params
      * @return $this
      */
-    public function __invoke(FormInterface $form = null, $action = null, array $params = null)
+    public function __invoke(FieldsetInterface $form = null, $action = null, array $params = null)
     {
         if ($form !== null) {
             $this->setForm($form);
@@ -62,10 +64,10 @@ class FormRender extends AbstractHelper
     }
 
     /**
-     * @param FormInterface $form
+     * @param FieldsetInterface $form
      * @return $this
      */
-    public function setForm(FormInterface $form)
+    public function setForm(FieldsetInterface $form)
     {
         $this->form = $form;
 
@@ -128,7 +130,11 @@ class FormRender extends AbstractHelper
 
             $elementHtml = array();
             foreach ($this->form as $element) {
-                $type = $element->getAttribute('type');
+                if ($element instanceof FieldsetInterface) {
+                    $type = 'fieldset';
+                } else {
+                    $type = $element->getAttribute('type');
+                }
 
                 $elementPartial = (isset($this->partialMap[$element->getName()]))
                     ? $this->partialMap[$element->getName()]
@@ -144,14 +150,18 @@ class FormRender extends AbstractHelper
                 $this->partial = $this->getFormLayout();
             }
 
-            $partialHelper = $this->view->plugin('partial');
-            $html = $partialHelper($this->partial, array(
-                'form'          => $this->form,
-                'elements'      => $elementHtml,
-                'action'        => $this->action,
-                'hasErrors'     => count($this->form->getMessages()) > 0,
-                'params'        => $this->params
-            ));
+            if ($this->form instanceof FormInterface) {
+                $partialHelper = $this->view->plugin('partial');
+                $html = $partialHelper($this->partial, array(
+                    'form'          => $this->form,
+                    'elements'      => $elementHtml,
+                    'action'        => $this->action,
+                    'hasErrors'     => count($this->form->getMessages()) > 0,
+                    'params'        => $this->params
+                ));
+            } else {
+                $html = implode(PHP_EOL, $elementHtml);
+            }
 
             $this->partial = null;
             $this->partialMap = null;

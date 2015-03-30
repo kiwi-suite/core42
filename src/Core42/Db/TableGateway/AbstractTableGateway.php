@@ -173,19 +173,20 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
             }
 
             $values = $this->getHydrator()->extract($set);
-            $set = array_intersect_key($values, $set->diff());
+            $updateSet = array_intersect_key($values, $set->diff());
+            $set->memento();
         } elseif (is_array($set)) {
-            $set = $this->getHydrator()->extractArray($set);
+            $updateSet = $this->getHydrator()->extractArray($set);
 
             if (is_array($where)) {
                 $where = $this->getHydrator()->extractArray($where);
             }
         }
-        if (empty($set)) {
+        if (empty($updateSet)) {
             return 0;
         }
 
-        return parent::update($set, $where);
+        return parent::update($updateSet, $where);
     }
 
     /**

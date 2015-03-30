@@ -9,6 +9,7 @@
 
 namespace Core42\Selector;
 
+use Core42\Command\Migration\AbstractCommand;
 use Core42\Db\TableGateway\AbstractTableGateway;
 use Zend\ServiceManager\ServiceManager;
 
@@ -46,11 +47,29 @@ abstract class AbstractSelector implements SelectorInterface
     }
 
     /**
+     * @param string $commandName
+     * @return AbstractCommand
+     */
+    public function getCommand($commandName)
+    {
+        return $this->getServiceManager()->get('Command')->get($commandName);
+    }
+
+    /**
      * @param string $tableGatewayName
      * @return AbstractTableGateway
      */
     public function getTableGateway($tableGatewayName)
     {
         return $this->getServiceManager()->get('TableGateway')->get($tableGatewayName);
+    }
+
+    /**
+     * @param string $selectorName
+     * @return SelectorInterface
+     */
+    public function getSelector($selectorName)
+    {
+        return $this->getServiceManager()->get('Selector')->get($selectorName);
     }
 }
