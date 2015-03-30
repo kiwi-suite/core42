@@ -6,7 +6,8 @@
         "composer/installers": "~1.0",
         "zfcampus/zf-console": "1.0.3",
         "symfony/finder": "v2.5.0",
-        "symfony/filesystem": "v2.5.0"
+        "symfony/filesystem": "v2.5.0",
+        "mtdowling/cron-expression": "~1.0.0"
     },
     "require-dev": {
         "firephp/firephp-core": "*",
