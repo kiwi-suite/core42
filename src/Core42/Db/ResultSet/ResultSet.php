@@ -9,6 +9,7 @@
 
 namespace Core42\Db\ResultSet;
 
+use Core42\Hydrator\ModelHydrator;
 use Zend\Db\ResultSet\HydratingResultSet;
 
 class ResultSet extends HydratingResultSet
@@ -22,5 +23,21 @@ class ResultSet extends HydratingResultSet
         $object->memento();
 
         return $object;
+    }
+
+    /**
+     * Cast result set to array of arrays
+     *
+     * @return array
+     */
+    public function toArray()
+    {
+        $hydrator = new ModelHydrator();
+
+        $return = array();
+        foreach ($this as $row) {
+            $return[] = $hydrator->extract($row);
+        }
+        return $return;
     }
 }

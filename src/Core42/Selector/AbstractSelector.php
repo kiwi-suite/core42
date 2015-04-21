@@ -50,7 +50,7 @@ abstract class AbstractSelector implements SelectorInterface
      * @param string $commandName
      * @return AbstractCommand
      */
-    public function getCommand($commandName)
+    protected function getCommand($commandName)
     {
         return $this->getServiceManager()->get('Command')->get($commandName);
     }
@@ -59,7 +59,7 @@ abstract class AbstractSelector implements SelectorInterface
      * @param string $tableGatewayName
      * @return AbstractTableGateway
      */
-    public function getTableGateway($tableGatewayName)
+    protected function getTableGateway($tableGatewayName)
     {
         return $this->getServiceManager()->get('TableGateway')->get($tableGatewayName);
     }
@@ -68,7 +68,7 @@ abstract class AbstractSelector implements SelectorInterface
      * @param string $selectorName
      * @return SelectorInterface
      */
-    public function getSelector($selectorName)
+    protected function getSelector($selectorName)
     {
         return $this->getServiceManager()->get('Selector')->get($selectorName);
     }
