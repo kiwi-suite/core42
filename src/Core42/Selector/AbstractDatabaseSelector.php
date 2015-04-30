@@ -29,11 +29,6 @@ abstract class AbstractDatabaseSelector extends AbstractSelector
     protected $sql;
 
     /**
-     * @var int
-     */
-    protected $rowCount;
-
-    /**
      * @return Select|string|ResultSet
      */
     abstract public function getSelect();
