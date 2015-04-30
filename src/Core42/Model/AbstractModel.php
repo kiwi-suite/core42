@@ -31,11 +31,10 @@ abstract class AbstractModel implements ModelInterface
      */
     public function __construct(array $data = array())
     {
-        $this->data = array_fill_keys($this->properties, null);
         if (!empty($data)) {
             $this->populate($data);
+            $this->memento();
         }
-        $this->memento();
     }
 
     /**
@@ -69,6 +68,18 @@ abstract class AbstractModel implements ModelInterface
             throw new \Exception(sprintf("'%s' not set in property array", $property));
         }
 
+        if (!array_key_exists($property, $this->data) && !array_key_exists($property, $this->memento)) {
+            return false;
+        }
+
+        if (array_key_exists($property, $this->data) && !array_key_exists($property, $this->memento)) {
+            return true;
+        }
+
+        if (!array_key_exists($property, $this->data) && array_key_exists($property, $this->memento)) {
+            return true;
+        }
+
         return !($this->memento[$property] === $this->data[$property]);
     }
 
@@ -77,9 +88,15 @@ abstract class AbstractModel implements ModelInterface
      */
     public function diff()
     {
-        return array_udiff_assoc($this->data, $this->memento, function ($value1, $value2) {
-            return ($value1 === $value2) ? 0 : 1;
-        });
+        $changes = array();
+
+        foreach ($this->properties as $property) {
+            if ($this->hasChanged($property)) {
+                $changes[$property] = $this->get($property);
+            }
+        }
+
+        return $changes;
     }
 
     /**
@@ -120,13 +137,18 @@ abstract class AbstractModel implements ModelInterface
 
     /**
      * @param  string $name
+     * @param mixed $default
      * @return mixed
      * @throws \Exception
      */
-    protected function get($name)
+    protected function get($name, $default = null)
     {
         if (!in_array($name, $this->properties)) {
             throw new \Exception(sprintf("'%s' not set in property array", $name));
+        }
+
+        if (!array_key_exists($name, $this->data)) {
+            return $default;
         }
 
         return $this->data[$name];
