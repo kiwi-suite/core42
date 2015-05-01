@@ -37,6 +37,7 @@ class Module implements
             include __DIR__ . '/../../config/assets.config.php',
             include __DIR__ . '/../../config/permissions.config.php',
             include __DIR__ . '/../../config/form.config.php',
+            include __DIR__ . '/../../config/i18n.config.php',
             include __DIR__ . '/../../config/cron.config.php'
         );
     }

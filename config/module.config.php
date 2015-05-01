@@ -9,6 +9,7 @@ return array(
         ),
         'factories' => array(
             'permission'            => 'Core42\View\Helper\Service\PermissionFactory',
+            'localization'          => 'Core42\View\Helper\Service\LocalizationFactory',
             'menu'                  => 'Core42\View\Helper\Navigation\Service\MenuFactory',
             'breadcrumbs'           => 'Core42\View\Helper\Navigation\Service\BreadcrumbsFactory',
             'formRender'            => 'Core42\View\Helper\Form\Service\FormRenderFactory',

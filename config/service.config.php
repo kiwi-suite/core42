@@ -38,6 +38,7 @@ return array(
 
             'MvcTranslator'                                 => 'Core42\I18n\Translator\Service\TranslatorFactory',
             'MvcTranslatorPluginManager'                    => 'Core42\I18n\Translator\Service\TranslatorLoaderFactory',
+            'Localization'                                  => 'Core42\I18n\Localization\Service\LocalizationFactory',
         ),
         'invokables' => array(
             'Core42\LoggingProfiler'                        => 'Core42\Db\Adapter\Profiler\LoggingProfiler',
