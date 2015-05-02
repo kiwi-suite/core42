@@ -13,6 +13,9 @@ use Zend\Console\ColorInterface as Color;
 
 class Application extends \ZF\Console\Application
 {
+    /**
+     * @param string $name
+     */
     public function showUsageMessage($name = null)
     {
         $console = $this->console;

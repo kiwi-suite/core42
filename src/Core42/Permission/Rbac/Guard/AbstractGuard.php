@@ -98,6 +98,9 @@ abstract class AbstractGuard extends AbstractListenerAggregate implements GuardI
         $eventManager->trigger(MvcEvent::EVENT_DISPATCH_ERROR, $event);
     }
 
+    /**
+     *
+     */
     protected function loadAuthorizationService()
     {
         if ($this->authorizationService === null) {

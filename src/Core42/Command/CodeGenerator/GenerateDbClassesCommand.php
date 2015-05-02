@@ -112,6 +112,9 @@ class GenerateDbClassesCommand extends AbstractCommand
         $this->all = $all;
     }
 
+    /**
+     *
+     */
     protected function preExecute()
     {
         if (empty($this->directory)) {
@@ -166,6 +169,9 @@ class GenerateDbClassesCommand extends AbstractCommand
         $this->directory = rtrim($this->directory, '/') . '/';
     }
 
+    /**
+     *
+     */
     protected function execute()
     {
         if ($this->all !== null) {
@@ -180,7 +186,7 @@ class GenerateDbClassesCommand extends AbstractCommand
                 if (in_array($table, ['migrations'])) {
                     continue;
                 }
-                if ($this->all != '*' && substr($table, 0, strlen($this->all)) != $this->all ) {
+                if ($this->all != '*' && substr($table, 0, strlen($this->all)) != $this->all) {
                     continue;
                 }
 
@@ -194,6 +200,11 @@ class GenerateDbClassesCommand extends AbstractCommand
         }
     }
 
+    /**
+     * @param string $name
+     * @param string $table
+     * @throws \Exception
+     */
     protected function generate($name, $table)
     {
         $modelClassName = $this->namespace . '\\Model\\' . $name;

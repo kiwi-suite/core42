@@ -15,7 +15,9 @@ use Zend\Db\Sql\Select;
 
 abstract class AbstractNestedSetTableGateway extends AbstractTableGateway
 {
-
+    /**
+     * @throws \Exception
+     */
     public function checkNestedSet()
     {
         $primary = $this->getPrimaryKey();
@@ -34,7 +36,7 @@ abstract class AbstractNestedSetTableGateway extends AbstractTableGateway
         if ($result->count() == 1) {
             $row = $result->current();
             if ($row['max'] != $row['count'] * 2) {
-                echo 'max passt nicht zu count';
+                throw new \Exception("invalid count");
             }
         }
 
@@ -60,9 +62,11 @@ abstract class AbstractNestedSetTableGateway extends AbstractTableGateway
             }
             $last = $n;
         }
-
     }
 
+    /**
+     *
+     */
     public function regenerateNestedSet()
     {
         $this->adapter->driver->getConnection()->beginTransaction();
@@ -102,6 +106,15 @@ abstract class AbstractNestedSetTableGateway extends AbstractTableGateway
         $this->adapter->driver->getConnection()->commit();
     }
 
+    /**
+     * @param int $itemId
+     * @param int $left
+     * @param int $right
+     * @param array $items
+     * @param array $children
+     * @return array
+     * @throws \Exception
+     */
     protected function regenerateRecursive($itemId, $left, $right, &$items, $children)
     {
         $myLeft = $left;

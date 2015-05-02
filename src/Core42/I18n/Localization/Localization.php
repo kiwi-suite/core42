@@ -100,7 +100,7 @@ class Localization extends AbstractOptions
         $options = $this->getLocaleOptions($locale);
         if ($options !== false && array_key_exists("name", $options)) {
             $name = $options["name"];
-        } elseif($options !== false) {
+        } elseif ($options !== false) {
             switch ($this->type) {
                 case self::TYPE_REGION;
                     $name = \Locale::getDisplayRegion($locale);

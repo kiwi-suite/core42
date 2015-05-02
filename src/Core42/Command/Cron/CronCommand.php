@@ -43,6 +43,9 @@ class CronCommand extends AbstractCommand
      */
     protected $taskName = null;
 
+    /**
+     *
+     */
     protected function preExecute()
     {
         $config = $this->getServiceManager()->get('Config');
@@ -148,6 +151,13 @@ class CronCommand extends AbstractCommand
         }
     }
 
+    /**
+     * @param string $command
+     * @param array $params
+     * @param null $output
+     * @param int $returnVar
+     * @return bool
+     */
     protected function runCommand($command, $params, &$output = null, &$returnVar = 0)
     {
         $cmd = 'php module/core42/bin/fruit';

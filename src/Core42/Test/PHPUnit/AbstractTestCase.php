@@ -317,6 +317,11 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
         return $typeTableGatewayMock;
     }
 
+    /**
+     * @param \PHPUnit_Framework_MockObject_MockObject $tableGatewayMock
+     * @param array $dataSet
+     * @param bool $consecutiveCalls
+     */
     protected function mockSql(\PHPUnit_Framework_MockObject_MockObject $tableGatewayMock, $dataSet = [], $consecutiveCalls = false)
     {
         $selectMock = $this->getMockBuilder('\Zend\Db\Sql\Select')

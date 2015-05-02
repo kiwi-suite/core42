@@ -13,7 +13,6 @@ use Core42\Db\TableGateway\AbstractTableGateway;
 
 class CronTableGateway extends AbstractTableGateway
 {
-
     /**
      * @var string
      */
@@ -28,5 +27,4 @@ class CronTableGateway extends AbstractTableGateway
      * @var array
      */
     protected $databaseTypeMap = [];
-
 }
