@@ -101,14 +101,10 @@ class Localization extends AbstractOptions
         if ($options !== false && array_key_exists("name", $options)) {
             $name = $options["name"];
         } elseif ($options !== false) {
-            switch ($this->type) {
-                case self::TYPE_REGION;
-                    $name = \Locale::getDisplayRegion($locale);
-                    break;
-                case self::TYPE_LANGUAGE:
-                default:
-                    $name = \Locale::getDisplayLanguage($locale);
-                    break;
+            if ($this->type == self::TYPE_REGION) {
+                $name = \Locale::getDisplayRegion($locale);
+            } else {
+                $name = \Locale::getDisplayLanguage($locale);
             }
         } else {
             $name = "";
