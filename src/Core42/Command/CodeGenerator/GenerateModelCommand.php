@@ -95,10 +95,13 @@ class GenerateModelCommand extends AbstractCommand
 
     /**
      * @param boolean $generateSetterGetter
+     * @return $this
      */
     public function setGenerateSetterGetter($generateSetterGetter)
     {
         $this->generateSetterGetter = $generateSetterGetter;
+
+        return $this;
     }
 
     /**
