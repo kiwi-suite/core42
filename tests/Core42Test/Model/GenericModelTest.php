@@ -25,11 +25,11 @@ class GenericModelTest extends \PHPUnit_Framework_TestCase
      */
     public function testExchangeExtractHydrateArray()
     {
-        $array = array(
+        $array = [
             'int'           => 1,
             'string'        => 'test',
             'datetime'      => new \DateTime(),
-            'array'         => array(1,2,3),
+            'array'         => [1,2,3],
             'booleanTrue'   => true,
             'booleanFalse'  => false,
             'null'          => null,
@@ -37,7 +37,7 @@ class GenericModelTest extends \PHPUnit_Framework_TestCase
             'closure'       => function () {$test = "test";},
 
             'float'         => 5.43323232323,
-        );
+        ];
 
         foreach ($array as $name => $value) {
             $setter = 'set' . ucfirst($name);

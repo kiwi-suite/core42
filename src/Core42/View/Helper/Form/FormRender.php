@@ -33,12 +33,12 @@ class FormRender extends AbstractHelper
     /**
      * @var array
      */
-    protected $partialMap = array();
+    protected $partialMap = [];
 
     /**
      * @var array
      */
-    protected $params = array();
+    protected $params = [];
 
     /**
      * @param FieldsetInterface $form
@@ -128,7 +128,7 @@ class FormRender extends AbstractHelper
             /** @var FormElementRender $formElementRender */
             $formElementRender = $this->getView()->plugin('formElementRender');
 
-            $elementHtml = array();
+            $elementHtml = [];
             foreach ($this->form as $element) {
                 if ($element instanceof FieldsetInterface) {
                     $type = 'fieldset';
@@ -152,13 +152,13 @@ class FormRender extends AbstractHelper
 
             if ($this->form instanceof FormInterface) {
                 $partialHelper = $this->view->plugin('partial');
-                $html = $partialHelper($this->partial, array(
+                $html = $partialHelper($this->partial, [
                     'form'          => $this->form,
                     'elements'      => $elementHtml,
                     'action'        => $this->action,
                     'hasErrors'     => count($this->form->getMessages()) > 0,
                     'params'        => $this->params
-                ));
+                ]);
             } else {
                 $html = implode(PHP_EOL, $elementHtml);
             }

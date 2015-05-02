@@ -1,14 +1,14 @@
 <?php
 namespace Core42;
 
-return array(
-    'service_manager' => array(
-        'abstract_factories' => array(
+return [
+    'service_manager' => [
+        'abstract_factories' => [
             'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
             'Core42\Db\Adapter\AdapterAbstractServiceFactory',
             'Zend\Log\LoggerAbstractServiceFactory',
-        ),
-        'factories' => array(
+        ],
+        'factories' => [
             'Zend\Session\Service\SessionManager'           => 'Zend\Session\Service\SessionManagerFactory',
             'Zend\Session\Config\ConfigInterface'           => 'Zend\Session\Service\SessionConfigFactory',
             'Zend\Session\Storage\StorageInterface'         => 'Zend\Session\Service\StorageFactory',
@@ -39,15 +39,15 @@ return array(
             'MvcTranslator'                                 => 'Core42\I18n\Translator\Service\TranslatorFactory',
             'MvcTranslatorPluginManager'                    => 'Core42\I18n\Translator\Service\TranslatorLoaderFactory',
             'Localization'                                  => 'Core42\I18n\Localization\Service\LocalizationFactory',
-        ),
-        'invokables' => array(
+        ],
+        'invokables' => [
             'Core42\LoggingProfiler'                        => 'Core42\Db\Adapter\Profiler\LoggingProfiler',
 
             'Core42\ConsoleDispatcher'                      => 'Core42\Command\Console\ConsoleDispatcher',
 
             'Core42\TransactionManager'                     => 'Core42\Db\Transaction\TransactionManager',
-        ),
-        'aliases' => array(
+        ],
+        'aliases' => [
             'TransactionManager'                            => 'Core42\TransactionManager',
 
             'Command'                                       => 'Core42\CommandPluginManager',
@@ -57,13 +57,13 @@ return array(
             'Form'                                          => 'Core42\FormPluginManager',
 
             'Navigation'                                    => 'Core42\Navigation'
-        ),
-    ),
+        ],
+    ],
 
-    'table_gateway' => array(
-        'factories' => array(
+    'table_gateway' => [
+        'factories' => [
             'Core42\Migration' => 'Core42\TableGateway\Service\MigrationTableGatewayFactory',
             'Core42\Seeding' => 'Core42\TableGateway\Service\SeedingTableGatewayFactory',
-        ),
-    ),
-);
+        ],
+    ],
+];

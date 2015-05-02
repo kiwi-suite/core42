@@ -26,27 +26,27 @@ class RbacOptions extends AbstractOptions
     /**
      * @var array
      */
-    private $guards = array();
+    private $guards = [];
 
     /**
      * @var array
      */
-    private $roleProvider = array();
+    private $roleProvider = [];
 
     /**
      * @var array
      */
-    protected $assertionMap = array();
+    protected $assertionMap = [];
 
     /**
      * @var array
      */
-    protected $redirectStrategy = array();
+    protected $redirectStrategy = [];
 
     /**
      * @var array
      */
-    protected $unauthorizedStrategy = array();
+    protected $unauthorizedStrategy = [];
 
     /**
      * @param  string $identityRoleProvider

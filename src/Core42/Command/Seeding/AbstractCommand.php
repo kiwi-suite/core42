@@ -73,7 +73,7 @@ abstract class AbstractCommand extends \Core42\Command\AbstractCommand
 
             do {
                 $dir = preg_replace(
-                    array('#//|/\./#', '#/([^/]*)/\.\./#'),
+                    ['#//|/\./#', '#/([^/]*)/\.\./#'],
                     '/',
                     $dir,
                     -1,
@@ -99,14 +99,14 @@ abstract class AbstractCommand extends \Core42\Command\AbstractCommand
         $seedingTableGateway = $this->getServiceManager()->get('TableGateway')->get('Core42\Seeding');
         $resultSet = $seedingTableGateway->select();
 
-        $seededSeeding = array();
+        $seededSeeding = [];
         foreach ($resultSet as $seed) {
             $seededSeeding[$seed->getName()] = $seed;
         }
 
         $seedingDirs = $this->getSeedingDirectories();
 
-        $seeding = array();
+        $seeding = [];
 
         foreach ($seedingDirs as $dir) {
             $globPattern = $dir  . '*.php';
@@ -115,12 +115,12 @@ abstract class AbstractCommand extends \Core42\Command\AbstractCommand
                 $name = $this->getSeedingNameByFilename(pathinfo($filename, PATHINFO_FILENAME));
                 $class = 'Seeding' . ucfirst($name);
 
-                $seeding[] = array(
+                $seeding[] = [
                     'name'      => $name,
                     'filename'  => $filename,
                     'instance'  => new $class,
                     'seeded'  => (isset($seededSeeding[$name])) ? $seededSeeding[$name] : null,
-                );
+                ];
             }
         }
 

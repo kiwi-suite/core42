@@ -50,7 +50,7 @@ class MailModel extends ViewModel
     public function hasTemplate($type)
     {
         $type = strtolower($type);
-        if (!in_array($type, array(self::TYPE_HTML, self::TYPE_PLAIN))) {
+        if (!in_array($type, [self::TYPE_HTML, self::TYPE_PLAIN])) {
             throw new \Exception("invalid type '{$type}'");
         }
         $method = "has" . ucfirst($type) . 'Template';
@@ -80,7 +80,7 @@ class MailModel extends ViewModel
     public function useTemplate($type)
     {
         $type = strtolower($type);
-        if (!in_array($type, array(self::TYPE_HTML, self::TYPE_PLAIN))) {
+        if (!in_array($type, [self::TYPE_HTML, self::TYPE_PLAIN])) {
             throw new \Exception("invalid type '{$type}'");
         }
         $method = "use" . ucfirst($type) . 'Template';

@@ -24,7 +24,7 @@ class RouteAssertion implements AssertionInterface
     {
         $roles = $authorizationService->getIdentityRoles();
 
-        $rules = array();
+        $rules = [];
         /** @var RoleInterface $_role */
         foreach ($roles as $_role) {
             $permissions = $_role->getPermissions();

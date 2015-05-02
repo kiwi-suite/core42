@@ -48,6 +48,6 @@ class DateStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function isResponsible(\Zend\Db\Metadata\Object\ColumnObject $column)
     {
-        return (in_array($column->getDataType(), array('date')));
+        return (in_array($column->getDataType(), ['date']));
     }
 }

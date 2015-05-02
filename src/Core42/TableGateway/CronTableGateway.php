@@ -27,6 +27,6 @@ class CronTableGateway extends AbstractTableGateway
     /**
      * @var array
      */
-    protected $databaseTypeMap = array();
+    protected $databaseTypeMap = [];
 
 }

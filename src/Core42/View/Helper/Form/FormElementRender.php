@@ -76,10 +76,10 @@ class FormElementRender extends AbstractHelper
                 $this->partial = $this->getElementTemplate($this->element->getAttribute('type'));
             }
 
-            $html = $partialHelper($this->partial, array(
+            $html = $partialHelper($this->partial, [
                 'element'       => $this->element,
                 'hasErrors'     => count($this->element->getMessages()) > 0
-            ));
+            ]);
 
             $this->partial = null;
             $this->element = null;

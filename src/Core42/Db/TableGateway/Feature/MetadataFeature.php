@@ -20,7 +20,7 @@ class MetadataFeature extends ZendMetadataFeature
     {
         $return = $this->sharedData['metadata']['primaryKey'];
         if (!is_array($return)) {
-            $return = array($return);
+            $return = [$return];
         }
 
         return $return;

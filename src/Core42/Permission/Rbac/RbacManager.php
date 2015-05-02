@@ -28,12 +28,12 @@ class RbacManager
     /**
      * @var AuthorizationService[]
      */
-    private $services = array();
+    private $services = [];
 
     /**
      * @var RbacOptions[]
      */
-    private $rbacOptions = array();
+    private $rbacOptions = [];
 
     /**
      * @param ServiceManager $serviceManager
@@ -66,7 +66,7 @@ class RbacManager
         $roleProviderConfig = $options->getRoleProvider();
         $roleProvider = $roleProviderPluginManager->get(
             $roleProviderConfig['name'],
-            (!empty($roleProviderConfig['options'])) ? $roleProviderConfig['options'] : array()
+            (!empty($roleProviderConfig['options'])) ? $roleProviderConfig['options'] : []
         );
 
         $rbac = $this->serviceManager->get('Core42\Rbac');
@@ -97,7 +97,7 @@ class RbacManager
      */
     public function getGuards($name)
     {
-        $initializedGuards = array();
+        $initializedGuards = [];
 
         $options = $this->getRbacOptions($name);
 

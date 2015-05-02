@@ -19,7 +19,7 @@ class Role implements RoleInterface
     /**
      * @var string[]
      */
-    protected $permissions = array();
+    protected $permissions = [];
 
     /**
      * @param string $name

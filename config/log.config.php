@@ -1,37 +1,37 @@
 <?php
 namespace Core42;
 
-return array(
-    'log' => array(
-        'Log\Dev' => array(
-            'writers' => array(
-                array(
+return [
+    'log' => [
+        'Log\Dev' => [
+            'writers' => [
+                [
                     'name' => 'chromephp',
-                    'options' => array(
-                        'filters' => array(
-                            'console' => array(
+                    'options' => [
+                        'filters' => [
+                            'console' => [
                                 'name'      => 'suppress',
-                                'options'   => array(
+                                'options'   => [
                                     'suppress' => (PHP_SAPI === 'cli')
-                                ),
-                            )
-                        ),
-                    ),
-                ),
-                array(
+                                ],
+                            ]
+                        ],
+                    ],
+                ],
+                [
                     'name' => 'firephp',
-                    'options' => array(
-                        'filters' => array(
-                            'console' => array(
+                    'options' => [
+                        'filters' => [
+                            'console' => [
                                 'name'      => 'suppress',
-                                'options'   => array(
+                                'options'   => [
                                     'suppress' => (PHP_SAPI === 'cli')
-                                ),
-                            )
-                        ),
-                    ),
-                ),
-            ),
-        ),
-    ),
-);
+                                ],
+                            ]
+                        ],
+                    ],
+                ],
+            ],
+        ],
+    ],
+];

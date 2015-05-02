@@ -71,10 +71,10 @@ class AssetsCommand extends AbstractCommand
 
         foreach ($this->assetConfig as $name => $config) {
             if ($this->copy === true) {
-                $filesystem->mirror($config['source'], $config['target'], null, array(
+                $filesystem->mirror($config['source'], $config['target'], null, [
                     'override'          => true,
                     'copy_on_windows'   => true,
-                ));
+                ]);
                 $this->consoleOutput("created directory for '{$config['source']}'");
 
                 continue;

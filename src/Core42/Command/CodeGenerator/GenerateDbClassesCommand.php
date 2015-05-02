@@ -177,7 +177,7 @@ class GenerateDbClassesCommand extends AbstractCommand
 
             foreach ($tables as $table) {
 
-                if (in_array($table, array('migrations'))) {
+                if (in_array($table, ['migrations'])) {
                     continue;
                 }
                 if ($this->all != '*' && substr($table, 0, strlen($this->all)) != $this->all ) {

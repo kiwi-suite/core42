@@ -39,7 +39,7 @@ abstract class AbstractGuard extends AbstractListenerAggregate implements GuardI
     /**
      * @var array
      */
-    protected $options = array();
+    protected $options = [];
 
     /**
      * @param EventManagerInterface $events

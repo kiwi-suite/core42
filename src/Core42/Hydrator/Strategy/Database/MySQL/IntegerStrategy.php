@@ -22,7 +22,7 @@ class IntegerStrategy implements StrategyInterface, DatabaseStrategyInterface
     {
         return (in_array(
             $column->getDataType(),
-            array('smallint', 'mediumint', 'int', 'bigint')
+            ['smallint', 'mediumint', 'int', 'bigint']
         )) ? true : false;
     }
 

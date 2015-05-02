@@ -14,7 +14,7 @@ class GenericModel extends AbstractModel
     /**
      * @param array $data
      */
-    public function __construct(array $data = array())
+    public function __construct(array $data = [])
     {
         if (!empty($data)) {
             $this->populate($data);

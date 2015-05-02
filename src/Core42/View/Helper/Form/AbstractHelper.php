@@ -19,7 +19,7 @@ class AbstractHelper extends \Zend\View\Helper\AbstractHelper
     /**
      * @var array
      */
-    protected $elementTemplateMap = array();
+    protected $elementTemplateMap = [];
 
     /**
      * @param array $config

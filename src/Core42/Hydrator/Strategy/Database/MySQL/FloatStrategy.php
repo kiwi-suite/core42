@@ -20,7 +20,7 @@ class FloatStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function isResponsible(\Zend\Db\Metadata\Object\ColumnObject $column)
     {
-        return (in_array($column->getDataType(), array('decimal', 'numeric', 'float', 'double')));
+        return (in_array($column->getDataType(), ['decimal', 'numeric', 'float', 'double']));
     }
 
     /**

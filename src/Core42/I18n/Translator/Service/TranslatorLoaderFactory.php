@@ -26,7 +26,7 @@ class TranslatorLoaderFactory implements FactoryInterface
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
         $config = $serviceLocator->get('config');
-        $config = (array_key_exists('translation_manager', $config)) ? $config['translation_manager'] : array();
+        $config = (array_key_exists('translation_manager', $config)) ? $config['translation_manager'] : [];
 
         return new LoaderPluginManager(new Config($config));
     }

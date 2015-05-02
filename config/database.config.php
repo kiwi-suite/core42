@@ -1,46 +1,46 @@
 <?php
 namespace Core42;
 
-return array(
-    'hydrator_strategy' => array(
-        'invokables' => array(
+return [
+    'hydrator_strategy' => [
+        'invokables' => [
             'Mysql/Integer'        => 'Core42\Hydrator\Strategy\Database\MySQL\IntegerStrategy',
             'Mysql/Boolean'        => 'Core42\Hydrator\Strategy\Database\MySQL\BooleanStrategy',
             'Mysql/Date'           => 'Core42\Hydrator\Strategy\Database\MySQL\DateStrategy',
             'Mysql/Datetime'       => 'Core42\Hydrator\Strategy\Database\MySQL\DatetimeStrategy',
             'Mysql/Float'          => 'Core42\Hydrator\Strategy\Database\MySQL\FloatStrategy',
-        ),
-    ),
+        ],
+    ],
 
-    'metadata' => array(
+    'metadata' => [
         'cache' => (DEVELOPMENT_MODE) ? false : 'Cache\Intern',
-    ),
+    ],
 
-    'db' => array(
-        'adapters' =>array(
-            'Db\Master' => array(
+    'db' => [
+        'adapters' => [
+            'Db\Master' => [
                 'driver'    => 'pdo_mysql',
                 'database'  => '',
                 'username'  => 'root',
                 'password'  => '',
                 'hostname'  => '127.0.0.1',
-                'options'   => array(
+                'options'   => [
                     'buffer_results' => false
-                ),
+                ],
                 'charset'   => 'utf8',
-            ),
+            ],
 // Set this for using Master/Slave Adapters
-//             'Db\Slave' => array(
+//             'Db\Slave' => [
 //                 'driver'    => 'mysqli',
 //                 'database'  => '',
 //                 'username'  => 'root',
 //                 'password'  => '',
 //                 'hostname'  => '127.0.0.1',
-//                 'options'   => array(
+//                 'options'   => [
 //                     'buffer_results' => true
-//                 ),
+//                 ],
 //                 'charset'   => 'utf8',
-//             ),
-        ),
-    ),
-);
+//             ],
+        ],
+    ],
+];

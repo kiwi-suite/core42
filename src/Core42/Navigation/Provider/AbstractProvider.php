@@ -14,7 +14,7 @@ abstract class AbstractProvider implements ProviderInterface
     /**
      * @var array
      */
-    protected $options = array();
+    protected $options = [];
 
     /**
      * @param array $options

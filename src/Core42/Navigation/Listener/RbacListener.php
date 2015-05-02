@@ -43,7 +43,7 @@ class RbacListener extends AbstractListenerAggregate
      */
     public function attach(EventManagerInterface $events)
     {
-        $this->listeners[] = $events->attach(Navigation::EVENT_IS_ALLOWED, array($this, 'isAllowed'));
+        $this->listeners[] = $events->attach(Navigation::EVENT_IS_ALLOWED, [$this, 'isAllowed']);
     }
 
     /**

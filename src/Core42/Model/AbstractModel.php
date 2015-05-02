@@ -14,22 +14,22 @@ abstract class AbstractModel implements ModelInterface
     /**
      * @var array
      */
-    protected $properties = array();
+    protected $properties = [];
 
     /**
      * @var array
      */
-    protected $data = array();
+    protected $data = [];
 
     /**
      * @var array
      */
-    protected $memento = array();
+    protected $memento = [];
 
     /**
      * @param array $data
      */
-    public function __construct(array $data = array())
+    public function __construct(array $data = [])
     {
         if (!empty($data)) {
             $this->populate($data);
@@ -88,7 +88,7 @@ abstract class AbstractModel implements ModelInterface
      */
     public function diff()
     {
-        $changes = array();
+        $changes = [];
 
         foreach ($this->properties as $property) {
             if ($this->hasChanged($property)) {

@@ -76,13 +76,13 @@ class MakeCommand extends AbstractCommand
 
         $classGenerator = new ClassGenerator($migrationName);
 
-        $classGenerator->addMethod("up", array(
+        $classGenerator->addMethod("up", [
             new ParameterGenerator('serviceManager', 'Zend\ServiceManager\ServiceManager')
-        ), MethodGenerator::FLAG_PUBLIC, "\n");
+        ], MethodGenerator::FLAG_PUBLIC, "\n");
 
-        $classGenerator->addMethod("down", array(
+        $classGenerator->addMethod("down", [
             new ParameterGenerator('serviceManager', 'Zend\ServiceManager\ServiceManager')
-        ), MethodGenerator::FLAG_PUBLIC, "\n");
+        ], MethodGenerator::FLAG_PUBLIC, "\n");
 
         file_put_contents($filename, "<?php\n" . $classGenerator->generate());
 

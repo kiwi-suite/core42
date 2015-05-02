@@ -16,12 +16,12 @@ class NavigationOptions extends AbstractOptions
     /**
      * @var array
      */
-    protected $containers = array();
+    protected $containers = [];
 
     /**
      * @var array
      */
-    protected $listeners = array();
+    protected $listeners = [];
 
     /**
      * @param array $containers

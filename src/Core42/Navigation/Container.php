@@ -21,7 +21,7 @@ class Container implements \RecursiveIterator
     /**
      * @var array
      */
-    protected $children = array();
+    protected $children = [];
 
     /**
      * @var string
@@ -31,7 +31,7 @@ class Container implements \RecursiveIterator
     /**
      * @var array
      */
-    protected $sort = array();
+    protected $sort = [];
 
     /**
      *
@@ -39,7 +39,7 @@ class Container implements \RecursiveIterator
     public function sort()
     {
         $index = 0;
-        $sort = array();
+        $sort = [];
 
         /** @var Page $page */
         foreach ($this->children as $hash => $page) {
@@ -201,7 +201,7 @@ class Container implements \RecursiveIterator
      */
     public function findByAttribute($attribute, $value)
     {
-        $result = array();
+        $result = [];
         $iterator = new \RecursiveIteratorIterator($this, \RecursiveIteratorIterator::SELF_FIRST);
 
         /** @var Page $page */
@@ -240,7 +240,7 @@ class Container implements \RecursiveIterator
      */
     public function findByOption($option, $value)
     {
-        $result = array();
+        $result = [];
         $iterator = new \RecursiveIteratorIterator($this, \RecursiveIteratorIterator::SELF_FIRST);
 
         /** @var Page $page */

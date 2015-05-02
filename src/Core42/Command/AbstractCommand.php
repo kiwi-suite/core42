@@ -39,7 +39,7 @@ abstract class AbstractCommand implements CommandInterface
     /**
      * @var array
      */
-    private $errors = array();
+    private $errors = [];
 
     /**
      * @param ServiceManager $serviceManager
@@ -177,7 +177,7 @@ abstract class AbstractCommand implements CommandInterface
     protected function addError($name, $message)
     {
         if (!array_key_exists($name, $this->errors)) {
-            $this->errors[$name] = array();
+            $this->errors[$name] = [];
         }
 
         $this->errors[$name][] = $message;

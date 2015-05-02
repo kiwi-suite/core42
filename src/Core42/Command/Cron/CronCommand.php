@@ -50,9 +50,9 @@ class CronCommand extends AbstractCommand
         if (isset($config['cron']['logger'])) {
             $this->logger = $this->getServiceManager()->get($config['cron']['logger']);
         } else {
-            $this->logger = new Logger(array(
-                'writers' => array('null'),
-            ));
+            $this->logger = new Logger([
+                'writers' => ['null'],
+            ]);
         }
 
         if (!$this->silent) {
@@ -111,7 +111,7 @@ class CronCommand extends AbstractCommand
                 continue;
             }
 
-            $params = array();
+            $params = [];
             $taskParams = $task->getParameters();
             if (!empty($taskParams)) {
                 $taskParams = json_decode($taskParams, true);

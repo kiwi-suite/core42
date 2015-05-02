@@ -17,7 +17,7 @@ class HierarchicalRole extends Role implements HierarchicalRoleInterface
     /**
      * @var array|RoleInterface[]
      */
-    protected $children = array();
+    protected $children = [];
 
     /**
      * @return bool

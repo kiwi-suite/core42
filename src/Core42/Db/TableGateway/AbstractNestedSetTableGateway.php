@@ -24,10 +24,10 @@ abstract class AbstractNestedSetTableGateway extends AbstractTableGateway
         $model = $this->getModelPrototype();
 
         $select = $this->sql->select();
-        $select->columns(array(
+        $select->columns([
             'max' => new Expression("MAX({$model->getNestedRightFieldName()})"),
             'count' => new Expression("COUNT({$model->getNestedRightFieldName()})"),
-        ));
+        ]);
 
         $statement = $this->sql->prepareStatementForSqlObject($select);
         $result = $statement->execute();
@@ -40,10 +40,10 @@ abstract class AbstractNestedSetTableGateway extends AbstractTableGateway
 
         // detect gaps or duplicate values
         $selectLeft = $this->sql->select();
-        $selectLeft->columns(array_merge(array_values($primary), array('nested' => $model->getNestedLeftFieldName())));
+        $selectLeft->columns(array_merge(array_values($primary), ['nested' => $model->getNestedLeftFieldName()]));
 
         $selectRight = $this->sql->select();
-        $selectRight->columns(array_merge(array_values($primary), array('nested' => $model->getNestedRightFieldName())));
+        $selectRight->columns(array_merge(array_values($primary), ['nested' => $model->getNestedRightFieldName()]));
 
         $selectLeft->combine($selectRight);
         $selectCombined = (new Select())->from(['sub' => $selectLeft])->order('nested');
@@ -68,20 +68,20 @@ abstract class AbstractNestedSetTableGateway extends AbstractTableGateway
         $this->adapter->driver->getConnection()->beginTransaction();
 
         $select = $this->sql->select();
-        $select->order(array($this->parentFieldName, $this->sortFieldName));
+        $select->order([$this->parentFieldName, $this->sortFieldName]);
 
         $result = $this->selectWith($select);
 
-        $children = array();
-        $items = array();
-        $rootItems = array();
+        $children = [];
+        $items = [];
+        $rootItems = [];
 
         foreach ($result as $row) {
             /* @var NestedSetInterface $row */
             $parentId = $row->getParentId();
             if (!empty($parentId)) {
                 if (!array_key_exists($parentId, $children)) {
-                    $children[$parentId] = array();
+                    $children[$parentId] = [];
                 }
                 $children[$parentId][] = $row->getId();
             } else {
@@ -127,9 +127,9 @@ abstract class AbstractNestedSetTableGateway extends AbstractTableGateway
 
         parent::update($row);
 
-        return array(
+        return [
             'left' => $myLeft,
             'right' => $myRight
-        );
+        ];
     }
 }

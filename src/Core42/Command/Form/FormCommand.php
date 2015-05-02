@@ -42,7 +42,7 @@ class FormCommand extends AbstractCommand
     /**
      * @var array
      */
-    private $protectedData = array();
+    private $protectedData = [];
 
     /**
      *

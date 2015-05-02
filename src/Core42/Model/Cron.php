@@ -16,7 +16,7 @@ class Cron extends AbstractModel
     const STATUS_MANUAL = 'manual';
     const STATUS_DISABLED = 'disabled';
 
-    protected $properties = array(
+    protected $properties = [
         'id',
         'status',
         'name',
@@ -33,7 +33,7 @@ class Cron extends AbstractModel
         'interval_year',
         'created',
         'updated'
-    );
+    ];
 
     /**
      * @param int $id

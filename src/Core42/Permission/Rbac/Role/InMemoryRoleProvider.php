@@ -14,7 +14,7 @@ class InMemoryRoleProvider implements RoleProviderInterface
     /**
      * @var array
      */
-    private $rolesConfig = array();
+    private $rolesConfig = [];
 
     /**
      * @param array
@@ -30,7 +30,7 @@ class InMemoryRoleProvider implements RoleProviderInterface
      */
     public function getRoles(array $roleNames)
     {
-        $roles = array();
+        $roles = [];
 
         foreach ($roleNames as $roleName) {
             if (!isset($this->rolesConfig[$roleName])) {

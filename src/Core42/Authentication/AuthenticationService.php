@@ -84,9 +84,7 @@ class AuthenticationService implements AuthenticationServiceInterface
             return new Result(
                 Result::FAILURE_UNCATEGORIZED,
                 null,
-                array(
-                    'no result set'
-                )
+                ['no result set']
             );
         }
 

@@ -46,7 +46,7 @@ class AuthorizationService
     /**
      * @var array
      */
-    protected $assertions = array();
+    protected $assertions = [];
 
     /**
      * @var string
@@ -158,7 +158,7 @@ class AuthorizationService
             return false;
         }
 
-        $roleNames = array();
+        $roleNames = [];
 
         foreach ($roles as $role) {
             $roleNames[] = $role instanceof RoleInterface ? $role->getName() : (string) $role;
@@ -179,8 +179,8 @@ class AuthorizationService
             $roles = iterator_to_array($roles);
         }
 
-        $collectedRoles = array();
-        $toCollect      = array();
+        $collectedRoles = [];
+        $toCollect      = [];
 
         foreach ((array) $roles as $role) {
             if ($role instanceof RoleInterface) {
@@ -204,7 +204,7 @@ class AuthorizationService
      */
     public function flattenRoles(array $roles)
     {
-        $roleNames = array();
+        $roleNames = [];
         $iterator  = $this->rbac->getTraversalStrategy()->getRolesIterator($roles);
 
         foreach ($iterator as $role) {

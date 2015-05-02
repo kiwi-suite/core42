@@ -40,8 +40,8 @@ class Localization extends AbstractHelper
      * @param array $arguments
      * @return mixed
      */
-    public function __call($method, array $arguments = array())
+    public function __call($method, array $arguments = [])
     {
-        return call_user_func_array(array($this->localization, $method), $arguments);
+        return call_user_func_array([$this->localization, $method], $arguments);
     }
 }

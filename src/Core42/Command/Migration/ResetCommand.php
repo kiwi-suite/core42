@@ -43,7 +43,7 @@ class ResetCommand extends AbstractCommand
 
             $migration['instance']->down($this->getServiceManager());
 
-            $migrationTableGateway->delete(array('name' => $migration['name']));
+            $migrationTableGateway->delete(['name' => $migration['name']]);
             $migrationCounter++;
 
             $this->getServiceManager()->get('Metadata')->refresh();
@@ -67,6 +67,6 @@ class ResetCommand extends AbstractCommand
      */
     public function consoleSetup(Route $route)
     {
-        
+
     }
 }

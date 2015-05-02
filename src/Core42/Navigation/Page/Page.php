@@ -16,12 +16,12 @@ class Page extends Container
     /**
      * @var array
      */
-    protected $attributes = array();
+    protected $attributes = [];
 
     /**
      * @var array
      */
-    protected $options = array();
+    protected $options = [];
 
     /**
      * @var Page|null

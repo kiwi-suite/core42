@@ -160,9 +160,9 @@ class GenerateModelCommand extends AbstractCommand
 
         $filter = new UnderscoreToCamelCase();
 
-        $tags = array();
-        $properties = array();
-        $methods = array();
+        $tags = [];
+        $properties = [];
+        $methods = [];
         foreach ($columns as $column) {
             /* @type \Zend\Db\Metadata\Object\ColumnObject $column */
 
@@ -175,13 +175,13 @@ class GenerateModelCommand extends AbstractCommand
             if ($this->generateSetterGetter === false) {
                 $setterMethodDocBlock = new Generator\DocBlock\Tag\MethodTag(
                     "set".$method,
-                    array($class),
+                    [$class],
                     "set".$method."(".$type." \$".$column->getName().")"
                 );
 
                 $getterMethodDocBlock = new Generator\DocBlock\Tag\MethodTag(
                     "get".$method,
-                    array($type),
+                    [$type],
                     "get".$method."()"
                 );
 
@@ -198,25 +198,25 @@ class GenerateModelCommand extends AbstractCommand
 
                 $methods[] = new Generator\MethodGenerator(
                     'set'.$method,
-                    array(
+                    [
                         new Generator\ParameterGenerator(
                             $column->getName(),
                             null,
                             null
                         )
-                    ),
+                    ],
                     Generator\MethodGenerator::FLAG_PUBLIC,
-                    implode("\n", array(
+                    implode("\n", [
                         '$this->set(\''.$column->getName().'\', $'.$column->getName().');',
                         'return $this;'
-                    )),
+                    ]),
                     new Generator\DocBlockGenerator(
                         null,
                         null,
-                        array(
+                        [
                             $docBlockParam,
                             $docBlockReturn
-                        )
+                        ]
                     )
                 );
 
@@ -226,15 +226,15 @@ class GenerateModelCommand extends AbstractCommand
 
                 $methods[] = new Generator\MethodGenerator(
                     'get'.$method,
-                    array(),
+                    [],
                     Generator\MethodGenerator::FLAG_PUBLIC,
                     "return \$this->get('".$column->getName()."');",
                     new Generator\DocBlockGenerator(
                         null,
                         null,
-                        array(
+                        [
                             $docBlockReturn
-                        )
+                        ]
                     )
                 );
             }
@@ -251,7 +251,7 @@ class GenerateModelCommand extends AbstractCommand
         $propertyGenerator->setDocBlock(new Generator\DocBlockGenerator(
             null,
             null,
-            array(new Generator\DocBlock\Tag\GenericTag('var', 'array'))
+            [new Generator\DocBlock\Tag\GenericTag('var', 'array')]
         ));
         $modelClass->addPropertyFromGenerator($propertyGenerator);
 
@@ -272,7 +272,7 @@ class GenerateModelCommand extends AbstractCommand
             case "bool":
                 return "boolean";
             case "enum":
-                $check = array(array("true", "false"), array("false", "true"));
+                $check = [["true", "false"], ["false", "true"]];
                 if (in_array($column->getErrata("permitted_values"), $check)) {
                     return "boolean";
                 }

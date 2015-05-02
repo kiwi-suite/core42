@@ -73,7 +73,7 @@ abstract class AbstractCommand extends \Core42\Command\AbstractCommand
 
             do {
                 $dir = preg_replace(
-                    array('#//|/\./#', '#/([^/]*)/\.\./#'),
+                    ['#//|/\./#', '#/([^/]*)/\.\./#'],
                     '/',
                     $dir,
                     -1,
@@ -99,7 +99,7 @@ abstract class AbstractCommand extends \Core42\Command\AbstractCommand
         $migrationTableGateway = $this->getServiceManager()->get('TableGateway')->get('Core42\Migration');
         $resultSet = $migrationTableGateway->select();
 
-        $migratedMigrations = array();
+        $migratedMigrations = [];
         foreach ($resultSet as $mig) {
             /* @var Migration $mig */
             $migratedMigrations[$mig->getName()] = $mig;
@@ -107,7 +107,7 @@ abstract class AbstractCommand extends \Core42\Command\AbstractCommand
 
         $migrationDirs = $this->getMigrationDirectories();
 
-        $migrations = array();
+        $migrations = [];
 
         foreach ($migrationDirs as $dir) {
             $globPattern = $dir  . '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]t[0-9][0-9][0-9][0-9][0-9][0-9].php';
@@ -117,12 +117,12 @@ abstract class AbstractCommand extends \Core42\Command\AbstractCommand
 
                 $name = $this->getMigrationNameByFilename(pathinfo($filename, PATHINFO_FILENAME));
 
-                $migrations[] = array(
+                $migrations[] = [
                     'name'      => $name,
                     'filename'  => $filename,
                     'instance'  => new $class,
                     'migrated'  => (isset($migratedMigrations[$name])) ? $migratedMigrations[$name] : null,
-                );
+                ];
             }
         }
 
@@ -135,7 +135,7 @@ abstract class AbstractCommand extends \Core42\Command\AbstractCommand
      */
     protected function getMigrationNameByFilename($filename)
     {
-        return str_replace(array('-', 't'), "", $filename);
+        return str_replace(['-', 't'], "", $filename);
     }
 
     /**
@@ -144,6 +144,6 @@ abstract class AbstractCommand extends \Core42\Command\AbstractCommand
      */
     protected function getClassnameByFilename($filename)
     {
-        return 'Migration' . str_replace(array('-', 't'), "", $filename);
+        return 'Migration' . str_replace(['-', 't'], "", $filename);
     }
 }

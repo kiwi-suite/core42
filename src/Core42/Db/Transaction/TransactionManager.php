@@ -23,7 +23,7 @@ class TransactionManager implements ServiceManagerAwareInterface
     /**
      * @var array
      */
-    private $transactions = array();
+    private $transactions = [];
 
     /**
      * Set service manager

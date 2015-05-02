@@ -172,7 +172,7 @@ class GenerateTableGatewayCommand extends AbstractCommand
                 new Generator\DocBlockGenerator(
                     null,
                     null,
-                    array(new Generator\DocBlock\Tag\GenericTag('var', 'string'))
+                    [new Generator\DocBlock\Tag\GenericTag('var', 'string')]
                 )
             )
             ->setFlags(Generator\PropertyGenerator::FLAG_PROTECTED);
@@ -180,7 +180,7 @@ class GenerateTableGatewayCommand extends AbstractCommand
 
         $property = new Generator\PropertyGenerator("databaseTypeMap");
         $property->setDefaultValue(
-            array(),
+            [],
             Generator\ValueGenerator::TYPE_ARRAY,
             Generator\ValueGenerator::OUTPUT_SINGLE_LINE
         )
@@ -188,7 +188,7 @@ class GenerateTableGatewayCommand extends AbstractCommand
                 new Generator\DocBlockGenerator(
                     null,
                     null,
-                    array(new Generator\DocBlock\Tag\GenericTag('var', 'array'))
+                    [new Generator\DocBlock\Tag\GenericTag('var', 'array')]
                 )
             )
             ->setFlags(Generator\PropertyGenerator::FLAG_PROTECTED);
@@ -200,7 +200,7 @@ class GenerateTableGatewayCommand extends AbstractCommand
                 new Generator\DocBlockGenerator(
                     null,
                     null,
-                    array(new Generator\DocBlock\Tag\GenericTag('var', 'string'))
+                    [new Generator\DocBlock\Tag\GenericTag('var', 'string')]
                 )
             )
             ->setFlags(Generator\PropertyGenerator::FLAG_PROTECTED);

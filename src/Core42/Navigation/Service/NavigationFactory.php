@@ -39,9 +39,9 @@ class NavigationFactory implements FactoryInterface
                 }
             } elseif (is_array($container)) {
                 $provider  = new ArrayProvider();
-                $provider->setOptions(array(
+                $provider->setOptions([
                     'config' => $container
-                ));
+                ]);
             }
             $container = $provider->getContainer($containerName);
             $container->setContainerName($containerName);

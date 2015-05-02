@@ -57,7 +57,7 @@ class RedirectStrategy extends AbstractStrategy
 
         $rbacService = $this->rbacManager->getService($exception->getPermissionName());
 
-        if (array($rbacService->getGuestRole()) !== $rbacService->flattenRoles($rbacService->getIdentityRoles())) {
+        if ([$rbacService->getGuestRole()] !== $rbacService->flattenRoles($rbacService->getIdentityRoles())) {
             if (!$options->getRedirectWhenConnected()) {
                 return;
             }
@@ -67,18 +67,18 @@ class RedirectStrategy extends AbstractStrategy
             $redirectRoute = $options->getRedirectToRouteDisconnected();
         }
 
-        $uri = $router->assemble(array(), array('name' => $redirectRoute));
+        $uri = $router->assemble([], ['name' => $redirectRoute]);
 
         if ($options->getAppendPreviousUri()) {
             $redirectKey = $options->getPreviousUriQueryKey();
             $previousUri = $event->getRequest()->getUriString();
 
             $uri = $router->assemble(
-                array(),
-                array(
+                [],
+                [
                     'name' => $redirectRoute,
-                    'query' => array($redirectKey => $previousUri)
-                )
+                    'query' => [$redirectKey => $previousUri]
+                ]
             );
         }
 

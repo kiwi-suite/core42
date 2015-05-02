@@ -91,7 +91,7 @@ class MakeCommand extends AbstractCommand implements ConsoleAwareInterface
             return;
         }
 
-        $checkArray = array();
+        $checkArray = [];
         $seeds = $this->getAllSeeds();
         foreach ($seeds as $_seed) {
             $checkArray[] = $_seed['name'];
@@ -116,9 +116,9 @@ class MakeCommand extends AbstractCommand implements ConsoleAwareInterface
 
         $classGenerator = new ClassGenerator($seedingName);
 
-        $classGenerator->addMethod("seed", array(
+        $classGenerator->addMethod("seed", [
             new ParameterGenerator('serviceManager', 'Zend\ServiceManager\ServiceManager')
-        ), MethodGenerator::FLAG_PUBLIC, "\n");
+        ], MethodGenerator::FLAG_PUBLIC, "\n");
 
         file_put_contents($filename, "<?php\n" . $classGenerator->generate());
 

@@ -36,7 +36,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     /**
      * @var array
      */
-    protected $databaseTypeMap = array();
+    protected $databaseTypeMap = [];
 
     /**
      * @var DatabaseHydrator
@@ -225,7 +225,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         }
 
         if (!is_array($values)) {
-            $values = array($primary[0] => $values);
+            $values = [$primary[0] => $values];
         }
 
         if (count(array_diff(array_keys($values), $primary)) > 0) {
@@ -270,7 +270,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
      */
     public function getSqlColumns()
     {
-        $sqlColumns = array();
+        $sqlColumns = [];
         foreach ($this->getColumns() as $column) {
             $sqlColumns["{$this->table}.{$column}"] = $column;
         }

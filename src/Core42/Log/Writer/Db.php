@@ -35,7 +35,7 @@ class Db extends AbstractWriter
      * @param array $columnMap
      * @throws Exception\InvalidArgumentException
      */
-    public function __construct($tableGateway, $columnMap = array())
+    public function __construct($tableGateway, $columnMap = [])
     {
         $this->tableGateway = $tableGateway;
 
@@ -89,10 +89,10 @@ class Db extends AbstractWriter
     protected function mapEventIntoColumn(array $event, array $columnMap = null)
     {
         if (empty($event)) {
-            return array();
+            return [];
         }
 
-        $data = array();
+        $data = [];
         foreach ($event as $name => $value) {
             if (is_array($value)) {
                 foreach ($value as $key => $subvalue) {
@@ -116,10 +116,10 @@ class Db extends AbstractWriter
     protected function eventIntoColumn(array $event)
     {
         if (empty($event)) {
-            return array();
+            return [];
         }
 
-        $data = array();
+        $data = [];
         foreach ($event as $name => $value) {
             if (is_array($value)) {
                 foreach ($value as $key => $subvalue) {

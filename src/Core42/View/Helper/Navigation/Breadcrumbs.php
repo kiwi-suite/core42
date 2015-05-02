@@ -16,11 +16,11 @@ class Breadcrumbs extends AbstractHelper
         $iterator = new \RecursiveIteratorIterator($filter, \RecursiveIteratorIterator::SELF_FIRST);
         $iterator->setMaxDepth($this->maxDepth);
 
-        $model = array(
+        $model = [
             'iterator' => $iterator,
             'minDepth' => $this->minDepth,
             'navigation' => $this->navigation,
-        );
+        ];
 
         return $this->view->render($this->partial, $model);
     }

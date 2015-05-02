@@ -1,7 +1,7 @@
 <?php
 
-return array(
-    'cron' => array(
+return [
+    'cron' => [
         'logger' => 'Log\Dev'
-    ),
-);
+    ],
+];

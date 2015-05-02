@@ -34,7 +34,7 @@ class ResultSet extends HydratingResultSet
     {
         $hydrator = new ModelHydrator();
 
-        $return = array();
+        $return = [];
         foreach ($this as $row) {
             $return[] = $hydrator->extract($row);
         }

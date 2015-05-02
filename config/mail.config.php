@@ -1,9 +1,9 @@
 <?php
-return array(
-    'mail' => array(
-        'transport' => array(
+return [
+    'mail' => [
+        'transport' => [
             'type' => 'null',
-            'options' => array(),
-        ),
-    ),
-);
+            'options' => [],
+        ],
+    ],
+];

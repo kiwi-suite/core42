@@ -1,23 +1,23 @@
 <?php
 namespace Core42;
 
-return array(
-    'caches' => array(
-        'Cache\Intern' => array(
-            'adapter' => array(
+return [
+    'caches' => [
+        'Cache\Intern' => [
+            'adapter' => [
                 'name' => 'filesystem',
-                'options' => array(
+                'options' => [
                     'cache_dir'      => 'data/cache/',
                     'namespace'      => 'cache_intern',
                     'dirPermission'  => 0770,
                     'filePermission' => 0660,
                     'readable'       => !DEVELOPMENT_MODE,
                     'writable'       => !DEVELOPMENT_MODE,
-                ),
-            ),
-            'plugins' => array(
+                ],
+            ],
+            'plugins' => [
                 'Serializer'
-            ),
-        ),
-    ),
-);
+            ],
+        ],
+    ],
+];

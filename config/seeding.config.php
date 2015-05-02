@@ -1,9 +1,9 @@
 <?php
 namespace Core42;
 
-return array(
-    'seeding' => array(
-        'directory'     => array(),
+return [
+    'seeding' => [
+        'directory'     => [],
         'table_name'    => 'seeding',
-    ),
-);
+    ],
+];

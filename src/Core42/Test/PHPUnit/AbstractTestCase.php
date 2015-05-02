@@ -189,12 +189,12 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
 
         // reset server datas
         if (!$keepPersistence) {
-            $_SESSION = array();
-            $_COOKIE  = array();
+            $_SESSION = [];
+            $_COOKIE  = [];
         }
 
-        $_GET     = array();
-        $_POST    = array();
+        $_GET     = [];
+        $_POST    = [];
 
         // reset singleton
         StaticEventManager::resetInstance();
@@ -317,7 +317,7 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
         return $typeTableGatewayMock;
     }
 
-    protected function mockSql(\PHPUnit_Framework_MockObject_MockObject $tableGatewayMock, $dataSet = array(), $consecutiveCalls = false)
+    protected function mockSql(\PHPUnit_Framework_MockObject_MockObject $tableGatewayMock, $dataSet = [], $consecutiveCalls = false)
     {
         $selectMock = $this->getMockBuilder('\Zend\Db\Sql\Select')
             ->disableOriginalConstructor()
@@ -346,7 +346,7 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
 
         if ($consecutiveCalls) {
 
-            $resultSets = array();
+            $resultSets = [];
             foreach ($dataSet as $consecutiveResultSet) {
                 $resultSet = new \Zend\Db\ResultSet\ResultSet();
                 $resultSet->initialize($consecutiveResultSet);
@@ -354,7 +354,7 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
                 $resultSets[] = $resultSet;
             }
 
-            $resultSets = call_user_func_array(array($this, 'onConsecutiveCalls'), $resultSets);
+            $resultSets = call_user_func_array([$this, 'onConsecutiveCalls'], $resultSets);
 
             $statementMock
                 ->method('execute')

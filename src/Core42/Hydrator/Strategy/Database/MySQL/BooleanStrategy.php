@@ -44,7 +44,7 @@ class BooleanStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function isResponsible(\Zend\Db\Metadata\Object\ColumnObject $column)
     {
-        $check = array(array("true", "false"), array("false", "true"));
+        $check = [["true", "false"], ["false", "true"]];
         if ($column->getDataType() == "enum" && in_array($column->getErrata("permitted_values"), $check)) {
             return true;
         }

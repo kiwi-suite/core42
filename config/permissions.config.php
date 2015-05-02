@@ -1,24 +1,24 @@
 <?php
 namespace Core42;
 
-return array(
-    'permissions' => array(
-        'role_provider_manager' => array(
-            'invokables' => array(
+return [
+    'permissions' => [
+        'role_provider_manager' => [
+            'invokables' => [
                 'InMemoryRoleProvider' => 'Core42\Permission\Rbac\Role\InMemoryRoleProvider',
-            ),
-        ),
-        'guard_manager' => array(
-            'invokables' => array(
+            ],
+        ],
+        'guard_manager' => [
+            'invokables' => [
                 'RouteGuard' => 'Core42\Permission\Rbac\Guard\RouteGuard',
-            ),
-        ),
-        'assertion_manager' => array(
-            'invokables' => array(
+            ],
+        ],
+        'assertion_manager' => [
+            'invokables' => [
                 'RouteAssertion' => 'Core42\Permission\Rbac\Assertion\RouteAssertion'
-            ),
-        ),
+            ],
+        ],
 
-        'service' => array(),
-    ),
-);
+        'service' => [],
+    ],
+];

@@ -11,10 +11,10 @@ namespace Core42\Model;
 
 class Seeding extends AbstractModel
 {
-    protected $properties = array(
+    protected $properties = [
         'name',
         'created',
-    );
+    ];
 
     /**
      * @param string $name

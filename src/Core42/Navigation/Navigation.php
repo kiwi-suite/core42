@@ -23,17 +23,17 @@ class Navigation
     /**
      * @var Container[]
      */
-    protected $containers = array();
+    protected $containers = [];
 
     /**
      * @var EventManagerInterface[]
      */
-    protected $events = array();
+    protected $events = [];
 
     /**
      * @var array
      */
-    protected $hrefCache = array();
+    protected $hrefCache = [];
 
     /**
      * @var bool
@@ -43,7 +43,7 @@ class Navigation
     /**
      * @var array
      */
-    protected $isActiveCache = array();
+    protected $isActiveCache = [];
 
     /**
      * @var RouteStackInterface
@@ -64,11 +64,11 @@ class Navigation
      */
     public function setEventManager($containerName, EventManagerInterface $eventManager)
     {
-        $eventManager->setIdentifiers(array(
+        $eventManager->setIdentifiers([
             'Zend\Stdlib\DispatchableInterface',
             __CLASS__,
             get_called_class()
-        ));
+        ]);
         $this->events[$containerName] = $eventManager;
 
         return $this;
@@ -220,7 +220,7 @@ class Navigation
      */
     public function clearContainers()
     {
-        $this->containers = array();
+        $this->containers = [];
 
         return $this;
     }
@@ -294,7 +294,7 @@ class Navigation
         if ($page->getOption('uri')) {
             $href = $page->getOption('uri');
         } elseif ($page->getOption('route')) {
-            $params = array();
+            $params = [];
             $routeMatch = $this->getRouteMatch();
             if ($routeMatch !== null) {
                 $rmParams = $routeMatch->getParams();
@@ -313,7 +313,7 @@ class Navigation
 
             $href = $this->getRouter()->assemble(
                 $params,
-                array('name' => $page->getOption('route'))
+                ['name' => $page->getOption('route')]
             );
         } elseif ($page->getOption('href')) {
             $href = $page->getAttribute('href');
@@ -342,7 +342,7 @@ class Navigation
     {
         if ($isActiveRecursion != $this->isActiveRecursion) {
             $this->isActiveRecursion = $isActiveRecursion;
-            $this->isActiveCache     = array();
+            $this->isActiveCache     = [];
         }
         return $this;
     }
