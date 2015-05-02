@@ -2,7 +2,8 @@
     "name": "fruit42/core42",
     "type": "zend-module",
     "require": {
-        "php": ">=5.3.23",
+        "php": ">=5.4",
+        "ext-intl" : "*",
         "composer/installers": "~1.0",
         "zfcampus/zf-console": "1.0.3",
         "symfony/finder": "v2.5.0",
