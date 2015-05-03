@@ -228,23 +228,37 @@ class Localization extends AbstractOptions
 
     /**
      * @return string
+     * @throws \Exception
+     */
+    public function getDefaultLocale()
+    {
+        if (count($this->locales) == 0) {
+            throw new \Exception("no locales set");
+        }
+
+        foreach ($this->getAvailableLocales() as $_locale) {
+            $options = $this->getLocaleOptions($_locale);
+            if ($options === false) {
+                continue;
+            }
+
+            if (is_array($options) && array_key_exists('default', $options) && $options['default'] === true) {
+                return $_locale;
+            }
+        }
+
+        return current($this->getAvailableLocales());
+    }
+
+    /**
+     * @return string
      */
     public function getLocaleFromHeader()
     {
         $locale = \Locale::acceptFromHttp($this->header);
 
         if (empty($locale) || !in_array($locale, $this->locales)) {
-            foreach ($this->locales as $_locale) {
-                $options = $this->getLocaleOptions($_locale);
-                if ($options === false) {
-                    continue;
-                }
-
-                if (is_array($options) && array_key_exists('default', $options) && $options['default'] === true) {
-                    $locale = $_locale;
-                    break;
-                }
-            }
+            $locale = $this->getDefaultLocale();
         }
 
         return $locale;
