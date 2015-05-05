@@ -2,7 +2,7 @@
 /**
  * core42 (www.raum42.at)
  *
- * @link http://www.raum42.at
+ * @link      http://www.raum42.at
  * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
  *
  */
@@ -29,10 +29,12 @@ class TranslatorFactory extends TranslatorServiceFactory
 
         if ($translator->isEventManagerEnabled()) {
             $config = $serviceLocator->get('Config');
-            if(isset($config['translator']['missing_translations_handler'])) {
+            if (isset($config['translator']['missing_translations_handler'])) {
                 $missingConfig = $config['translator']['missing_translations_handler'];
-                if(isset($missingConfig['service']) && isset($missingConfig['action'])) {
-                    $translator->getEventManager()->attach(Translator::EVENT_MISSING_TRANSLATION, [$serviceLocator->get($missingConfig['service']), $missingConfig['action']]);
+                if (isset($missingConfig['service']) && isset($missingConfig['action'])) {
+                    $translator->getEventManager()->attach(
+                        Translator::EVENT_MISSING_TRANSLATION, [$serviceLocator->get($missingConfig['service']), $missingConfig['action']]
+                    );
                 }
             }
         }
