@@ -33,7 +33,8 @@ class TranslatorFactory extends TranslatorServiceFactory
                 $missingConfig = $config['translator']['missing_translations_handler'];
                 if (isset($missingConfig['service']) && isset($missingConfig['action'])) {
                     $translator->getEventManager()->attach(
-                        Translator::EVENT_MISSING_TRANSLATION, [$serviceLocator->get($missingConfig['service']), $missingConfig['action']]
+                        Translator::EVENT_MISSING_TRANSLATION,
+                        [$serviceLocator->get($missingConfig['service']), $missingConfig['action']]
                     );
                 }
             }
