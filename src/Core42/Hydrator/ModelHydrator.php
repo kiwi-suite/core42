@@ -9,7 +9,6 @@
 
 namespace Core42\Hydrator;
 
-
 class ModelHydrator extends AbstractHydrator
 {
 

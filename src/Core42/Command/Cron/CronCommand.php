@@ -135,10 +135,8 @@ class CronCommand extends AbstractCommand
             $this->logger->info(sprintf("cron task %s started", $task->getName()));
 
             if ($this->runCommand($task->getCommand(), $params, $output, $returnVar)) {
-
                 $this->logger->info(sprintf("cron task %s successful finished", $task->getName()));
             } else {
-
                 $this->logger->err(sprintf('cron task %s exited with status code %d', $task->getName(), $returnVar));
             }
 

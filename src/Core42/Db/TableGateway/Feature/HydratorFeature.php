@@ -72,7 +72,6 @@ class HydratorFeature extends AbstractFeature
             } else {
                 foreach ($services as $canonicalName => $name) {
                     if (strpos($canonicalName, $platform) == 0) {
-
                         /* @var DatabaseStrategyInterface $strategy */
                         $strategy = $this->hydratorStrategyPluginManager->get($canonicalName);
                         if ($strategy->isResponsible($_column)) {

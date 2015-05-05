@@ -182,7 +182,6 @@ class GenerateDbClassesCommand extends AbstractCommand
             $filter = new UnderscoreToCamelCase();
 
             foreach ($tables as $table) {
-
                 if (in_array($table, ['migrations'])) {
                     continue;
                 }

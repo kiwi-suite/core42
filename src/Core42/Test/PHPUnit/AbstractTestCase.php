@@ -322,8 +322,11 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
      * @param array $dataSet
      * @param bool $consecutiveCalls
      */
-    protected function mockSql(\PHPUnit_Framework_MockObject_MockObject $tableGatewayMock, $dataSet = [], $consecutiveCalls = false)
-    {
+    protected function mockSql(
+        \PHPUnit_Framework_MockObject_MockObject $tableGatewayMock,
+        $dataSet = [],
+        $consecutiveCalls = false
+    ) {
         $selectMock = $this->getMockBuilder('\Zend\Db\Sql\Select')
             ->disableOriginalConstructor()
             ->enableProxyingToOriginalMethods()
@@ -350,7 +353,6 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
             ->getMock();
 
         if ($consecutiveCalls) {
-
             $resultSets = [];
             foreach ($dataSet as $consecutiveResultSet) {
                 $resultSet = new \Zend\Db\ResultSet\ResultSet();

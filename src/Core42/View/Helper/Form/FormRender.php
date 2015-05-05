@@ -124,7 +124,6 @@ class FormRender extends AbstractHelper
     public function render()
     {
         try {
-
             /** @var FormElementRender $formElementRender */
             $formElementRender = $this->getView()->plugin('formElementRender');
 

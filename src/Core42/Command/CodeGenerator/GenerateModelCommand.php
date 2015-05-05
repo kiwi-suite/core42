@@ -191,7 +191,6 @@ class GenerateModelCommand extends AbstractCommand
                 $tags[] = $setterMethodDocBlock;
                 $tags[] = $getterMethodDocBlock;
             } else {
-
                 $docBlockParam = new Generator\DocBlock\Tag\ParamTag();
                 $docBlockParam->setVariableName($column->getName());
                 $docBlockParam->setTypes($this->getPropertyTypeByColumnObject($column));
@@ -250,7 +249,11 @@ class GenerateModelCommand extends AbstractCommand
             $modelClass->setDocBlock($docBlock);
         }
 
-        $propertyGenerator = new Generator\PropertyGenerator("properties", $properties, Generator\PropertyGenerator::FLAG_PROTECTED);
+        $propertyGenerator = new Generator\PropertyGenerator(
+            "properties",
+            $properties,
+            Generator\PropertyGenerator::FLAG_PROTECTED
+        );
         $propertyGenerator->setDocBlock(new Generator\DocBlockGenerator(
             null,
             null,
