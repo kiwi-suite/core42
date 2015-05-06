@@ -12,25 +12,6 @@ namespace Core42\Model;
 class GenericModel extends AbstractModel
 {
     /**
-     * @param array $data
-     */
-    public function __construct(array $data = [])
-    {
-        if (!empty($data)) {
-            $this->populate($data);
-        }
-        $this->memento();
-    }
-
-    /**
-     * @return array
-     */
-    public function getProperties()
-    {
-        return array_keys($this->data);
-    }
-
-    /**
      * @param  string $name
      * @param  mixed $value
      * @param bool $strict

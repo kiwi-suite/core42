@@ -10,11 +10,14 @@
 namespace Core42\Selector;
 
 use Core42\Db\ResultSet\ResultSet;
-use Core42\Hydrator\ModelHydrator;
+use Core42\Db\TableGateway\AbstractTableGateway;
+use Core42\Hydrator\DatabaseHydrator;
+use Core42\Hydrator\Strategy\Service\HydratorStrategyPluginManager;
 use Core42\Model\GenericModel;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Sql;
+use Zend\Stdlib\Hydrator\HydratorInterface;
 
 abstract class AbstractDatabaseSelector extends AbstractSelector
 {
@@ -29,9 +32,40 @@ abstract class AbstractDatabaseSelector extends AbstractSelector
     protected $sql;
 
     /**
+     * @var HydratorInterface
+     */
+    protected $hydrator;
+
+    protected function init()
+    {
+        parent::init();
+
+        if (!is_array($this->getDatabaseTypeMap())) {
+            throw new \Exception("'getDatabaseTypeMap' doesn't return an array");
+        }
+    }
+
+    /**
+     * @param string $tableGatewayName
+     * @return AbstractTableGateway
+     */
+    protected function getTableGateway($tableGatewayName)
+    {
+        return $this->getServiceManager()->get('TableGateway')->get($tableGatewayName);
+    }
+
+    /**
+     * @return HydratorStrategyPluginManager
+     */
+    protected function getHydratorStrategyManager()
+    {
+        return $this->getServiceManager()->get('Core42\HydratorStrategyPluginManager');
+    }
+
+    /**
      * @return Select|string|ResultSet
      */
-    abstract public function getSelect();
+    abstract protected function getSelect();
 
     /**
      * @return Sql
@@ -54,11 +88,31 @@ abstract class AbstractDatabaseSelector extends AbstractSelector
     }
 
     /**
-     * @return ModelHydrator
+     * @return DatabaseHydrator
      */
     protected function getHydrator()
     {
-        return new ModelHydrator();
+        if ($this->hydrator instanceof HydratorInterface) {
+            return $this->hydrator;
+        }
+        $this->hydrator = new DatabaseHydrator();
+
+        foreach ($this->getDatabaseTypeMap() as $name => $strategy) {
+            $this->hydrator->addStrategy(
+                $name,
+                $this->getHydratorStrategyManager()->get($strategy)
+            );
+        }
+
+        return $this->hydrator;
+    }
+
+    /**
+     * @return array
+     */
+    protected function getDatabaseTypeMap()
+    {
+        return [];
     }
 
     /**
