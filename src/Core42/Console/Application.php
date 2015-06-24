@@ -47,7 +47,7 @@ class Application extends \ZF\Console\Application
     }
 
     /**
-     * Patch: Set CLI process title (PHP versions >= 5.5) and not OSX
+     * @see setProcessTitle()
      */
     protected function setProcessTitle()
     {
