@@ -2,7 +2,7 @@
 /**
  * core42 (www.raum42.at)
  *
- * @link http://www.raum42.at
+ * @link      http://www.raum42.at
  * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
  *
  */
@@ -44,5 +44,19 @@ class Application extends \ZF\Console\Application
             $this->showUnrecognizedRouteMessage($name);
             return;
         }
+    }
+
+    /**
+     * Patch: Set CLI process title (PHP versions >= 5.5) and not OSX
+     */
+    protected function setProcessTitle()
+    {
+        // Mac OS X does not support cli_set_process_title() due to security issues
+        // Bug fix for issue https://github.com/zfcampus/zf-console/issues/21
+        if (PHP_OS == 'Darwin') {
+            return;
+        }
+
+        parent::setProcessTitle();
     }
 }
