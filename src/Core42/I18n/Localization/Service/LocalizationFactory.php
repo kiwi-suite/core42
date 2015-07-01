@@ -28,7 +28,8 @@ class LocalizationFactory implements FactoryInterface
         $config = $serviceLocator->get('config')['i18n'];
         /** @var Request $request */
         $request = $serviceLocator->get("request");
+        $header = ($request instanceof Request) ? $request->getHeader("HTTP_ACCEPT_LANGUAGE", "") : '';
 
-        return new Localization($request->getHeader("HTTP_ACCEPT_LANGUAGE", ""), $config);
+        return new Localization($header, $config);
     }
 }
