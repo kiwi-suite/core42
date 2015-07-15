@@ -9,12 +9,15 @@
 
 namespace Core42\Navigation;
 
+use Core42\Navigation\Options\NavigationOptions;
 use Core42\Navigation\Page\Page;
+use Core42\Navigation\Provider\ArrayProvider;
 use Zend\EventManager\EventManager;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\ModuleRouteListener;
 use Zend\Mvc\Router\RouteMatch;
 use Zend\Mvc\Router\RouteStackInterface;
+use Zend\ServiceManager\ServiceManager;
 
 class Navigation
 {
@@ -54,6 +57,22 @@ class Navigation
      * @var RouteMatch
      */
     protected $routeMatch;
+
+    /**
+     * @var ServiceManager
+     */
+    protected $serviceManager;
+
+    /**
+     * @param ServiceManager $serviceManager
+     * @return $this
+     */
+    public function setServiceManager(ServiceManager $serviceManager)
+    {
+        $this->serviceManager = $serviceManager;
+
+        return $this;
+    }
 
     /**
      * Inject an EventManager instance
@@ -171,6 +190,32 @@ class Navigation
     public function getContainer($name)
     {
         if (!$this->hasContainer($name)) {
+            /** @var NavigationOptions $options */
+            $options = $this->serviceManager->get('Core42\NavigationOptions');
+
+            foreach ($options->getContainers() as $containerName => $container) {
+                if ($containerName !== $name) continue;
+
+                if (is_string($container)) {
+                    if ($this->serviceManager->has($container)) {
+                        $provider = $this->serviceManager->get($container);
+                    } else {
+                        $provider = new $container();
+                    }
+                } elseif (is_array($container)) {
+                    $provider  = new ArrayProvider();
+                    $provider->setOptions([
+                        'config' => $container
+                    ]);
+                }
+                $container = $provider->getContainer($containerName);
+                $container->setContainerName($containerName);
+
+                $this->addContainer($containerName, $container);
+
+                return $this->containers[$name];
+            }
+
             throw new \InvalidArgumentException(sprintf(
                 'No container with name "%s" could be found.',
                 $name

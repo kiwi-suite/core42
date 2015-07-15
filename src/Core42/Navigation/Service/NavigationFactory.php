@@ -11,7 +11,6 @@ namespace Core42\Navigation\Service;
 
 use Core42\Navigation\Navigation;
 use Core42\Navigation\Options\NavigationOptions;
-use Core42\Navigation\Provider\ArrayProvider;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -29,25 +28,7 @@ class NavigationFactory implements FactoryInterface
         $options = $serviceLocator->get('Core42\NavigationOptions');
 
         $navigation = new Navigation();
-
-        foreach ($options->getContainers() as $containerName => $container) {
-            if (is_string($container)) {
-                if ($serviceLocator->has($container)) {
-                    $provider = $serviceLocator->get($container);
-                } else {
-                    $provider = new $container();
-                }
-            } elseif (is_array($container)) {
-                $provider  = new ArrayProvider();
-                $provider->setOptions([
-                    'config' => $container
-                ]);
-            }
-            $container = $provider->getContainer($containerName);
-            $container->setContainerName($containerName);
-
-            $navigation->addContainer($containerName, $container);
-        }
+        $navigation->setServiceManager($serviceLocator);
 
         foreach ($options->getListeners() as $navName => $_listener) {
             foreach ($_listener as $priority => $listener) {
