@@ -79,11 +79,19 @@ class AssetsCommand extends AbstractCommand
 
                 continue;
             }
+            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+                if ($filesystem->isAbsolutePath($config['target'])) {
+                    $source = $config['target'];
+                } else {
+                    $source = getcwd() . DIRECTORY_SEPARATOR . $config['source'];
+                }
+            } else {
+                $source = $filesystem->makePathRelative(
+                    $config['source'],
+                    substr($config['target'], 0, strrpos($config['target'], '/'))
+                );
+            }
 
-            $source = $filesystem->makePathRelative(
-                $config['source'],
-                substr($config['target'], 0, strrpos($config['target'], '/'))
-            );
             $filesystem->symlink($source, $config['target']);
             $this->consoleOutput("created symlink for '{$config['source']}'");
         }
