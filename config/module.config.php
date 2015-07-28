@@ -6,6 +6,7 @@ return [
         'invokables' => [
             'params'                => __NAMESPACE__ . '\View\Helper\Params',
             'auth'                  => __NAMESPACE__ . '\View\Helper\Auth',
+            'wordTruncate'          => __NAMESPACE__ . '\View\Helper\WordTruncate',
         ],
         'factories' => [
             'permission'            => 'Core42\View\Helper\Service\PermissionFactory',
