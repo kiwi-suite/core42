@@ -45,6 +45,11 @@ class GenerateDbClassesCommand extends AbstractCommand
     protected $all;
 
     /**
+     * @var bool
+     */
+    protected $generateGetterSetter = false;
+
+    /**
      * @var string
      */
     protected $adapterName = 'Db\Master';
@@ -110,6 +115,14 @@ class GenerateDbClassesCommand extends AbstractCommand
     public function setAll($all)
     {
         $this->all = $all;
+    }
+
+    /**
+     * @param boolean $generateGetterSetter
+     */
+    public function setGenerateGetterSetter($generateGetterSetter)
+    {
+        $this->generateGetterSetter = $generateGetterSetter;
     }
 
     /**
@@ -218,7 +231,7 @@ class GenerateDbClassesCommand extends AbstractCommand
             ->setDirectory($modelDirectory)
             ->setClassName($modelClassName)
             ->setTableName($table)
-            ->setGenerateSetterGetter(false)
+            ->setGenerateSetterGetter($this->generateGetterSetter)
             ->run();
 
         /** @var GenerateTableGatewayCommand $generateTableGateway */
@@ -251,6 +264,8 @@ class GenerateDbClassesCommand extends AbstractCommand
         }
 
         $this->setAll($route->getMatchedParam('all', null));
+
+        $this->setGenerateGetterSetter($route->getMatchedParam("getter-setter"));
 
         $adapterName = $route->getMatchedParam('adapter');
         if (!empty($adapterName)) {

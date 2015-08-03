@@ -24,6 +24,11 @@ interface NestedSetInterface
     public function getParentId();
 
     /**
+     * @return string
+     */
+    public function getParentIdFieldName();
+
+    /**
      * @param int $nestedLeft
      * @return $this
      */

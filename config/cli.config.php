@@ -88,7 +88,7 @@ return [
         ],
 
         'generate-db-classes' => [
-            'route'                     => 'generate-db-classes --namespace= --directory= [--name=] [--table=] [--all=] [--adapter=]',
+            'route'                     => 'generate-db-classes --namespace= --directory= [--name=] [--table=] [--all=] [--adapter=] [--getter-setter]',
             'command-name'              => 'Core42\CodeGenerator\GenerateDbClasses',
             'description'               => 'generates model based on database schema',
             'short_description'         => 'generate model from database',
@@ -99,6 +99,7 @@ return [
                 '--table'               => 'tablename where to fetch informations from from',
                 '--all'                 => 'generate db classes for all tables with the given prefix',
                 '--adapter'             => 'Optional adapter name',
+                '--getter-setter'       => 'Generate Getter & Setter instead of PphDoc',
             ]
         ],
 

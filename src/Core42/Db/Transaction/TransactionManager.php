@@ -77,7 +77,7 @@ class TransactionManager implements ServiceManagerAwareInterface
      * @param string $name
      * @throws \Exception
      */
-    public function commit($name)
+    public function commit($name, $force = false)
     {
         $adapter = $this->getAdapter($name);
 
@@ -85,11 +85,25 @@ class TransactionManager implements ServiceManagerAwareInterface
             throw new \Exception("no transaction started for '{$name}'");
         }
 
-        $this->transactions[$name]--;
+        if ($force) {
+            $this->transactions[$name] = 0;
+        } else {
+            $this->transactions[$name]--;
+        }
+
 
         if ($this->transactions[$name] == 0) {
             $adapter->getDriver()->getConnection()->commit();
         }
+    }
+
+    /**
+     * @param string $name
+     * @throws \Exception
+     */
+    public function forceCommit($name)
+    {
+        $this->commit($name, true);
     }
 
     /**

@@ -93,7 +93,7 @@ class AssetsCommand extends AbstractCommand
             }
 
             $filesystem->symlink($source, $config['target']);
-            $this->consoleOutput("created symlink for '{$config['source']}'");
+            $this->consoleOutput("created symlink for '{$config['source']}' (target '{$config['target']}')");
         }
     }
 

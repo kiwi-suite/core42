@@ -31,6 +31,7 @@ class Cron extends AbstractModel
         'interval_month',
         'interval_day_of_week',
         'interval_year',
+        'logfile',
         'created',
         'updated'
     ];
@@ -294,6 +295,24 @@ class Cron extends AbstractModel
     {
         return $this->getIntervalMinute() . ' ' . $this->getIntervalHour() . ' ' . $this->getIntervalDay() . ' ' .
                $this->getIntervalMonth() . ' ' . $this->getIntervalDayOfWeek() . ' ' . $this->getIntervalYear();
+    }
+
+    /**
+     * @param $string $logfile
+     * @return $this
+     */
+    public function setLogfile($logfile)
+    {
+        $this->set('logfile', $logfile);
+        return $this;
+    }
+
+    /**
+     * @return $string
+     */
+    public function getLogfile()
+    {
+        return $this->get('logfile');
     }
 
     /**

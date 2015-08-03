@@ -361,11 +361,11 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
                 $resultSets[] = $resultSet;
             }
 
-            $resultSets = call_user_func_array([$this, 'onConsecutiveCalls'], $resultSets);
+            $onConsecutiveCalls = call_user_func_array([$this, 'onConsecutiveCalls'], $resultSets);
 
             $statementMock
                 ->method('execute')
-                ->will($resultSets);
+                ->will($onConsecutiveCalls);
 
         } else {
             $resultSet = new \Zend\Db\ResultSet\ResultSet();

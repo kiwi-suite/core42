@@ -24,9 +24,9 @@ class SelectorPluginManager extends AbstractPluginManager
     {
         $this->setShareByDefault(false);
 
-        parent::__construct($configuration);
-
         $this->addAbstractFactory(new SelectorFallbackAbstractFactory(), false);
+
+        parent::__construct($configuration);
     }
 
     /**

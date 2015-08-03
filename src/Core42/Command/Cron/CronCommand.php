@@ -92,7 +92,7 @@ class CronCommand extends AbstractCommand
             $where->equalTo('name', $this->taskName);
         }
 
-        if (!$this->ignoreLock) {
+        if (!$this->ignoreLock && empty($this->taskName)) {
             $where->isNull('lock');
         }
 
@@ -110,7 +110,12 @@ class CronCommand extends AbstractCommand
             /* @var Cron $task */
 
             if ($task->getStatus() == Cron::STATUS_DISABLED) {
-                $this->logger->warn('trying to execute disabled task');
+                $this->logger->warn('trying to execute disabled task ' . $task->getName());
+                continue;
+            }
+
+            if ($task->getLock() !== null && !$this->ignoreLock) {
+                $this->logger->warn('trying to execute locked task ' . $task->getName());
                 continue;
             }
 
@@ -125,12 +130,19 @@ class CronCommand extends AbstractCommand
             }
 
             if (array_key_exists('lastrun', $params)) {
-                $params['lastrun'] = $task->getLastRun()->getTimestamp();
+                $params['lastrun'] = ($task->getLastRun() instanceof \DateTime) ? $task->getLastRun()->getTimestamp() : 0;
             }
 
             $task->setLastRun(new \DateTime());
             $task->setLock(new \DateTime());
             $timedTaskTableGateway->update($task);
+
+            try {
+                $cronExpression = CronExpression::factory($task->getCronInterval());
+            } catch(\InvalidArgumentException $e) {
+                $this->logger->warn(sprintf('cron task %s: unable to parse cron expression! (%s)', $task->getName(), $task->getCronInterval()));
+                continue;
+            }
 
             $this->logger->info(sprintf("cron task %s started", $task->getName()));
 
@@ -140,7 +152,11 @@ class CronCommand extends AbstractCommand
                 $this->logger->err(sprintf('cron task %s exited with status code %d', $task->getName(), $returnVar));
             }
 
-            $cronExpression = CronExpression::factory($task->getCronInterval());
+            $logfile = $task->getLogfile();
+            if (!empty($logfile) && is_writable($logfile)) {
+                file_put_contents($logfile, $output, FILE_APPEND | LOCK_EX);
+            }
+
             $nextRun = $cronExpression->getNextRunDate();
 
             $task->setNextRun($nextRun);
@@ -161,8 +177,12 @@ class CronCommand extends AbstractCommand
         $cmd = 'php module/core42/bin/fruit';
         $cmd .= " {$command}";
         foreach ($params as $name => $value) {
-            $value = escapeshellarg($value);
-            $cmd .= " --{$name} {$value}";
+            if ($name == $value || $value === null) {
+                $cmd .= " --{$name}";
+            } else {
+                $value = escapeshellarg($value);
+                $cmd .= " --{$name} {$value}";
+            }
         }
 
         exec($cmd, $output, $returnVar);

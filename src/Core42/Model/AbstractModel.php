@@ -170,7 +170,7 @@ abstract class AbstractModel implements ModelInterface
 
             return $this;
         }
-        $this->data[$name] =  $value;
+        $this->data[$name] = $value;
 
         return $this;
     }

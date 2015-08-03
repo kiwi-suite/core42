@@ -62,6 +62,7 @@ abstract class AbstractNestedSetTableGateway extends AbstractTableGateway
             }
             $last = $n;
         }
+
     }
 
     /**
@@ -71,8 +72,11 @@ abstract class AbstractNestedSetTableGateway extends AbstractTableGateway
     {
         $this->adapter->driver->getConnection()->beginTransaction();
 
+        /* @var NestedSetInterface $model */
+        $model = $this->getModelPrototype();
+
         $select = $this->sql->select();
-        $select->order([$this->parentFieldName, $this->sortFieldName]);
+        $select->order(['parent_id', 'sort']);
 
         $result = $this->selectWith($select);
 
