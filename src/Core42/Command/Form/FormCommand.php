@@ -143,7 +143,7 @@ class FormCommand extends AbstractCommand
         }
 
 
-        $values = call_user_func($this->valueCallback, $this->data);
+        $values = call_user_func($this->valueCallback, $this->form->getInputFilter()->getValues());
 
         $this->cmd->hydrate($values);
 
