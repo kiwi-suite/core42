@@ -45,6 +45,11 @@ class FormCommand extends AbstractCommand
     private $protectedData = [];
 
     /**
+     * @var bool
+     */
+    private $takeOriginalData = false;
+
+    /**
      *
      */
     protected function init()
@@ -110,6 +115,17 @@ class FormCommand extends AbstractCommand
     }
 
     /**
+     * @param bool $takeOriginalData
+     * @return $this
+     */
+    public function setTableOriginalData($takeOriginalData)
+    {
+        $this->takeOriginalData = $takeOriginalData;
+
+        return $this;
+    }
+
+    /**
      * @param array $protectedData
      * @return $this
      */
@@ -142,8 +158,11 @@ class FormCommand extends AbstractCommand
             $this->addErrors($errors);
         }
 
-
-        $values = call_user_func($this->valueCallback, $this->form->getInputFilter()->getValues());
+        if ($this->takeOriginalData === true) {
+            $values = call_user_func($this->valueCallback, $this->data);
+        } else {
+            $values = call_user_func($this->valueCallback, $this->form->getInputFilter()->getValues());
+        }
 
         $this->cmd->hydrate($values);
 
