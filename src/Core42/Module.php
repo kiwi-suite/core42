@@ -13,9 +13,12 @@ use Core42\Console\Console;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\InitProviderInterface;
+use Zend\ModuleManager\ModuleEvent;
+use Zend\ModuleManager\ModuleManagerInterface;
 
 class Module implements
     BootstrapListenerInterface,
+    InitProviderInterface,
     ConfigProviderInterface
 {
     /**
@@ -60,5 +63,32 @@ class Module implements
         $e->getTarget()->getEventManager()->attach(
             $e->getApplication()->getServiceManager()->get('Core42\Permission\UnauthorizedStrategy')
         );
+    }
+
+    /**
+     * Initialize workflow
+     *
+     * @param  ModuleManagerInterface $manager
+     * @return void
+     */
+    public function init(ModuleManagerInterface $manager)
+    {
+        $events = $manager->getEventManager();
+
+        $events->attach(ModuleEvent::EVENT_MERGE_CONFIG, array($this, 'onMergeConfig'));
+    }
+
+    public function onMergeConfig(ModuleEvent $e)
+    {
+        $configListener = $e->getConfigListener();
+        $config         = $configListener->getMergedConfig(false);
+
+        if ($config['caches']['Cache\Intern']['adapter']['name'] !== 'filesystem') {
+            unset($config['caches']['Cache\Intern']['adapter']['options']['cache_dir']);
+            unset($config['caches']['Cache\Intern']['adapter']['options']['dirPermission']);
+            unset($config['caches']['Cache\Intern']['adapter']['options']['filePermission']);
+        }
+
+        $configListener->setMergedConfig($config);
     }
 }
