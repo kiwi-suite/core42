@@ -5,7 +5,7 @@
         "php": ">=5.5",
         "ext-intl" : "*",
         "composer/installers": "~1.0",
-        "zendframework/zendframework": "=2.5.2",
+        "zendframework/zendframework": "^2.5",
         "zfcampus/zf-console": "1.0.3",
         "symfony/finder": "v2.5.0",
         "symfony/filesystem": "v2.5.0",
