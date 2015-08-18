@@ -105,7 +105,7 @@ return [
 
         'clear-app-cache' => [
             'route'                     => 'clear-app-cache',
-            'command-name'              => '',
+            'command-name'              => 'Core42\Cache\ClearAppCache',
             'description'               => 'Clears config cache and module map cache',
             'short_description'         => 'Clears config cache and module map cache',
         ],
