@@ -1,4 +1,12 @@
 <?php
+/**
+ * core42 (www.raum42.at)
+ *
+ * @link http://www.raum42.at
+ * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
+ *
+ */
+
 namespace Core42\Hydrator\Strategy\Database\MySQL;
 
 use Core42\Hydrator\Strategy\Database\DatabaseStrategyInterface;
@@ -6,11 +14,6 @@ use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 
 class BooleanStrategy implements StrategyInterface, DatabaseStrategyInterface
 {
-    /**
-     * @var boolean
-     */
-    private $isNullable;
-
     /**
      * Converts the given value so that it can be extracted by the hydrator.
      *
@@ -20,7 +23,6 @@ class BooleanStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function extract($value)
     {
-        if ($this->isNullable && $value === null) return null;
         return ($value === true) ? "true" : "false";
     }
 
@@ -33,7 +35,6 @@ class BooleanStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function hydrate($value)
     {
-        if ($this->isNullable && $value === null) return null;
         return ($value === "true") ? true : false;
     }
 
@@ -41,14 +42,13 @@ class BooleanStrategy implements StrategyInterface, DatabaseStrategyInterface
      * @param  \Zend\Db\Metadata\Object\ColumnObject $column
      * @return mixed
      */
-    public function getStrategy(\Zend\Db\Metadata\Object\ColumnObject $column)
+    public function isResponsible(\Zend\Db\Metadata\Object\ColumnObject $column)
     {
-        if ($column->getDataType() == "enum" && in_array($column->getErrata("permitted_values"), array(array("true", "false"), array("false", "true")))) {
-            $this->isNullable = $column->getIsNullable();
-
-            return $this;
+        $check = [["true", "false"], ["false", "true"]];
+        if ($column->getDataType() == "enum" && in_array($column->getErrata("permitted_values"), $check)) {
+            return true;
         }
 
-        return null;
+        return false;
     }
 }
