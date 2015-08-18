@@ -1,0 +1,96 @@
+#!/usr/bin/env php
+<?php
+use Zend\Console\Console;
+use Core42\Console\Application;
+use ZF\Console\Dispatcher;
+
+chdir(__DIR__
+        . DIRECTORY_SEPARATOR
+        . '..'
+        . DIRECTORY_SEPARATOR
+        . '..'
+        . DIRECTORY_SEPARATOR
+        . '..'
+        . DIRECTORY_SEPARATOR
+);
+
+require_once 'config/settings.php';
+require_once 'init_autoloader.php';
+
+//just for downward compatibility
+if (file_exists('config/application.config.php')) {
+    $applicationConfig = require 'config/application.config.php';
+} elseif (DEVELOPMENT_MODE === true) {
+    $applicationConfig = require 'config/application/development.config.php';
+} else {
+    $applicationConfig = require 'config/application/application.config.php';
+}
+
+if (!empty($argv[1]) && $argv[1] == 'clear-app-cache') {
+    $dir = rtrim($applicationConfig['module_listener_options']['cache_dir'], '/') . '/';
+    if (file_exists($dir . 'module-classmap-cache.' . $applicationConfig['module_listener_options']['module_map_cache_key'] . '.php')) {
+        unlink($dir . 'module-classmap-cache.' . $applicationConfig['module_listener_options']['module_map_cache_key'] . '.php');
+    }
+
+    if (file_exists($dir . 'module-config-cache.' . $applicationConfig['module_listener_options']['config_cache_key'] . '.php')) {
+        unlink($dir . 'module-config-cache.' . $applicationConfig['module_listener_options']['config_cache_key'] . '.php');
+    }
+}
+
+$application = Zend\Mvc\Application::init($applicationConfig);
+
+$serviceManager = $application->getServiceManager();
+
+$cliConfig = $serviceManager->get('config');
+$cliConfig = $cliConfig['cli'];
+
+$dispatcher = new Dispatcher();
+foreach ($cliConfig as $name => &$info) {
+    if (array_key_exists('development', $info)) {
+        if ($info['development'] === true && DEVELOPMENT_MODE === false) {
+            unset($cliConfig[$name]);
+                    continue;
+        }
+        unset($info['development']);
+    }
+    if (!array_key_exists('name', $info) && is_string($name)) {
+        $info['name'] = $name;
+    }
+
+    if (!array_key_exists('dispatcher', $info)) {
+        $commandDispatcher = $serviceManager->get('Core42\ConsoleDispatcher');
+    } else {
+        $commandDispatcher = $serviceManager->get($info['dispatcher']);
+        unset($info['dispatcher']);
+    }
+
+    $dispatcher->map($info['name'], $commandDispatcher);
+}
+
+$application = new Application(
+    'fruit',
+    '1.0.0',
+    $cliConfig,
+    Console::getInstance(),
+    $dispatcher
+);
+
+if (DEVELOPMENT_MODE === true){
+$template = <<<EOT
+======================================================================
+   The application has thrown an exception!
+======================================================================
+
+ :className:
+ :message
+ :code
+ :file
+ :line
+ :stack
+ :previous
+EOT;
+$application->getExceptionHandler()->setMessageTemplate($template);
+}
+
+$exit = $application->run();
+exit($exit);

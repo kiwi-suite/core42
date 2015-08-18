@@ -1,194 +1,197 @@
 <?php
+/**
+ * core42 (www.raum42.at)
+ *
+ * @link http://www.raum42.at
+ * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
+ *
+ */
+
 namespace Core42\Model;
 
-use Core42\Hydrator\ModelHydrator;
-use Zend\InputFilter\Factory;
-use Zend\InputFilter\InputFilterProviderInterface;
-use Zend\InputFilter\InputFilterInterface;
-
-abstract class AbstractModel implements InputFilterProviderInterface
+abstract class AbstractModel implements ModelInterface
 {
     /**
      * @var array
      */
-    protected $inputFilterSpecifications = array();
+    protected $properties = [];
 
     /**
-     * @var ModelHydrator
+     * @var array
      */
-    private $hydrator;
+    protected $data = [];
 
     /**
-     * @var \Zend\InputFilter\InputFilterInterface
+     * @var array
      */
-    private $inputFilter;
-
-    private $modelProperties = array();
-
-    /**
-     * @var null|array
-     */
-    private $memento = null;
-
-    public function __construct()
-    {
-        $this->memento();
-    }
-
-    /**
-     * @param  string $name
-     * @return mixed
-     */
-    protected function get($name)
-    {
-        if (array_key_exists($name, $this->modelProperties)) {
-            return $this->modelProperties[$name];
-        }
-
-        return null;
-    }
-
-    /**
-     * @param  string                      $name
-     * @param  mixed                       $value
-     * @return \Core42\Model\AbstractModel
-     */
-    protected function set($name, $value)
-    {
-        $this->modelProperties[$name] =  $value;
-
-        return $this;
-    }
-
-    /**
-     * @return ModelHydrator
-     */
-    public function getHydrator()
-    {
-        if ($this->hydrator === null) {
-            $this->hydrator = new ModelHydrator();
-        }
-
-        return $this->hydrator;
-    }
+    protected $memento = [];
 
     /**
      * @param array $data
      */
-    public function hydrate(array $data)
+    public function __construct(array $data = [])
     {
-        $this->getHydrator()->hydrate($data, $this);
+        if (!empty($data)) {
+            $this->populate($data);
+            $this->memento();
+        }
     }
 
     /**
      * @return array
      */
-    public function extract()
+    public function getProperties()
     {
-        return $this->getHydrator()->extract($this);
+        return $this->properties;
     }
 
     /**
-     * @return \Zend\InputFilter\InputFilterInterface
-     */
-    public function getInputFilter()
-    {
-        if (!($this->inputFilter instanceof \Zend\InputFilter\InputFilterInterface)) {
-            $inputFilterSpecifications = $this->getInputFilterSpecification();
-            if (empty($inputFilterSpecifications)) {
-                return null;
-            }
-
-            $factory = new Factory();
-            $this->inputFilter = $factory->createInputFilter($inputFilterSpecifications);
-        }
-
-        return $this->inputFilter;
-    }
-
-    /**
-     * @param  string|array|null $options
-     * @return bool
-     */
-    public function isValid($options = null)
-    {
-        $this->filter();
-
-        if (is_string($options)) {
-            $this->getInputFilter()->setValidationGroup(array($options));
-        } elseif (is_array($options)) {
-            $this->getInputFilter()->setValidationGroup($options);
-        }
-
-        $return = $this->getInputFilter()
-                            ->isValid();
-
-        $this->getInputFilter()->setValidationGroup(InputFilterInterface::VALIDATE_ALL);
-
-        return $return;
-    }
-
-    /**
-     *
-     */
-    public function filter()
-    {
-        $values = $this->getInputFilter()->setData($this->diff())->getValues();
-        $hydrateValues = array_intersect_key($values, $this->diff());
-        $this->hydrate($hydrateValues);
-    }
-
-    /**
-     * @return array
-     */
-    public function getInputFilterSpecification()
-    {
-        return $this->inputFilterSpecifications;
-    }
-
-    /**
-     * @return \Core42\Model\AbstractModel
+     * @return void
      */
     public function memento()
     {
-        $this->memento = $this->modelProperties;
-
-        return $this;
+        $this->memento = $this->data;
     }
 
     /**
-     * @return bool
-     */
-    public function isMemento()
-    {
-        return ($this->memento !== null);
-    }
-
-    /**
-     * @param  null|string $property
-     * @return bool
+     * @param null|string $property
+     * @return true
+     * @throws \Exception
      */
     public function hasChanged($property = null)
     {
         if ($property === null) {
             return (count($this->diff()) > 0);
-        } else {
-            return array_key_exists($property, $this->modelProperties);
         }
+
+        if (!in_array($property, $this->properties)) {
+            throw new \Exception(sprintf("'%s' not set in property array", $property));
+        }
+
+        if (!array_key_exists($property, $this->data) && !array_key_exists($property, $this->memento)) {
+            return false;
+        }
+
+        if (array_key_exists($property, $this->data) && !array_key_exists($property, $this->memento)) {
+            return true;
+        }
+
+        if (!array_key_exists($property, $this->data) && array_key_exists($property, $this->memento)) {
+            return true;
+        }
+
+        return !($this->memento[$property] === $this->data[$property]);
     }
 
     /**
      * @return array
-     * @throws \Exception
      */
     public function diff()
     {
-        if (!$this->isMemento()) {
-            throw new \Exception("memento never called");
+        $changes = [];
+
+        foreach ($this->properties as $property) {
+            if ($this->hasChanged($property)) {
+                $changes[$property] = $this->get($property);
+            }
         }
 
-        return array_udiff_assoc($this->modelProperties, $this->memento, function ($value1, $value2) {
-            return ($value1 === $value2) ? 0 : 1;
-        });
+        return $changes;
+    }
+
+    /**
+     * @return array
+     */
+    public function toArray()
+    {
+        return $this->data;
+    }
+
+    /**
+     * @return array
+     */
+    public function getArrayCopy()
+    {
+        return $this->toArray();
+    }
+
+    /**
+     * @param array $data
+     * @return void
+     */
+    public function exchangeArray(array $data)
+    {
+        $this->populate($data);
+    }
+
+    /**
+     * @param array $data
+     * @return void
+     */
+    public function populate(array $data)
+    {
+        foreach ($data as $name => $value) {
+            $this->set($name, $value);
+        }
+    }
+
+    /**
+     * @param  string $name
+     * @param mixed $default
+     * @return mixed
+     * @throws \Exception
+     */
+    protected function get($name, $default = null)
+    {
+        if (!in_array($name, $this->properties)) {
+            throw new \Exception(sprintf("'%s' not set in property array", $name));
+        }
+
+        if (!array_key_exists($name, $this->data)) {
+            return $default;
+        }
+
+        return $this->data[$name];
+    }
+
+    /**
+     * @param  string $name
+     * @param  mixed $value
+     * @param bool $strict
+     * @return $this
+     * @throws \Exception
+     */
+    protected function set($name, $value, $strict = false)
+    {
+        if (!in_array($name, $this->properties)) {
+            if ($strict === true) {
+                throw new \Exception(sprintf("'%s' not set in property array", $name));
+            }
+
+            return $this;
+        }
+        $this->data[$name] = $value;
+
+        return $this;
+    }
+
+    /**
+     * @param $method
+     * @param $params
+     * @return BaseModel|mixed|null
+     * @throws \Exception
+     */
+    public function __call($method, $params)
+    {
+        $return = null;
+
+        $variableName = lcfirst(substr($method, 3));
+        if (strncasecmp($method, "get", 3) === 0) {
+            return $this->get($variableName);
+        } elseif (strncasecmp($method, "set", 3) === 0) {
+            return $this->set($variableName, $params[0], true);
+        }
+
+        throw new \Exception("Method {$method} not found");
     }
 }

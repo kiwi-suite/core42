@@ -1,18 +1,25 @@
 <?php
+/**
+ * core42 (www.raum42.at)
+ *
+ * @link http://www.raum42.at
+ * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
+ *
+ */
+
 namespace Core42\Command;
 
-use Core42\ValueManager\ValueManager;
+use Core42\Db\TableGateway\AbstractTableGateway;
+use Core42\Selector\SelectorInterface;
 use Zend\ServiceManager\ServiceManager;
-use Core42\ServiceManager\ServiceManagerStaticAwareInterface;
-use Zend\Stdlib\Hydrator\ClassMethods;
 
-abstract class AbstractCommand implements ServiceManagerStaticAwareInterface
+abstract class AbstractCommand implements CommandInterface
 {
     /**
      *
      * @var ServiceManager
      */
-    private static $serviceManager = null;
+    private $serviceManager;
 
     /**
      * @var \Exception|null
@@ -27,44 +34,32 @@ abstract class AbstractCommand implements ServiceManagerStaticAwareInterface
     /**
      * @var bool
      */
-    private $publishToConsole = false;
+    private $dryRun = false;
 
     /**
-     * @var \Core42\ValueManager\ValueManager
+     * @var array
      */
-    private $valueManager;
+    private $errors = [];
 
     /**
-     *
-     * @return \Core42\Command\AbstractCommand
+     * @param ServiceManager $serviceManager
      */
-    public static function createCommand()
+    final public function __construct(ServiceManager $serviceManager)
     {
-        $className = get_called_class();
-
-        return new $className;
+        $this->serviceManager = $serviceManager;
+        $this->enableThrowExceptions(true);
+        $this->init();
     }
 
     /**
-     *
+     * @param boolean $dryRun
+     * @return \Core42\Command\AbstractCommand
      */
-    final public function __construct(ServiceManager $manager = null)
+    public function setDryRun($dryRun)
     {
-        if ($manager !== null) {
-            self::$serviceManager = $manager;
-        }
+        $this->dryRun = (boolean) $dryRun;
 
-        $this->valueManager = new ValueManager();
-
-        $this->enableThrowExceptions(true);
-        $this->enablePublishToConsole(false);
-
-        $request = $this->getServiceManager()->get("Request");
-        if ($this instanceof ConsoleOutputInterface && $request instanceof \Zend\Console\Request) {
-            $this->enablePublishToConsole(true);
-        }
-
-        $this->init();
+        return $this;
     }
 
     /**
@@ -79,135 +74,146 @@ abstract class AbstractCommand implements ServiceManagerStaticAwareInterface
     }
 
     /**
-     * @param $enable
-     * @return \Core42\Command\AbstractCommand
-     */
-    final public function enablePublishToConsole($enable)
-    {
-        $this->publishToConsole = (boolean) $enable;
-
-        return $this;
-    }
-
-    /**
-     *
-     * @param ServiceManager $manager
-     */
-    public static function setServiceManager(ServiceManager $manager)
-    {
-        self::$serviceManager = $manager;
-    }
-
-    /**
      *
      * @return \Zend\ServiceManager\ServiceManager
      */
-    protected function getServiceManager()
+    public function getServiceManager()
     {
-        return self::$serviceManager;
+        return $this->serviceManager;
     }
 
     /**
-     * @param  array                           $arguments
-     * @return \Core42\Command\AbstractCommand
+     * @param array $values
+     * @throws \Exception
      */
-    public function setCommandArguments($arguments = array())
+    public function hydrate(array $values)
     {
-        $arguments = (array) $arguments;
-        if (empty($arguments)) {
-            return $this;
-        }
-
-        $hydrator = new ClassMethods(false);
-        $hydrator->hydrate($arguments, $this);
-
-        return $this;
+        throw new \Exception("hydrate isn't implemented");
     }
 
     /**
-     *
-     */
-    protected function init() {}
-
-    /**
-     * @return \Core42\Command\AbstractCommand
+     * @return mixed
      * @throws \Exception
      */
     final public function run()
     {
+        $result = null;
+
+        $this->configure();
+
         try {
             $this->preExecute();
 
-            if (!$this->hasCommandErrors()) {
-                $this->execute();
+            if (!$this->hasErrors() && $this->dryRun === false) {
+                $result = $this->execute();
                 $this->postExecute();
             }
         } catch (\Exception $e) {
             $this->commandException = $e;
+            $this->shutdown();
             if ($this->throwCommandExceptions === true) {
                 throw $e;
             }
         }
 
-        if ($this->publishToConsole === true) {
-            $this->publishToConsole();
+        //TODO might be more clean with PHP5.5 finally
+        if ($this->commandException === null) {
+            $this->shutdown();
         }
 
-        return $this;
+        return $result;
     }
 
     /**
      *
      */
-    protected function preExecute() {}
+    protected function init()
+    {
+
+    }
 
     /**
      *
+     */
+    protected function configure()
+    {
+
+    }
+
+    /**
+     *
+     */
+    protected function preExecute()
+    {
+
+    }
+
+    /**
+     * @return mixed
      */
     abstract protected function execute();
 
     /**
      *
      */
-    protected function postExecute() {}
+    protected function postExecute()
+    {
+
+    }
+
+    /**
+     *
+     */
+    protected function shutdown()
+    {
+
+    }
+
+    /**
+     * @param string $name
+     * @param string $message
+     * @return $this
+     */
+    protected function addError($name, $message)
+    {
+        if (!array_key_exists($name, $this->errors)) {
+            $this->errors[$name] = [];
+        }
+
+        $this->errors[$name][] = $message;
+
+        return $this;
+    }
+
+    /**
+     * @param array $errors
+     * @return $this
+     */
+    protected function addErrors(array $errors)
+    {
+        foreach ($errors as $name => $listErrors) {
+            foreach ($listErrors as $message) {
+                $this->addError($name, $message);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return array
+     */
+    public function getErrors()
+    {
+        return $this->errors;
+    }
 
     /**
      * @return bool
      */
-    final public function hasCommandErrors()
+    public function hasErrors()
     {
-        return $this->valueManager->hasErrors();
-    }
-
-    /**
-     * @param  array                           $errors
-     * @return \Core42\Command\AbstractCommand
-     */
-    final public function setCommandErrors(array $errors)
-    {
-        $this->valueManager->setErrors($errors);
-
-        return $this;
-    }
-
-    /**
-     * @param  string                          $name
-     * @param  string                          $error
-     * @return \Core42\Command\AbstractCommand
-     */
-    final public function setCommandError($name, $error)
-    {
-        $this->valueManager->setError($name, $error);
-
-        return $this;
-    }
-
-    /**
-     * @return ValueManager
-     */
-    final public function getValueManager()
-    {
-        return $this->valueManager;
+        return (count($this->errors) > 0);
     }
 
     /**
@@ -216,5 +222,32 @@ abstract class AbstractCommand implements ServiceManagerStaticAwareInterface
     final public function getException()
     {
         return $this->commandException;
+    }
+
+    /**
+     * @param string $commandName
+     * @return AbstractCommand
+     */
+    public function getCommand($commandName)
+    {
+        return $this->getServiceManager()->get('Command')->get($commandName);
+    }
+
+    /**
+     * @param string $tableGatewayName
+     * @return AbstractTableGateway
+     */
+    public function getTableGateway($tableGatewayName)
+    {
+        return $this->getServiceManager()->get('TableGateway')->get($tableGatewayName);
+    }
+
+    /**
+     * @param string $selectorName
+     * @return SelectorInterface
+     */
+    public function getSelector($selectorName)
+    {
+        return $this->getServiceManager()->get('Selector')->get($selectorName);
     }
 }

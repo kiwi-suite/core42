@@ -1,4 +1,12 @@
 <?php
+/**
+ * core42 (www.raum42.at)
+ *
+ * @link http://www.raum42.at
+ * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
+ *
+ */
+
 namespace Core42\Hydrator\Strategy\Database\MySQL;
 
 use Core42\Hydrator\Strategy\Database\DatabaseStrategyInterface;
@@ -6,11 +14,6 @@ use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
 
 class DateStrategy implements StrategyInterface, DatabaseStrategyInterface
 {
-    /**
-     * @var boolean
-     */
-    private $isNullable;
-
     /**
      * Converts the given value so that it can be extracted by the hydrator.
      *
@@ -20,8 +23,6 @@ class DateStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function extract($value)
     {
-        if ($this->isNullable && $value === null) return null;
-
         if ($value instanceof \DateTime) {
             return date("Y-m-d", $value->getTimestamp());
         }
@@ -38,18 +39,15 @@ class DateStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function hydrate($value)
     {
-        if ($this->isNullable && $value === null) return null;
         return new \DateTime($value);
     }
 
     /**
      * @param  \Zend\Db\Metadata\Object\ColumnObject $column
-     * @return mixed
+     * @return bool
      */
-    public function getStrategy(\Zend\Db\Metadata\Object\ColumnObject $column)
+    public function isResponsible(\Zend\Db\Metadata\Object\ColumnObject $column)
     {
-        $this->isNullable = $column->getIsNullable();
-
-        return (in_array($column->getDataType(), array('date'))) ? $this : null;
+        return (in_array($column->getDataType(), ['date']));
     }
 }

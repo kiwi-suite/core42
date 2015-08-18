@@ -2,15 +2,22 @@
     "name": "fruit42/core42",
     "type": "zend-module",
     "require": {
-        "php": ">=5.3.3",
-        "firephp/firephp-core": "*",
-        "ccampbell/chromephp": "*",
+        "php": ">=5.5",
+        "ext-intl" : "*",
         "composer/installers": "~1.0",
-        "mobiledetect/mobiledetectlib": "*"
+        "zendframework/zendframework": "=2.5.2",
+        "zfcampus/zf-console": "1.0.3",
+        "symfony/finder": "v2.5.0",
+        "symfony/filesystem": "v2.5.0",
+        "mtdowling/cron-expression": "~1.0.0"
     },
-    "extra": {
-        "installer-name": "Core42"
+    "require-dev": {
+        "firephp/firephp-core": "*",
+        "ccampbell/chromephp": "4.1.0"
     },
+    "bin": [
+        "bin/fruit"
+    ],
     "autoload": {
         "psr-0": {
             "Core42": "src/"
