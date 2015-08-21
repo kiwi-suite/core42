@@ -11,6 +11,7 @@ namespace Core42\Command\Form;
 
 use Core42\Command\AbstractCommand;
 use Zend\Form\FormInterface;
+use Zend\Stdlib\ArrayUtils;
 
 class FormCommand extends AbstractCommand
 {
@@ -159,7 +160,10 @@ class FormCommand extends AbstractCommand
         }
 
         if ($this->takeOriginalData === true) {
-            $values = call_user_func($this->valueCallback, $this->data);
+            $values = call_user_func($this->valueCallback, ArrayUtils::merge(
+                $this->data,
+                $this->form->getInputFilter()->getValues()
+            ));
         } else {
             $values = call_user_func($this->valueCallback, $this->form->getInputFilter()->getValues());
         }
