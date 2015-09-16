@@ -222,7 +222,13 @@ class Localization extends AbstractOptions
     public function acceptLocale($locale)
     {
         \Locale::setDefault($locale);
-        setlocale(LC_ALL, \Locale::canonicalize($locale));
+
+        foreach (['.utf8', '.UTF-8', ''] as $encodigPrefix) {
+            if ((setlocale(LC_ALL, \Locale::canonicalize($locale) . $encodigPrefix)) !== false) {
+                break;
+            }
+        }
+
         $this->activeLocale = $locale;
     }
 
