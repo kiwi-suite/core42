@@ -222,7 +222,7 @@ class Localization extends AbstractOptions
     public function acceptLocale($locale)
     {
         \Locale::setDefault($locale);
-        setlocale(LC_ALL, $locale);
+        setlocale(LC_ALL, \Locale::canonicalize($locale));
         $this->activeLocale = $locale;
     }
 
