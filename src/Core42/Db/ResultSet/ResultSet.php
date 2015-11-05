@@ -20,7 +20,9 @@ class ResultSet extends HydratingResultSet
     public function current()
     {
         $object = parent::current();
-        $object->memento();
+        if ($object !== false) {
+            $object->memento();
+        }
 
         return $object;
     }
