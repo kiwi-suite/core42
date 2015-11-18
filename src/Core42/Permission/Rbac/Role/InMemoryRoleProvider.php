@@ -40,15 +40,17 @@ class InMemoryRoleProvider implements RoleProviderInterface
 
             $roleConfig = $this->rolesConfig[$roleName];
 
+            $roleOptions = (!empty($roleConfig['options'])) ? $roleConfig['options'] : [];
+
             if (isset($roleConfig['children'])) {
-                $role       = new HierarchicalRole($roleName);
+                $role       = new HierarchicalRole($roleName, $roleOptions);
                 $childRoles = (array) $roleConfig['children'];
 
                 foreach ($this->getRoles($childRoles) as $childRole) {
                     $role->addChild($childRole);
                 }
             } else {
-                $role = new Role($roleName);
+                $role = new Role($roleName, $roleOptions);
             }
 
             $permissions = isset($roleConfig['permissions']) ? $roleConfig['permissions'] : [];
