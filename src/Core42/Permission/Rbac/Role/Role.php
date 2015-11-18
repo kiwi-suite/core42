@@ -22,11 +22,19 @@ class Role implements RoleInterface
     protected $permissions = [];
 
     /**
-     * @param string $name
+     * @var array
      */
-    public function __construct($name)
+    protected $options = [];
+
+    /**
+     * @param string $name
+     * @param array $options
+     */
+    public function __construct($name, array $options = [])
     {
         $this->name = (string) $name;
+
+        $this->options = $options;
     }
 
     /**
@@ -60,5 +68,13 @@ class Role implements RoleInterface
     public function getPermissions()
     {
         return $this->permissions;
+    }
+
+    /**
+     * @return array
+     */
+    public function getOptions()
+    {
+        return $this->options;
     }
 }

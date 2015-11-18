@@ -26,4 +26,9 @@ interface RoleInterface
      * @return array
      */
     public function getPermissions();
+
+    /**
+     * @return array
+     */
+    public function getOptions();
 }
