@@ -59,7 +59,25 @@ class Role implements RoleInterface
      */
     public function hasPermission($permission)
     {
-        return isset($this->permissions[(string) $permission]);
+        $permission = (string) $permission;
+        if (isset($this->permissions[$permission])) {
+            return true;
+        }
+
+        $permissionParts = explode("/", $permission);
+
+        for ($i = 0; $i < count($permissionParts); $i++) {
+            $checkPermission = [];
+            for ($j = 0; $j <= $i; $j++) {
+                $checkPermission[] = $permissionParts[$j];
+
+                if (isset($this->permissions[implode("/", $checkPermission) . '*'])) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
