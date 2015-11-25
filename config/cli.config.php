@@ -44,33 +44,6 @@ return [
             'short_description'         => 'Resets all Migrations',
         ],
 
-        'seeding-make' => [
-            'route'                     => 'seeding-make --directory= --name=',
-            'command-name'              => 'Core42\Seeding\Make',
-            'description'               => 'Create a seeding file into the configured seeding directory',
-            'short_description'         => 'Create a seeding file',
-            'options_descriptions'      => [
-                '--directory'       => 'directory where seeding will be created',
-                '--name'            => 'name of the seeding',
-            ]
-        ],
-        'seeding-list' => [
-            'route'                     => 'seeding-list',
-            'command-name'              => 'Core42\Seeding\List',
-            'description'               => 'List all seeded and available seeds',
-            'short_description'         => 'List of seeds',
-        ],
-        'seeding-seed' => [
-            'route'                     => 'seeding-seed --name= [-f]',
-            'command-name'              => 'Core42\Seeding\Seed',
-            'description'               => 'Seed a seeding',
-            'short_description'         => 'Seed a seeding',
-            'options_descriptions'      => [
-                '--name'           => 'Name of the seeding which should be seeded',
-                '-f'               => 'Force the seeding'
-            ]
-        ],
-
         'development' => [
             'route'                     => 'development (on|off)',
             'command-name'              => 'Core42\Development\Development',

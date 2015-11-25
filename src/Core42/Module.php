@@ -36,7 +36,6 @@ class Module implements
             include __DIR__ . '/../../config/caches.config.php',
             include __DIR__ . '/../../config/cli.config.php',
             include __DIR__ . '/../../config/migration.config.php',
-            include __DIR__ . '/../../config/seeding.config.php',
             include __DIR__ . '/../../config/assets.config.php',
             include __DIR__ . '/../../config/permissions.config.php',
             include __DIR__ . '/../../config/form.config.php',
