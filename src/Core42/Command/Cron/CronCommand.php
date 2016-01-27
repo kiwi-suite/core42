@@ -106,6 +106,7 @@ class CronCommand extends AbstractCommand
             $this->logger->debug(sprintf("%d tasks found for execution", $tasks->count()));
         }
 
+        $p = [];
         foreach ($tasks as $task) {
             /* @var Cron $task */
 
@@ -119,79 +120,20 @@ class CronCommand extends AbstractCommand
                 continue;
             }
 
-            $params = [];
-            $taskParams = $task->getParameters();
-            if (!empty($taskParams)) {
-                $taskParams = json_decode($taskParams, true);
-                if ($taskParams !== null) {
-                    $params = $taskParams;
-                    unset($taskParams);
-                }
+            $cmd = 'php module/core42/bin/fruit cron-wrapper ' . escapeshellarg($task->getName()) .  ' 2>&1 &';
+            //echo $cmd . "\n";
+
+            $descriptors = [];
+            if (!empty($task->getLogfile())) {
+                $descriptors[1] = ['file', $task->getLogfile(), 'a'];
+                $descriptors[2] = ['file', $task->getLogfile(), 'a'];
             }
-
-            if (array_key_exists('lastrun', $params)) {
-                $params['lastrun'] = ($task->getLastRun() instanceof \DateTime) ? $task->getLastRun()->getTimestamp() : 0;
-            }
-
-            $task->setLastRun(new \DateTime());
-            $task->setLock(new \DateTime());
-            $timedTaskTableGateway->update($task);
-
-            try {
-                $cronExpression = CronExpression::factory($task->getCronInterval());
-            } catch(\InvalidArgumentException $e) {
-                $this->logger->warn(sprintf('cron task %s: unable to parse cron expression! (%s)', $task->getName(), $task->getCronInterval()));
-                continue;
-            }
-
-            $this->logger->info(sprintf("cron task %s started", $task->getName()));
-
-            if ($this->runCommand($task->getCommand(), $params, $output, $returnVar)) {
-                $this->logger->info(sprintf("cron task %s successful finished", $task->getName()));
-            } else {
-                $this->logger->err(sprintf('cron task %s exited with status code %d', $task->getName(), $returnVar));
-            }
-
-            $logfile = $task->getLogfile();
-            if (!empty($logfile) && is_writable($logfile)) {
-                file_put_contents($logfile, $output, FILE_APPEND | LOCK_EX);
-            }
-
-            $nextRun = $cronExpression->getNextRunDate();
-
-            $task->setNextRun($nextRun);
-            $task->setLock(null);
-            $timedTaskTableGateway->update($task);
-        }
-    }
-
-    /**
-     * @param string $command
-     * @param array $params
-     * @param null $output
-     * @param int $returnVar
-     * @return bool
-     */
-    protected function runCommand($command, $params, &$output = null, &$returnVar = 0)
-    {
-        $cmd = 'php module/core42/bin/fruit';
-        $cmd .= " {$command}";
-        foreach ($params as $name => $value) {
-            if ($name == $value || $value === null) {
-                $cmd .= " --{$name}";
-            } else {
-                $value = escapeshellarg($value);
-                $cmd .= " --{$name} {$value}";
-            }
+            $p[] = proc_open ($cmd, $descriptors, $pipes);
         }
 
-        exec($cmd, $output, $returnVar);
-
-        if ($returnVar != 0) {
-            return false;
+        foreach ($p as $_p) {
+            proc_close($_p);
         }
-
-        return true;
     }
 
     /**

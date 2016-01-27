@@ -42,14 +42,24 @@ class ConsoleDispatcher implements ServiceManagerAwareInterface
 
         /** @var CommandInterface $command */
         $command = $this->serviceManager->get('Command')->get($commandName);
-        if (!(in_array('Core42\Command\ConsoleAwareTrait', class_uses($command)))) {
+        $valid = false;
+
+        $class = get_class($command);
+        do {
+            if (in_array('Core42\Command\ConsoleAwareTrait', class_uses($class))) {
+                $valid = true;
+                break;
+            }
+        } while($class = get_parent_class($class));
+
+        if (!$valid) {
             $console->writeLine(
                 'command must use "Core42\Command\ConsoleAwareTrait"',
                 ColorInterface::RED
             );
-
             return;
         }
+
         $command->consoleSetup($route);
         $command->run();
 

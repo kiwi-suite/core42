@@ -24,7 +24,7 @@ class DateStrategy implements StrategyInterface, DatabaseStrategyInterface
     public function extract($value)
     {
         if ($value instanceof \DateTime) {
-            return date("Y-m-d", $value->getTimestamp());
+            return $value->format('Y-m-d');
         }
 
         return $value;
