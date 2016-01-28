@@ -84,7 +84,7 @@ return [
         ],
 
         'cron' => [
-            'route'                     => '[<name>] [--ignorelock|-i] [--silent]',
+            'route'                     => '[<name>] [--ignorelock|-i] [--silent] [--group=]',
             'command-name'              => 'Core42\Cron\Cron',
             'description'               => 'Start the cron tasks',
             'short_description'         => 'Start the cron tasks',

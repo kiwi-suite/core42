@@ -44,6 +44,11 @@ class CronCommand extends AbstractCommand
     protected $taskName = null;
 
     /**
+     * @var string|null
+     */
+    protected $group = null;
+
+    /**
      *
      */
     protected function preExecute()
@@ -94,6 +99,10 @@ class CronCommand extends AbstractCommand
 
         if (!$this->ignoreLock && empty($this->taskName)) {
             $where->isNull('lock');
+        }
+
+        if (!empty($this->group)) {
+            $where->equalTo("group", $this->group);
         }
 
         $tasks = $timedTaskTableGateway->select($where);
@@ -152,6 +161,11 @@ class CronCommand extends AbstractCommand
         $name = $route->getMatchedParam('name');
         if (!empty($name)) {
             $this->taskName = $name;
+        }
+
+        $group = $route->getMatchedParam('group');
+        if (!empty($group)) {
+            $this->group = $group;
         }
     }
 }

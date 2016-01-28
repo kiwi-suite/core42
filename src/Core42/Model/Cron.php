@@ -20,6 +20,7 @@ class Cron extends AbstractModel
         'id',
         'status',
         'name',
+        'group',
         'command',
         'parameters',
         'lock',
@@ -88,6 +89,24 @@ class Cron extends AbstractModel
     public function getName()
     {
         return $this->get('name');
+    }
+
+    /**
+     * @param string $group
+     * @return $this
+     */
+    public function setGroup($group)
+    {
+        $this->set('group', $group);
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGroup()
+    {
+        return $this->get('group');
     }
 
     /**
