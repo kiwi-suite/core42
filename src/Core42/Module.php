@@ -77,6 +77,9 @@ class Module implements
         $events->attach(ModuleEvent::EVENT_MERGE_CONFIG, array($this, 'onMergeConfig'));
     }
 
+    /**
+     * @param ModuleEvent $e
+     */
     public function onMergeConfig(ModuleEvent $e)
     {
         $configListener = $e->getConfigListener();
