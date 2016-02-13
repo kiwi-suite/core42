@@ -9,12 +9,27 @@
 
 namespace Core42\Form\Service;
 
+use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class FormPluginManagerFactory implements FactoryInterface
 {
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return FormPluginManager
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $config = $container->get('config');
+        $config = (array_key_exists('forms', $config)) ? $config['forms'] : [];
+
+        return new FormPluginManager(new Config($config));
+    }
+
     /**
      * Create service
      *
@@ -23,9 +38,6 @@ class FormPluginManagerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $serviceLocator->get('config');
-        $config = (array_key_exists('forms', $config)) ? $config['forms'] : [];
-
-        return new FormPluginManager(new Config($config));
+        return $this($serviceLocator, FormPluginManager::class);
     }
 }

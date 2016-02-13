@@ -9,32 +9,34 @@
 
 namespace Core42\TableGateway\Service;
 
+use Core42\Db\Metadata\Metadata;
+use Core42\Hydrator\Strategy\Service\HydratorStrategyPluginManager;
 use Core42\TableGateway\MigrationTableGateway;
+use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class MigrationTableGatewayFactory implements FactoryInterface
 {
-
     /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return MigrationTableGateway
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $adapter = $serviceLocator->getServiceLocator()->get('Db\Master');
+        $adapter = $container->getServiceLocator()->get('Db\Master');
         $slave = null;
-        if ($serviceLocator->getServiceLocator()->has('Db\Slave')) {
-            $slave = $serviceLocator->getServiceLocator()->get('Db\Slave');
+        if ($container->getServiceLocator()->has('Db\Slave')) {
+            $slave = $container->getServiceLocator()->get('Db\Slave');
         }
-        $metadata = $serviceLocator->getServiceLocator()->get('Metadata');
+        $metadata = $container->getServiceLocator()->get(Metadata::class);
 
-        $sm = $serviceLocator->getServiceLocator();
-        $hydratorStrategyPluginManager = $sm->get('Core42\HydratorStrategyPluginManager');
+        $sm = $container->getServiceLocator();
+        $hydratorStrategyPluginManager = $sm->get(HydratorStrategyPluginManager::class);
 
-        $config = $serviceLocator->getServiceLocator()->get('config');
+        $config = $container->getServiceLocator()->get('config');
         $config = $config['migration'];
 
         return new MigrationTableGateway(
@@ -44,5 +46,16 @@ class MigrationTableGatewayFactory implements FactoryInterface
             $config['table_name'],
             $slave
         );
+    }
+
+    /**
+     * Create service
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return mixed
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        return $this($serviceLocator, 'Core42\Migration');
     }
 }

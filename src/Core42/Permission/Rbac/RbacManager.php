@@ -9,8 +9,11 @@
 
 namespace Core42\Permission\Rbac;
 
+use Core42\Permission\Rbac\Assertion\AssertionPluginManager;
 use Core42\Permission\Rbac\Guard\GuardInterface;
+use Core42\Permission\Rbac\Guard\GuardPluginManager;
 use Core42\Permission\Rbac\Options\RbacOptions;
+use Core42\Permission\Rbac\Role\RoleProviderPluginManager;
 use Zend\ServiceManager\ServiceManager;
 
 class RbacManager
@@ -61,7 +64,7 @@ class RbacManager
 
         $identityRoleProvider = $this->serviceManager->get($options->getIdentityRoleProvider());
 
-        $roleProviderPluginManager = $this->serviceManager->get('Core42\Permission\RoleProviderPluginManager');
+        $roleProviderPluginManager = $this->serviceManager->get(RoleProviderPluginManager::class);
 
         $roleProviderConfig = $options->getRoleProvider();
         $roleProvider = $roleProviderPluginManager->get(
@@ -69,8 +72,8 @@ class RbacManager
             (!empty($roleProviderConfig['options'])) ? $roleProviderConfig['options'] : []
         );
 
-        $rbac = $this->serviceManager->get('Core42\Rbac');
-        $assertionManager = $this->serviceManager->get('Core42\Permission\AssertionPluginManager');
+        $rbac = $this->serviceManager->get(Rbac::class);
+        $assertionManager = $this->serviceManager->get(AssertionPluginManager::class);
 
         $service = new AuthorizationService(
             $name,
@@ -103,7 +106,7 @@ class RbacManager
 
         $guards = $options->getGuards();
 
-        $guardPluginManager = $this->serviceManager->get('Core42\Permission\GuardPluginManager');
+        $guardPluginManager = $this->serviceManager->get(GuardPluginManager::class);
 
         foreach ($guards as $guardName => $options) {
             /** @var GuardInterface $currentGuard */

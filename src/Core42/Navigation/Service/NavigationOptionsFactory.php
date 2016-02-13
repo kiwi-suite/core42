@@ -10,11 +10,28 @@
 namespace Core42\Navigation\Service;
 
 use Core42\Navigation\Options\NavigationOptions;
+use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class NavigationOptionsFactory implements FactoryInterface
 {
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return NavigationOptions
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $config = $container->get('config');
+
+        if (!isset($config['navigation'])) {
+            throw new \RuntimeException('Missing `navigation` configuration key');
+        }
+
+        return new NavigationOptions($config['navigation']);
+    }
 
     /**
      * Create service
@@ -24,12 +41,6 @@ class NavigationOptionsFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $serviceLocator->get('config');
-
-        if (!isset($config['navigation'])) {
-            throw new \RuntimeException('Missing `navigation` configuration key');
-        }
-
-        return new NavigationOptions($config['navigation']);
+        return $this($serviceLocator, NavigationOptions::class);
     }
 }

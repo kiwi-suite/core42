@@ -10,6 +10,8 @@
 namespace Core42;
 
 use Core42\Console\Console;
+use Core42\Permission\Rbac\Strategy\RedirectStrategy;
+use Core42\Permission\Rbac\Strategy\UnauthorizedStrategy;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\InitProviderInterface;
@@ -56,11 +58,11 @@ class Module implements
         $e->getApplication()->getServiceManager()->get('Zend\Session\Service\SessionManager');
 
         $e->getTarget()->getEventManager()->attach(
-            $e->getApplication()->getServiceManager()->get('Core42\Permission\RedirectStrategy')
+            $e->getApplication()->getServiceManager()->get(RedirectStrategy::class)
         );
 
         $e->getTarget()->getEventManager()->attach(
-            $e->getApplication()->getServiceManager()->get('Core42\Permission\UnauthorizedStrategy')
+            $e->getApplication()->getServiceManager()->get(UnauthorizedStrategy::class)
         );
     }
 

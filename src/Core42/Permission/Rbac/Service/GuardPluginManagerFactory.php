@@ -10,12 +10,29 @@
 namespace Core42\Permission\Rbac\Service;
 
 use Core42\Permission\Rbac\Guard\GuardPluginManager;
+use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class GuardPluginManagerFactory implements FactoryInterface
 {
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return GuardPluginManager
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $config = $container->get('config');
+        $config = $config['permissions']['guard_manager'];
+
+        $pluginManager = new GuardPluginManager(new Config($config));
+        $pluginManager->setServiceLocator($container);
+
+        return $pluginManager;
+    }
 
     /**
      * Create service
@@ -25,12 +42,6 @@ class GuardPluginManagerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $serviceLocator->get('config');
-        $config = $config['permissions']['guard_manager'];
-
-        $pluginManager = new GuardPluginManager(new Config($config));
-        $pluginManager->setServiceLocator($serviceLocator);
-
-        return $pluginManager;
+        return $this($serviceLocator, GuardPluginManager::class);
     }
 }

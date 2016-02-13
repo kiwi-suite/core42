@@ -9,6 +9,7 @@
 
 namespace Core42\I18n\Translator\Service;
 
+use Interop\Container\ContainerInterface;
 use Zend\I18n\Translator\LoaderPluginManager;
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\FactoryInterface;
@@ -16,6 +17,19 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 
 class TranslatorLoaderFactory implements FactoryInterface
 {
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return LoaderPluginManager
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $config = $container->get('config');
+        $config = (array_key_exists('translation_manager', $config)) ? $config['translation_manager'] : [];
+
+        return new LoaderPluginManager(new Config($config));
+    }
 
     /**
      * Create service
@@ -25,9 +39,6 @@ class TranslatorLoaderFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $serviceLocator->get('config');
-        $config = (array_key_exists('translation_manager', $config)) ? $config['translation_manager'] : [];
-
-        return new LoaderPluginManager(new Config($config));
+        return $this($serviceLocator, LoaderPluginManager::class);
     }
 }

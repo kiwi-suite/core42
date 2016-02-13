@@ -1,14 +1,28 @@
 <?php
 namespace Core42;
 
+use Core42\Hydrator\Strategy\Database\MySQL\BooleanStrategy;
+use Core42\Hydrator\Strategy\Database\MySQL\DateStrategy;
+use Core42\Hydrator\Strategy\Database\MySQL\DatetimeStrategy;
+use Core42\Hydrator\Strategy\Database\MySQL\FloatStrategy;
+use Core42\Hydrator\Strategy\Database\MySQL\IntegerStrategy;
+use Zend\ServiceManager\Factory\InvokableFactory;
+
 return [
     'hydrator_strategy' => [
-        'invokables' => [
-            'Mysql/Integer'        => 'Core42\Hydrator\Strategy\Database\MySQL\IntegerStrategy',
-            'Mysql/Boolean'        => 'Core42\Hydrator\Strategy\Database\MySQL\BooleanStrategy',
-            'Mysql/Date'           => 'Core42\Hydrator\Strategy\Database\MySQL\DateStrategy',
-            'Mysql/Datetime'       => 'Core42\Hydrator\Strategy\Database\MySQL\DatetimeStrategy',
-            'Mysql/Float'          => 'Core42\Hydrator\Strategy\Database\MySQL\FloatStrategy',
+        'factories' => [
+            IntegerStrategy::class        => InvokableFactory::class,
+            BooleanStrategy::class        => InvokableFactory::class,
+            DateStrategy::class           => InvokableFactory::class,
+            DatetimeStrategy::class       => InvokableFactory::class,
+            FloatStrategy::class          => InvokableFactory::class,
+        ],
+        'aliases' => [
+            'Mysql/Integer'        => IntegerStrategy::class,
+            'Mysql/Boolean'        => BooleanStrategy::class,
+            'Mysql/Date'           => DateStrategy::class,
+            'Mysql/Datetime'       => DatetimeStrategy::class,
+            'Mysql/Float'          => FloatStrategy::class,
         ],
     ],
 

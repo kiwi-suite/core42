@@ -191,7 +191,7 @@ class Navigation
     {
         if (!$this->hasContainer($name)) {
             /** @var NavigationOptions $options */
-            $options = $this->serviceManager->get('Core42\NavigationOptions');
+            $options = $this->serviceManager->get(NavigationOptions::class);
 
             foreach ($options->getContainers() as $containerName => $container) {
                 if ($containerName !== $name) {

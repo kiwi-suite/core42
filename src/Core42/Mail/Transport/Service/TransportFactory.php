@@ -9,12 +9,27 @@
 
 namespace Core42\Mail\Transport\Service;
 
+use Interop\Container\ContainerInterface;
 use Zend\Mail\Transport\Factory;
+use Zend\Mail\Transport\TransportInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class TransportFactory implements FactoryInterface
 {
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return TransportInterface
+     * @throws \Exception
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $config = $this->getConfig($container);
+
+        return Factory::create($config);
+    }
 
     /**
      * Create service
@@ -24,19 +39,17 @@ class TransportFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $this->getConfig($serviceLocator);
-
-        return Factory::create($config);
+        return $this($serviceLocator, TransportInterface::class);
     }
 
     /**
-     * @param ServiceLocatorInterface $serviceLocator
+     * @param ContainerInterface $container
      * @return array
      * @throws \Exception
      */
-    private function getConfig(ServiceLocatorInterface $serviceLocator)
+    private function getConfig(ContainerInterface $container)
     {
-        $config = $serviceLocator->get("Config");
+        $config = $container->get("Config");
 
         if (isset($config['mail']['transport'])) {
             return $config['mail']['transport'];

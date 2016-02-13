@@ -9,12 +9,27 @@
 
 namespace Core42\Command\Service;
 
+use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class CommandPluginManagerFactory implements FactoryInterface
 {
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return CommandPluginManager
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $config = $container->get('config');
+        $config = (array_key_exists('commands', $config)) ? $config['commands'] : [];
+
+        return new CommandPluginManager(new Config($config));
+    }
+
     /**
      * Create service
      *
@@ -23,9 +38,6 @@ class CommandPluginManagerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $serviceLocator->get('config');
-        $config = (array_key_exists('commands', $config)) ? $config['commands'] : [];
-
-        return new CommandPluginManager(new Config($config));
+        return $this($serviceLocator, CommandPluginManager::class);
     }
 }
