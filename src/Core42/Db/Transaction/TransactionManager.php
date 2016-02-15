@@ -13,87 +13,56 @@ use Zend\Db\Adapter\AdapterInterface;
 use Zend\ServiceManager\ServiceManager;
 use Zend\ServiceManager\ServiceManagerAwareInterface;
 
-class TransactionManager implements ServiceManagerAwareInterface
+class TransactionManager
 {
-    /**
-     * @var ServiceManager
-     */
-    private $serviceManager;
-
     /**
      * @var array
      */
-    private $transactions = [];
+    private $transactions = 0;
 
     /**
-     * Set service manager
-     *
-     * @param ServiceManager $serviceManager
+     * @var AdapterInterface[]
      */
-    public function setServiceManager(ServiceManager $serviceManager)
+    protected $adapters = [];
+
+    /**
+     * @param array $adapters
+     */
+    public function __construct(array $adapters)
     {
-        $this->serviceManager = $serviceManager;
+        $this->adapters = $adapters;
     }
 
     /**
-     * @param string $name
-     * @return AdapterInterface
      * @throws \Exception
      */
-    protected function getAdapter($name)
+    public function begin()
     {
-        if (!$this->serviceManager->has($name)) {
-            throw new \Exception("database adapter named '{$name}' doesnt't exists");
-        }
+        $this->transactions++;
 
-        $adapter = $this->serviceManager->get($name);
-        if (!($adapter instanceof AdapterInterface)) {
-            throw new \Exception("given service '{$name}' doesn't implement 'Zend\\Db\\Adapter\\AdapterInterface'");
-        }
-
-        return $adapter;
-    }
-
-    /**
-     * @param string $name
-     * @throws \Exception
-     */
-    public function begin($name)
-    {
-        $adapter = $this->getAdapter($name);
-
-        if (!array_key_exists($name, $this->transactions)) {
-            $this->transactions[$name] = 0;
-        }
-
-        $this->transactions[$name]++;
-
-        if ($this->transactions[$name] == 1) {
-            $adapter->getDriver()->getConnection()->beginTransaction();
+        if ($this->transactions == 1) {
+            foreach ($this->adapters as $adapter) {
+                $adapter->getDriver()->getConnection()->beginTransaction();
+            }
         }
     }
 
     /**
-     * @param string $name
-     * @throws \Exception
+     * @param bool $force
      */
-    public function commit($name, $force = false)
+    public function commit($force = false)
     {
-        $adapter = $this->getAdapter($name);
-
-        if (!array_key_exists($name, $this->transactions) || !($this->transactions[$name] > 0)) {
-            throw new \Exception("no transaction started for '{$name}'");
-        }
-
         if ($force) {
-            $this->transactions[$name] = 0;
+            $this->transactions = 0;
         } else {
-            $this->transactions[$name]--;
+            $this->transactions--;
         }
 
 
-        if ($this->transactions[$name] == 0) {
-            $adapter->getDriver()->getConnection()->commit();
+        if ($this->transactions == 0) {
+            foreach ($this->adapters as $adapter) {
+                $adapter->getDriver()->getConnection()->commit();
+            }
         }
     }
 
@@ -107,36 +76,30 @@ class TransactionManager implements ServiceManagerAwareInterface
     }
 
     /**
-     * @param string $name
      * @throws \Exception
      */
-    public function rollback($name)
+    public function rollback()
     {
-        $adapter = $this->getAdapter($name);
+        $this->transactions = 0;
 
-        if (!array_key_exists($name, $this->transactions)) {
-            throw new \Exception("no transaction started for '{$name}'");
+        foreach ($this->adapters as $adapter) {
+            $adapter->getDriver()->getConnection()->rollback();
         }
-
-        $this->transactions[$name] = 0;
-
-        $adapter->getDriver()->getConnection()->rollback();
     }
 
     /**
      * @param callable $callback
-     * @param string $name
      * @throws \Exception
      */
-    public function transaction($name, $callback)
+    public function transaction($callback)
     {
-        $this->begin($name);
+        $this->begin();
         try {
             call_user_func($callback);
-            $this->commit($name);
+            $this->commit();
 
         } catch (\Exception $e) {
-            $this->rollback($name);
+            $this->rollback();
 
             throw $e;
         }

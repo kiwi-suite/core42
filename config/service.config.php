@@ -9,6 +9,7 @@ use Core42\Db\Metadata\Metadata;
 use Core42\Db\Metadata\Service\MetadataServiceFactory;
 use Core42\Db\TableGateway\Service\TableGatewayPluginManager;
 use Core42\Db\TableGateway\Service\TableGatewayPluginManagerFactory;
+use Core42\Db\Transaction\Service\TransactionManagerFactory;
 use Core42\Db\Transaction\TransactionManager;
 use Core42\Form\Service\FormPluginManager;
 use Core42\Form\Service\FormPluginManagerFactory;
@@ -82,7 +83,7 @@ return [
 
             LoggingProfiler::class                          => InvokableFactory::class,
             ConsoleDispatcher::class                        => InvokableFactory::class,
-            TransactionManager::class                       => InvokableFactory::class,
+            TransactionManager::class                       => TransactionManagerFactory::class,
 
 
             'MvcTranslator'                                 => 'Core42\I18n\Translator\Service\TranslatorFactory',
