@@ -13,7 +13,7 @@ use Core42\Hydrator\Strategy\Database\DatabaseStrategyInterface;
 use Zend\Db\TableGateway\Feature\AbstractFeature;
 use Zend\Db\Metadata\MetadataInterface;
 use Zend\ServiceManager\AbstractPluginManager;
-use Zend\Stdlib\Hydrator\AbstractHydrator;
+use Zend\Hydrator\AbstractHydrator;
 
 class HydratorFeature extends AbstractFeature
 {

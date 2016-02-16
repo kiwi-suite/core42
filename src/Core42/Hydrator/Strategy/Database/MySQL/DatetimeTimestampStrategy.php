@@ -10,7 +10,7 @@
 namespace Core42\Hydrator\Strategy\Database\MySQL;
 
 use Core42\Hydrator\Strategy\Database\DatabaseStrategyInterface;
-use Zend\Stdlib\Hydrator\Strategy\StrategyInterface;
+use Zend\Hydrator\Strategy\StrategyInterface;
 
 class DatetimeTimestampStrategy implements StrategyInterface, DatabaseStrategyInterface
 {
