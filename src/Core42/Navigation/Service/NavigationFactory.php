@@ -12,6 +12,7 @@ namespace Core42\Navigation\Service;
 use Core42\Navigation\Navigation;
 use Core42\Navigation\Options\NavigationOptions;
 use Interop\Container\ContainerInterface;
+use Zend\EventManager\ListenerAggregateInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -40,11 +41,12 @@ class NavigationFactory implements FactoryInterface
                         $listener = new $listener();
                     }
                 }
+                /* @var ListenerAggregateInterface $listener */
 
                 if (is_numeric($priority)) {
                     $navigation->getEventManager($navName)->attachAggregate($listener, $priority);
                 } else {
-                    $navigation->getEventManager($navName)->attachAggregate($listener);
+                    $listener->attach($navigation->getEventManager($navName));
                 }
             }
         }

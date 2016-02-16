@@ -57,6 +57,10 @@ class FormFallbackAbstractFactory implements AbstractFactoryInterface
      */
     protected function getFQCN($name)
     {
+        if (class_exists($name)) {
+            return $name;
+        }
+
         if (strpos($name, '\\') === false) {
             return false;
         }

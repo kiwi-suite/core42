@@ -8,6 +8,7 @@
  */
 
 namespace Core42\Db\Metadata;
+use Zend\Db\Metadata\Source\Factory;
 
 class Metadata extends \Zend\Db\Metadata\Metadata
 {
@@ -17,6 +18,6 @@ class Metadata extends \Zend\Db\Metadata\Metadata
      */
     public function refresh()
     {
-        $this->source = $this->createSourceFromAdapter($this->adapter);
+        $this->source = Factory::createSourceFromAdapter($this->adapter);
     }
 }

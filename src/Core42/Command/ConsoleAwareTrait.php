@@ -17,14 +17,32 @@ trait ConsoleAwareTrait
 
     /**
      * @param string $message
+     * @param null|int $color
+     * @param null|int $bgColor
      */
-    protected function consoleOutput($message)
+    protected function consoleOutput($message, $color = null, $bgColor = null)
     {
         if (!Console::isConsole()) {
             return;
         }
 
-        Console::outputFilter($message);
+        $message = Console::outputFilter($message);
+        Console::getInstance()->writeLine($message, $color, $bgColor);
+    }
+
+    /**
+     * @param string $message
+     * @param null|int $color
+     * @param null|int $bgColor
+     */
+    protected function consoleWrite($message, $color = null, $bgColor = null)
+    {
+        if (!Console::isConsole()) {
+            return;
+        }
+
+        $message = Console::outputFilter($message);
+        Console::getInstance()->write($message, $color, $bgColor);
     }
 
     /**
