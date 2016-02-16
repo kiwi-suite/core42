@@ -11,11 +11,22 @@ namespace Core42\Permission\Rbac\Service;
 
 use Core42\Permission\Rbac\Rbac;
 use Core42\Permission\Rbac\Traversal\Strategy\RecursiveRoleIteratorStrategy;
+use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class RbacFactory implements FactoryInterface
 {
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return Rbac
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        return new Rbac(new RecursiveRoleIteratorStrategy());
+    }
 
     /**
      * Create service
@@ -25,6 +36,6 @@ class RbacFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return new Rbac(new RecursiveRoleIteratorStrategy());
+        return $this($serviceLocator, Rbac::class);
     }
 }

@@ -10,11 +10,22 @@
 namespace Core42\Permission\Rbac\Service;
 
 use Core42\Permission\Rbac\Strategy\UnauthorizedStrategy;
+use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class UnauthorizedStrategyFactory implements FactoryInterface
 {
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return UnauthorizedStrategy
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        return new UnauthorizedStrategy($container->get('Permission'));
+    }
 
     /**
      * Create service
@@ -24,6 +35,6 @@ class UnauthorizedStrategyFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return new UnauthorizedStrategy($serviceLocator->get('Core42\Permission'));
+        return $this($serviceLocator, UnauthorizedStrategy::class);
     }
 }

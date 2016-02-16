@@ -10,11 +10,22 @@
 namespace Core42\View\Helper\Service;
 
 use Core42\View\Helper\Permission;
+use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class PermissionFactory implements FactoryInterface
 {
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return Permission
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        return new Permission($container->getServiceLocator()->get('Permission'));
+    }
 
     /**
      * Create service
@@ -24,6 +35,6 @@ class PermissionFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return new Permission($serviceLocator->getServiceLocator()->get('Core42\Permission'));
+        return $this($serviceLocator, "permission");
     }
 }

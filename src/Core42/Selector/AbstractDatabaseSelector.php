@@ -36,6 +36,9 @@ abstract class AbstractDatabaseSelector extends AbstractSelector
      */
     protected $hydrator;
 
+    /**
+     * @throws \Exception
+     */
     protected function init()
     {
         parent::init();

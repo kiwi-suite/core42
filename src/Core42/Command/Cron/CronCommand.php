@@ -137,7 +137,8 @@ class CronCommand extends AbstractCommand
                 $descriptors[1] = ['file', $task->getLogfile(), 'a'];
                 $descriptors[2] = ['file', $task->getLogfile(), 'a'];
             }
-            $p[] = proc_open ($cmd, $descriptors, $pipes);
+
+            $p[] = proc_open($cmd, $descriptors, $pipes);
         }
 
         foreach ($p as $_p) {

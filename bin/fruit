@@ -58,7 +58,7 @@ foreach ($cliConfig as $name => &$info) {
     }
 
     if (!array_key_exists('dispatcher', $info)) {
-        $commandDispatcher = $serviceManager->get('Core42\ConsoleDispatcher');
+        $commandDispatcher = $serviceManager->get(\Core42\Command\Console\ConsoleDispatcher::class);
     } else {
         $commandDispatcher = $serviceManager->get($info['dispatcher']);
         unset($info['dispatcher']);

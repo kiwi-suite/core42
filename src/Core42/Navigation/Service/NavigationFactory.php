@@ -11,30 +11,31 @@ namespace Core42\Navigation\Service;
 
 use Core42\Navigation\Navigation;
 use Core42\Navigation\Options\NavigationOptions;
+use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class NavigationFactory implements FactoryInterface
 {
     /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
      * @return Navigation
      */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         /** @var NavigationOptions $options */
-        $options = $serviceLocator->get('Core42\NavigationOptions');
+        $options = $container->get(NavigationOptions::class);
 
         $navigation = new Navigation();
-        $navigation->setServiceManager($serviceLocator);
+        $navigation->setServiceManager($container);
 
         foreach ($options->getListeners() as $navName => $_listener) {
             foreach ($_listener as $priority => $listener) {
                 if (is_string($listener)) {
-                    if ($serviceLocator->has($listener)) {
-                        $listener = $serviceLocator->get($listener);
+                    if ($container->has($listener)) {
+                        $listener = $container->get($listener);
                     } else {
                         $listener = new $listener();
                     }
@@ -48,7 +49,7 @@ class NavigationFactory implements FactoryInterface
             }
         }
 
-        $application = $serviceLocator->get('Application');
+        $application = $container->get('Application');
         $routeMatch  = $application->getMvcEvent()->getRouteMatch();
         $router      = $application->getMvcEvent()->getRouter();
 
@@ -56,5 +57,15 @@ class NavigationFactory implements FactoryInterface
         $navigation->setRouter($router);
 
         return $navigation;
+    }
+    /**
+     * Create service
+     *
+     * @param ServiceLocatorInterface $serviceLocator
+     * @return Navigation
+     */
+    public function createService(ServiceLocatorInterface $serviceLocator)
+    {
+        return $this($serviceLocator, Navigation::class);
     }
 }
