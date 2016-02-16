@@ -277,4 +277,16 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
 
         return $sqlColumns;
     }
+
+    /**
+     * @param ModelInterface $model
+     * @throws \Exception
+     */
+    public function refresh(ModelInterface $model)
+    {
+        $where = $this->getPrimaryValues($model);
+        $tmpObject = $this->selectByPrimary($where);
+        $this->getHydrator()->hydrate($this->getHydrator()->extract($tmpObject), $model);
+        $model->memento();
+    }
 }
