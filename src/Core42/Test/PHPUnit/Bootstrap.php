@@ -58,6 +58,4 @@ class Bootstrap
     {
         return static::$serviceManager;
     }
-
-
 }
