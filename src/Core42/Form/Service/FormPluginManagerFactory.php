@@ -27,7 +27,10 @@ class FormPluginManagerFactory implements FactoryInterface
         $config = $container->get('config');
         $config = (array_key_exists('forms', $config)) ? $config['forms'] : [];
 
-        return new FormPluginManager(new Config($config));
+        $manager = new FormPluginManager(new Config($config));
+        $manager->setServiceLocator($container);
+
+        return $manager;
     }
 
     /**

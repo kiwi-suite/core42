@@ -27,7 +27,10 @@ class TableGatewayPluginManagerFactory implements FactoryInterface
         $config = $container->get('config');
         $config = (array_key_exists('table_gateway', $config)) ? $config['table_gateway'] : [];
 
-        return new TableGatewayPluginManager(new Config($config));
+        $manager = new TableGatewayPluginManager(new Config($config));
+        $manager->setServiceLocator($container);
+
+        return $manager;
     }
 
     /**
