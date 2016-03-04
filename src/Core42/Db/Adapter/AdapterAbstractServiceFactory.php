@@ -9,7 +9,7 @@
 
 namespace Core42\Db\Adapter;
 
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Interop\Container\ContainerInterface;
 
 class AdapterAbstractServiceFactory extends \Zend\Db\Adapter\AdapterAbstractServiceFactory
 {
@@ -17,24 +17,24 @@ class AdapterAbstractServiceFactory extends \Zend\Db\Adapter\AdapterAbstractServ
     /**
      * Get db configuration, if any
      *
-     * @param  ServiceLocatorInterface $services
+     * @param  ContainerInterface $container
      * @return array
      */
-    protected function getConfig(ServiceLocatorInterface $services)
+    protected function getConfig(ContainerInterface $container)
     {
         if ($this->config !== null) {
             return $this->config;
         }
-        $config = parent::getConfig($services);
+        $config = parent::getConfig($container);
 
         foreach ($config as &$_config) {
             if (array_key_exists('profiler', $_config)
                 && is_array($_config['profiler'])
                 && count($_config['profiler']) == 2) {
                 $profilerConfig = $_config['profiler'];
-                if ($services->has($profilerConfig[0])) {
-                    $_config['profiler'] = $services->get($profilerConfig[0]);
-                    $_config['profiler']->setLogger($services->get($profilerConfig[1]));
+                if ($container->has($profilerConfig[0])) {
+                    $_config['profiler'] = $container->get($profilerConfig[0]);
+                    $_config['profiler']->setLogger($container->get($profilerConfig[1]));
                 }
             }
         }
