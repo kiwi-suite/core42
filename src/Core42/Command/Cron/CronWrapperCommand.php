@@ -111,7 +111,9 @@ class CronWrapperCommand extends AbstractCommand
         }
 
         if (array_key_exists('lastrun', $params)) {
-            $params['lastrun'] = ($this->task->getLastRun() instanceof \DateTime) ? $this->task->getLastRun()->getTimestamp() : 0;
+            $params['lastrun'] = ($this->task->getLastRun() instanceof \DateTime)
+                ? $this->task->getLastRun()->getTimestamp()
+                : 0;
         }
 
         $this->task->setLastRun(new \DateTime());
@@ -120,8 +122,13 @@ class CronWrapperCommand extends AbstractCommand
 
         try {
             $cronExpression = CronExpression::factory($this->task->getCronInterval());
-        } catch(\InvalidArgumentException $e) {
-            $this->logger->warn(sprintf('cron task %s: unable to parse cron expression! (%s)', $this->task->getName(), $this->task->getCronInterval()));
+        } catch (\InvalidArgumentException $e) {
+            $this->logger->warn(sprintf(
+                'cron task %s: unable to parse cron expression! (%s)',
+                $this->task->getName(),
+                $this->task->getCronInterval()
+            ));
+
             return;
         }
 
@@ -188,5 +195,4 @@ class CronWrapperCommand extends AbstractCommand
             $this->taskName = $name;
         }
     }
-
 }

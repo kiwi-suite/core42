@@ -9,7 +9,7 @@
 
 namespace Core42\Hydrator;
 
-use Zend\Stdlib\Hydrator\ArraySerializable;
+use Zend\Hydrator\ArraySerializable;
 
 class AbstractHydrator extends ArraySerializable
 {

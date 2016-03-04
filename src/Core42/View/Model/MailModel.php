@@ -28,18 +28,22 @@ class MailModel extends ViewModel
 
     /**
      * @param string $template
+     * @return $this;
      */
     public function setHtmlTemplate($template)
     {
         $this->htmlTemplate = $template;
+        return $this;
     }
 
     /**
      * @param string $template
+     * @return $this;
      */
     public function setPlainTemplate($template)
     {
         $this->plainTemplate = $template;
+        return $this;
     }
 
     /**

@@ -9,12 +9,30 @@
 
 namespace Core42\Db\TableGateway\Service;
 
+use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class TableGatewayPluginManagerFactory implements FactoryInterface
 {
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return TableGatewayPluginManager
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $config = $container->get('config');
+        $config = (array_key_exists('table_gateway', $config)) ? $config['table_gateway'] : [];
+
+        $manager = new TableGatewayPluginManager(new Config($config));
+        $manager->setServiceLocator($container);
+
+        return $manager;
+    }
+
     /**
      * Create service
      *
@@ -23,9 +41,6 @@ class TableGatewayPluginManagerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $serviceLocator->get('config');
-        $config = (array_key_exists('table_gateway', $config)) ? $config['table_gateway'] : [];
-
-        return new TableGatewayPluginManager(new Config($config));
+        return $this($serviceLocator, TableGatewayPluginManager::class);
     }
 }

@@ -17,7 +17,7 @@ use Core42\Model\GenericModel;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Select;
 use Zend\Db\Sql\Sql;
-use Zend\Stdlib\Hydrator\HydratorInterface;
+use Zend\Hydrator\HydratorInterface;
 
 abstract class AbstractDatabaseSelector extends AbstractSelector
 {
@@ -36,6 +36,9 @@ abstract class AbstractDatabaseSelector extends AbstractSelector
      */
     protected $hydrator;
 
+    /**
+     * @throws \Exception
+     */
     protected function init()
     {
         parent::init();

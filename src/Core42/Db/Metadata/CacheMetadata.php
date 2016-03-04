@@ -12,6 +12,7 @@ namespace Core42\Db\Metadata;
 use Core42\Db\Metadata\Source\CacheSource;
 use Zend\Cache\Storage\StorageInterface;
 use Zend\Db\Adapter\Adapter;
+use Zend\Db\Metadata\Source\Factory;
 
 class CacheMetadata extends Metadata
 {
@@ -31,7 +32,7 @@ class CacheMetadata extends Metadata
     {
         $this->adapter = $adapter;
         $this->storage = $storage;
-        $this->source = $this->createSourceFromAdapter($adapter);
+        $this->source = Factory::createSourceFromAdapter($adapter);
 
         if ($storage !== null) {
             new CacheSource($this->source, $storage);

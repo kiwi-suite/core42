@@ -11,11 +11,40 @@ namespace Core42\Db\Metadata\Service;
 
 use Core42\Db\Metadata\CacheMetadata;
 use Core42\Db\Metadata\Metadata;
+use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class MetadataServiceFactory implements FactoryInterface
 {
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return CacheMetadata|Metadata
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $adapter = $container->get('Db\Master');
+        if ($container->has('Db\Slave')) {
+            $adapter = $container->get('Db\Slave');
+        }
+
+        $config = $container->get('Config');
+        $cache = null;
+        if (array_key_exists('metadata', $config)
+            && array_key_exists('cache', $config['metadata'])
+            && !empty($config['metadata']['cache'])
+        ) {
+            $cache = $container->get($config['metadata']['cache']);
+        }
+
+        if (!empty($cache)) {
+            return new CacheMetadata($adapter, $cache);
+        }
+
+        return new Metadata($adapter);
+    }
 
     /**
      * Create service
@@ -25,24 +54,6 @@ class MetadataServiceFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $adapter = $serviceLocator->get('Db\Master');
-        if ($serviceLocator->has('Db\Slave')) {
-            $adapter = $serviceLocator->get('Db\Slave');
-        }
-
-        $config = $serviceLocator->get('Config');
-        $cache = null;
-        if (array_key_exists('metadata', $config)
-            && array_key_exists('cache', $config['metadata'])
-            && !empty($config['metadata']['cache'])
-        ) {
-            $cache = $serviceLocator->get($config['metadata']['cache']);
-        }
-
-        if (!empty($cache)) {
-            return new CacheMetadata($adapter, $cache);
-        }
-
-        return new Metadata($adapter);
+        return $this($serviceLocator, Metadata::class);
     }
 }

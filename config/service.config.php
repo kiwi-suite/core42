@@ -1,6 +1,53 @@
 <?php
 namespace Core42;
 
+use Core42\Command\Console\ConsoleDispatcher;
+use Core42\Command\Service\CommandPluginManager;
+use Core42\Command\Service\CommandPluginManagerFactory;
+use Core42\Db\Adapter\Profiler\LoggingProfiler;
+use Core42\Db\Metadata\Metadata;
+use Core42\Db\Metadata\Service\MetadataServiceFactory;
+use Core42\Db\TableGateway\Service\TableGatewayPluginManager;
+use Core42\Db\TableGateway\Service\TableGatewayPluginManagerFactory;
+use Core42\Db\Transaction\Service\TransactionManagerFactory;
+use Core42\Db\Transaction\TransactionManager;
+use Core42\Form\Service\FormPluginManager;
+use Core42\Form\Service\FormPluginManagerFactory;
+use Core42\Hydrator\Strategy\Service\HydratorStrategyPluginManager;
+use Core42\Hydrator\Strategy\Service\HydratorStrategyPluginManagerFactory;
+use Core42\I18n\Localization\Localization;
+use Core42\I18n\Localization\Service\LocalizationFactory;
+use Core42\I18n\Translator\Service\TranslatorLoaderFactory;
+use Core42\Mail\Transport\Service\TransportFactory;
+use Core42\Mvc\TreeRouteMatcher\Service\TreeRouteMatcherFactory;
+use Core42\Mvc\TreeRouteMatcher\TreeRouteMatcher;
+use Core42\Navigation\Navigation;
+use Core42\Navigation\Options\NavigationOptions;
+use Core42\Navigation\Service\NavigationFactory;
+use Core42\Navigation\Service\NavigationOptionsFactory;
+use Core42\Permission\Rbac\Assertion\AssertionPluginManager;
+use Core42\Permission\Rbac\Guard\GuardPluginManager;
+use Core42\Permission\Rbac\Rbac;
+use Core42\Permission\Rbac\RbacManager;
+use Core42\Permission\Rbac\Role\RoleProviderPluginManager;
+use Core42\Permission\Rbac\Service\AssertionPluginManagerFactory;
+use Core42\Permission\Rbac\Service\GuardPluginManagerFactory;
+use Core42\Permission\Rbac\Service\RbacFactory;
+use Core42\Permission\Rbac\Service\RbacManagerFactory;
+use Core42\Permission\Rbac\Service\RedirectStrategyFactory;
+use Core42\Permission\Rbac\Service\RoleProviderPluginManagerFactory;
+use Core42\Permission\Rbac\Service\UnauthorizedStrategyFactory;
+use Core42\Permission\Rbac\Strategy\RedirectStrategy;
+use Core42\Permission\Rbac\Strategy\UnauthorizedStrategy;
+use Core42\Selector\Service\SelectorPluginManager;
+use Core42\Selector\Service\SelectorPluginManagerFactory;
+use Core42\TableGateway\Service\MigrationTableGatewayFactory;
+use Zend\Mail\Transport\TransportInterface;
+use Zend\ServiceManager\Factory\InvokableFactory;
+use Zend\Session\Service\SessionConfigFactory;
+use Zend\Session\Service\SessionManagerFactory;
+use Zend\Session\Service\StorageFactory;
+
 return [
     'service_manager' => [
         'abstract_factories' => [
@@ -9,61 +56,75 @@ return [
             'Zend\Log\LoggerAbstractServiceFactory',
         ],
         'factories' => [
-            'Zend\Session\Service\SessionManager'           => 'Zend\Session\Service\SessionManagerFactory',
-            'Zend\Session\Config\ConfigInterface'           => 'Zend\Session\Service\SessionConfigFactory',
-            'Zend\Session\Storage\StorageInterface'         => 'Zend\Session\Service\StorageFactory',
+            TransportInterface::class                       => TransportFactory::class,
 
-            'Core42\Mail\Transport'                         => 'Core42\Mail\Transport\Service\TransportFactory',
+            CommandPluginManager::class                     => CommandPluginManagerFactory::class,
+            TableGatewayPluginManager::class                => TableGatewayPluginManagerFactory::class,
+            HydratorStrategyPluginManager::class            => HydratorStrategyPluginManagerFactory::class,
+            SelectorPluginManager::class                    => SelectorPluginManagerFactory::class,
+            FormPluginManager::class                        => FormPluginManagerFactory::class,
 
-            'Core42\CommandPluginManager'                   => 'Core42\Command\Service\CommandPluginManagerFactory',
-            'Core42\TableGatewayPluginManager'              => 'Core42\Db\TableGateway\Service\TableGatewayPluginManagerFactory',
-            'Core42\HydratorStrategyPluginManager'          => 'Core42\Hydrator\Strategy\Service\HydratorStrategyPluginManagerFactory',
-            'Core42\SelectorPluginManager'                  => 'Core42\Selector\Service\SelectorPluginManagerFactory',
-            'Core42\FormPluginManager'                      => 'Core42\Form\Service\FormPluginManagerFactory',
+            Metadata::class                                 => MetadataServiceFactory::class,
 
-            'Metadata'                                      => 'Core42\Db\Metadata\Service\MetadataServiceFactory',
+            TreeRouteMatcher::class                         => TreeRouteMatcherFactory::class,
 
-            'TreeRouteMatcher'                              => 'Core42\Mvc\TreeRouteMatcher\Service\TreeRouteMatcherFactory',
+            Rbac::class                                     => RbacFactory::class,
+            RbacManager::class                              => RbacManagerFactory::class,
+            RoleProviderPluginManager::class                => RoleProviderPluginManagerFactory::class,
+            GuardPluginManager::class                       => GuardPluginManagerFactory::class,
+            AssertionPluginManager::class                   => AssertionPluginManagerFactory::class,
+            RedirectStrategy::class                         => RedirectStrategyFactory::class,
+            UnauthorizedStrategy::class                     => UnauthorizedStrategyFactory::class,
 
-            'Core42\Rbac'                                   => 'Core42\Permission\Rbac\Service\RbacFactory',
-            'Core42\Permission'                             => 'Core42\Permission\Rbac\Service\RbacManagerFactory',
-            'Core42\Permission\RoleProviderPluginManager'   => 'Core42\Permission\Rbac\Service\RoleProviderPluginManagerFactory',
-            'Core42\Permission\GuardPluginManager'          => 'Core42\Permission\Rbac\Service\GuardPluginManagerFactory',
-            'Core42\Permission\AssertionPluginManager'      => 'Core42\Permission\Rbac\Service\AssertionPluginManagerFactory',
-            'Core42\Permission\RedirectStrategy'            => 'Core42\Permission\Rbac\Service\RedirectStrategyFactory',
-            'Core42\Permission\UnauthorizedStrategy'        => 'Core42\Permission\Rbac\Service\UnauthorizedStrategyFactory',
+            NavigationOptions::class                        => NavigationOptionsFactory::class,
+            Navigation::class                               => NavigationFactory::class,
 
-            'Core42\NavigationOptions'                      => 'Core42\Navigation\Service\NavigationOptionsFactory',
-            'Core42\Navigation'                             => 'Core42\Navigation\Service\NavigationFactory',
+            Localization::class                             => LocalizationFactory::class,
+
+            LoggingProfiler::class                          => InvokableFactory::class,
+            ConsoleDispatcher::class                        => InvokableFactory::class,
+            TransactionManager::class                       => TransactionManagerFactory::class,
+
 
             'MvcTranslator'                                 => 'Core42\I18n\Translator\Service\TranslatorFactory',
-            'MvcTranslatorPluginManager'                    => 'Core42\I18n\Translator\Service\TranslatorLoaderFactory',
-            'Localization'                                  => 'Core42\I18n\Localization\Service\LocalizationFactory',
+            'MvcTranslatorPluginManager'                    => TranslatorLoaderFactory::class,
+
+            'Zend\Session\Service\SessionManager'           => SessionManagerFactory::class,
+            'Zend\Session\Config\ConfigInterface'           => SessionConfigFactory::class,
+            'Zend\Session\Storage\StorageInterface'         => StorageFactory::class,
         ],
         'invokables' => [
-            'Core42\LoggingProfiler'                        => 'Core42\Db\Adapter\Profiler\LoggingProfiler',
 
-            'Core42\ConsoleDispatcher'                      => 'Core42\Command\Console\ConsoleDispatcher',
-
-            'Core42\TransactionManager'                     => 'Core42\Db\Transaction\TransactionManager',
         ],
         'aliases' => [
-            'TransactionManager'                            => 'Core42\TransactionManager',
+            'Localization'                                  => Localization::class,
+            'Permission'                                    => RbacManager::class,
 
-            'Command'                                       => 'Core42\CommandPluginManager',
-            'TableGateway'                                  => 'Core42\TableGatewayPluginManager',
-            'HydratorStrategy'                              => 'Core42\HydratorStrategyPluginManager',
-            'Selector'                                      => 'Core42\SelectorPluginManager',
-            'Form'                                          => 'Core42\FormPluginManager',
+            'Command'                                       => CommandPluginManager::class,
+            'TableGateway'                                  => TableGatewayPluginManager::class,
+            'HydratorStrategy'                              => HydratorStrategyPluginManager::class,
+            'Selector'                                      => SelectorPluginManager::class,
+            'Form'                                          => FormPluginManager::class,
+            'Navigation'                                    => Navigation::class,
 
-            'Navigation'                                    => 'Core42\Navigation'
+            'Core42\Mail\Transport'                         => TransportInterface::class,
+
+            //Deprecated
+            'Core42\Navigation'                             => Navigation::class,
+            'Core42\Permission'                             => RbacManager::class,
+            'TreeRouteMatcher'                              => TreeRouteMatcher::class,
+            'Metadata'                                      => Metadata::class,
+            'Core42\FormPluginManager'                      => FormPluginManager::class,
+            'Core42\SelectorPluginManager'                  => SelectorPluginManager::class,
+            'Core42\HydratorStrategyPluginManager'          => HydratorStrategyPluginManager::class,
+            'Core42\TableGatewayPluginManager'              => TableGatewayPluginManager::class,
+            'Core42\CommandPluginManager'                   => CommandPluginManager::class,
         ],
     ],
 
     'table_gateway' => [
         'factories' => [
-            'Core42\Migration' => 'Core42\TableGateway\Service\MigrationTableGatewayFactory',
-            'Core42\Seeding' => 'Core42\TableGateway\Service\SeedingTableGatewayFactory',
+            'Core42\Migration' => MigrationTableGatewayFactory::class,
         ],
     ],
 ];

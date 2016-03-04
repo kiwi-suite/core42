@@ -1,12 +1,24 @@
 <?php
 namespace Core42\View\Helper\Navigation\Service;
 
+use Core42\Navigation\Navigation;
 use Core42\View\Helper\Navigation\Breadcrumbs;
+use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class BreadcrumbsFactory implements FactoryInterface
 {
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return Breadcrumbs
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        return new Breadcrumbs($container->getServiceLocator()->get(Navigation::class));
+    }
 
     /**
      * Create service
@@ -16,6 +28,6 @@ class BreadcrumbsFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return new Breadcrumbs($serviceLocator->getServiceLocator()->get('Core42\Navigation'));
+        return $this($serviceLocator, "breadcrumbs");
     }
 }

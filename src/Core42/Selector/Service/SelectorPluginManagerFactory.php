@@ -9,12 +9,29 @@
 
 namespace Core42\Selector\Service;
 
+use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class SelectorPluginManagerFactory implements FactoryInterface
 {
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return SelectorPluginManager
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $config = $container->get('config');
+        $config = (array_key_exists('selector', $config)) ? $config['selector'] : [];
+
+        $manager = new SelectorPluginManager(new Config($config));
+        $manager->setServiceLocator($container);
+
+        return $manager;
+    }
 
     /**
      * Create service
@@ -24,9 +41,6 @@ class SelectorPluginManagerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $serviceLocator->get('config');
-        $config = (array_key_exists('selector', $config)) ? $config['selector'] : [];
-
-        return new SelectorPluginManager(new Config($config));
+        return $this($serviceLocator, SelectorPluginManager::class);
     }
 }

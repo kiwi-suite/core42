@@ -1,32 +1,31 @@
 <?php
-/**
- * core42 (www.raum42.at)
- *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
- *
- */
+namespace Core42\Db\Transaction\Service;
 
-namespace Core42\View\Helper\Service;
-
-use Core42\View\Helper\Localization;
+use Core42\Db\Transaction\TransactionManager;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class LocalizationFactory implements FactoryInterface
+class TransactionManagerFactory implements FactoryInterface
 {
     /**
      * @param ContainerInterface $container
      * @param $requestedName
      * @param array|null $options
-     * @return Localization
+     * @return TransactionManager
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        return new Localization($container->getServiceLocator()->get('Localization'));
-    }
+        $config = $container->get('config')['db']['adapters'];
+        $adapterNames = array_keys($config);
 
+        $adapters = [];
+        foreach ($adapterNames as $adapterName) {
+            $adapters[] = $container->get($adapterName);
+        }
+
+        return new TransactionManager($adapters);
+    }
     /**
      * Create service
      *
@@ -35,6 +34,6 @@ class LocalizationFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return $this($serviceLocator, "localization");
+        return $this($serviceLocator, TransactionManager::class);
     }
 }

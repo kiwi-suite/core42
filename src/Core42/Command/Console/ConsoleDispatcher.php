@@ -50,7 +50,7 @@ class ConsoleDispatcher implements ServiceManagerAwareInterface
                 $valid = true;
                 break;
             }
-        } while($class = get_parent_class($class));
+        } while ($class = get_parent_class($class));
 
         if (!$valid) {
             $console->writeLine(

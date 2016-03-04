@@ -15,6 +15,7 @@ class Console extends \Zend\Console\Console
 {
     /**
      * @param string $message
+     * @return string
      */
     public static function outputFilter($message)
     {
@@ -55,6 +56,6 @@ class Console extends \Zend\Console\Console
             $message
         );
 
-        Console::getInstance()->writeLine($message);
+        return $message;
     }
 }

@@ -9,12 +9,30 @@
 
 namespace Core42\Hydrator\Strategy\Service;
 
+use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Config;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class HydratorStrategyPluginManagerFactory implements FactoryInterface
 {
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return HydratorStrategyPluginManager
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $config = $container->get('config');
+        $config = (array_key_exists('hydrator_strategy', $config)) ? $config['hydrator_strategy'] : [];
+
+        $manager = new HydratorStrategyPluginManager(new Config($config));
+        $manager->setServiceLocator($container);
+
+        return $manager;
+    }
+
     /**
      * Create service
      *
@@ -23,9 +41,6 @@ class HydratorStrategyPluginManagerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        $config = $serviceLocator->get('config');
-        $config = (array_key_exists('hydrator_strategy', $config)) ? $config['hydrator_strategy'] : [];
-
-        return new HydratorStrategyPluginManager(new Config($config));
+        return $this($serviceLocator, HydratorStrategyPluginManager::class);
     }
 }

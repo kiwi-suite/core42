@@ -10,11 +10,22 @@
 namespace Core42\Permission\Rbac\Service;
 
 use Core42\Permission\Rbac\Strategy\RedirectStrategy;
+use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
 class RedirectStrategyFactory implements FactoryInterface
 {
+    /**
+     * @param ContainerInterface $container
+     * @param $requestedName
+     * @param array|null $options
+     * @return RedirectStrategy
+     */
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        return new RedirectStrategy($container->get('Permission'));
+    }
 
     /**
      * Create service
@@ -24,6 +35,6 @@ class RedirectStrategyFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return new RedirectStrategy($serviceLocator->get('Core42\Permission'));
+        return $this($serviceLocator, RedirectStrategy::class);
     }
 }
