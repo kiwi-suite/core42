@@ -10,8 +10,6 @@
 namespace Core42\Db\Transaction;
 
 use Zend\Db\Adapter\AdapterInterface;
-use Zend\ServiceManager\ServiceManager;
-use Zend\ServiceManager\ServiceManagerAwareInterface;
 
 class TransactionManager
 {
