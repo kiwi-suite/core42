@@ -13,10 +13,9 @@ use Core42\Command\CommandInterface;
 use Zend\Console\Adapter\AdapterInterface;
 use Zend\Console\ColorInterface;
 use Zend\ServiceManager\ServiceManager;
-use Zend\ServiceManager\ServiceManagerAwareInterface;
 use ZF\Console\Route;
 
-class ConsoleDispatcher implements ServiceManagerAwareInterface
+class ConsoleDispatcher
 {
     /**
      * @var ServiceManager;

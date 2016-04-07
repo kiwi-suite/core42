@@ -27,7 +27,10 @@ class HydratorStrategyPluginManagerFactory implements FactoryInterface
         $config = $container->get('config');
         $config = (array_key_exists('hydrator_strategy', $config)) ? $config['hydrator_strategy'] : [];
 
-        return new HydratorStrategyPluginManager(new Config($config));
+        $manager = new HydratorStrategyPluginManager(new Config($config));
+        $manager->setServiceLocator($container);
+
+        return $manager;
     }
 
     /**

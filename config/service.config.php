@@ -2,6 +2,7 @@
 namespace Core42;
 
 use Core42\Command\Console\ConsoleDispatcher;
+use Core42\Command\Console\Service\ConsoleDispatcherFactory;
 use Core42\Command\Service\CommandPluginManager;
 use Core42\Command\Service\CommandPluginManagerFactory;
 use Core42\Db\Adapter\Profiler\LoggingProfiler;
@@ -82,7 +83,7 @@ return [
             Localization::class                             => LocalizationFactory::class,
 
             LoggingProfiler::class                          => InvokableFactory::class,
-            ConsoleDispatcher::class                        => InvokableFactory::class,
+            ConsoleDispatcher::class                        => ConsoleDispatcherFactory::class,
             TransactionManager::class                       => TransactionManagerFactory::class,
 
 

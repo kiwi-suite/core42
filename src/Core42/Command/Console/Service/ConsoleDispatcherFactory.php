@@ -7,30 +7,28 @@
  *
  */
 
-namespace Core42\Form\Service;
+namespace Core42\Command\Console\Service;
 
+use Core42\Command\Console\ConsoleDispatcher;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Config;
 use Zend\ServiceManager\FactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class FormPluginManagerFactory implements FactoryInterface
+class ConsoleDispatcherFactory implements FactoryInterface
 {
+
     /**
      * @param ContainerInterface $container
      * @param $requestedName
      * @param array|null $options
-     * @return FormPluginManager
+     * @return ConsoleDispatcher
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $config = $container->get('config');
-        $config = (array_key_exists('forms', $config)) ? $config['forms'] : [];
+        $dispatcher = new ConsoleDispatcher();
+        $dispatcher->setServiceManager($container);
 
-        $manager = new FormPluginManager(new Config($config));
-        $manager->setServiceLocator($container);
-
-        return $manager;
+        return $dispatcher;
     }
 
     /**
@@ -41,6 +39,6 @@ class FormPluginManagerFactory implements FactoryInterface
      */
     public function createService(ServiceLocatorInterface $serviceLocator)
     {
-        return $this($serviceLocator, FormPluginManager::class);
+        return $this($serviceLocator, ConsoleDispatcher::class);
     }
 }

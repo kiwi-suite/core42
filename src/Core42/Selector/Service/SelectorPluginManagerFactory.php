@@ -27,7 +27,10 @@ class SelectorPluginManagerFactory implements FactoryInterface
         $config = $container->get('config');
         $config = (array_key_exists('selector', $config)) ? $config['selector'] : [];
 
-        return new SelectorPluginManager(new Config($config));
+        $manager = new SelectorPluginManager(new Config($config));
+        $manager->setServiceLocator($container);
+
+        return $manager;
     }
 
     /**

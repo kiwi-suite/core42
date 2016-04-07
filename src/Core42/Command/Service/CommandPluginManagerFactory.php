@@ -27,7 +27,10 @@ class CommandPluginManagerFactory implements FactoryInterface
         $config = $container->get('config');
         $config = (array_key_exists('commands', $config)) ? $config['commands'] : [];
 
-        return new CommandPluginManager(new Config($config));
+        $manager = new CommandPluginManager(new Config($config));
+        $manager->setServiceLocator($container);
+
+        return $manager;
     }
 
     /**
