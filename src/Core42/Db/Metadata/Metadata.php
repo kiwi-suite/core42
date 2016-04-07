@@ -18,6 +18,10 @@ class Metadata extends \Zend\Db\Metadata\Metadata
      */
     protected $adapter;
 
+    /**
+     * Metadata constructor.
+     * @param Adapter $adapter
+     */
     public function __construct(Adapter $adapter)
     {
         parent::__construct($adapter);
