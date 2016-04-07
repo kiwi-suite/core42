@@ -15,6 +15,7 @@ use Core42\Db\SelectQuery\AbstractSelectQuery;
 use Core42\Db\TableGateway\AbstractTableGateway;
 use Core42\Selector\SelectorInterface;
 use Zend\Form\Form;
+use Zend\ServiceManager\ServiceLocatorInterface;
 
 /**
  * Class AbstractActionController
@@ -24,6 +25,27 @@ use Zend\Form\Form;
  */
 class AbstractActionController extends \Zend\Mvc\Controller\AbstractActionController
 {
+    /**
+     * @var ServiceLocatorInterface
+     */
+    protected $serviceLocator;
+
+    /**
+     * @param ServiceLocatorInterface $serviceLocator
+     */
+    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    {
+        $this->serviceLocator = $serviceLocator;
+    }
+
+    /**
+     * @return ServiceLocatorInterface
+     */
+    public function getServiceLocator()
+    {
+        return $this->serviceLocator;
+    }
+
     /**
      * @param string $commandName
      * @return AbstractCommand
