@@ -9,9 +9,21 @@
 
 namespace Core42\Db\Metadata;
 use Zend\Db\Metadata\Source\Factory;
+use Zend\Db\Adapter\Adapter;
 
 class Metadata extends \Zend\Db\Metadata\Metadata
 {
+    /**
+     * @var Adapter
+     */
+    protected $adapter;
+
+    public function __construct(Adapter $adapter)
+    {
+        parent::__construct($adapter);
+
+        $this->adapter = $adapter;
+    }
 
     /**
      * @throws \Exception
