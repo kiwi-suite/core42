@@ -12,15 +12,31 @@ namespace Core42\Hydrator\Strategy\Database\MySQL;
 use Core42\Hydrator\Strategy\Database\DatabaseStrategyInterface;
 use Zend\Hydrator\Strategy\StrategyInterface;
 
-class FloatStrategy implements StrategyInterface, DatabaseStrategyInterface
+class StringStrategy implements StrategyInterface, DatabaseStrategyInterface
 {
-    /**
+     /**
      * @param  \Zend\Db\Metadata\Object\ColumnObject $column
      * @return mixed
      */
     public function isResponsible(\Zend\Db\Metadata\Object\ColumnObject $column)
     {
-        return (in_array($column->getDataType(), ['decimal', 'numeric', 'float', 'double']));
+        return (in_array(
+            $column->getDataType(),
+            [
+                'char',
+                'varchar',
+                'enum',
+                'set',
+                'blob',
+                'longblob',
+                'mediumblob',
+                'tinyblob',
+                'text',
+                'longtext',
+                'mediumtext',
+                'tinytext'
+            ]
+        )) ? true : false;
     }
 
     /**
@@ -32,7 +48,7 @@ class FloatStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function extract($value)
     {
-        return (float) $value;
+        return (string) $value;
     }
 
     /**
@@ -44,7 +60,7 @@ class FloatStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function hydrate($value)
     {
-        return (float) $value;
+        return (string) $value;
     }
 
     /**
@@ -52,6 +68,6 @@ class FloatStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function getName()
     {
-        return 'Float';
+        return 'String';
     }
 }

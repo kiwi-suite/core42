@@ -9,6 +9,9 @@
 
 namespace Core42\Db\TableGateway\Service;
 
+use Core42\Db\Metadata\Metadata;
+use Core42\Db\TableGateway\AbstractTableGateway;
+use Core42\Hydrator\Strategy\Service\HydratorStrategyPluginManager;
 use Zend\ServiceManager\AbstractFactoryInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
@@ -51,12 +54,21 @@ class TableGatewayFallbackAbstractFactory implements AbstractFactoryInterface
         if ($serviceLocator->getServiceLocator()->has('Db\Slave')) {
             $slave =  $serviceLocator->getServiceLocator()->get('Db\Slave');
         }
-        $metadata = $serviceLocator->getServiceLocator()->get('Metadata');
 
         $sm = $serviceLocator->getServiceLocator();
-        $hydratorStrategyPluginManager = $sm->get('Core42\HydratorStrategyPluginManager');
+        $hydratorStrategyPluginManager = $sm->get(HydratorStrategyPluginManager::class);
 
-        return new $fqcn($adapter, $metadata, $hydratorStrategyPluginManager, $slave);
+        /** @var AbstractTableGateway $gateway */
+        $gateway = new $fqcn($adapter, $hydratorStrategyPluginManager, $slave);
+
+        if ($gateway->getUseMetaDataFeature() === true) {
+            $metadata = $serviceLocator->getServiceLocator()->get(Metadata::class);
+            $gateway->enableMetadata($metadata, $hydratorStrategyPluginManager);
+        }
+
+        $gateway->initialize();
+
+        return $gateway;
     }
 
     /**

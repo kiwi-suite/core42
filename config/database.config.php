@@ -3,29 +3,44 @@ namespace Core42;
 
 use Core42\Hydrator\Strategy\Database\MySQL\BooleanStrategy;
 use Core42\Hydrator\Strategy\Database\MySQL\DateStrategy;
-use Core42\Hydrator\Strategy\Database\MySQL\DatetimeStrategy;
+use Core42\Hydrator\Strategy\Database\MySQL\DateTimeStrategy;
 use Core42\Hydrator\Strategy\Database\MySQL\FloatStrategy;
 use Core42\Hydrator\Strategy\Database\MySQL\IntegerStrategy;
+use Core42\Hydrator\Strategy\Database\MySQL\StringStrategy;
 use Zend\ServiceManager\Factory\InvokableFactory;
 
 return [
     'hydrator_strategy' => [
-        'factories' => [
-            IntegerStrategy::class        => InvokableFactory::class,
-            BooleanStrategy::class        => InvokableFactory::class,
-            DateStrategy::class           => InvokableFactory::class,
-            DatetimeStrategy::class       => InvokableFactory::class,
-            FloatStrategy::class          => InvokableFactory::class,
-        ],
-        'aliases' => [
-            'Mysql/Integer'        => IntegerStrategy::class,
-            'Mysql/Boolean'        => BooleanStrategy::class,
-            'Mysql/Date'           => DateStrategy::class,
-            'Mysql/Datetime'       => DatetimeStrategy::class,
-            'Mysql/Float'          => FloatStrategy::class,
-        ],
+        'mysql' => [
+            'factories' => [
+                IntegerStrategy::class        => InvokableFactory::class,
+                BooleanStrategy::class        => InvokableFactory::class,
+                DateStrategy::class           => InvokableFactory::class,
+                DateTimeStrategy::class       => InvokableFactory::class,
+                FloatStrategy::class          => InvokableFactory::class,
+                StringStrategy::class         => InvokableFactory::class,
+            ],
+            'aliases' => [
+                'Integer'        => IntegerStrategy::class,
+                'Boolean'        => BooleanStrategy::class,
+                'Date'           => DateStrategy::class,
+                'DateTime'       => DateTimeStrategy::class,
+                'Float'          => FloatStrategy::class,
+                'String'         => StringStrategy::class,
+
+                //Deprecated
+                'Mysql/Integer'        => IntegerStrategy::class,
+                'Mysql/Boolean'        => BooleanStrategy::class,
+                'Mysql/Date'           => DateStrategy::class,
+                'Mysql/DateTime'       => DateTimeStrategy::class,
+                'Mysql/Datetime'       => DateTimeStrategy::class,
+                'Mysql/Float'          => FloatStrategy::class,
+                'Mysql/String'         => StringStrategy::class,
+            ],
+        ]
     ],
 
+    //Deprecated
     'metadata' => [
         'cache' => (DEVELOPMENT_MODE) ? false : 'Cache\Intern',
     ],

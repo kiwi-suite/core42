@@ -49,4 +49,12 @@ class IntegerStrategy implements StrategyInterface, DatabaseStrategyInterface
     {
         return (int) $value;
     }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return 'Integer';
+    }
 }

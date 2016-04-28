@@ -10,6 +10,8 @@
 namespace Core42\Command\CodeGenerator;
 
 use Core42\Command\AbstractCommand;
+use Core42\Hydrator\Strategy\Service\HydratorStrategyPluginManager;
+use Zend\Db\Metadata\Source\Factory;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\Code\Generator;
 use Zend\Code\Reflection;
@@ -153,7 +155,7 @@ class GenerateTableGatewayCommand extends AbstractCommand
      */
     protected function execute()
     {
-        $metadata = new Metadata($this->adapter);
+        $metadata = Factory::createSourceFromAdapter($this->adapter);
         $metadata->getTable($this->tableName);
 
         $parts =  explode("\\", $this->className);
@@ -178,17 +180,86 @@ class GenerateTableGatewayCommand extends AbstractCommand
             ->setFlags(Generator\PropertyGenerator::FLAG_PROTECTED);
         $classGenerator->addPropertyFromGenerator($property);
 
+        $pkc = null;
+        foreach ($metadata->getConstraints($this->tableName) as $constraint) {
+            if ($constraint->getType() == 'PRIMARY KEY') {
+                $pkc = $constraint;
+                break;
+            }
+        }
+        if ($pkc) {
+            $primaryKey = $pkc->getColumns();
+
+            $property = new Generator\PropertyGenerator("primaryKey");
+            $property->setDefaultValue(
+                $primaryKey,
+                Generator\ValueGenerator::TYPE_ARRAY_SHORT,
+                Generator\ValueGenerator::OUTPUT_SINGLE_LINE
+            )
+                ->setDocBlock(
+                    new Generator\DocBlockGenerator(
+                        null,
+                        null,
+                        [new Generator\DocBlock\Tag\GenericTag('var', 'array')]
+                    )
+                )
+                ->setFlags(Generator\PropertyGenerator::FLAG_PROTECTED);
+            $classGenerator->addPropertyFromGenerator($property);
+        }
+
+        $databaseTypeMap = [];
+        $columns = $metadata->getColumns($this->tableName);
+
+        /** @var HydratorStrategyPluginManager $hydratorStrategyManager */
+        $hydratorStrategyManager = $this->getServiceManager()->get(HydratorStrategyPluginManager::class);
+        $services = $hydratorStrategyManager->getCanonicalNames();
+        foreach ($columns as $column) {
+            foreach ($services as $canonicalName => $name) {
+                $strategy = $hydratorStrategyManager->get($canonicalName);
+                if ($strategy->isResponsible($column)) {
+                    $serviceName = $strategy->getName();
+                    if (empty($serviceName)) {
+                        $serviceName = $canonicalName;
+                    }
+
+                    if (!$hydratorStrategyManager->has($serviceName)) {
+                        $serviceName = $canonicalName;
+                    }
+
+                    $databaseTypeMap[$column->getName()] = $serviceName;
+
+                    break;
+                }
+            }
+        }
+
         $property = new Generator\PropertyGenerator("databaseTypeMap");
         $property->setDefaultValue(
-            [],
-            Generator\ValueGenerator::TYPE_ARRAY,
-            Generator\ValueGenerator::OUTPUT_SINGLE_LINE
+            $databaseTypeMap,
+            Generator\ValueGenerator::TYPE_ARRAY_SHORT,
+            Generator\ValueGenerator::OUTPUT_MULTIPLE_LINE
         )
             ->setDocBlock(
                 new Generator\DocBlockGenerator(
                     null,
                     null,
                     [new Generator\DocBlock\Tag\GenericTag('var', 'array')]
+                )
+            )
+            ->setFlags(Generator\PropertyGenerator::FLAG_PROTECTED);
+        $classGenerator->addPropertyFromGenerator($property);
+
+        $property = new Generator\PropertyGenerator("useMetaDataFeature");
+        $property->setDefaultValue(
+            false,
+            Generator\ValueGenerator::TYPE_BOOLEAN,
+            Generator\ValueGenerator::OUTPUT_SINGLE_LINE
+        )
+            ->setDocBlock(
+                new Generator\DocBlockGenerator(
+                    null,
+                    null,
+                    [new Generator\DocBlock\Tag\GenericTag('var', 'boolean')]
                 )
             )
             ->setFlags(Generator\PropertyGenerator::FLAG_PROTECTED);

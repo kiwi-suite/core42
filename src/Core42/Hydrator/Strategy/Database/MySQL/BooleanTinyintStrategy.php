@@ -47,4 +47,12 @@ class BooleanTinyintStrategy implements StrategyInterface, DatabaseStrategyInter
     {
         return ($column->getDataType() == 'tinyint') ? true : false;
     }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return 'BooleanTinyint';
+    }
 }

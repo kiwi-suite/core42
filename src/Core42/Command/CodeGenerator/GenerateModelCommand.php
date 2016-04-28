@@ -249,10 +249,11 @@ class GenerateModelCommand extends AbstractCommand
             $modelClass->setDocBlock($docBlock);
         }
 
-        $propertyGenerator = new Generator\PropertyGenerator(
-            "properties",
+        $propertyGenerator = new Generator\PropertyGenerator("properties");
+        $propertyGenerator->setDefaultValue(
             $properties,
-            Generator\PropertyGenerator::FLAG_PROTECTED
+            Generator\ValueGenerator::TYPE_ARRAY_SHORT,
+            Generator\ValueGenerator::OUTPUT_MULTIPLE_LINE
         );
         $propertyGenerator->setDocBlock(new Generator\DocBlockGenerator(
             null,
