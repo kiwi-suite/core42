@@ -36,6 +36,13 @@ class MigrationTableGateway extends AbstractTableGateway
      */
     protected $modelPrototype = 'Core42\\Model\\Migration';
 
+    /**
+     * MigrationTableGateway constructor.
+     * @param Adapter $adapter
+     * @param AbstractPluginManager $hydratorStrategyPluginManager
+     * @param Adapter $tablename
+     * @param null $slave
+     */
     public function __construct(
         Adapter $adapter,
         AbstractPluginManager $hydratorStrategyPluginManager,

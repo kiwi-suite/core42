@@ -49,6 +49,4 @@ class CronTableGateway extends AbstractTableGateway
      * @var string
      */
     protected $modelPrototype = 'Core42\\Model\\Cron';
-
-
 }

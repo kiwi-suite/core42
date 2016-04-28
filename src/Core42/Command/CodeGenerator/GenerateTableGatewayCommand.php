@@ -214,7 +214,7 @@ class GenerateTableGatewayCommand extends AbstractCommand
         $hydratorStrategyManager = $this->getServiceManager()->get(HydratorStrategyPluginManager::class);
         $services = $hydratorStrategyManager->getCanonicalNames();
         foreach ($columns as $column) {
-            foreach ($services as $canonicalName => $name) {
+            foreach (array_keys($services) as $canonicalName) {
                 $strategy = $hydratorStrategyManager->get($canonicalName);
                 if ($strategy->isResponsible($column)) {
                     $serviceName = $strategy->getName();

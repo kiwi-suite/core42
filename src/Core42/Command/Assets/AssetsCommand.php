@@ -69,7 +69,7 @@ class AssetsCommand extends AbstractCommand
     {
         $filesystem = new Filesystem();
 
-        foreach ($this->assetConfig as $name => $config) {
+        foreach ($this->assetConfig as $config) {
             if ($this->copy === true) {
                 $filesystem->mirror($config['source'], $config['target'], null, [
                     'override'          => true,
@@ -79,17 +79,18 @@ class AssetsCommand extends AbstractCommand
 
                 continue;
             }
+
+            $source = $filesystem->makePathRelative(
+                $config['source'],
+                substr($config['target'], 0, strrpos($config['target'], '/'))
+            );
+
             if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
+                $source = getcwd() . DIRECTORY_SEPARATOR . $config['source'];
+
                 if ($filesystem->isAbsolutePath($config['target'])) {
                     $source = $config['target'];
-                } else {
-                    $source = getcwd() . DIRECTORY_SEPARATOR . $config['source'];
                 }
-            } else {
-                $source = $filesystem->makePathRelative(
-                    $config['source'],
-                    substr($config['target'], 0, strrpos($config['target'], '/'))
-                );
             }
 
             $filesystem->symlink($source, $config['target']);
