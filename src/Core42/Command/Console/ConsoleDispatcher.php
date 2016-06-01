@@ -96,8 +96,8 @@ class ConsoleDispatcher
     {
         if ($command->hasErrors()) {
             $errors = $command->getErrors();
-            foreach ($errors as $_error) {
-                foreach ($_error as $msg) {
+            foreach ($errors as $error) {
+                foreach ($error as $msg) {
                     $console->writeLine($msg, ColorInterface::RED);
                 }
             }

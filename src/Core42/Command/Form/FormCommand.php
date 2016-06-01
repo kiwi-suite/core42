@@ -201,12 +201,12 @@ class FormCommand extends AbstractCommand
         }
 
         $errors = $this->getErrors();
-        foreach ($errors as $elementName => $_errorList) {
+        foreach ($errors as $elementName => $errorList) {
             if (!$this->form->has($elementName)) {
                 continue;
             }
 
-            $this->form->get($elementName)->setMessages($_errorList);
+            $this->form->get($elementName)->setMessages($errorList);
         }
     }
 }

@@ -66,6 +66,10 @@ class SendCommand extends AbstractCommand
         ];
     }
 
+    /**
+     * @param MailModel $layout
+     * @return $this
+     */
     public function setLayout(MailModel $layout)
     {
         $this->layout = $layout;

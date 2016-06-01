@@ -31,7 +31,6 @@ class MigrationTableGatewayFactory implements FactoryInterface
         if ($container->getServiceLocator()->has('Db\Slave')) {
             $slave = $container->getServiceLocator()->get('Db\Slave');
         }
-        $metadata = $container->getServiceLocator()->get(Metadata::class);
 
         $sm = $container->getServiceLocator();
         $hydratorStrategyPluginManager = $sm->get(HydratorStrategyPluginManager::class);
@@ -39,13 +38,16 @@ class MigrationTableGatewayFactory implements FactoryInterface
         $config = $container->getServiceLocator()->get('config');
         $config = $config['migration'];
 
-        return new MigrationTableGateway(
+        $gateway = new MigrationTableGateway(
             $adapter,
-            $metadata,
             $hydratorStrategyPluginManager,
             $config['table_name'],
             $slave
         );
+
+        $gateway->initialize();
+
+        return $gateway;
     }
 
     /**

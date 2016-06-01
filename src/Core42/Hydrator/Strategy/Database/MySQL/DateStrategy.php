@@ -50,4 +50,12 @@ class DateStrategy implements StrategyInterface, DatabaseStrategyInterface
     {
         return (in_array($column->getDataType(), ['date']));
     }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return 'Date';
+    }
 }

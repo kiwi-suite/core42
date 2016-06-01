@@ -10,6 +10,7 @@
 namespace Core42\Db\TableGateway;
 
 use Core42\Db\ResultSet\ResultSet;
+use Core42\Db\TableGateway\Feature\HydratorMetadataFeature;
 use Core42\Hydrator\DatabaseHydrator;
 use Core42\Model\ModelInterface;
 use Zend\Db\Adapter\Adapter;
@@ -49,27 +50,28 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     protected $underscoreSeparatedKeys = false;
 
     /**
-     *
-     * @var Metadata
+     * @var array
      */
-    protected $metadata;
+    protected $primaryKey = [];
+
+    /**
+     * @var bool
+     * @deprecated
+     */
+    protected $useMetaDataFeature = true;
 
     /**
      * @param Adapter $adapter
      * @param Adapter $slave
-     * @param Metadata $metadata
      * @param AbstractPluginManager $hydratorStrategyPluginManager
      * @throws \Exception
      */
     public function __construct(
         Adapter $adapter,
-        Metadata $metadata,
         AbstractPluginManager $hydratorStrategyPluginManager,
         Adapter $slave = null
     ) {
         $this->adapter = $adapter;
-
-        $this->metadata = $metadata;
 
         if (is_string($this->modelPrototype)) {
             $className = $this->modelPrototype;
@@ -88,10 +90,34 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         if ($slave !== null) {
             $this->featureSet->addFeature(new MasterSlaveFeature($slave));
         }
-        $this->featureSet->addFeature(new MetadataFeature($this->metadata));
-        $this->featureSet->addFeature(new HydratorFeature($this->metadata, $hydratorStrategyPluginManager));
 
-        $this->initialize();
+        if ($this->useMetaDataFeature === false) {
+            $this->featureSet->addFeature(new HydratorFeature($hydratorStrategyPluginManager));
+        }
+    }
+
+    /**
+     * @return bool
+     * @deprecated
+     */
+    public function getUseMetaDataFeature()
+    {
+        return $this->useMetaDataFeature;
+    }
+
+    /**
+     * @param Metadata $metadata
+     * @param AbstractPluginManager $hydratorStrategyPluginManager
+     * @deprecated
+     */
+    public function enableMetadata(Metadata $metadata, AbstractPluginManager $hydratorStrategyPluginManager)
+    {
+        if ($this->isInitialized) {
+            return;
+        }
+
+        $this->featureSet->addFeature(new MetadataFeature($metadata));
+        $this->featureSet->addFeature(new HydratorMetadataFeature($metadata, $hydratorStrategyPluginManager));
     }
 
     /**
@@ -245,9 +271,13 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
      */
     public function getPrimaryKey()
     {
-        $metadata = $this->getFeatureSet()->getFeatureByClassName('Core42\Db\TableGateway\Feature\MetadataFeature');
+        if ($this->getUseMetaDataFeature() === true) {
+            $metadata = $this->getFeatureSet()->getFeatureByClassName('Core42\Db\TableGateway\Feature\MetadataFeature');
 
-        return $metadata->getPrimaryKey();
+            return $metadata->getPrimaryKey();
+        }
+
+        return $this->primaryKey;
     }
 
     /**
@@ -288,5 +318,17 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         $tmpObject = $this->selectByPrimary($where);
         $this->getHydrator()->hydrate($this->getHydrator()->extract($tmpObject), $model);
         $model->memento();
+    }
+
+    /**
+     * @return array
+     */
+    public function getColumns()
+    {
+        if ($this->getUseMetaDataFeature() === true) {
+            return parent::getColumns();
+        }
+        
+        return array_keys($this->databaseTypeMap);
     }
 }

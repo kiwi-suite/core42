@@ -207,9 +207,11 @@ class GenerateDbClassesCommand extends AbstractCommand
                 $name = ucfirst($filter->filter(strtolower($table)));
                 $this->generate($name, $table);
             }
-        } else {
-            $this->generate($this->name, $this->table);
+
+            return;
         }
+
+        $this->generate($this->name, $this->table);
     }
 
     /**

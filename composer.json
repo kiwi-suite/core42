@@ -6,10 +6,10 @@
         "ext-intl" : "*",
         "composer/installers": "~1.0",
         "zendframework/zendframework": "^2.5",
-        "zfcampus/zf-console": "1.0.3",
-        "symfony/finder": "v2.5.0",
-        "symfony/filesystem": "v2.5.0",
-        "mtdowling/cron-expression": "~1.0.0"
+        "zfcampus/zf-console": "1.2.0",
+        "symfony/finder": "v3.1.0",
+        "symfony/filesystem": "v3.1.0",
+        "mtdowling/cron-expression": "v1.1.0"
     },
     "require-dev": {
         "firephp/firephp-core": "*",

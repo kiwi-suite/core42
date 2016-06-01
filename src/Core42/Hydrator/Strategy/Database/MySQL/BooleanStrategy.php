@@ -51,4 +51,12 @@ class BooleanStrategy implements StrategyInterface, DatabaseStrategyInterface
 
         return false;
     }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return 'Boolean';
+    }
 }

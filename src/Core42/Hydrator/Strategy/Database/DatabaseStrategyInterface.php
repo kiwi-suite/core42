@@ -16,4 +16,9 @@ interface DatabaseStrategyInterface
      * @return boolean
      */
     public function isResponsible(\Zend\Db\Metadata\Object\ColumnObject $column);
+
+    /**
+     * @return string
+     */
+    public function getName();
 }

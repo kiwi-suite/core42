@@ -12,7 +12,7 @@ namespace Core42\Hydrator\Strategy\Database\MySQL;
 use Core42\Hydrator\Strategy\Database\DatabaseStrategyInterface;
 use Zend\Hydrator\Strategy\StrategyInterface;
 
-class DatetimeStrategy implements StrategyInterface, DatabaseStrategyInterface
+class DateTimeStrategy implements StrategyInterface, DatabaseStrategyInterface
 {
     /**
      * Converts the given value so that it can be extracted by the hydrator.
@@ -49,5 +49,13 @@ class DatetimeStrategy implements StrategyInterface, DatabaseStrategyInterface
     public function isResponsible(\Zend\Db\Metadata\Object\ColumnObject $column)
     {
         return (in_array($column->getDataType(), ['datetime', 'timestamp']));
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return 'DateTime';
     }
 }
