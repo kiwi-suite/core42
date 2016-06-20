@@ -76,6 +76,16 @@ return [
             ]
         ],
 
+        'generate-module' => [
+            'route'                     => 'generate-module --name=',
+            'command-name'              => 'Core42\CodeGenerator\GenerateModule',
+            'description'               => 'generates a module skeleton directory structure',
+            'short_description'         => 'generate a module',
+            'options_descriptions'      => [
+                '--name'                => 'Name of the module in CamelCase (Namespace)',
+            ]
+        ],
+
         'clear-app-cache' => [
             'route'                     => 'clear-app-cache',
             'command-name'              => 'Core42\Cache\ClearAppCache',
