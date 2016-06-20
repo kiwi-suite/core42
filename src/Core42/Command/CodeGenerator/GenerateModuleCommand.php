@@ -67,7 +67,7 @@ return [
 ];
 
 EOT
-);
+        );
 
         file_put_contents(
             $moduleDirectory . '/src/'.$this->name.'/Module.php',
