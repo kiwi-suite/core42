@@ -52,7 +52,9 @@ class GenerateModuleCommand extends AbstractCommand
         mkdir($moduleDirectory . '/src');
         mkdir($moduleDirectory . '/src/' . $this->name);
 
-        file_put_contents($moduleDirectory . '/config/module.config.php', <<<EOT
+        file_put_contents(
+            $moduleDirectory . '/config/module.config.php',
+            <<<EOT
 <?php
 namespace {$this->name};
 
@@ -67,7 +69,9 @@ return [
 EOT
 );
 
-        file_put_contents($moduleDirectory . '/src/'.$this->name.'/Module.php', <<<EOT
+        file_put_contents(
+            $moduleDirectory . '/src/'.$this->name.'/Module.php',
+            <<<EOT
 <?php
 namespace {$this->name};
 
