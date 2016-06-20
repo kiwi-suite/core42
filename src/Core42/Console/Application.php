@@ -9,54 +9,41 @@
 
 namespace Core42\Console;
 
-use Zend\Console\ColorInterface as Color;
+use Zend\Console\Adapter\AdapterInterface;
+use ZF\Console\Dispatcher;
+use ZF\Console\RouteCollection;
 
 class Application extends \ZF\Console\Application
 {
     /**
+     * Application constructor.
      * @param string $name
+     * @param string $version
+     * @param array|\Traversable $routes
+     * @param AdapterInterface $console
+     * @param Dispatcher $dispatcher
      */
-    public function showUsageMessage($name = null)
+    public function __construct($name, $version, $routes, AdapterInterface $console, Dispatcher $dispatcher)
     {
-        $console = $this->console;
-
-        if ($name === null) {
-            $console->writeLine('Available commands:', Color::GREEN);
-            $console->writeLine('');
-        }
-
-        foreach ($this->routeCollection as $route) {
-            if ($name === $route->getName()) {
-                $this->showUsageMessageForRoute($route);
-                return;
-            }
-
-            if ($name !== null) {
-                continue;
-            }
-
-            $routeName = $route->getName();
-            $console->write(' ' . $routeName, Color::GREEN);
-            $console->writeLine(str_repeat(" ", max(0, 30 - strlen($routeName))) . $route->getShortDescription());
-        }
-
-        if ($name) {
-            $this->showUnrecognizedRouteMessage($name);
-            return;
-        }
+        parent::__construct($name, $version, $routes, $console, $dispatcher);
+        $this->banner = null;
     }
 
     /**
-     * @see setProcessTitle()
+     * @param RouteCollection $routeCollection
+     * @param Dispatcher $dispatcher
      */
-    protected function setProcessTitle()
+    protected function setupAutocompleteCommand(RouteCollection $routeCollection, Dispatcher $dispatcher)
     {
-        // Mac OS X does not support cli_set_process_title() due to security issues
-        // Bug fix for issue https://github.com/zfcampus/zf-console/issues/21
-        if (PHP_OS == 'Darwin') {
-            return;
-        }
 
-        parent::setProcessTitle();
+    }
+
+    /**
+     * @param RouteCollection $routeCollection
+     * @param Dispatcher $dispatcher
+     */
+    protected function setupVersionCommand(RouteCollection $routeCollection, Dispatcher $dispatcher)
+    {
+
     }
 }
