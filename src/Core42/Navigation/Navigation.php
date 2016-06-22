@@ -290,19 +290,24 @@ class Navigation
 
             if ($page->getOption('route') == $name) {
                 $active = true;
-                /*
-                $reqParams = array_merge($this->getRouteMatch()->getParams(), $_GET);
-                $pageParams = array_merge(
-                    $page->getOption('params') ? $page->getOption('params') : array(),
-                    $page->getOption('query_params') ? $page->getOption('query_params') : array()
-                );
-                $ignoreParams = array_merge(
-                    array('__CONTROLLER__', '__NAMESPACE__', 'controller', 'action'),
-                    $page->getOption('ignore_params') ? $page->getOption('ignore_params') : array()
-                );
+                $pageParams = $page->getOption("params", []);
 
-                $active = $this->paramsAreEqual($pageParams, $reqParams, $ignoreParams);
-                */
+                if (!empty($pageParams)) {
+                    $reqParams = $this->getRouteMatch()->getParams();
+                    
+                    if (!empty($reqParams['controller'])) {
+                        unset($reqParams['controller']);
+                    }
+
+                    if (!empty($reqParams['action'])) {
+                        unset($reqParams['action']);
+                    }
+
+                    if (!empty($reqParams)) {
+                        $diff = array_diff($reqParams, $pageParams);
+                        $active = (empty($diff));
+                    }
+                }
             } elseif ($this->getIsActiveRecursion()) {
                 $iterator = new \RecursiveIteratorIterator($page, \RecursiveIteratorIterator::CHILD_FIRST);
 
@@ -400,25 +405,5 @@ class Navigation
     public function getIsActiveRecursion()
     {
         return $this->isActiveRecursion;
-    }
-
-    /**
-     * @param $pageParams
-     * @param $requiredParams
-     * @param $ignoreParams
-     * @return bool
-     */
-    protected function paramsAreEqual($pageParams, $requiredParams, $ignoreParams)
-    {
-        foreach ($ignoreParams as $unsetKey) {
-            if (isset($requiredParams[$unsetKey])) {
-                unset($requiredParams[$unsetKey]);
-            }
-        }
-        var_dump($pageParams);
-        var_dump($requiredParams);
-        $diff = array_diff($requiredParams, $pageParams);
-
-        return empty($diff);
     }
 }
