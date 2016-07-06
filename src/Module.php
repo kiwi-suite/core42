@@ -57,13 +57,15 @@ class Module implements
         }
         $e->getApplication()->getServiceManager()->get('Zend\Session\Service\SessionManager');
 
-        $e->getTarget()->getEventManager()->attach(
-            $e->getApplication()->getServiceManager()->get(RedirectStrategy::class)
-        );
+        $e->getApplication()
+            ->getServiceManager()
+            ->get(RedirectStrategy::class)
+            ->attach($e->getTarget()->getEventManager());
 
-        $e->getTarget()->getEventManager()->attach(
-            $e->getApplication()->getServiceManager()->get(UnauthorizedStrategy::class)
-        );
+        $e->getApplication()
+            ->getServiceManager()
+            ->get(UnauthorizedStrategy::class)
+            ->attach($e->getTarget()->getEventManager());
     }
 
     /**
