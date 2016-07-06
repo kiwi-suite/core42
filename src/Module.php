@@ -29,20 +29,20 @@ class Module implements
     public function getConfig()
     {
         return array_merge(
-            include __DIR__ . '/../../config/module.config.php',
-            include __DIR__ . '/../../config/service.config.php',
-            include __DIR__ . '/../../config/database.config.php',
-            include __DIR__ . '/../../config/session.config.php',
-            include __DIR__ . '/../../config/log.config.php',
-            include __DIR__ . '/../../config/mail.config.php',
-            include __DIR__ . '/../../config/caches.config.php',
-            include __DIR__ . '/../../config/cli.config.php',
-            include __DIR__ . '/../../config/migration.config.php',
-            include __DIR__ . '/../../config/assets.config.php',
-            include __DIR__ . '/../../config/permissions.config.php',
-            include __DIR__ . '/../../config/form.config.php',
-            include __DIR__ . '/../../config/i18n.config.php',
-            include __DIR__ . '/../../config/cron.config.php'
+            include __DIR__ . '/../config/module.config.php',
+            include __DIR__ . '/../config/service.config.php',
+            include __DIR__ . '/../config/database.config.php',
+            include __DIR__ . '/../config/session.config.php',
+            include __DIR__ . '/../config/log.config.php',
+            include __DIR__ . '/../config/mail.config.php',
+            include __DIR__ . '/../config/caches.config.php',
+            include __DIR__ . '/../config/cli.config.php',
+            include __DIR__ . '/../config/migration.config.php',
+            include __DIR__ . '/../config/assets.config.php',
+            include __DIR__ . '/../config/permissions.config.php',
+            include __DIR__ . '/../config/form.config.php',
+            include __DIR__ . '/../config/i18n.config.php',
+            include __DIR__ . '/../config/cron.config.php'
         );
     }
 
