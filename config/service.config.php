@@ -5,7 +5,7 @@ use Core42\Command\Console\ConsoleDispatcher;
 use Core42\Command\Console\Service\ConsoleDispatcherFactory;
 use Core42\Command\Service\CommandPluginManager;
 use Core42\Command\Service\CommandPluginManagerFactory;
-use Core42\Db\Adapter\Profiler\LoggingProfiler;
+use Core42\Db\Adapter\Service\AdapterFactory;
 use Core42\Db\TableGateway\Service\TableGatewayPluginManager;
 use Core42\Db\TableGateway\Service\TableGatewayPluginManagerFactory;
 use Core42\Db\Transaction\Service\TransactionManagerFactory;
@@ -52,7 +52,6 @@ return [
     'service_manager' => [
         'abstract_factories' => [
             'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
-            'Core42\Db\Adapter\AdapterAbstractServiceFactory',
             'Zend\Log\LoggerAbstractServiceFactory',
         ],
         'factories' => [
@@ -79,7 +78,6 @@ return [
 
             Localization::class                             => LocalizationFactory::class,
 
-            LoggingProfiler::class                          => InvokableFactory::class,
             ConsoleDispatcher::class                        => ConsoleDispatcherFactory::class,
             TransactionManager::class                       => TransactionManagerFactory::class,
 
@@ -92,6 +90,8 @@ return [
             'Zend\Session\Service\SessionManager'           => SessionManagerFactory::class,
             'Zend\Session\Config\ConfigInterface'           => SessionConfigFactory::class,
             'Zend\Session\Storage\StorageInterface'         => StorageFactory::class,
+
+            'Db\Master'                                     => AdapterFactory::class,
         ],
         'aliases' => [
             'Localization'                                  => Localization::class,
