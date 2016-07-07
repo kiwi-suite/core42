@@ -16,6 +16,7 @@ use Core42\Db\TableGateway\AbstractTableGateway;
 use Core42\Selector\SelectorInterface;
 use Zend\Form\Form;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\ServiceManager;
 
 /**
  * Class AbstractActionController
@@ -26,24 +27,39 @@ use Zend\ServiceManager\ServiceLocatorInterface;
 class AbstractActionController extends \Zend\Mvc\Controller\AbstractActionController
 {
     /**
+     * @var ServiceManager
+     */
+    protected $serviceManager;
+
+    /**
+     * AbstractActionController constructor.
+     * @param ServiceManager $serviceManager
+     */
+    public function __construct(ServiceManager $serviceManager)
+    {
+        $this->serviceManager = $serviceManager;
+    }
+
+    /**
      * @var ServiceLocatorInterface
      */
     protected $serviceLocator;
 
     /**
-     * @param ServiceLocatorInterface $serviceLocator
+     * @return ServiceManager
      */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    public function getServiceManager()
     {
-        $this->serviceLocator = $serviceLocator;
+        return $this->serviceManager;
     }
 
     /**
+     * @deprecated
      * @return ServiceLocatorInterface
      */
     public function getServiceLocator()
     {
-        return $this->serviceLocator;
+        return $this->getServiceManager();
     }
 
     /**
@@ -52,7 +68,7 @@ class AbstractActionController extends \Zend\Mvc\Controller\AbstractActionContro
      */
     public function getCommand($commandName)
     {
-        return $this->getServiceLocator()->get('Command')->get($commandName);
+        return $this->getServiceManager()->get('Command')->get($commandName);
     }
 
     /**
@@ -61,7 +77,7 @@ class AbstractActionController extends \Zend\Mvc\Controller\AbstractActionContro
      */
     public function getForm($formName)
     {
-        return $this->getServiceLocator()->get("Form")->get($formName);
+        return $this->getServiceManager()->get("Form")->get($formName);
     }
 
     /**
@@ -70,7 +86,7 @@ class AbstractActionController extends \Zend\Mvc\Controller\AbstractActionContro
      */
     public function getSelector($selectorName)
     {
-        return $this->getServiceLocator()->get('Selector')->get($selectorName);
+        return $this->getServiceManager()->get('Selector')->get($selectorName);
     }
 
     /**
@@ -79,7 +95,7 @@ class AbstractActionController extends \Zend\Mvc\Controller\AbstractActionContro
      */
     public function getTableGateway($tableGatewayName)
     {
-        return $this->getServiceLocator()->get('TableGateway')->get($tableGatewayName);
+        return $this->getServiceManager()->get('TableGateway')->get($tableGatewayName);
     }
 
     /**

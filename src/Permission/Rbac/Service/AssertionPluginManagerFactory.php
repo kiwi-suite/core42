@@ -11,9 +11,7 @@ namespace Core42\Permission\Rbac\Service;
 
 use Core42\Permission\Rbac\Assertion\AssertionPluginManager;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Config;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 class AssertionPluginManagerFactory implements FactoryInterface
 {
@@ -28,18 +26,8 @@ class AssertionPluginManagerFactory implements FactoryInterface
         $config = $container->get('config');
         $config = $config['permissions']['assertion_manager'];
 
-        $pluginManager = new AssertionPluginManager(new Config($config));
-        $pluginManager->setServiceLocator($container);
+        $pluginManager = new AssertionPluginManager($container, $config);
 
         return $pluginManager;
-    }
-
-    /**
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return AssertionPluginManager|mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, AssertionPluginManager::class);
     }
 }

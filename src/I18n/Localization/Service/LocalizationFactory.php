@@ -12,8 +12,7 @@ namespace Core42\I18n\Localization\Service;
 use Core42\I18n\Localization\Localization;
 use Interop\Container\ContainerInterface;
 use Zend\Http\PhpEnvironment\Request;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 class LocalizationFactory implements FactoryInterface
 {
@@ -31,16 +30,5 @@ class LocalizationFactory implements FactoryInterface
         $header = ($request instanceof Request) ? $request->getHeader("HTTP_ACCEPT_LANGUAGE", "") : '';
 
         return new Localization($header, $config);
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, Localization::class);
     }
 }

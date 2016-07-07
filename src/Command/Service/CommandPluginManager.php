@@ -16,36 +16,26 @@ use Zend\ServiceManager\ConfigInterface;
 class CommandPluginManager extends AbstractPluginManager
 {
     /**
-     * @param ConfigInterface $configuration
+     * @var string
      */
-    public function __construct(ConfigInterface $configuration = null)
-    {
-        $this->setShareByDefault(false);
-
-        parent::__construct($configuration);
-
-        $this->addAbstractFactory(new CommandFallbackAbstractFactory(), false);
-    }
+    protected $instanceOf = CommandInterface::class;
 
     /**
-     * Validate the plugin
+     * Should the services be shared by default?
      *
-     * Checks that the filter loaded is either a valid callback or an instance
-     * of FilterInterface.
-     *
-     * @param  mixed $plugin
-     * @throws \RuntimeException
-     * @return void
+     * @var bool
      */
-    public function validatePlugin($plugin)
-    {
-        if ($plugin instanceof CommandInterface) {
-            return;
-        }
+    protected $sharedByDefault = false;
 
-        throw new \RuntimeException(sprintf(
-            "Plugin of type %s is invalid; must implement \\Core42\\Command\\CommandInterface",
-            (is_object($plugin) ? get_class($plugin) : gettype($plugin))
-        ));
+    /**
+     * CommandPluginManager constructor.
+     * @param \Interop\Container\ContainerInterface|null|ConfigInterface $configInstanceOrParentLocator
+     * @param array $config
+     */
+    public function __construct($configInstanceOrParentLocator, array $config)
+    {
+        $this->addAbstractFactory(new CommandFallbackAbstractFactory());
+
+        parent::__construct($configInstanceOrParentLocator, $config);
     }
 }

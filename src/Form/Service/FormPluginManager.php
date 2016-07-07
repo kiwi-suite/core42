@@ -16,40 +16,26 @@ use Zend\ServiceManager\ConfigInterface;
 class FormPluginManager extends AbstractPluginManager
 {
     /**
-     * @param ConfigInterface $configuration
+     * @var string
      */
-    public function __construct(ConfigInterface $configuration = null)
-    {
-        $this->setShareByDefault(false);
-
-        parent::__construct($configuration);
-        $this->addInitializer(function ($instance) {
-            if (method_exists($instance, 'init')) {
-                $instance->init();
-            }
-        }, false);
-        $this->addAbstractFactory(new FormFallbackAbstractFactory(), false);
-    }
+    protected $instanceOf = FormInterface::class;
 
     /**
-     * Validate the plugin
+     * Should the services be shared by default?
      *
-     * Checks that the filter loaded is either a valid callback or an instance
-     * of FilterInterface.
-     *
-     * @param  mixed $plugin
-     * @return void
-     * @throws \RuntimeException if invalid
+     * @var bool
      */
-    public function validatePlugin($plugin)
-    {
-        if ($plugin instanceof FormInterface) {
-            return;
-        }
+    protected $sharedByDefault = false;
 
-        throw new \RuntimeException(sprintf(
-            "Plugin of type %s is invalid; must implement Zend\\Form\\FormInterface",
-            (is_object($plugin) ? get_class($plugin) : gettype($plugin))
-        ));
+    /**
+     * FormPluginManager constructor.
+     * @param \Interop\Container\ContainerInterface|null|ConfigInterface $configInstanceOrParentLocator
+     * @param array $config
+     */
+    public function __construct($configInstanceOrParentLocator, array $config)
+    {
+        $this->addAbstractFactory(new FormFallbackAbstractFactory());
+
+        parent::__construct($configInstanceOrParentLocator, $config);
     }
 }

@@ -15,8 +15,8 @@ use Core42\Navigation\Provider\ArrayProvider;
 use Zend\EventManager\EventManager;
 use Zend\EventManager\EventManagerInterface;
 use Zend\Mvc\ModuleRouteListener;
-use Zend\Mvc\Router\RouteMatch;
-use Zend\Mvc\Router\RouteStackInterface;
+use Zend\Router\RouteMatch;
+use Zend\Router\RouteStackInterface;
 use Zend\ServiceManager\ServiceManager;
 
 class Navigation
@@ -118,10 +118,11 @@ class Navigation
     public function isAllowed(Page $page)
     {
         $event = new NavigationEvent();
+        $event->setName(self::EVENT_IS_ALLOWED);
         $event->setNavigation($this)
             ->setTarget($page);
 
-        $results = $this->getEventManager($page->getContainerName())->trigger(self::EVENT_IS_ALLOWED, $event);
+        $results = $this->getEventManager($page->getContainerName())->triggerEvent($event);
         $result  = $results->last();
 
         return null === $result ? true : (bool) $results->last();
@@ -146,7 +147,7 @@ class Navigation
     }
 
     /**
-     * @param \Zend\Mvc\Router\RouteStackInterface $router
+     * @param \Zend\Router\RouteStackInterface $router
      * @return $this
      */
     public function setRouter($router)
@@ -156,7 +157,7 @@ class Navigation
     }
 
     /**
-     * @return \Zend\Mvc\Router\RouteStackInterface
+     * @return \Zend\Router\RouteStackInterface
      */
     public function getRouter()
     {

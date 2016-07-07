@@ -12,8 +12,7 @@ namespace Core42\Db\Metadata\Service;
 use Core42\Db\Metadata\CacheMetadata;
 use Core42\Db\Metadata\Metadata;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 class MetadataServiceFactory implements FactoryInterface
 {
@@ -44,16 +43,5 @@ class MetadataServiceFactory implements FactoryInterface
         }
 
         return new Metadata($adapter);
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, Metadata::class);
     }
 }

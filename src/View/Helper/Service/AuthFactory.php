@@ -9,20 +9,20 @@
 
 namespace Core42\View\Helper\Service;
 
-use Core42\View\Helper\Permission;
+use Core42\View\Helper\Auth;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
-class PermissionFactory implements FactoryInterface
+class AuthFactory implements FactoryInterface
 {
     /**
      * @param ContainerInterface $container
      * @param $requestedName
      * @param array|null $options
-     * @return Permission
+     * @return Auth
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        return new Permission($container->get('Permission'));
+        return new Auth($container);
     }
 }

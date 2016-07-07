@@ -14,26 +14,8 @@ use Zend\ServiceManager\Exception;
 
 class RoleProviderPluginManager extends AbstractPluginManager
 {
-
     /**
-     * Validate the plugin
-     *
-     * Checks that the filter loaded is either a valid callback or an instance
-     * of FilterInterface.
-     *
-     * @param  mixed $plugin
-     * @return void
-     * @throws \Exception if invalid
+     * @var string
      */
-    public function validatePlugin($plugin)
-    {
-        if ($plugin instanceof RoleProviderInterface) {
-            return;
-        }
-
-        throw new \Exception(sprintf(
-            'Role provider must implement "Core42\Permission\Rbac\Role\RoleProviderInterface", but "%s" was given',
-            is_object($plugin) ? get_class($plugin) : gettype($plugin)
-        ));
-    }
+    protected $instanceOf = RoleProviderInterface::class;
 }

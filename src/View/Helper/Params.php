@@ -9,44 +9,32 @@
 
 namespace Core42\View\Helper;
 
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
-use Zend\ServiceManager\ServiceManager;
+use Zend\Http\PhpEnvironment\Request;
+use Zend\Router\Http\RouteMatch;
 use Zend\View\Helper\AbstractHelper;
 
-class Params extends AbstractHelper implements ServiceLocatorAwareInterface
+class Params extends AbstractHelper
 {
     /**
-     * @var ServiceLocatorInterface
+     * @var Request
      */
-    private $serviceLocator;
+    protected $request;
 
     /**
-     * Set service locator
-     *
-     * @param ServiceLocatorInterface $serviceLocator
+     * @var RouteMatch
      */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
-    {
-        $this->serviceLocator = $serviceLocator;
-    }
+    protected $routeMatch;
 
     /**
-     * Get service locator
-     *
-     * @return ServiceLocatorInterface
+     * Params constructor.
+     * @param Request $request
+     * @param RouteMatch $routeMatch
      */
-    public function getServiceLocator()
+    public function __construct(Request $request, RouteMatch $routeMatch)
     {
-        return $this->serviceLocator;
-    }
+        $this->request = $request;
 
-    /**
-     * @return ServiceManager
-     */
-    public function getServiceManager()
-    {
-        return $this->getServiceLocator()->getServiceLocator();
+        $this->routeMatch = $routeMatch;
     }
 
     /**
@@ -73,10 +61,10 @@ class Params extends AbstractHelper implements ServiceLocatorAwareInterface
     public function fromFiles($name = null, $default = null)
     {
         if ($name === null) {
-            return $this->getServiceManager()->get('Request')->getFiles($name, $default)->toArray();
+            return $this->request->getFiles($name, $default)->toArray();
         }
 
-        return $this->getServiceManager()->get('Request')->getFiles($name, $default);
+        return $this->request->getFiles($name, $default);
     }
 
     /**
@@ -88,10 +76,10 @@ class Params extends AbstractHelper implements ServiceLocatorAwareInterface
     public function fromHeader($header = null, $default = null)
     {
         if ($header === null) {
-            return $this->getServiceManager()->get('Request')->getHeaders($header, $default)->toArray();
+            return $this->request->getHeaders($header, $default)->toArray();
         }
 
-        return $this->getServiceManager()->get('Request')->getHeaders($header, $default);
+        return $this->request->getHeaders($header, $default);
     }
 
     /**
@@ -103,10 +91,10 @@ class Params extends AbstractHelper implements ServiceLocatorAwareInterface
     public function fromPost($param = null, $default = null)
     {
         if ($param === null) {
-            return $this->getServiceManager()->get('Request')->getPost($param, $default)->toArray();
+            return $this->request->getPost($param, $default)->toArray();
         }
 
-        return $this->getServiceManager()->get('Request')->getPost($param, $default);
+        return $this->request->getPost($param, $default);
     }
 
     /**
@@ -118,10 +106,10 @@ class Params extends AbstractHelper implements ServiceLocatorAwareInterface
     public function fromQuery($param = null, $default = null)
     {
         if ($param === null) {
-            return $this->getServiceManager()->get('Request')->getQuery($param, $default)->toArray();
+            return $this->request->getQuery($param, $default)->toArray();
         }
 
-        return $this->getServiceManager()->get('Request')->getQuery($param, $default);
+        return $this->request->getQuery($param, $default);
     }
 
     /**
@@ -132,14 +120,13 @@ class Params extends AbstractHelper implements ServiceLocatorAwareInterface
      */
     public function fromRoute($param = null, $default = null)
     {
-        $routeMatch = $this->getServiceManager()->get("Application")->getMvcEvent()->getRouteMatch();
-        if (empty($routeMatch)) {
+        if (empty($this->routeMatch)) {
             return "";
         }
         if ($param === null) {
-            return $routeMatch->getParams();
+            return $this->routeMatch->getParams();
         }
 
-        return $routeMatch->getParam($param, $default);
+        return $this->routeMatch->getParam($param, $default);
     }
 }

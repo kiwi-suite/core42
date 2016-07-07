@@ -11,8 +11,7 @@ namespace Core42\Command\Console\Service;
 
 use Core42\Command\Console\ConsoleDispatcher;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 class ConsoleDispatcherFactory implements FactoryInterface
 {
@@ -29,16 +28,5 @@ class ConsoleDispatcherFactory implements FactoryInterface
         $dispatcher->setServiceManager($container);
 
         return $dispatcher;
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, ConsoleDispatcher::class);
     }
 }

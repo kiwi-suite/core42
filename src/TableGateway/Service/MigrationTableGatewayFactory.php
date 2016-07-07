@@ -9,12 +9,10 @@
 
 namespace Core42\TableGateway\Service;
 
-use Core42\Db\Metadata\Metadata;
 use Core42\Hydrator\Strategy\Service\HydratorStrategyPluginManager;
 use Core42\TableGateway\MigrationTableGateway;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 class MigrationTableGatewayFactory implements FactoryInterface
 {
@@ -26,16 +24,15 @@ class MigrationTableGatewayFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $adapter = $container->getServiceLocator()->get('Db\Master');
+        $adapter = $container->get('Db\Master');
         $slave = null;
-        if ($container->getServiceLocator()->has('Db\Slave')) {
-            $slave = $container->getServiceLocator()->get('Db\Slave');
+        if ($container->has('Db\Slave')) {
+            $slave = $container->get('Db\Slave');
         }
 
-        $sm = $container->getServiceLocator();
-        $hydratorStrategyPluginManager = $sm->get(HydratorStrategyPluginManager::class);
+        $hydratorStrategyPluginManager = $container->get(HydratorStrategyPluginManager::class);
 
-        $config = $container->getServiceLocator()->get('config');
+        $config = $container->get('config');
         $config = $config['migration'];
 
         $gateway = new MigrationTableGateway(
@@ -48,16 +45,5 @@ class MigrationTableGatewayFactory implements FactoryInterface
         $gateway->initialize();
 
         return $gateway;
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, 'Core42\Migration');
     }
 }

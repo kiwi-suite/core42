@@ -3,8 +3,7 @@ namespace Core42\Db\Transaction\Service;
 
 use Core42\Db\Transaction\TransactionManager;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 class TransactionManagerFactory implements FactoryInterface
 {
@@ -25,15 +24,5 @@ class TransactionManagerFactory implements FactoryInterface
         }
 
         return new TransactionManager($adapters);
-    }
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, TransactionManager::class);
     }
 }

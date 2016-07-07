@@ -11,9 +11,7 @@ namespace Core42\Permission\Rbac\Service;
 
 use Core42\Permission\Rbac\Role\RoleProviderPluginManager;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Config;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 class RoleProviderPluginManagerFactory implements FactoryInterface
 {
@@ -27,20 +25,8 @@ class RoleProviderPluginManagerFactory implements FactoryInterface
     {
         $config = $container->get('config');
         $config = $config['permissions']['role_provider_manager'];
-        $pluginManager = new RoleProviderPluginManager(new Config($config));
-        $pluginManager->setServiceLocator($container);
+        $pluginManager = new RoleProviderPluginManager($container, $config);
 
         return $pluginManager;
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, RoleProviderPluginManager::class);
     }
 }

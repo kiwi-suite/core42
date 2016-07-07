@@ -12,10 +12,9 @@ namespace Core42\View\Helper;
 use Zend\Authentication\AuthenticationServiceInterface;
 use Zend\Form\View\Helper\AbstractHelper;
 use Zend\ServiceManager\Exception;
-use Zend\ServiceManager\ServiceLocatorAwareInterface;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class Auth extends AbstractHelper implements ServiceLocatorAwareInterface
+class Auth extends AbstractHelper
 {
     /**
      * @var string
@@ -28,24 +27,12 @@ class Auth extends AbstractHelper implements ServiceLocatorAwareInterface
     private $serviceLocator;
 
     /**
-     * Set service locator
-     *
+     * Auth constructor.
      * @param ServiceLocatorInterface $serviceLocator
      */
-    public function setServiceLocator(ServiceLocatorInterface $serviceLocator)
+    public function __construct(ServiceLocatorInterface $serviceLocator)
     {
         $this->serviceLocator = $serviceLocator;
-    }
-
-    /**
-     * Get service locator
-     *
-     * @return null
-     * @throws \Exception
-     */
-    public function getServiceLocator()
-    {
-        throw new \Exception("I don't want this?!?!?!");
     }
 
     /**
@@ -87,7 +74,7 @@ class Auth extends AbstractHelper implements ServiceLocatorAwareInterface
             throw new \Exception("authServiceName not set");
         }
 
-        $authService = $this->serviceLocator->getServiceLocator()->get($this->authServiceName);
+        $authService = $this->serviceLocator->get($this->authServiceName);
 
         if (!($authService instanceof AuthenticationServiceInterface)) {
             throw new \Exception("invalid AuthenticationService");

@@ -12,8 +12,7 @@ namespace Core42\Mail\Transport\Service;
 use Interop\Container\ContainerInterface;
 use Zend\Mail\Transport\Factory;
 use Zend\Mail\Transport\TransportInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 class TransportFactory implements FactoryInterface
 {
@@ -29,17 +28,6 @@ class TransportFactory implements FactoryInterface
         $config = $this->getConfig($container);
 
         return Factory::create($config);
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, TransportInterface::class);
     }
 
     /**

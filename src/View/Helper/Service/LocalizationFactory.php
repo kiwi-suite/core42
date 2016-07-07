@@ -11,8 +11,7 @@ namespace Core42\View\Helper\Service;
 
 use Core42\View\Helper\Localization;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 class LocalizationFactory implements FactoryInterface
 {
@@ -24,17 +23,6 @@ class LocalizationFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        return new Localization($container->getServiceLocator()->get('Localization'));
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return mixed
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, "localization");
+        return new Localization($container->get(\Core42\I18n\Localization\Localization::class));
     }
 }

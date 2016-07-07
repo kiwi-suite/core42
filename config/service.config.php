@@ -94,9 +94,6 @@ return [
             'Zend\Session\Config\ConfigInterface'           => SessionConfigFactory::class,
             'Zend\Session\Storage\StorageInterface'         => StorageFactory::class,
         ],
-        'invokables' => [
-
-        ],
         'aliases' => [
             'Localization'                                  => Localization::class,
             'Permission'                                    => RbacManager::class,

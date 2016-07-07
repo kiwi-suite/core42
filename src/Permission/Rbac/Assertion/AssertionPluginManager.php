@@ -13,19 +13,9 @@ use Zend\ServiceManager\AbstractPluginManager;
 
 class AssertionPluginManager extends AbstractPluginManager
 {
-    /**
-     * @param mixed $plugin
-     * @throws \Exception
-     */
-    public function validatePlugin($plugin)
-    {
-        if ($plugin instanceof AssertionInterface) {
-            return;
-        }
 
-        throw new \Exception(sprintf(
-            'Assertions must implement "Core42\Permission\Rbac\Assertion\AssertionInterface", but "%s" was given',
-            is_object($plugin) ? get_class($plugin) : gettype($plugin)
-        ));
-    }
+    /**
+     * @var string
+     */
+    protected $instanceOf = AssertionInterface::class;
 }

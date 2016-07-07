@@ -11,8 +11,7 @@ namespace Core42\Navigation\Service;
 
 use Core42\Navigation\Options\NavigationOptions;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 class NavigationOptionsFactory implements FactoryInterface
 {
@@ -31,16 +30,5 @@ class NavigationOptionsFactory implements FactoryInterface
         }
 
         return new NavigationOptions($config['navigation']);
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return NavigationOptions
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, NavigationOptions::class);
     }
 }

@@ -11,8 +11,7 @@ namespace Core42\Permission\Rbac\Service;
 
 use Core42\Permission\Rbac\RbacManager;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 class RbacManagerFactory implements FactoryInterface
 {
@@ -28,15 +27,5 @@ class RbacManagerFactory implements FactoryInterface
         $config = $config['permissions'];
 
         return new RbacManager($container, $config);
-    }
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return RbacManager
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, RbacManager::class);
     }
 }

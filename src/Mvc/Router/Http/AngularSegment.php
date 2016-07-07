@@ -9,7 +9,7 @@
 
 namespace Core42\Mvc\Router\Http;
 
-use Zend\Mvc\Router\Http\Segment;
+use Zend\Router\Http\Segment;
 
 class AngularSegment extends Segment
 {

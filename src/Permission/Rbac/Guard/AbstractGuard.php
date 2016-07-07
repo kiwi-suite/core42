@@ -44,7 +44,7 @@ abstract class AbstractGuard extends AbstractListenerAggregate implements GuardI
     /**
      * @param EventManagerInterface $events
      */
-    public function attach(EventManagerInterface $events)
+    public function attach(EventManagerInterface $events,  $priority = 1)
     {
         $this->listeners[] = $events->attach(static::EVENT_NAME, [$this, 'onResult'], static::EVENT_PRIORITY);
     }
@@ -83,6 +83,7 @@ abstract class AbstractGuard extends AbstractListenerAggregate implements GuardI
             return;
         }
 
+        $event->setName(MvcEvent::EVENT_DISPATCH_ERROR);
         $event->setError(self::GUARD_UNAUTHORIZED);
         $event->setParam('exception', new UnauthorizedException(
             $this->authorizationService->getName(),
@@ -95,7 +96,7 @@ abstract class AbstractGuard extends AbstractListenerAggregate implements GuardI
         $application  = $event->getApplication();
         $eventManager = $application->getEventManager();
 
-        $eventManager->trigger(MvcEvent::EVENT_DISPATCH_ERROR, $event);
+        $eventManager->triggerEvent($event);
     }
 
     /**

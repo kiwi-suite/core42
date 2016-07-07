@@ -18,36 +18,26 @@ class SelectorPluginManager extends AbstractPluginManager
 {
 
     /**
-     * @param ConfigInterface $configuration
+     * @var string
      */
-    public function __construct(ConfigInterface $configuration = null)
-    {
-        $this->setShareByDefault(false);
-
-        $this->addAbstractFactory(new SelectorFallbackAbstractFactory(), false);
-
-        parent::__construct($configuration);
-    }
+    protected $instanceOf = SelectorInterface::class;
 
     /**
-     * Validate the plugin
+     * Should the services be shared by default?
      *
-     * Checks that the filter loaded is either a valid callback or an instance
-     * of FilterInterface.
-     *
-     * @param  mixed $plugin
-     * @throws \RuntimeException
-     * @return void
+     * @var bool
      */
-    public function validatePlugin($plugin)
-    {
-        if ($plugin instanceof SelectorInterface) {
-            return;
-        }
+    protected $sharedByDefault = false;
 
-        throw new \RuntimeException(sprintf(
-            "Plugin of type %s is invalid; must implement \\Core42\\Selector\\SelectorInterface",
-            (is_object($plugin) ? get_class($plugin) : gettype($plugin))
-        ));
+    /**
+     * SelectorPluginManager constructor.
+     * @param \Interop\Container\ContainerInterface|null|ConfigInterface $configInstanceOrParentLocator
+     * @param array $config
+     */
+    public function __construct($configInstanceOrParentLocator, array $config)
+    {
+        $this->addAbstractFactory(new SelectorFallbackAbstractFactory());
+
+        parent::__construct($configInstanceOrParentLocator, $config);
     }
 }

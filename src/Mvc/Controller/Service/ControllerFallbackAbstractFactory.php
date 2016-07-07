@@ -23,6 +23,10 @@ class ControllerFallbackAbstractFactory implements AbstractFactoryInterface
      */
     protected function getFQCN($name)
     {
+        if (class_exists($name)) {
+            return $name;
+        }
+        
         if (strpos($name, '\\') === false) {
             return false;
         }
@@ -65,6 +69,6 @@ class ControllerFallbackAbstractFactory implements AbstractFactoryInterface
     {
         $fqcn = $this->getFQCN($requestedName);
 
-        return new $fqcn();
+        return new $fqcn($container);
     }
 }

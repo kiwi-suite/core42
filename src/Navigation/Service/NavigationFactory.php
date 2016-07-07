@@ -13,8 +13,7 @@ use Core42\Navigation\Navigation;
 use Core42\Navigation\Options\NavigationOptions;
 use Interop\Container\ContainerInterface;
 use Zend\EventManager\ListenerAggregateInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 class NavigationFactory implements FactoryInterface
 {
@@ -44,7 +43,7 @@ class NavigationFactory implements FactoryInterface
                 /* @var ListenerAggregateInterface $listener */
 
                 if (is_numeric($priority)) {
-                    $navigation->getEventManager($navName)->attachAggregate($listener, $priority);
+                    $listener->attach($navigation->getEventManager($navName), $priority);
                 } else {
                     $listener->attach($navigation->getEventManager($navName));
                 }
@@ -59,15 +58,5 @@ class NavigationFactory implements FactoryInterface
         $navigation->setRouter($router);
 
         return $navigation;
-    }
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return Navigation
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, Navigation::class);
     }
 }

@@ -11,8 +11,7 @@ namespace Core42\Mvc\TreeRouteMatcher\Service;
 
 use Core42\Mvc\TreeRouteMatcher\TreeRouteMatcher;
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\FactoryInterface;
-use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 class TreeRouteMatcherFactory implements FactoryInterface
 {
@@ -28,16 +27,5 @@ class TreeRouteMatcherFactory implements FactoryInterface
         $router = $container->get('Router');
 
         return new TreeRouteMatcher($router, $routeMatch);
-    }
-
-    /**
-     * Create service
-     *
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return TreeRouteMatcher
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
-    {
-        return $this($serviceLocator, TreeRouteMatcher::class);
     }
 }

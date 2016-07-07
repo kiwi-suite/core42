@@ -16,27 +16,24 @@ use Zend\ServiceManager\Exception;
 class GuardPluginManager extends AbstractPluginManager
 {
     /**
-     * @param ConfigInterface $configuration
+     * Should the services be shared by default?
+     *
+     * @var bool
      */
-    public function __construct(ConfigInterface $configuration = null)
-    {
-        $this->setShareByDefault(false);
-        parent::__construct($configuration);
-    }
+    protected $sharedByDefault = false;
+
     /**
-     * @param  mixed $plugin
-     * @return void
-     * @throws \Exception if invalid
+     * {@inheritDoc}
      */
-    public function validatePlugin($plugin)
+    public function validate($instance)
     {
-        if ($plugin instanceof GuardInterface) {
+        if ($instance instanceof GuardInterface) {
             return;
         }
 
         throw new \Exception(sprintf(
             'Guard must implement "Core42\Permission\Rbac\Guard\GuardInterface", but "%s" was given',
-            is_object($plugin) ? get_class($plugin) : gettype($plugin)
+            is_object($instance) ? get_class($instance) : gettype($instance)
         ));
     }
 }

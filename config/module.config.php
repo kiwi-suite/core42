@@ -5,7 +5,9 @@ use Core42\View\Helper\Auth;
 use Core42\View\Helper\Navigation\Service\BreadcrumbsFactory;
 use Core42\View\Helper\Navigation\Service\MenuFactory;
 use Core42\View\Helper\Params;
+use Core42\View\Helper\Service\AuthFactory;
 use Core42\View\Helper\Service\LocalizationFactory;
+use Core42\View\Helper\Service\ParamsFactory;
 use Core42\View\Helper\Service\PermissionFactory;
 use Core42\View\Helper\WordTruncate;
 use Zend\ServiceManager\Factory\InvokableFactory;
@@ -13,8 +15,8 @@ use Zend\ServiceManager\Factory\InvokableFactory;
 return [
     'view_helpers' => [
         'factories' => [
-            Params::class           => InvokableFactory::class,
-            Auth::class             => InvokableFactory::class,
+            Params::class           => ParamsFactory::class,
+            Auth::class             => AuthFactory::class,
             WordTruncate::class     => InvokableFactory::class,
             'permission'            => PermissionFactory::class,
             'localization'          => LocalizationFactory::class,

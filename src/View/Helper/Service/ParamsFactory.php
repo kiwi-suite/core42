@@ -9,20 +9,23 @@
 
 namespace Core42\View\Helper\Service;
 
-use Core42\View\Helper\Permission;
+use Core42\View\Helper\Params;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
-class PermissionFactory implements FactoryInterface
+class ParamsFactory implements FactoryInterface
 {
     /**
      * @param ContainerInterface $container
      * @param $requestedName
      * @param array|null $options
-     * @return Permission
+     * @return Params
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        return new Permission($container->get('Permission'));
+        return new Params(
+            $container->get('Request'),
+            $container->get('Application')->getMvcEvent()->getRouteMatch()
+        );
     }
 }

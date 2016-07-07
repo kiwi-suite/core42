@@ -10,6 +10,7 @@
 namespace Core42;
 
 use Core42\Console\Console;
+use Core42\Mvc\Router\Http\AngularSegment;
 use Core42\Permission\Rbac\Strategy\RedirectStrategy;
 use Core42\Permission\Rbac\Strategy\UnauthorizedStrategy;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
@@ -17,6 +18,7 @@ use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\InitProviderInterface;
 use Zend\ModuleManager\ModuleEvent;
 use Zend\ModuleManager\ModuleManagerInterface;
+use Zend\Router\RouteInvokableFactory;
 
 class Module implements
     BootstrapListenerInterface,
@@ -56,7 +58,12 @@ class Module implements
             return;
         }
         $e->getApplication()->getServiceManager()->get('Zend\Session\Service\SessionManager');
-
+        
+        $e->getApplication()
+            ->getServiceManager()
+            ->get('RoutePluginManager')
+            ->setFactory(AngularSegment::class, RouteInvokableFactory::class);
+        
         $e->getApplication()
             ->getServiceManager()
             ->get(RedirectStrategy::class)
