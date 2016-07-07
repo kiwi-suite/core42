@@ -159,7 +159,7 @@ class GenerateModelCommand extends AbstractCommand
         $modelClass->setNamespaceName($namespace)
             ->addUse('Core42\Model\AbstractModel')
             ->setName($class)
-            ->setExtendedClass('AbstractModel');
+            ->setExtendedClass('Core42\Model\AbstractModel');
 
         $filter = new UnderscoreToCamelCase();
 

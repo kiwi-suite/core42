@@ -165,7 +165,7 @@ class GenerateTableGatewayCommand extends AbstractCommand
         $classGenerator->setNamespaceName($namespace)
             ->addUse('Core42\Db\TableGateway\AbstractTableGateway')
             ->setName($class)
-            ->setExtendedClass('AbstractTableGateway');
+            ->setExtendedClass('Core42\Db\TableGateway\AbstractTableGateway');
 
         $property = new Generator\PropertyGenerator("table");
         $property->setDefaultValue($this->tableName)
@@ -211,18 +211,18 @@ class GenerateTableGatewayCommand extends AbstractCommand
 
         /** @var HydratorStrategyPluginManager $hydratorStrategyManager */
         $hydratorStrategyManager = $this->getServiceManager()->get(HydratorStrategyPluginManager::class);
-        $services = $hydratorStrategyManager->getCanonicalNames();
+        $aliases = $hydratorStrategyManager->getServiceAliases();
         foreach ($columns as $column) {
-            foreach (array_keys($services) as $canonicalName) {
-                $strategy = $hydratorStrategyManager->get($canonicalName);
+            foreach ($aliases as $alias) {
+                $strategy = $hydratorStrategyManager->get($alias);
                 if ($strategy->isResponsible($column)) {
                     $serviceName = $strategy->getName();
                     if (empty($serviceName)) {
-                        $serviceName = $canonicalName;
+                        $serviceName = $alias;
                     }
 
                     if (!$hydratorStrategyManager->has($serviceName)) {
-                        $serviceName = $canonicalName;
+                        $serviceName = $alias;
                     }
 
                     $databaseTypeMap[$column->getName()] = $serviceName;
@@ -247,7 +247,7 @@ class GenerateTableGatewayCommand extends AbstractCommand
             )
             ->setFlags(Generator\PropertyGenerator::FLAG_PROTECTED);
         $classGenerator->addPropertyFromGenerator($property);
-        
+
 
         $property = new Generator\PropertyGenerator("modelPrototype");
         $property->setDefaultValue($this->model)

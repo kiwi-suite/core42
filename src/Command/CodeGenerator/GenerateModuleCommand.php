@@ -50,7 +50,6 @@ class GenerateModuleCommand extends AbstractCommand
         mkdir($moduleDirectory . '/view');
         mkdir($moduleDirectory . '/view/' . strtolower($camelcaseToDashFilter->filter($this->name)));
         mkdir($moduleDirectory . '/src');
-        mkdir($moduleDirectory . '/src/' . $this->name);
 
         file_put_contents(
             $moduleDirectory . '/config/module.config.php',
@@ -70,7 +69,7 @@ EOT
         );
 
         file_put_contents(
-            $moduleDirectory . '/src/'.$this->name.'/Module.php',
+            $moduleDirectory . '/src//Module.php',
             <<<EOT
 <?php
 namespace {$this->name};
@@ -88,7 +87,7 @@ class Module implements ConfigProviderInterface
     public function getConfig()
     {
         return array_merge(
-            require_once __DIR__ . '/../../config/module.config.php'
+            require_once __DIR__ . '/../config/module.config.php'
         );
     }
 }

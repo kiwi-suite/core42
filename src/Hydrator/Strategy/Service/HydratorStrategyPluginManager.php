@@ -30,4 +30,12 @@ class HydratorStrategyPluginManager extends AbstractPluginManager
             'Abstract factories are not allowed in hydrator strategy plugin manager'
         );
     }
+
+    /**
+     * @return array
+     */
+    public function getServiceAliases()
+    {
+        return array_keys($this->aliases);
+    }
 }
