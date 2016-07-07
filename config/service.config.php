@@ -18,6 +18,7 @@ use Core42\I18n\Localization\Localization;
 use Core42\I18n\Localization\Service\LocalizationFactory;
 use Core42\I18n\Translator\Service\TranslatorLoaderFactory;
 use Core42\Mail\Transport\Service\TransportFactory;
+use Core42\Mvc\Environment\Environment;
 use Core42\Mvc\TreeRouteMatcher\Service\TreeRouteMatcherFactory;
 use Core42\Mvc\TreeRouteMatcher\TreeRouteMatcher;
 use Core42\Navigation\Navigation;
@@ -81,6 +82,8 @@ return [
             LoggingProfiler::class                          => InvokableFactory::class,
             ConsoleDispatcher::class                        => ConsoleDispatcherFactory::class,
             TransactionManager::class                       => TransactionManagerFactory::class,
+
+            Environment::class                              => InvokableFactory::class,
 
 
             'MvcTranslator'                                 => 'Core42\I18n\Translator\Service\TranslatorFactory',

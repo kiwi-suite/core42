@@ -50,6 +50,7 @@
         "monolog/monolog": "1.19.0",
         "swiftmailer/swiftmailer": "v5.4.2",
         "guzzlehttp/guzzle": "6.2.0",
+        "filp/whoops": "2.1.2",
 
         "zendframework/zend-cache": "^2.7",
         "zendframework/zend-http": "^2.5",
@@ -60,6 +61,8 @@
         "symfony/finder": "v3.1.0",
         "symfony/filesystem": "v3.1.0",
         "mtdowling/cron-expression": "v1.1.0"
+
+
     },
     "require-dev": {
         "zendframework/zend-test": "^3.0"
