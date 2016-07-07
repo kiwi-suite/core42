@@ -85,7 +85,7 @@ class Module implements
     {
         $events = $manager->getEventManager();
 
-        $events->attach(ModuleEvent::EVENT_MERGE_CONFIG, array($this, 'onMergeConfig'));
+        $events->attach(ModuleEvent::EVENT_MERGE_CONFIG, [$this, 'onMergeConfig']);
     }
 
     /**

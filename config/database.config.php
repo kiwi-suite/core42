@@ -40,11 +40,6 @@ return [
         ]
     ],
 
-    //Deprecated
-    'metadata' => [
-        'cache' => (DEVELOPMENT_MODE) ? false : 'Cache\Intern',
-    ],
-
     'db' => [
         'adapters' => [
             'Db\Master' => [

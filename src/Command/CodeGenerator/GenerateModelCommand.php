@@ -10,11 +10,11 @@
 namespace Core42\Command\CodeGenerator;
 
 use Core42\Command\AbstractCommand;
+use Zend\Db\Metadata\Source\Factory;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\Code\Generator;
 use Zend\Code\Reflection;
 use Zend\Db\Adapter;
-use Zend\Db\Metadata\Metadata;
 use Zend\Filter\Word\UnderscoreToCamelCase;
 
 class GenerateModelCommand extends AbstractCommand
@@ -148,7 +148,7 @@ class GenerateModelCommand extends AbstractCommand
      */
     protected function execute()
     {
-        $metadata = new Metadata($this->adapter);
+        $metadata = Factory::createSourceFromAdapter($this->adapter);
         $columns = $metadata->getColumns($this->tableName);
 
         $parts =  explode("\\", $this->className);

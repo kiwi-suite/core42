@@ -41,11 +41,6 @@ class CronTableGateway extends AbstractTableGateway
     ];
 
     /**
-     * @var boolean
-     */
-    protected $useMetaDataFeature = false;
-
-    /**
      * @var string
      */
     protected $modelPrototype = 'Core42\\Model\\Cron';

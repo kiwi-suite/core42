@@ -10,8 +10,6 @@
 namespace Core42\Permission\Rbac\Guard;
 
 use Zend\ServiceManager\AbstractPluginManager;
-use Zend\ServiceManager\ConfigInterface;
-use Zend\ServiceManager\Exception;
 
 class GuardPluginManager extends AbstractPluginManager
 {

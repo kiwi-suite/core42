@@ -10,7 +10,6 @@
 namespace Core42\Selector\Service;
 
 use Interop\Container\ContainerInterface;
-use Zend\ServiceManager\Config;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
 class SelectorPluginManagerFactory implements FactoryInterface

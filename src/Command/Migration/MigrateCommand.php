@@ -81,8 +81,6 @@ class MigrateCommand extends AbstractCommand
             $migrationTableGateway->insert($migrationObject);
             $migrationCounter++;
 
-            $this->getServiceManager()->get('Metadata')->refresh();
-
             $this->consoleOutput("Migration {$migration['name']} migrated");
         }
         $this->consoleOutput("");

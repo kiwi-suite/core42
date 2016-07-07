@@ -12,6 +12,7 @@ namespace Core42\Command\Migration;
 use Core42\Model\Migration;
 use Symfony\Component\Filesystem\Filesystem;
 use Zend\Db\Adapter\Adapter;
+use Zend\Db\Metadata\Source\Factory;
 
 abstract class AbstractCommand extends \Core42\Command\AbstractCommand
 {
@@ -40,13 +41,14 @@ abstract class AbstractCommand extends \Core42\Command\AbstractCommand
     {
         $migrationConfig = $this->getMigrationConfig();
 
-        $metadata = $this->getServiceManager()->get('Metadata');
+        /** @var Adapter $adapter */
+        $adapter = $this->getServiceManager()->get('Db\Master');
+
+
+        $metadata = Factory::createSourceFromAdapter($adapter);
         if (in_array($migrationConfig['table_name'], $metadata->getTableNames())) {
             return;
         }
-
-        /** @var Adapter $adapter */
-        $adapter = $this->getServiceManager()->get('Db\Master');
 
         switch ($adapter->getPlatform()->getName()) {
             case 'MySQL':
@@ -58,7 +60,6 @@ abstract class AbstractCommand extends \Core42\Command\AbstractCommand
         }
 
         $adapter->query($sql, Adapter::QUERY_MODE_EXECUTE);
-        $metadata->refresh();
     }
 
     /**

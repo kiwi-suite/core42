@@ -77,8 +77,6 @@ class RollbackCommand extends AbstractCommand
             $migrationTableGateway->delete(['name' => $migration['name']]);
             $migrationCounter++;
 
-            $this->getServiceManager()->get('Metadata')->refresh();
-
             $this->consoleOutput("Migration {$migration['name']} rolled back");
         }
         $this->consoleOutput("");

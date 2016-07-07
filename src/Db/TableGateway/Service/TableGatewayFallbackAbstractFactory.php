@@ -9,7 +9,6 @@
 
 namespace Core42\Db\TableGateway\Service;
 
-use Core42\Db\Metadata\Metadata;
 use Core42\Db\TableGateway\AbstractTableGateway;
 use Core42\Hydrator\Strategy\Service\HydratorStrategyPluginManager;
 use Interop\Container\ContainerInterface;
@@ -83,11 +82,6 @@ class TableGatewayFallbackAbstractFactory implements AbstractFactoryInterface
 
         /** @var AbstractTableGateway $gateway */
         $gateway = new $fqcn($adapter, $hydratorStrategyPluginManager, $slave);
-
-        if ($gateway->getUseMetaDataFeature() === true) {
-            $metadata = $container->get(Metadata::class);
-            $gateway->enableMetadata($metadata, $hydratorStrategyPluginManager);
-        }
 
         $gateway->initialize();
 

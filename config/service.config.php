@@ -6,8 +6,6 @@ use Core42\Command\Console\Service\ConsoleDispatcherFactory;
 use Core42\Command\Service\CommandPluginManager;
 use Core42\Command\Service\CommandPluginManagerFactory;
 use Core42\Db\Adapter\Profiler\LoggingProfiler;
-use Core42\Db\Metadata\Metadata;
-use Core42\Db\Metadata\Service\MetadataServiceFactory;
 use Core42\Db\TableGateway\Service\TableGatewayPluginManager;
 use Core42\Db\TableGateway\Service\TableGatewayPluginManagerFactory;
 use Core42\Db\Transaction\Service\TransactionManagerFactory;
@@ -65,8 +63,6 @@ return [
             SelectorPluginManager::class                    => SelectorPluginManagerFactory::class,
             FormPluginManager::class                        => FormPluginManagerFactory::class,
 
-            Metadata::class                                 => MetadataServiceFactory::class,
-
             TreeRouteMatcher::class                         => TreeRouteMatcherFactory::class,
 
             Rbac::class                                     => RbacFactory::class,
@@ -111,7 +107,6 @@ return [
             'Core42\Navigation'                             => Navigation::class,
             'Core42\Permission'                             => RbacManager::class,
             'TreeRouteMatcher'                              => TreeRouteMatcher::class,
-            'Metadata'                                      => Metadata::class,
             'Core42\FormPluginManager'                      => FormPluginManager::class,
             'Core42\SelectorPluginManager'                  => SelectorPluginManager::class,
             'Core42\HydratorStrategyPluginManager'          => HydratorStrategyPluginManager::class,

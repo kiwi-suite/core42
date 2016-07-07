@@ -16,7 +16,6 @@ use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\Code\Generator;
 use Zend\Code\Reflection;
 use Zend\Db\Adapter;
-use Zend\Db\Metadata\Metadata;
 
 class GenerateTableGatewayCommand extends AbstractCommand
 {
@@ -248,22 +247,7 @@ class GenerateTableGatewayCommand extends AbstractCommand
             )
             ->setFlags(Generator\PropertyGenerator::FLAG_PROTECTED);
         $classGenerator->addPropertyFromGenerator($property);
-
-        $property = new Generator\PropertyGenerator("useMetaDataFeature");
-        $property->setDefaultValue(
-            false,
-            Generator\ValueGenerator::TYPE_BOOLEAN,
-            Generator\ValueGenerator::OUTPUT_SINGLE_LINE
-        )
-            ->setDocBlock(
-                new Generator\DocBlockGenerator(
-                    null,
-                    null,
-                    [new Generator\DocBlock\Tag\GenericTag('var', 'boolean')]
-                )
-            )
-            ->setFlags(Generator\PropertyGenerator::FLAG_PROTECTED);
-        $classGenerator->addPropertyFromGenerator($property);
+        
 
         $property = new Generator\PropertyGenerator("modelPrototype");
         $property->setDefaultValue($this->model)

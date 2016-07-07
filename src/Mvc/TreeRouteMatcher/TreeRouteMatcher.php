@@ -9,8 +9,8 @@
 
 namespace Core42\Mvc\TreeRouteMatcher;
 
-use Zend\Mvc\Router\RouteMatch;
-use Zend\Mvc\Router\RouteStackInterface;
+use Zend\Router\RouteMatch;
+use Zend\Router\RouteStackInterface;
 
 class TreeRouteMatcher
 {

@@ -13,7 +13,6 @@ use Core42\Command\AbstractCommand;
 use Core42\Command\ConsoleAwareTrait;
 use Core42\Model\Cron;
 use Core42\TableGateway\CronTableGateway;
-use Cron\CronExpression;
 use Zend\Db\Sql\Where;
 use Zend\Log\Logger;
 use Zend\Log\Formatter\Simple as SimpleFormatter;

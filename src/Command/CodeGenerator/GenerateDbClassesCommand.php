@@ -11,7 +11,7 @@ namespace Core42\Command\CodeGenerator;
 
 use Core42\Command\AbstractCommand;
 use Core42\Command\ConsoleAwareTrait;
-use Core42\Db\Metadata\Metadata;
+use Zend\Db\Metadata\Source\Factory;
 use Zend\Filter\Word\UnderscoreToCamelCase;
 use ZF\Console\Route;
 
@@ -189,7 +189,7 @@ class GenerateDbClassesCommand extends AbstractCommand
     {
         if ($this->all !== null) {
             $adapter = $this->getServiceManager()->get($this->adapterName);
-            $metadata = new Metadata($adapter);
+            $metadata = Factory::createSourceFromAdapter($adapter);
             $tables = $metadata->getTableNames();
 
             $filter = new UnderscoreToCamelCase();

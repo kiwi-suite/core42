@@ -43,8 +43,9 @@ abstract class AbstractGuard extends AbstractListenerAggregate implements GuardI
 
     /**
      * @param EventManagerInterface $events
+     * @param int $priority
      */
-    public function attach(EventManagerInterface $events,  $priority = 1)
+    public function attach(EventManagerInterface $events, $priority = 1)
     {
         $this->listeners[] = $events->attach(static::EVENT_NAME, [$this, 'onResult'], static::EVENT_PRIORITY);
     }
