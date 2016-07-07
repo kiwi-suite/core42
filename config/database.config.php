@@ -27,15 +27,6 @@ return [
                 'DateTime'       => DateTimeStrategy::class,
                 'Float'          => FloatStrategy::class,
                 'String'         => StringStrategy::class,
-
-                //Deprecated
-                'Mysql/Integer'        => IntegerStrategy::class,
-                'Mysql/Boolean'        => BooleanStrategy::class,
-                'Mysql/Date'           => DateStrategy::class,
-                'Mysql/DateTime'       => DateTimeStrategy::class,
-                'Mysql/Datetime'       => DateTimeStrategy::class,
-                'Mysql/Float'          => FloatStrategy::class,
-                'Mysql/String'         => StringStrategy::class,
             ],
         ]
     ],
