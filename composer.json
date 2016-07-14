@@ -6,7 +6,6 @@
         "composer/installers": "~1.0",
 
         "zendframework/zend-authentication": "^2.5",
-        "zendframework/zend-code": "^3.0",
         "zendframework/zend-config": "^2.6",
         "zendframework/zend-console": "^2.6",
         "zendframework/zend-crypt": "^3.0",
@@ -65,12 +64,8 @@
 
     },
     "require-dev": {
-        "zendframework/zend-test": "^3.0"
-    },
-    "extra": {
-        "zf": {
-            "component": "Core42"
-        }
+        "zendframework/zend-test": "^3.0",
+        "zendframework/zend-code": "^3.0"
     },
     "bin": [
         "bin/fruit"

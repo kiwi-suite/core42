@@ -42,6 +42,7 @@ use Core42\Permission\Rbac\Strategy\UnauthorizedStrategy;
 use Core42\Selector\Service\SelectorPluginManager;
 use Core42\Selector\Service\SelectorPluginManagerFactory;
 use Core42\TableGateway\Service\MigrationTableGatewayFactory;
+use Core42\View\Http\Service\ExceptionStrategyFactory;
 use Zend\Mail\Transport\TransportInterface;
 use Zend\ServiceManager\Factory\InvokableFactory;
 use Zend\Session\Service\SessionConfigFactory;
@@ -92,6 +93,8 @@ return [
             'Zend\Session\Storage\StorageInterface'         => StorageFactory::class,
 
             'Db\Master'                                     => AdapterFactory::class,
+
+            'HttpExceptionStrategy'                         => ExceptionStrategyFactory::class,
         ],
         'aliases' => [
             'Localization'                                  => Localization::class,

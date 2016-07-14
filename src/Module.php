@@ -83,25 +83,6 @@ class Module implements
      */
     public function init(ModuleManagerInterface $manager)
     {
-        $events = $manager->getEventManager();
 
-        $events->attach(ModuleEvent::EVENT_MERGE_CONFIG, [$this, 'onMergeConfig']);
-    }
-
-    /**
-     * @param ModuleEvent $e
-     */
-    public function onMergeConfig(ModuleEvent $e)
-    {
-        $configListener = $e->getConfigListener();
-        $config         = $configListener->getMergedConfig(false);
-
-        if ($config['caches']['Cache\Intern']['adapter']['name'] !== 'filesystem') {
-            unset($config['caches']['Cache\Intern']['adapter']['options']['cache_dir']);
-            unset($config['caches']['Cache\Intern']['adapter']['options']['dirPermission']);
-            unset($config['caches']['Cache\Intern']['adapter']['options']['filePermission']);
-        }
-
-        $configListener->setMergedConfig($config);
     }
 }
