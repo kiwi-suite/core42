@@ -18,6 +18,17 @@ class ErrorMiddleware implements ErrorMiddlewareInterface
     protected $errorTemplate;
 
     /**
+     * @param string $errorTemplate
+     * @return $this
+     */
+    public function setErrorTemplate($errorTemplate)
+    {
+        $this->errorTemplate = $errorTemplate;
+
+        return $this;
+    }
+
+    /**
      * Process an incoming error, along with associated request and response.
      *
      * Accepts an error, a server-side request, and a response instance, and
@@ -38,17 +49,6 @@ class ErrorMiddleware implements ErrorMiddlewareInterface
         }
 
         return $this->showTemplate($error);
-    }
-
-    /**
-     * @param string $errorTemplate
-     * @return $this
-     */
-    public function setErrorTemplate($errorTemplate)
-    {
-        $this->errorTemplate = $errorTemplate;
-
-        return $this;
     }
 
     /**
