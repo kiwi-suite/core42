@@ -13,12 +13,16 @@ use Core42\Console\Console;
 use Core42\Mvc\Router\Http\AngularSegment;
 use Core42\Permission\Rbac\Strategy\RedirectStrategy;
 use Core42\Permission\Rbac\Strategy\UnauthorizedStrategy;
+use Zend\Db\Adapter\AdapterAbstractServiceFactory;
+use Zend\Form\FormAbstractServiceFactory;
+use Zend\InputFilter\InputFilterAbstractServiceFactory;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\ModuleManager\Feature\InitProviderInterface;
 use Zend\ModuleManager\ModuleEvent;
 use Zend\ModuleManager\ModuleManagerInterface;
 use Zend\Router\RouteInvokableFactory;
+use Zend\Session\Service\ContainerAbstractServiceFactory;
 
 class Module implements
     BootstrapListenerInterface,
@@ -83,6 +87,36 @@ class Module implements
      */
     public function init(ModuleManagerInterface $manager)
     {
+        $events = $manager->getEventManager();
 
+        $events->attach(ModuleEvent::EVENT_MERGE_CONFIG, array($this, 'onMergeConfig'));
+    }
+
+    /**
+     * @param ModuleEvent $e
+     */
+    public function onMergeConfig(ModuleEvent $e)
+    {
+        $configListener = $e->getConfigListener();
+        $config         = $configListener->getMergedConfig(false);
+
+        $abstractFactories = $config['service_manager']['abstract_factories'];
+        foreach ($abstractFactories as $key => $class) {
+            if (in_array($class, [
+                AdapterAbstractServiceFactory::class,
+                FormAbstractServiceFactory::class,
+                ContainerAbstractServiceFactory::class,
+                InputFilterAbstractServiceFactory::class
+            ])) {
+                unset($abstractFactories[$key]);
+            }
+        }
+
+        $config['service_manager']['abstract_factories'] = array_values($abstractFactories);
+
+        //unset($config['service_manager']['factories'][AdapterInterface::class]);
+        unset($config['service_manager']['factories']['Zend\Db\Adapter\Adapter']);
+
+        $configListener->setMergedConfig($config);
     }
 }

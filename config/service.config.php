@@ -43,6 +43,7 @@ use Core42\Selector\Service\SelectorPluginManager;
 use Core42\Selector\Service\SelectorPluginManagerFactory;
 use Core42\TableGateway\Service\MigrationTableGatewayFactory;
 use Core42\View\Http\Service\ExceptionStrategyFactory;
+use Zend\Db\Adapter\AdapterInterface;
 use Zend\Mail\Transport\TransportInterface;
 use Zend\ServiceManager\Factory\InvokableFactory;
 use Zend\Session\Service\SessionConfigFactory;
@@ -52,8 +53,6 @@ use Zend\Session\Service\StorageFactory;
 return [
     'service_manager' => [
         'abstract_factories' => [
-            'Zend\Cache\Service\StorageCacheAbstractServiceFactory',
-            'Zend\Log\LoggerAbstractServiceFactory',
         ],
         'factories' => [
             TransportInterface::class                       => TransportFactory::class,
@@ -99,6 +98,8 @@ return [
         'aliases' => [
             'Localization'                                  => Localization::class,
             'Permission'                                    => RbacManager::class,
+
+            AdapterInterface::class                         => 'Db\Master',
 
             'Command'                                       => CommandPluginManager::class,
             'TableGateway'                                  => TableGatewayPluginManager::class,
