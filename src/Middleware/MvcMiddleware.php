@@ -63,7 +63,9 @@ class MvcMiddleware implements MiddlewareInterface
         $application = Application::init($appConfig);
 
         $path = $request->getUri()->getPath();
-        if (strpos($path, $application->getRequest()->getBasePath()) === false) {
+        if (strlen($application->getRequest()->getBasePath())
+            && strpos($path, $application->getRequest()->getBasePath()) === false
+        ) {
             return $out($request, $response);
         }
 
