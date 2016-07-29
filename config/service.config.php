@@ -16,6 +16,7 @@ use Core42\Hydrator\Strategy\Service\HydratorStrategyPluginManager;
 use Core42\Hydrator\Strategy\Service\HydratorStrategyPluginManagerFactory;
 use Core42\I18n\Localization\Localization;
 use Core42\I18n\Localization\Service\LocalizationFactory;
+use Core42\I18n\Translator\Service\TranslatorFactory;
 use Core42\I18n\Translator\Service\TranslatorLoaderFactory;
 use Core42\Mail\Transport\Service\TransportFactory;
 use Core42\Mvc\Environment\Environment;
@@ -44,7 +45,9 @@ use Core42\Selector\Service\SelectorPluginManagerFactory;
 use Core42\TableGateway\Service\MigrationTableGatewayFactory;
 use Core42\View\Http\Service\ExceptionStrategyFactory;
 use Zend\Db\Adapter\AdapterInterface;
+use Zend\I18n\Translator\LoaderPluginManager;
 use Zend\Mail\Transport\TransportInterface;
+use Zend\Mvc\I18n\Translator;
 use Zend\ServiceManager\Factory\InvokableFactory;
 use Zend\Session\Service\SessionConfigFactory;
 use Zend\Session\Service\SessionManagerFactory;
@@ -84,8 +87,8 @@ return [
             Environment::class                              => InvokableFactory::class,
 
 
-            'MvcTranslator'                                 => 'Core42\I18n\Translator\Service\TranslatorFactory',
-            'MvcTranslatorPluginManager'                    => TranslatorLoaderFactory::class,
+            Translator::class                               => TranslatorFactory::class,
+            LoaderPluginManager::class                      => TranslatorLoaderFactory::class,
 
             'Zend\Session\Service\SessionManager'           => SessionManagerFactory::class,
             'Zend\Session\Config\ConfigInterface'           => SessionConfigFactory::class,

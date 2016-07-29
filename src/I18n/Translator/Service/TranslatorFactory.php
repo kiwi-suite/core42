@@ -9,32 +9,23 @@
 
 namespace Core42\I18n\Translator\Service;
 
+use Interop\Container\ContainerInterface;
 use Zend\I18n\Translator\Translator;
-use Zend\Mvc\Service\TranslatorServiceFactory;
-use Zend\ServiceManager\ServiceLocatorInterface;
 
-class TranslatorFactory extends TranslatorServiceFactory
+class TranslatorFactory extends \Zend\Mvc\I18n\TranslatorFactory
 {
-    /**
-     * @param ServiceLocatorInterface $serviceLocator
-     * @return \Zend\Mvc\I18n\Translator
-     */
-    public function createService(ServiceLocatorInterface $serviceLocator)
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $translator = parent::createService($serviceLocator);
-
-        $translator->getTranslator()->setPluginManager(
-            $serviceLocator->get('MvcTranslatorPluginManager')
-        );
+        $translator = parent::__invoke($container, $requestedName, $options);
 
         if ($translator->isEventManagerEnabled()) {
-            $config = $serviceLocator->get('Config');
+            $config = $container->get('config');
             if (isset($config['translator']['missing_translations_handler'])) {
                 $missingConfig = $config['translator']['missing_translations_handler'];
                 if (isset($missingConfig['service']) && isset($missingConfig['action'])) {
                     $translator->getEventManager()->attach(
                         Translator::EVENT_MISSING_TRANSLATION,
-                        [$serviceLocator->get($missingConfig['service']), $missingConfig['action']]
+                        [$container->get($missingConfig['service']), $missingConfig['action']]
                     );
                 }
             }
