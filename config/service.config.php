@@ -17,6 +17,11 @@ use Core42\Hydrator\Strategy\Service\HydratorStrategyPluginManagerFactory;
 use Core42\I18n\Localization\Localization;
 use Core42\I18n\Localization\Service\LocalizationFactory;
 use Core42\I18n\Translator\Service\TranslatorLoaderFactory;
+use Core42\Log\Service\Handler\ErrorLogHandlerFactory;
+use Core42\Log\Service\Handler\RotatingFileHandlerFactory;
+use Core42\Log\Service\Handler\StreamHandlerFactory;
+use Core42\Log\Service\Handler\SyslogHandlerFactory;
+use Core42\Log\Service\LoggerFactory;
 use Core42\Mail\Transport\Service\TransportFactory;
 use Core42\Mvc\Environment\Environment;
 use Core42\Mvc\TreeRouteMatcher\Service\TreeRouteMatcherFactory;
@@ -43,6 +48,10 @@ use Core42\Selector\Service\SelectorPluginManager;
 use Core42\Selector\Service\SelectorPluginManagerFactory;
 use Core42\TableGateway\Service\MigrationTableGatewayFactory;
 use Core42\View\Http\Service\ExceptionStrategyFactory;
+use Monolog\Handler\ErrorLogHandler;
+use Monolog\Handler\RotatingFileHandler;
+use Monolog\Handler\StreamHandler;
+use Monolog\Handler\SyslogHandler;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\Mail\Transport\TransportInterface;
 use Zend\ServiceManager\Factory\InvokableFactory;
@@ -82,6 +91,13 @@ return [
             TransactionManager::class                       => TransactionManagerFactory::class,
 
             Environment::class                              => InvokableFactory::class,
+
+            'Log\Core'                                      => LoggerFactory::class,
+            StreamHandler::class                            => StreamHandlerFactory::class,
+            RotatingFileHandler::class                      => RotatingFileHandlerFactory::class,
+            SyslogHandler::class                            => SyslogHandlerFactory::class,
+            ErrorLogHandler::class                          => ErrorLogHandlerFactory::class,
+            //ProcessHandler::class                           => ProcessHandlerFactory::class,
 
 
             'MvcTranslator'                                 => 'Core42\I18n\Translator\Service\TranslatorFactory',
