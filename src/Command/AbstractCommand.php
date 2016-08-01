@@ -10,6 +10,7 @@
 namespace Core42\Command;
 
 use Core42\Db\TableGateway\AbstractTableGateway;
+use Core42\Db\Transaction\TransactionManager;
 use Core42\Selector\SelectorInterface;
 use Zend\ServiceManager\ServiceManager;
 
@@ -29,7 +30,7 @@ abstract class AbstractCommand implements CommandInterface
     /**
      * @var bool
      */
-    private $throwCommandExceptions = true;
+    protected $throwCommandExceptions = true;
 
     /**
      * @var bool
@@ -40,6 +41,11 @@ abstract class AbstractCommand implements CommandInterface
      * @var array
      */
     private $errors = [];
+
+    /**
+     * @var bool
+     */
+    protected $transaction = true;
 
     /**
      * @param ServiceManager $serviceManager
@@ -105,7 +111,17 @@ abstract class AbstractCommand implements CommandInterface
             $this->preExecute();
 
             if (!$this->hasErrors() && $this->dryRun === false) {
-                $result = $this->execute();
+                if ($this->transaction === true) {
+                    $result = $this
+                        ->getServiceManager()
+                        ->get(TransactionManager::class)
+                        ->transaction(function(){
+                            return $this->execute();
+                        });
+                } else {
+                    $result = $this->execute();
+                }
+
                 $this->postExecute();
             }
         } catch (\Exception $e) {

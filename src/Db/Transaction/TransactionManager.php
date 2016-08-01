@@ -87,13 +87,16 @@ class TransactionManager
 
     /**
      * @param callable $callback
+     * @return mixed|null
      * @throws \Exception
      */
     public function transaction($callback)
     {
+        $return = null;
+
         $this->begin();
         try {
-            call_user_func($callback);
+            $return = call_user_func($callback);
             $this->commit();
 
         } catch (\Exception $e) {
@@ -101,5 +104,7 @@ class TransactionManager
 
             throw $e;
         }
+
+        return $return;
     }
 }
