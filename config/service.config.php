@@ -18,10 +18,8 @@ use Core42\I18n\Localization\Localization;
 use Core42\I18n\Localization\Service\LocalizationFactory;
 use Core42\I18n\Translator\Service\TranslatorFactory;
 use Core42\I18n\Translator\Service\TranslatorLoaderFactory;
-use Core42\Log\Service\Handler\ErrorLogHandlerFactory;
-use Core42\Log\Service\Handler\RotatingFileHandlerFactory;
-use Core42\Log\Service\Handler\StreamHandlerFactory;
-use Core42\Log\Service\Handler\SyslogHandlerFactory;
+use Core42\Log\Service\HandlerPluginManager;
+use Core42\Log\Service\HandlerPluginManagerFactory;
 use Core42\Log\Service\LoggerFactory;
 use Core42\Mail\Transport\Service\TransportFactory;
 use Core42\Mvc\Environment\Environment;
@@ -49,10 +47,6 @@ use Core42\Selector\Service\SelectorPluginManager;
 use Core42\Selector\Service\SelectorPluginManagerFactory;
 use Core42\TableGateway\Service\MigrationTableGatewayFactory;
 use Core42\View\Http\Service\ExceptionStrategyFactory;
-use Monolog\Handler\ErrorLogHandler;
-use Monolog\Handler\RotatingFileHandler;
-use Monolog\Handler\StreamHandler;
-use Monolog\Handler\SyslogHandler;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\I18n\Translator\LoaderPluginManager;
 use Zend\Mail\Transport\TransportInterface;
@@ -95,13 +89,9 @@ return [
 
             Environment::class                              => InvokableFactory::class,
 
+            HandlerPluginManager::class                     => HandlerPluginManagerFactory::class,
             'Log\Core'                                      => LoggerFactory::class,
-            StreamHandler::class                            => StreamHandlerFactory::class,
-            RotatingFileHandler::class                      => RotatingFileHandlerFactory::class,
-            SyslogHandler::class                            => SyslogHandlerFactory::class,
-            ErrorLogHandler::class                          => ErrorLogHandlerFactory::class,
-            //ProcessHandler::class                           => ProcessHandlerFactory::class,
-
+            'Log\Test'                                      => LoggerFactory::class,
 
             Translator::class                               => TranslatorFactory::class,
             LoaderPluginManager::class                      => TranslatorLoaderFactory::class,

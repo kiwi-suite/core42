@@ -25,42 +25,38 @@ class LoggerFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $config = $container->get('Config');
-        
-        if (!isset($config['log'][$requestedName])) {
+
+        if (!isset($config['log']['logger'][$requestedName])) {
             throw new ServiceNotFoundException('unable to get config for "' . $requestedName . '"');
         }
+        $config = $config['log']['logger'][$requestedName];
+
+        /* @var HandlerPluginManager $handlerPluginManager */
+        $handlerPluginManager = $container->get(HandlerPluginManager::class);
 
         $handlers = [];
-        foreach ($config['log'][$requestedName]['handlers'] as $handler) {
-            if (empty($config['log']['handler_definitions'][$handler])) {
-                throw new ServiceNotCreatedException('unable to find handler definition for "' . $handler . '"');
+        foreach ($config['handlers'] as $key => $value) {
+            $handler = $value;
+            $config = [];
+            if (is_int($value)) {
+                $handler = $key;
+                $config['level'] = $value;
             }
 
-            $handlerConfig = [];
-            if (!empty($config['log']['handler_definitions'][$handler]['config'])) {
-                $handlerConfig = $config['log']['handler_definitions'][$handler]['config'];
-            }
-            
-            $handlers[] = $container->build($config['log']['handler_definitions'][$handler]['handler_type'], $handlerConfig);
+            $handlers[] = $handlerPluginManager->get($handler, $config);
         }
 
         $processors = [];
-        foreach ($config['log'][$requestedName]['processors'] as $processor) {
+        if (!empty($config['processors'])) {
+            $processorPluginManager = $container->get(HandlerPluginManager::class);
 
+            foreach ($config['processors'] as $processor) {
+                $processors[] = $processorPluginManager->get($processor);
+            }
         }
 
         $logger = new Logger($requestedName, $handlers, $processors);
 
         return $logger;
-    }
-    
-    protected function getHandler(ServiceLocatorInterface $container, $handler, $config)
-    {
-        switch ($handler) {
-            case 'null':
-                
-                break;
-            
-        }
     }
 }
