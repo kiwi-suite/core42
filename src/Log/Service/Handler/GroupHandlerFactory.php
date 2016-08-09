@@ -9,32 +9,37 @@
 
 namespace Core42\Log\Service\Handler;
 
+use Core42\Log\Service\HandlerPluginManager;
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
-use Monolog\Handler\SyslogUdpHandler;
-use Monolog\Logger;
+use Monolog\Handler\GroupHandler;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use \Zend\ServiceManager\Factory\FactoryInterface;
 
-class SyslogUdpHandlerFactory implements FactoryInterface
+class GroupHandlerFactory implements FactoryInterface
 {
     /**
      * @param ContainerInterface $container
      * @param string $requestedName
      * @param array|null $options
-     * @return SyslogUdpHandler
+     * @return GroupHandler
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        if (empty($options['host'])) {
-            throw new ServiceNotCreatedException('host option not found for SyslogUdpHandler');
+        if (empty($options['handlers'])) {
+            throw new ServiceNotCreatedException('handlers option not found or empty for GroupHandler');
         }
 
-        $port = (!empty($options['port'])) ? $options['port'] : 514;
-        $facility = (!empty($options['facility'])) ? $options['facility'] : LOG_USER;
-        $level = (!empty($options['level'])) ? $options['level'] : Logger::DEBUG;
+        /* @var HandlerPluginManager $handlerPluginManager */
+        $handlerPluginManager = $container->get(HandlerPluginManager::class);
+
+        $handlers = [];
+        foreach ($options['handlers'] as $handler) {
+            $handlers[] = $handlerPluginManager->get($handler);    
+        }
+        
         $bubble = (!empty($options['bubble'])) ? $options['bubble'] : true;
 
-        return new SyslogUdpHandler($options['host'], $port, $facility, $level, $bubble);
+        return new GroupHandler($handlers, $bubble);
     }
 }

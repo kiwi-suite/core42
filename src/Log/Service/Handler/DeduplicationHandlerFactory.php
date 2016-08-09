@@ -9,34 +9,37 @@
 
 namespace Core42\Log\Service\Handler;
 
+use Core42\Log\Service\HandlerPluginManager;
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
-use Monolog\Handler\NullHandler;
-use Monolog\Handler\SwiftMailerHandler;
+use Monolog\Handler\DeduplicationHandler;
 use Monolog\Logger;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use \Zend\ServiceManager\Factory\FactoryInterface;
 
-class SwiftMailerHandlerFactory implements FactoryInterface
+class DeduplicationHandlerFactory implements FactoryInterface
 {
     /**
      * @param ContainerInterface $container
      * @param string $requestedName
      * @param array|null $options
-     * @return SwiftMailerHandler
+     * @return DeduplicationHandler
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        if (empty($options['mailer'])) {
-            throw new ServiceNotCreatedException('mailer option not found for SwiftMailer');
-        }
-        if (empty($options['message'])) {
-            throw new ServiceNotCreatedException('message option not found for SwiftMailer');
+        if (empty($options['handler'])) {
+            throw new ServiceNotCreatedException('handler option not found for DeduplicationHandler');
         }
 
+        /* @var HandlerPluginManager $handlerPluginManager */
+        $handlerPluginManager = $container->get(HandlerPluginManager::class);
+        $handler = $handlerPluginManager->get($options['handler']);
+
+        $store = (!empty($options['store'])) ? $options['store'] : null;
         $level = (!empty($options['level'])) ? $options['level'] : Logger::ERROR;
+        $time = (!empty($options['time'])) ? $options['time'] : 60;
         $bubble = (!empty($options['bubble'])) ? $options['bubble'] : true;
 
-        return new SwiftMailerHandler($options['mailer'], $options['message'], $level, $bubble);
+        return new DeduplicationHandler($handler, $store, $level, $time, $bubble);
     }
 }

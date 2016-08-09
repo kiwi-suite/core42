@@ -1,10 +1,16 @@
 <?php
+/**
+ * core42 (www.raum42.at)
+ *
+ * @link http://www.raum42.at
+ * @copyright Copyright (c) 2010-2016 raum42 OG (http://www.raum42.at)
+ *
+ */
 
 namespace Core42\Log\Service\Handler;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
-use Monolog\Handler\NullHandler;
 use Monolog\Handler\SlackHandler;
 use Monolog\Logger;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
@@ -16,7 +22,7 @@ class SlackHandlerFactory implements FactoryInterface
      * @param ContainerInterface $container
      * @param string $requestedName
      * @param array|null $options
-     * @return SlackHandlerFactory
+     * @return SlackHandler
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {

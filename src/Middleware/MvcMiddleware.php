@@ -75,7 +75,7 @@ class MvcMiddleware implements MiddlewareInterface
             ->getServiceManager()
             ->get('SendResponseListener')
             ->getEventManager()
-            ->attach(SendResponseEvent::EVENT_SEND_RESPONSE, function(SendResponseEvent $event){
+            ->attach(SendResponseEvent::EVENT_SEND_RESPONSE, function (SendResponseEvent $event) {
                 $event->stopPropagation(true);
             }, -900);
 

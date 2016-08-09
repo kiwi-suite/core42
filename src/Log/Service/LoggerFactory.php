@@ -7,7 +7,7 @@
  *
  */
 
-namespace Core42\Log\Service; 
+namespace Core42\Log\Service;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;

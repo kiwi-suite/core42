@@ -94,7 +94,7 @@ class ErrorMiddleware implements ErrorMiddlewareInterface
         ];
 
         $e = $error->getPrevious();
-        while($e) {
+        while ($e) {
             $data['exceptions'][] = [
                 'exception' => get_class($e),
                 'file' => $error->getFile() .':'.$e->getLine(),

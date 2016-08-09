@@ -115,7 +115,7 @@ abstract class AbstractCommand implements CommandInterface
                     $result = $this
                         ->getServiceManager()
                         ->get(TransactionManager::class)
-                        ->transaction(function(){
+                        ->transaction(function () {
                             return $this->execute();
                         });
                 } else {

@@ -1,4 +1,11 @@
 <?php
+/**
+ * core42 (www.raum42.at)
+ *
+ * @link http://www.raum42.at
+ * @copyright Copyright (c) 2010-2016 raum42 OG (http://www.raum42.at)
+ *
+ */
 
 namespace Core42\Log\Service\Handler;
 
@@ -7,7 +14,7 @@ use Monolog\Handler\ChromePHPHandler;
 use Monolog\Logger;
 use \Zend\ServiceManager\Factory\FactoryInterface;
 
-class ChromePHPFactory implements FactoryInterface
+class ChromePHPHandlerFactory implements FactoryInterface
 {
     /**
      * @param ContainerInterface $container
