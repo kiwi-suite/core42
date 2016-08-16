@@ -10,6 +10,7 @@
 namespace Core42\Command\Migration;
 
 use Core42\Command\ConsoleAwareTrait;
+use Core42\TableGateway\MigrationTableGateway;
 use ZF\Console\Route;
 
 class ResetCommand extends AbstractCommand
@@ -30,7 +31,7 @@ class ResetCommand extends AbstractCommand
     protected function execute()
     {
         /** @var \Core42\TableGateway\MigrationTableGateway $migrationTableGateway */
-        $migrationTableGateway = $this->getServiceManager()->get('TableGateway')->get('Core42\Migration');
+        $migrationTableGateway = $this->getServiceManager()->get('TableGateway')->get(MigrationTableGateway::class);
 
         $migrationList = array_reverse($this->getAllMigrations());
 

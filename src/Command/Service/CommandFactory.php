@@ -14,45 +14,10 @@ use Interop\Container\Exception\ContainerException;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\Factory\AbstractFactoryInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
-class CommandFallbackAbstractFactory implements AbstractFactoryInterface
+class CommandFactory implements FactoryInterface
 {
-    /**
-     * @param string $name
-     * @return bool|string
-     */
-    protected function getFQCN($name)
-    {
-        if (class_exists($name)) {
-            return $name;
-        }
-
-        if (strpos($name, '\\') === false) {
-            return false;
-        }
-
-        $parts = explode('\\', $name, 2);
-
-        return '\\' . $parts[0] . '\\Command\\' .$parts[1] . 'Command';
-    }
-
-    /**
-     * Can the factory create an instance for the service?
-     *
-     * @param  ContainerInterface $container
-     * @param  string $requestedName
-     * @return bool
-     */
-    public function canCreate(ContainerInterface $container, $requestedName)
-    {
-        $fqcn = $this->getFQCN($requestedName);
-        if ($fqcn === false) {
-            return false;
-        }
-
-        return class_exists($fqcn);
-    }
-
     /**
      * Create an object
      *
@@ -67,8 +32,6 @@ class CommandFallbackAbstractFactory implements AbstractFactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $fqcn = $this->getFQCN($requestedName);
-
-        return new $fqcn($container);
+        return new $requestedName($container);
     }
 }

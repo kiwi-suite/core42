@@ -81,7 +81,7 @@ class CronCommand extends AbstractCommand
         $now = new \DateTime();
 
         /* @var CronTableGateway $timedTaskTableGateway */
-        $timedTaskTableGateway = $this->getTableGateway('Core42\Cron');
+        $timedTaskTableGateway = $this->getTableGateway(CronTableGateway::class);
 
         $where = new Where();
         if (empty($this->taskName)) {

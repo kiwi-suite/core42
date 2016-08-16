@@ -47,6 +47,7 @@ use Core42\Permission\Rbac\Strategy\RedirectStrategy;
 use Core42\Permission\Rbac\Strategy\UnauthorizedStrategy;
 use Core42\Selector\Service\SelectorPluginManager;
 use Core42\Selector\Service\SelectorPluginManagerFactory;
+use Core42\TableGateway\MigrationTableGateway;
 use Core42\TableGateway\Service\MigrationTableGatewayFactory;
 use Core42\View\Http\Service\ExceptionStrategyFactory;
 use Zend\Db\Adapter\AdapterInterface;
@@ -137,7 +138,7 @@ return [
 
     'table_gateway' => [
         'factories' => [
-            'Core42\Migration' => MigrationTableGatewayFactory::class,
+            MigrationTableGateway::class => MigrationTableGatewayFactory::class,
         ],
     ],
 ];

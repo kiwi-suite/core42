@@ -12,6 +12,7 @@ namespace Core42\Command\Service;
 use Core42\Command\CommandInterface;
 use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\ConfigInterface;
+use Zend\ServiceManager\Exception\ServiceNotFoundException;
 
 class CommandPluginManager extends AbstractPluginManager
 {
@@ -28,14 +29,23 @@ class CommandPluginManager extends AbstractPluginManager
     protected $sharedByDefault = false;
 
     /**
-     * CommandPluginManager constructor.
-     * @param \Interop\Container\ContainerInterface|null|ConfigInterface $configInstanceOrParentLocator
-     * @param array $config
+     * @param string $name
+     * @param array|null $options
+     * @return mixed
      */
-    public function __construct($configInstanceOrParentLocator, array $config)
+    public function get($name, array $options = null)
     {
-        $this->addAbstractFactory(new CommandFallbackAbstractFactory());
+        if (!$this->has($name)) {
+            if (!$this->autoAddInvokableClass || !class_exists($name)) {
+                throw new ServiceNotFoundException(sprintf(
+                    'A plugin by the name "%s" was not found in the plugin manager %s',
+                    $name,
+                    get_class($this)
+                ));
+            }
 
-        parent::__construct($configInstanceOrParentLocator, $config);
+            $this->setFactory($name, CommandFactory::class);
+        }
+        return parent::get($name, $options);
     }
 }

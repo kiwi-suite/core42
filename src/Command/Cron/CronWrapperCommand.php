@@ -78,7 +78,7 @@ class CronWrapperCommand extends AbstractCommand
             $this->logger->addWriter($writer);
         }
 
-        $this->cronTableGateway = $this->getTableGateway('Core42\Cron');
+        $this->cronTableGateway = $this->getTableGateway(CronTableGateway::class);
 
         if (empty($this->taskName)) {
             $this->addError('name', 'task name is required');

@@ -103,6 +103,6 @@ class AbstractActionController extends \Zend\Mvc\Controller\AbstractActionContro
      */
     public function getFormCommand()
     {
-        return $this->getCommand('Core42\Form\Form');
+        return $this->getCommand(FormCommand::class);
     }
 }

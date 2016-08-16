@@ -13,6 +13,7 @@ use Core42\Db\SelectQuery\AbstractSelectQuery;
 use Core42\Selector\SelectorInterface;
 use Zend\ServiceManager\AbstractPluginManager;
 use Zend\ServiceManager\ConfigInterface;
+use Zend\ServiceManager\Exception\ServiceNotFoundException;
 
 class SelectorPluginManager extends AbstractPluginManager
 {
@@ -30,14 +31,23 @@ class SelectorPluginManager extends AbstractPluginManager
     protected $sharedByDefault = false;
 
     /**
-     * SelectorPluginManager constructor.
-     * @param \Interop\Container\ContainerInterface|null|ConfigInterface $configInstanceOrParentLocator
-     * @param array $config
+     * @param string $name
+     * @param array|null $options
+     * @return mixed
      */
-    public function __construct($configInstanceOrParentLocator, array $config)
+    public function get($name, array $options = null)
     {
-        $this->addAbstractFactory(new SelectorFallbackAbstractFactory());
+        if (!$this->has($name)) {
+            if (!$this->autoAddInvokableClass || !class_exists($name)) {
+                throw new ServiceNotFoundException(sprintf(
+                    'A plugin by the name "%s" was not found in the plugin manager %s',
+                    $name,
+                    get_class($this)
+                ));
+            }
 
-        parent::__construct($configInstanceOrParentLocator, $config);
+            $this->setFactory($name, SelectorFactory::class);
+        }
+        return parent::get($name, $options);
     }
 }

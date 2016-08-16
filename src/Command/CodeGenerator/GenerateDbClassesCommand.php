@@ -228,7 +228,7 @@ class GenerateDbClassesCommand extends AbstractCommand
         $tableGatewayDirectory = $this->directory . 'TableGateway/';
 
         /** @var GenerateModelCommand $generateModel */
-        $generateModel = $this->getCommand('Core42\CodeGenerator\GenerateModel');
+        $generateModel = $this->getCommand(GenerateModelCommand::class);
         $generateModel->setAdapterName($this->adapterName)
             ->setDirectory($modelDirectory)
             ->setClassName($modelClassName)
@@ -237,7 +237,7 @@ class GenerateDbClassesCommand extends AbstractCommand
             ->run();
 
         /** @var GenerateTableGatewayCommand $generateTableGateway */
-        $generateTableGateway = $this->getCommand('Core42\CodeGenerator\GenerateTableGateway');
+        $generateTableGateway = $this->getCommand(GenerateTableGatewayCommand::class);
         $generateTableGateway->setAdapterName($this->adapterName)
             ->setDirectory($tableGatewayDirectory)
             ->setClassName($tableGatewayClassName)

@@ -11,24 +11,33 @@ namespace Core42\Db\TableGateway\Service;
 
 use Core42\Db\TableGateway\AbstractTableGateway;
 use Zend\ServiceManager\AbstractPluginManager;
+use Zend\ServiceManager\Exception\ServiceNotFoundException;
 
 class TableGatewayPluginManager extends AbstractPluginManager
 {
-
     /**
      * @var string
      */
     protected $instanceOf = AbstractTableGateway::class;
 
     /**
-     * TableGatewayPluginManager constructor.
-     * @param \Interop\Container\ContainerInterface|null|\Zend\ServiceManager\ConfigInterface $configInstanceOrParentLocator
-     * @param array $config
+     * @param string $name
+     * @param array|null $options
+     * @return mixed
      */
-    public function __construct($configInstanceOrParentLocator, array $config)
+    public function get($name, array $options = null)
     {
-        $this->addAbstractFactory(new TableGatewayFallbackAbstractFactory());
+        if (!$this->has($name)) {
+            if (!$this->autoAddInvokableClass || !class_exists($name)) {
+                throw new ServiceNotFoundException(sprintf(
+                    'A plugin by the name "%s" was not found in the plugin manager %s',
+                    $name,
+                    get_class($this)
+                ));
+            }
 
-        parent::__construct($configInstanceOrParentLocator, $config);
+            $this->setFactory($name, TableGatewayFactory::class);
+        }
+        return parent::get($name, $options);
     }
 }

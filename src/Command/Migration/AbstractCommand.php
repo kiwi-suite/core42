@@ -10,6 +10,7 @@
 namespace Core42\Command\Migration;
 
 use Core42\Model\Migration;
+use Core42\TableGateway\MigrationTableGateway;
 use Symfony\Component\Filesystem\Filesystem;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Metadata\Source\Factory;
@@ -97,7 +98,7 @@ abstract class AbstractCommand extends \Core42\Command\AbstractCommand
     protected function getAllMigrations()
     {
         /** @var \Core42\TableGateway\MigrationTableGateway $migrationTableGateway */
-        $migrationTableGateway = $this->getServiceManager()->get('TableGateway')->get('Core42\Migration');
+        $migrationTableGateway = $this->getServiceManager()->get('TableGateway')->get(MigrationTableGateway::class);
         $resultSet = $migrationTableGateway->select();
 
         $migratedMigrations = [];

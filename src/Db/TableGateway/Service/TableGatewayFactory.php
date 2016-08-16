@@ -1,12 +1,4 @@
 <?php
-/**
- * core42 (www.raum42.at)
- *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
- *
- */
-
 namespace Core42\Db\TableGateway\Service;
 
 use Core42\Db\TableGateway\AbstractTableGateway;
@@ -15,45 +7,10 @@ use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
-use Zend\ServiceManager\Factory\AbstractFactoryInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
-class TableGatewayFallbackAbstractFactory implements AbstractFactoryInterface
+class TableGatewayFactory implements FactoryInterface
 {
-    /**
-     * @param string $name
-     * @return bool|string
-     */
-    protected function getFQCN($name)
-    {
-        if (class_exists($name)) {
-            return $name;
-        }
-
-        if (strpos($name, '\\') === false) {
-            return false;
-        }
-
-        $parts = explode('\\', $name, 2);
-
-        return '\\' . $parts[0] . '\\TableGateway\\' .$parts[1] . 'TableGateway';
-    }
-
-    /**
-     * Can the factory create an instance for the service?
-     *
-     * @param  ContainerInterface $container
-     * @param  string $requestedName
-     * @return bool
-     */
-    public function canCreate(ContainerInterface $container, $requestedName)
-    {
-        $fqcn = $this->getFQCN($requestedName);
-        if ($fqcn === false) {
-            return false;
-        }
-
-        return class_exists($fqcn);
-    }
 
     /**
      * Create an object
@@ -69,8 +26,6 @@ class TableGatewayFallbackAbstractFactory implements AbstractFactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $fqcn = $this->getFQCN($requestedName);
-
         /* @var \Zend\Db\Adapter\Adapter $adapter */
         $adapter = $container->get('Db\Master');
         $slave = null;
@@ -81,7 +36,7 @@ class TableGatewayFallbackAbstractFactory implements AbstractFactoryInterface
         $hydratorStrategyPluginManager = $container->get(HydratorStrategyPluginManager::class);
 
         /** @var AbstractTableGateway $gateway */
-        $gateway = new $fqcn($adapter, $hydratorStrategyPluginManager, $slave);
+        $gateway = new $requestedName($adapter, $hydratorStrategyPluginManager, $slave);
 
         $gateway->initialize();
 
