@@ -14,6 +14,8 @@ use Core42\Form\Service\FormPluginManager;
 use Core42\Form\Service\FormPluginManagerFactory;
 use Core42\Hydrator\Strategy\Service\HydratorStrategyPluginManager;
 use Core42\Hydrator\Strategy\Service\HydratorStrategyPluginManagerFactory;
+use Core42\Hydrator\Strategy\Service\JsonHydratorPluginManager;
+use Core42\Hydrator\Strategy\Service\JsonHydratorPluginManagerFactory;
 use Core42\I18n\Localization\Localization;
 use Core42\I18n\Localization\Service\LocalizationFactory;
 use Core42\I18n\Translator\Service\TranslatorFactory;
@@ -68,6 +70,8 @@ return [
             HydratorStrategyPluginManager::class            => HydratorStrategyPluginManagerFactory::class,
             SelectorPluginManager::class                    => SelectorPluginManagerFactory::class,
             FormPluginManager::class                        => FormPluginManagerFactory::class,
+
+            JsonHydratorPluginManager::class                => JsonHydratorPluginManagerFactory::class,
 
             TreeRouteMatcher::class                         => TreeRouteMatcherFactory::class,
 
