@@ -50,8 +50,14 @@ class CacheAbstractFactory implements AbstractFactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $driver = $this->getConfig($container)[$requestedName];
+        $config = $this->getConfig($container)[$requestedName];
 
-        return new Pool($container->get(DriverPluginManager::class)->get($driver));
+        $pool = new Pool($container->get(DriverPluginManager::class)->get($config['driver']));
+
+        if (!empty($config['namespace'])) {
+            $pool->setNamespace($config['namespace']);
+        }
+
+        return $pool;
     }
 }

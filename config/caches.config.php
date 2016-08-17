@@ -5,8 +5,7 @@ use Stash\Driver\Ephemeral;
 
 return [
     'cache' => [
-        'caches' => [
-        ],
+        'caches' => [],
         'drivers' => [
             'ephemeral' => [
                 'driver' => Ephemeral::class,
