@@ -46,6 +46,7 @@
         "zendframework/zend-psr7bridge": "^0.2.2",
 
         "monolog/monolog": "~1.20.0",
+        "tedivm/stash": "^0.14",
         "swiftmailer/swiftmailer": "v5.4.2",
         "guzzlehttp/guzzle": "6.2.0",
         "filp/whoops": "2.1.2",
