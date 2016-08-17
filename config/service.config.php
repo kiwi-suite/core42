@@ -1,6 +1,10 @@
 <?php
 namespace Core42;
 
+use Core42\Cache\Service\CachePluginManager;
+use Core42\Cache\Service\CachePluginManagerFactory;
+use Core42\Cache\Service\DriverPluginManager;
+use Core42\Cache\Service\DriverPluginManagerFactory;
 use Core42\Command\Console\ConsoleDispatcher;
 use Core42\Command\Console\Service\ConsoleDispatcherFactory;
 use Core42\Command\Service\CommandPluginManager;
@@ -108,6 +112,9 @@ return [
             'Db\Master'                                     => AdapterFactory::class,
 
             'HttpExceptionStrategy'                         => ExceptionStrategyFactory::class,
+
+            CachePluginManager::class                       => CachePluginManagerFactory::class,
+            DriverPluginManager::class                      => DriverPluginManagerFactory::class,
         ],
         'aliases' => [
             'Localization'                                  => Localization::class,
@@ -121,6 +128,7 @@ return [
             'Selector'                                      => SelectorPluginManager::class,
             'Form'                                          => FormPluginManager::class,
             'Navigation'                                    => Navigation::class,
+            'Cache'                                         => CachePluginManager::class,
 
             'Core42\Mail\Transport'                         => TransportInterface::class,
 

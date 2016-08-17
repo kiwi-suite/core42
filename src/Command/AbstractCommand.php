@@ -12,6 +12,7 @@ namespace Core42\Command;
 use Core42\Db\TableGateway\AbstractTableGateway;
 use Core42\Db\Transaction\TransactionManager;
 use Core42\Selector\SelectorInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Zend\ServiceManager\ServiceManager;
 
 abstract class AbstractCommand implements CommandInterface
@@ -265,5 +266,14 @@ abstract class AbstractCommand implements CommandInterface
     public function getSelector($selectorName)
     {
         return $this->getServiceManager()->get('Selector')->get($selectorName);
+    }
+
+    /**
+     * @param string $cacheName
+     * @return CacheItemPoolInterface
+     */
+    public function getCache($cacheName)
+    {
+        return $this->getServiceManager()->get('Cache')->get($cacheName);
     }
 }

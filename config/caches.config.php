@@ -1,22 +1,16 @@
 <?php
 namespace Core42;
 
+use Stash\Driver\Ephemeral;
+
 return [
-    'caches' => [
-        'Cache\Intern' => [
-            'adapter' => [
-                'name' => 'filesystem',
-                'options' => [
-                    'cache_dir'      => 'data/cache/',
-                    'namespace'      => 'cache_intern',
-                    'dirPermission'  => 0770,
-                    'filePermission' => 0660,
-                    'readable'       => !DEVELOPMENT_MODE,
-                    'writable'       => !DEVELOPMENT_MODE,
-                ],
-            ],
-            'plugins' => [
-                'Serializer'
+    'cache' => [
+        'caches' => [
+        ],
+        'drivers' => [
+            'ephemeral' => [
+                'driver' => Ephemeral::class,
+                'options' => [],
             ],
         ],
     ],

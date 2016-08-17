@@ -14,6 +14,7 @@ use Core42\Command\Form\FormCommand;
 use Core42\Db\SelectQuery\AbstractSelectQuery;
 use Core42\Db\TableGateway\AbstractTableGateway;
 use Core42\Selector\SelectorInterface;
+use Psr\Cache\CacheItemPoolInterface;
 use Zend\Form\Form;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceManager;
@@ -104,5 +105,14 @@ class AbstractActionController extends \Zend\Mvc\Controller\AbstractActionContro
     public function getFormCommand()
     {
         return $this->getCommand(FormCommand::class);
+    }
+
+    /**
+     * @param string $cacheName
+     * @return CacheItemPoolInterface
+     */
+    public function getCache($cacheName)
+    {
+        return $this->getServiceManager()->get('Cache')->get($cacheName);
     }
 }
