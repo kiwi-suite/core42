@@ -50,6 +50,8 @@
         "swiftmailer/swiftmailer": "v5.4.2",
         "guzzlehttp/guzzle": "6.2.0",
         "filp/whoops": "2.1.2",
+        "league/flysystem": "^1.0",
+        "ramsey/uuid": "^3.5",
 
         "zfcampus/zf-console": "1.2.0",
         "symfony/finder": "v3.1.0",
