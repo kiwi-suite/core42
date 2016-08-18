@@ -9,9 +9,8 @@
 
 namespace Core42\Mail\Transport\Service;
 
+use Core42\Mail\Transport\Factory;
 use Interop\Container\ContainerInterface;
-use Zend\Mail\Transport\Factory;
-use Zend\Mail\Transport\TransportInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
 class TransportFactory implements FactoryInterface
@@ -20,7 +19,7 @@ class TransportFactory implements FactoryInterface
      * @param ContainerInterface $container
      * @param $requestedName
      * @param array|null $options
-     * @return TransportInterface
+     * @return \Swift_Transport
      * @throws \Exception
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)

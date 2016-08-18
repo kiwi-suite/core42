@@ -51,6 +51,11 @@ class FormCommand extends AbstractCommand
     private $takeOriginalData = false;
 
     /**
+     * @var bool
+     */
+    protected $transaction = false;
+
+    /**
      *
      */
     protected function init()

@@ -11,28 +11,25 @@ namespace Core42\Command\Mail;
 
 use Core42\Command\AbstractCommand;
 use Core42\View\Model\MailModel;
-use Zend\Mail\Message;
-use Zend\Mime\Mime;
-use Zend\Mime\Part;
-use Zend\Mime\Message as MimeMessage;
 use Zend\View\Renderer\PhpRenderer;
+use Swift_Message;
 
 class SendCommand extends AbstractCommand
 {
     /**
-     * @var Message
+     * @var Swift_Message
      */
-    private $mailMessage;
+    protected $mailMessage;
 
     /**
      * @var MailModel
      */
-    private $layout;
+    protected $layout;
 
     /**
      * @var MailModel
      */
-    private $body;
+    protected $body;
 
     /**
      * @var array
@@ -42,26 +39,51 @@ class SendCommand extends AbstractCommand
     /**
      * @var array
      */
-    private $parts = [];
+    protected $parts = [];
 
     /**
      * @var string
      */
-    private $subject;
+    protected $subject;
+
+    /**
+     * @var array
+     */
+    protected $from = [];
+
+    /**
+     * @var array
+     */
+    protected $to = [];
+
+    /**
+     * @var array
+     */
+    protected $cc = [];
+
+    /**
+     * @var array
+     */
+    protected $bcc = [];
+
+    /**
+     * @var array
+     */
+    protected $replyTo = [];
 
     /**
      *
      */
-    protected function init()
+    protected function configure()
     {
-        $this->mailMessage = new Message();
+        $this->mailMessage = Swift_Message::newInstance();
 
         $this->parts = [
             'plain' => [
-                'type' => Mime::TYPE_TEXT,
+                'type' => 'text/plain',
             ],
             'html' => [
-                'type' => Mime::TYPE_HTML,
+                'type' => 'text/html',
             ],
         ];
     }
@@ -91,10 +113,21 @@ class SendCommand extends AbstractCommand
      * @param null|string $name
      * @return $this
      */
+    public function setFrom($email, $name = null)
+    {
+        $address = ($name == null) ? $email : [$email, $name];
+        $this->from = $address;
+        return $this;
+    }
+
+    /**
+     * @param string $email
+     * @param null|string $name
+     * @return $this
+     */
     public function addFrom($email, $name = null)
     {
-        $this->mailMessage->addFrom($email, $name);
-        return $this;
+        return $this->setFrom($email, $name);
     }
 
     /**
@@ -104,7 +137,8 @@ class SendCommand extends AbstractCommand
      */
     public function addTo($email, $name = null)
     {
-        $this->mailMessage->addTo($email, $name);
+        $address = ($name == null) ? $email : [$email, $name];
+        $this->to[] = $address;
         return $this;
     }
 
@@ -115,7 +149,8 @@ class SendCommand extends AbstractCommand
      */
     public function addCc($email, $name = null)
     {
-        $this->mailMessage->addCc($email, $name);
+        $address = ($name == null) ? $email : [$email, $name];
+        $this->cc[] = $address;
         return $this;
     }
 
@@ -126,7 +161,8 @@ class SendCommand extends AbstractCommand
      */
     public function addBcc($email, $name = null)
     {
-        $this->mailMessage->addBcc($email, $name);
+        $address = ($name == null) ? $email : [$email, $name];
+        $this->bcc[] = $address;
         return $this;
     }
 
@@ -137,7 +173,8 @@ class SendCommand extends AbstractCommand
      */
     public function addReplyTo($email, $name = null)
     {
-        $this->mailMessage->addReplyTo($email, $name);
+        $address = ($name == null) ? $email : [$email, $name];
+        $this->replyTo[] = $address;
         return $this;
     }
 
@@ -155,9 +192,19 @@ class SendCommand extends AbstractCommand
      * @param array $attachments
      * @return $this
      */
-    public function setAttachments($attachments)
+    public function setAttachments(array $attachments)
     {
         $this->attachments = $attachments;
+        return $this;
+    }
+
+    /**
+     * @param $attachment
+     * @return $this
+     */
+    public function addAttachment($attachment)
+    {
+        $this->attachments[] = $attachment;
         return $this;
     }
 
@@ -203,13 +250,19 @@ class SendCommand extends AbstractCommand
         $this->subject = $projectConfig['email_subject_prefix'] . $this->subject;
         $this->mailMessage->setSubject($this->subject);
 
-        if ($this->mailMessage->getFrom()->count() == 0) {
+        if (empty($this->from)) {
             if (!empty($projectConfig['email_from'])) {
-                $this->mailMessage->addFrom($projectConfig['email_from']);
+                $this->from = $projectConfig['email_from'];
             } else {
                 $this->addError("from", "no from specified");
             }
         }
+
+        $this->mailMessage->setFrom($this->from);
+        $this->mailMessage->setTo($this->to);
+        $this->mailMessage->setCc($this->cc);
+        $this->mailMessage->setBcc($this->bcc);
+        $this->mailMessage->setReplyTo($this->replyTo);
     }
 
     /**
@@ -224,9 +277,6 @@ class SendCommand extends AbstractCommand
         $phpRenderer->setResolver($viewResolver);
         $phpRenderer->setHelperPluginManager($this->getServiceManager()->get("ViewHelperManager"));
 
-        $body = new \Zend\Mime\Message();
-
-        $parts = [];
         foreach ($this->parts as $type => $options) {
             if (!$this->body->hasTemplate($type)) {
                 continue;
@@ -234,131 +284,15 @@ class SendCommand extends AbstractCommand
             $this->body->useTemplate($type);
             $this->layout->useTemplate($type);
             $this->layout->setVariable('content', $phpRenderer->render($this->body));
-
-            $part = new Part($phpRenderer->render($this->layout));
-            $part->type = $options['type'];
-            $part->encoding = Mime::ENCODING_QUOTEDPRINTABLE;
-            $part->charset = "UTF-8";
-            $parts[$type] = $part;
+            $this->mailMessage->addPart($phpRenderer->render($this->layout), $options['type']);
         }
 
-        $inlineImages = [];
-        $attachments = [];
-
-        if (count($this->attachments) > 0) {
-
-            // Attachments
-            foreach ($this->attachments as $curAttachment) {
-
-                $isInline = false;
-
-                $attachment = new Part();
-                $attachment->encoding = Mime::ENCODING_BASE64;
-                $attachment->setDisposition(Mime::DISPOSITION_ATTACHMENT);
-
-                if (is_array($curAttachment)) {
-                    if (!empty($curAttachment['content'])) {
-                        $attachment->setContent($curAttachment['content']);
-                    } elseif (!empty($curAttachment['file'])) {
-                        $attachment->setContent(file_get_contents($curAttachment['file']));
-                    } else {
-                        continue;
-                    }
-
-                    $attachment->type = Mime::TYPE_OCTETSTREAM;
-                    if (!empty($curAttachment['type'])) {
-                        $attachment->type = $curAttachment['type'];
-                    }
-
-                    if (!empty($curAttachment['filename'])) {
-                        $attachment->filename = $curAttachment['filename'];
-                    } else {
-                        $attachment->filename = basename($curAttachment['file']);
-                    }
-
-                    if (!empty($curAttachment['inline']) && $curAttachment['inline'] === true) {
-                        $attachment->setDisposition(Mime::DISPOSITION_INLINE);
-                        $isInline = true;
-                    }
-
-                    if (!empty($curAttachment['id'])) {
-                        $attachment->setId($curAttachment['id']);
-                    }
-
-                } else {
-                    $attachment->setContent(file_get_contents($curAttachment));
-                    $attachment->type = Mime::TYPE_OCTETSTREAM;
-                    $attachment->filename = basename($curAttachment);
-                }
-
-                if ($isInline) {
-                    $inlineImages[] = $attachment;
-                } else {
-                    $attachments[] = $attachment;
-                }
-            }
-        }
-
-        // wrap html in part in related part if inline images are used
-        if (!empty($parts['html']) && count($inlineImages) > 0) {
-
-            $mimeMessage = new MimeMessage();
-            $relatedPart = new Part();
-            $relatedPart->type = "multipart/related;\n boundary=\"".$mimeMessage->getMime()->boundary()."\"";
-
-            $mimeMessage->addPart($parts['html']);
-            foreach ($inlineImages as $image) {
-                $mimeMessage->addPart($image);
-            }
-
-            $relatedPart->setContent($mimeMessage->generateMessage());
-            $parts['html'] = $relatedPart;
-        }
-
-        $contentType = null;
-
-        if (count($attachments) > 0) {
-
-            $contentType = Mime::MULTIPART_MIXED;
-
-            // Create separate alternative parts object
-            $alternatives = new MimeMessage();
-            $alternatives->setParts($parts);
-            $alternativesPart = new Part($alternatives->generateMessage());
-            $alternativesPart->type = "multipart/alternative;\n boundary=\"".$alternatives->getMime()->boundary()."\"";
-
-            $body->addPart($alternativesPart);
-            foreach ($attachments as $attachment) {
-                $body->addPart($attachment);
-            }
-
-        } else {
-
-            foreach ($parts as $part) {
-                $body->addPart($part);
-            }
-
-            if (count($parts) > 1) {
-                $contentType = Mime::MULTIPART_ALTERNATIVE;
-            }
-        }
-
-        if (count($body->getParts()) == 0) {
-            return;
-        }
-
-        $this->mailMessage->setBody($body);
-        $this->mailMessage->setEncoding('UTF-8');
-
-        //content type must be overwritten after "setBody"
-        if ($contentType !== null) {
-            $this->mailMessage
-                ->getHeaders()
-                ->get('content-type')
-                ->setType($contentType);
+        foreach ($this->attachments as $attachment) {
+            $this->mailMessage->attach(\Swift_Attachment::fromPath($attachment));
         }
 
         $transport = $this->getServiceManager()->get('Core42\Mail\Transport');
-        $transport->send($this->mailMessage);
+        $mailer = \Swift_Mailer::newInstance($transport);
+        $mailer->send($this->mailMessage);
     }
 }
