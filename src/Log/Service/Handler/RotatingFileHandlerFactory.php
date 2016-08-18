@@ -36,7 +36,14 @@ class RotatingFileHandlerFactory implements FactoryInterface
         $filePermission = (!empty($options['file_permission'])) ? $options['file_permission'] : null;
         $userLocking = (!empty($options['use_locking'])) ? $options['use_locking'] : false;
 
-        $handler = new RotatingFileHandler($options['filename'], $maxFiles, $level, $bubble, $filePermission, $userLocking);
+        $handler = new RotatingFileHandler(
+            $options['filename'],
+            $maxFiles,
+            $level,
+            $bubble,
+            $filePermission,
+            $userLocking
+        );
 
         if (!empty($options['filename_format']) && !empty($options['date_format'])) {
             $handler->setFilenameFormat($options['filename_format'], $options['date_format']);

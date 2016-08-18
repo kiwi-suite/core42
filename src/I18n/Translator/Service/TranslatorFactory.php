@@ -14,6 +14,12 @@ use Zend\I18n\Translator\Translator;
 
 class TranslatorFactory extends \Zend\Mvc\I18n\TranslatorFactory
 {
+    /**
+     * @param ContainerInterface $container
+     * @param string $requestedName
+     * @param array|null $options
+     * @return \Zend\Mvc\I18n\Translator
+     */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $translator = parent::__invoke($container, $requestedName, $options);

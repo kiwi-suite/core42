@@ -62,6 +62,9 @@ class AbstractHandlerFactory implements AbstractFactoryInterface
 
         $handlerPluginManager = $container->get(HandlerPluginManager::class);
 
-        return $handlerPluginManager->build($this->config['handler_definitions'][$requestedName]['handler_type'], $handlerConfig);
+        return $handlerPluginManager->build(
+            $this->config['handler_definitions'][$requestedName]['handler_type'],
+            $handlerConfig
+        );
     }
 }

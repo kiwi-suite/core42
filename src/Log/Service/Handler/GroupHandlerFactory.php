@@ -35,7 +35,7 @@ class GroupHandlerFactory implements FactoryInterface
 
         $handlers = [];
         foreach ($options['handlers'] as $handler) {
-            $handlers[] = $handlerPluginManager->get($handler);    
+            $handlers[] = $handlerPluginManager->get($handler);
         }
         
         $bubble = (!empty($options['bubble'])) ? $options['bubble'] : true;

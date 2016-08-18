@@ -93,7 +93,7 @@ class Json extends ZendJson
      */
     private function unserializeRecursive($value)
     {
-        if (!is_array($value)){
+        if (!is_array($value)) {
             return $value;
         }
 

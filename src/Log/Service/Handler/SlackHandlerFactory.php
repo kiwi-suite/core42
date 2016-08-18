@@ -42,6 +42,16 @@ class SlackHandlerFactory implements FactoryInterface
 
         $bubble = (!empty($options['bubble'])) ? $options['bubble'] : true;
 
-        return new SlackHandler($options['token'], $options['channel'], $username, $useAttachment, $iconEmoji, $level, $bubble, $useShortAttachment, $includeContextAndExtra);
+        return new SlackHandler(
+            $options['token'],
+            $options['channel'],
+            $username,
+            $useAttachment,
+            $iconEmoji,
+            $level,
+            $bubble,
+            $useShortAttachment,
+            $includeContextAndExtra
+        );
     }
 }

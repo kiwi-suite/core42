@@ -27,7 +27,10 @@ class ErrorLogHandlerFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
 
-        $messageType = (!empty($options['message_type'])) ? $options['message_type'] : ErrorLogHandler::OPERATING_SYSTEM;
+        $messageType = (!empty($options['message_type']))
+            ? $options['message_type']
+            : ErrorLogHandler::OPERATING_SYSTEM;
+
         $level = (!empty($options['level'])) ? $options['level'] : Logger::DEBUG;
         $bubble = (!empty($options['bubble'])) ? $options['bubble'] : true;
         $expandNewlines = (!empty($options['expand_newlines'])) ? $options['expand_newlines'] : false;

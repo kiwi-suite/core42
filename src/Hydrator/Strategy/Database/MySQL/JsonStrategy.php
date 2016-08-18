@@ -20,6 +20,10 @@ class JsonStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     protected $serializer;
 
+    /**
+     * JsonStrategy constructor.
+     * @param Json $serializer
+     */
     public function __construct(Json $serializer)
     {
         $this->serializer = $serializer;
