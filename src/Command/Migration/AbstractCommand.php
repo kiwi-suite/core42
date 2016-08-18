@@ -10,8 +10,8 @@
 namespace Core42\Command\Migration;
 
 use Core42\Model\Migration;
+use Core42\Stdlib\Filesystem;
 use Core42\TableGateway\MigrationTableGateway;
-use Symfony\Component\Filesystem\Filesystem;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Metadata\Source\Factory;
 
@@ -83,8 +83,7 @@ abstract class AbstractCommand extends \Core42\Command\AbstractCommand
                 );
             } while ($count > 0);
 
-            $filesystem = new Filesystem();
-            if ($filesystem->isAbsolutePath($dir)) {
+            if (Filesystem::isAbsolutePath($dir)) {
                 $dir = str_replace(getcwd() . DIRECTORY_SEPARATOR, '', $dir);
             }
 

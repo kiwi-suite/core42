@@ -11,7 +11,12 @@ namespace Core42\Command\Assets;
 
 use Core42\Command\AbstractCommand;
 use Core42\Command\ConsoleAwareTrait;
-use Symfony\Component\Filesystem\Filesystem;
+use Falc\Flysystem\Plugin\Symlink\Local\Symlink;
+use League\Flysystem\Adapter\Local;
+use League\Flysystem\Filesystem;
+use League\Flysystem\Plugin\EmptyDir;
+use League\Flysystem\Plugin\ListFiles;
+use League\Flysystem\Plugin\ListPaths;
 use ZF\Console\Route;
 
 class AssetsCommand extends AbstractCommand
@@ -67,34 +72,40 @@ class AssetsCommand extends AbstractCommand
      */
     protected function execute()
     {
-        $filesystem = new Filesystem();
+        $filesystem = new Filesystem(new Local(getcwd()));
+        $filesystem->addPlugin(new Symlink());
+        $filesystem->addPlugin(new ListPaths());
+        $filesystem->addPlugin(new ListFiles());
+        $filesystem->addPlugin(new EmptyDir());
 
         foreach ($this->assetConfig as $config) {
+            $source = $config['source'];
+            $target = rtrim($config['target'], DIRECTORY_SEPARATOR);
+
+            $filesystem->createDir(dirname($target));
+
             if ($this->copy === true) {
-                $filesystem->mirror($config['source'], $config['target'], null, [
-                    'override'          => true,
-                    'copy_on_windows'   => true,
-                ]);
-                $this->consoleOutput("created directory for '{$config['source']}'");
+                $filesystem->emptyDir($target);
+
+                $files = $filesystem->listFiles($source, true);
+                foreach ($files as $fileData) {
+                    if ($fileData['type'] == "dir") {
+                        continue;
+                    }
+
+                    $dirname = $target . DIRECTORY_SEPARATOR . str_replace($source, "", $fileData['dirname']);
+                    $filesystem->createDir($dirname);
+
+                    $filename = $target . DIRECTORY_SEPARATOR . str_replace($source, "", $fileData['path']);
+                    $filesystem->copy($fileData['path'], $filename);
+                }
+                $this->consoleOutput("created directory for '{$source}'");
 
                 continue;
             }
 
-            $source = $filesystem->makePathRelative(
-                $config['source'],
-                substr($config['target'], 0, strrpos($config['target'], '/'))
-            );
-
-            if (strtoupper(substr(PHP_OS, 0, 3)) === 'WIN') {
-                $source = getcwd() . DIRECTORY_SEPARATOR . $config['source'];
-
-                if ($filesystem->isAbsolutePath($config['target'])) {
-                    $source = $config['target'];
-                }
-            }
-
-            $filesystem->symlink($source, $config['target']);
-            $this->consoleOutput("created symlink for '{$config['source']}' (target '{$config['target']}')");
+            $filesystem->symlink($source, $target);
+            $this->consoleOutput("created symlink for '{$source}' (target '{$target}')");
         }
     }
 
