@@ -131,10 +131,7 @@ abstract class AbstractCommand implements CommandInterface
             if ($this->throwCommandExceptions === true) {
                 throw $e;
             }
-        }
-
-        //TODO might be more clean with PHP5.5 finally
-        if ($this->commandException === null) {
+        } finally {
             $this->shutdown();
         }
 
