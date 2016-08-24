@@ -14,6 +14,7 @@ use Core42\Command\Form\FormCommand;
 use Core42\Db\SelectQuery\AbstractSelectQuery;
 use Core42\Db\TableGateway\AbstractTableGateway;
 use Core42\Selector\SelectorInterface;
+use Core42\Stdlib\DefaultGetterTrait;
 use Psr\Cache\CacheItemPoolInterface;
 use Zend\Form\Form;
 use Zend\ServiceManager\ServiceLocatorInterface;
@@ -27,10 +28,7 @@ use Zend\ServiceManager\ServiceManager;
  */
 class AbstractActionController extends \Zend\Mvc\Controller\AbstractActionController
 {
-    /**
-     * @var ServiceManager
-     */
-    protected $serviceManager;
+    use DefaultGetterTrait;
 
     /**
      * AbstractActionController constructor.
@@ -42,19 +40,6 @@ class AbstractActionController extends \Zend\Mvc\Controller\AbstractActionContro
     }
 
     /**
-     * @var ServiceLocatorInterface
-     */
-    protected $serviceLocator;
-
-    /**
-     * @return ServiceManager
-     */
-    public function getServiceManager()
-    {
-        return $this->serviceManager;
-    }
-
-    /**
      * @deprecated
      * @return ServiceLocatorInterface
      */
@@ -63,56 +48,5 @@ class AbstractActionController extends \Zend\Mvc\Controller\AbstractActionContro
         return $this->getServiceManager();
     }
 
-    /**
-     * @param string $commandName
-     * @return AbstractCommand
-     */
-    public function getCommand($commandName)
-    {
-        return $this->getServiceManager()->get('Command')->get($commandName);
-    }
 
-    /**
-     * @param string $formName
-     * @return Form
-     */
-    public function getForm($formName)
-    {
-        return $this->getServiceManager()->get("Form")->get($formName);
-    }
-
-    /**
-     * @param string $selectorName
-     * @return SelectorInterface
-     */
-    public function getSelector($selectorName)
-    {
-        return $this->getServiceManager()->get('Selector')->get($selectorName);
-    }
-
-    /**
-     * @param string $tableGatewayName
-     * @return AbstractTableGateway
-     */
-    public function getTableGateway($tableGatewayName)
-    {
-        return $this->getServiceManager()->get('TableGateway')->get($tableGatewayName);
-    }
-
-    /**
-     * @return FormCommand
-     */
-    public function getFormCommand()
-    {
-        return $this->getCommand(FormCommand::class);
-    }
-
-    /**
-     * @param string $cacheName
-     * @return CacheItemPoolInterface
-     */
-    public function getCache($cacheName)
-    {
-        return $this->getServiceManager()->get('Cache')->get($cacheName);
-    }
 }

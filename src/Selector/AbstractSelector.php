@@ -11,15 +11,13 @@ namespace Core42\Selector;
 
 use Core42\Command\Migration\AbstractCommand;
 use Core42\Db\TableGateway\AbstractTableGateway;
+use Core42\Stdlib\DefaultGetterTrait;
 use Psr\Cache\CacheItemPoolInterface;
 use Zend\ServiceManager\ServiceManager;
 
 abstract class AbstractSelector implements SelectorInterface
 {
-    /**
-     * @var ServiceManager
-     */
-    private $serviceManager;
+    use DefaultGetterTrait;
 
     /**
      * @param ServiceManager $serviceManager
@@ -29,14 +27,6 @@ abstract class AbstractSelector implements SelectorInterface
         $this->serviceManager = $serviceManager;
 
         $this->init();
-    }
-
-    /**
-     * @return ServiceManager
-     */
-    protected function getServiceManager()
-    {
-        return $this->serviceManager;
     }
 
     /**
@@ -78,7 +68,7 @@ abstract class AbstractSelector implements SelectorInterface
      * @param string $cacheName
      * @return CacheItemPoolInterface
      */
-    public function getCache($cacheName)
+    protected function getCache($cacheName)
     {
         return $this->getServiceManager()->get('Cache')->get($cacheName);
     }

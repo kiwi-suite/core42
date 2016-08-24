@@ -12,16 +12,13 @@ namespace Core42\Command;
 use Core42\Db\TableGateway\AbstractTableGateway;
 use Core42\Db\Transaction\TransactionManager;
 use Core42\Selector\SelectorInterface;
+use Core42\Stdlib\DefaultGetterTrait;
 use Psr\Cache\CacheItemPoolInterface;
 use Zend\ServiceManager\ServiceManager;
 
 abstract class AbstractCommand implements CommandInterface
 {
-    /**
-     *
-     * @var ServiceManager
-     */
-    private $serviceManager;
+    use DefaultGetterTrait;
 
     /**
      * @var \Exception|null
@@ -78,15 +75,6 @@ abstract class AbstractCommand implements CommandInterface
         $this->throwCommandExceptions = (boolean) $enable;
 
         return $this;
-    }
-
-    /**
-     *
-     * @return \Zend\ServiceManager\ServiceManager
-     */
-    public function getServiceManager()
-    {
-        return $this->serviceManager;
     }
 
     /**
@@ -236,41 +224,5 @@ abstract class AbstractCommand implements CommandInterface
     final public function getException()
     {
         return $this->commandException;
-    }
-
-    /**
-     * @param string $commandName
-     * @return AbstractCommand
-     */
-    public function getCommand($commandName)
-    {
-        return $this->getServiceManager()->get('Command')->get($commandName);
-    }
-
-    /**
-     * @param string $tableGatewayName
-     * @return AbstractTableGateway
-     */
-    public function getTableGateway($tableGatewayName)
-    {
-        return $this->getServiceManager()->get('TableGateway')->get($tableGatewayName);
-    }
-
-    /**
-     * @param string $selectorName
-     * @return SelectorInterface
-     */
-    public function getSelector($selectorName)
-    {
-        return $this->getServiceManager()->get('Selector')->get($selectorName);
-    }
-
-    /**
-     * @param string $cacheName
-     * @return CacheItemPoolInterface
-     */
-    public function getCache($cacheName)
-    {
-        return $this->getServiceManager()->get('Cache')->get($cacheName);
     }
 }
