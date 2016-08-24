@@ -162,7 +162,7 @@ class CronWrapperCommand extends AbstractCommand
      */
     protected function runCommand($command, $params, &$output = null, &$returnVar = 0)
     {
-        $cmd = 'php module/core42/bin/fruit';
+        $cmd = PHP_BINARY . ' vendor/fruit/core42/bin/fruit';
         $cmd .= " {$command}";
         foreach ($params as $name => $value) {
             if ($name == $value || $value === null) {
