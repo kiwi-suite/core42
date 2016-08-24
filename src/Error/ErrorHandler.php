@@ -35,7 +35,7 @@ class ErrorHandler
             $error = error_get_last();
             if ($error && Misc::isLevelFatal($error['type'])) {
 
-                $exception = new \Exception(
+                $exception = new \ErrorException(
                     $error['message'],
                     $error['type'],
                     $error['type'],
@@ -97,8 +97,6 @@ class ErrorHandler
         $handler->setPageTitle("Error 500");
 
         $whoops->pushHandler($handler);
-        $whoops->allowQuit(false);
-        $whoops->writeToOutput(true);
         $whoops->$method($this->e);
     }
 
@@ -123,8 +121,6 @@ class ErrorHandler
             $handler->addTraceToOutput(true);
 
             $whoops->pushHandler($handler);
-            $whoops->allowQuit(false);
-            $whoops->writeToOutput(true);
             $whoops->$method($this->e);
 
             return;

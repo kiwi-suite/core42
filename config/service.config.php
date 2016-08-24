@@ -23,11 +23,9 @@ use Core42\Hydrator\Strategy\Service\JsonHydratorPluginManagerFactory;
 use Core42\I18n\Localization\Localization;
 use Core42\I18n\Localization\Service\LocalizationFactory;
 use Core42\I18n\Translator\Service\TranslatorFactory;
-use Core42\I18n\Translator\Service\TranslatorLoaderFactory;
 use Core42\Log\Service\HandlerPluginManager;
 use Core42\Log\Service\HandlerPluginManagerFactory;
 use Core42\Log\Service\LoggerFactory;
-use Core42\Mail\Transport\Service\TransportFactory;
 use Core42\Mvc\Environment\Environment;
 use Core42\Mvc\TreeRouteMatcher\Service\TreeRouteMatcherFactory;
 use Core42\Mvc\TreeRouteMatcher\TreeRouteMatcher;
@@ -55,9 +53,7 @@ use Core42\TableGateway\MigrationTableGateway;
 use Core42\TableGateway\Service\MigrationTableGatewayFactory;
 use Core42\View\Http\Service\ExceptionStrategyFactory;
 use Zend\Db\Adapter\AdapterInterface;
-use Zend\I18n\Translator\LoaderPluginManager;
-use Zend\Mail\Transport\TransportInterface;
-use Zend\Mvc\I18n\Translator;
+use Zend\I18n\Translator\TranslatorInterface;
 use Zend\ServiceManager\Factory\InvokableFactory;
 use Zend\Session\Service\SessionConfigFactory;
 use Zend\Session\Service\SessionManagerFactory;
@@ -68,8 +64,6 @@ return [
         'abstract_factories' => [
         ],
         'factories' => [
-            TransportInterface::class                       => TransportFactory::class,
-
             CommandPluginManager::class                     => CommandPluginManagerFactory::class,
             TableGatewayPluginManager::class                => TableGatewayPluginManagerFactory::class,
             HydratorStrategyPluginManager::class            => HydratorStrategyPluginManagerFactory::class,
@@ -102,8 +96,7 @@ return [
             'Log\Core'                                      => LoggerFactory::class,
             'Log\Test'                                      => LoggerFactory::class,
 
-            Translator::class                               => TranslatorFactory::class,
-            LoaderPluginManager::class                      => TranslatorLoaderFactory::class,
+            TranslatorInterface::class                      => TranslatorFactory::class,
 
             'Zend\Session\Service\SessionManager'           => SessionManagerFactory::class,
             'Zend\Session\Config\ConfigInterface'           => SessionConfigFactory::class,
@@ -117,7 +110,6 @@ return [
             DriverPluginManager::class                      => DriverPluginManagerFactory::class,
         ],
         'aliases' => [
-            'Localization'                                  => Localization::class,
             'Permission'                                    => RbacManager::class,
 
             AdapterInterface::class                         => 'Db\Master',
@@ -130,9 +122,8 @@ return [
             'Navigation'                                    => Navigation::class,
             'Cache'                                         => CachePluginManager::class,
 
-            'Core42\Mail\Transport'                         => TransportInterface::class,
-
             //Deprecated
+            'Localization'                                  => Localization::class,
             'Core42\Navigation'                             => Navigation::class,
             'Core42\Permission'                             => RbacManager::class,
             'TreeRouteMatcher'                              => TreeRouteMatcher::class,
