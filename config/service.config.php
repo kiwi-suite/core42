@@ -26,6 +26,7 @@ use Core42\I18n\Translator\Service\TranslatorFactory;
 use Core42\Log\Service\HandlerPluginManager;
 use Core42\Log\Service\HandlerPluginManagerFactory;
 use Core42\Log\Service\LoggerFactory;
+use Core42\Mail\Transport\Service\TransportFactory;
 use Core42\Mvc\Environment\Environment;
 use Core42\Mvc\TreeRouteMatcher\Service\TreeRouteMatcherFactory;
 use Core42\Mvc\TreeRouteMatcher\TreeRouteMatcher;
@@ -106,6 +107,7 @@ return [
 
             'HttpExceptionStrategy'                         => ExceptionStrategyFactory::class,
 
+            'Core42\Mail\Transport'                         => TransportFactory::class,
             CachePluginManager::class                       => CachePluginManagerFactory::class,
             DriverPluginManager::class                      => DriverPluginManagerFactory::class,
         ],
