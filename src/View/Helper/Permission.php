@@ -1,55 +1,41 @@
 <?php
-/**
- * core42 (www.raum42.at)
- *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
- *
- */
-
 namespace Core42\View\Helper;
 
-use Core42\Permission\Rbac\RbacManager;
-use Zend\Form\View\Helper\AbstractHelper;
+use Admin42\Link\LinkProvider;
+use Admin42\TableGateway\LinkTableGateway;
+use Core42\Permission\Service\PermissionPluginManager;
+use Zend\Cache\Storage\StorageInterface;
+use Zend\Json\Json;
+use Zend\View\Helper\AbstractHelper;
 
 class Permission extends AbstractHelper
 {
     /**
-     * @var RbacManager
+     * @var PermissionPluginManager
      */
-    private $rbacManager;
+    protected $permissionPluginManager;
 
     /**
      * @var string
      */
-    private $serviceName;
+    protected $serviceName;
 
     /**
-     * @param RbacManager $rbacManager
+     * @param PermissionPluginManager $permissionPluginManager
      */
-    public function __construct(RbacManager $rbacManager)
+    public function __construct(PermissionPluginManager $permissionPluginManager)
     {
-        $this->rbacManager = $rbacManager;
+        $this->permissionPluginManager = $permissionPluginManager;
     }
 
-    /**
-     * @param string $serviceName
-     * @return $this
-     */
-    public function __invoke($serviceName)
+    public function __invoke($name)
     {
-        $this->serviceName = $serviceName;
-
+        $this->serviceName = $name;
         return $this;
     }
 
-    /**
-     * @param string $permission
-     * @param null $context
-     * @return bool
-     */
-    public function isGranted($permission, $context = null)
+    public function isGranted($permission, $assert = null)
     {
-        return $this->rbacManager->getService($this->serviceName)->isGranted($permission, $context);
+        return $this->permissionPluginManager->get($this->serviceName)->isGranted($permission, $assert);
     }
 }

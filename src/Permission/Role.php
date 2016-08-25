@@ -1,26 +1,8 @@
 <?php
-/**
- * core42 (www.raum42.at)
- *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
- *
- */
+namespace Core42\Permission;
 
-namespace Core42\Permission\Rbac\Role;
-
-class Role implements RoleInterface
+class Role extends \Zend\Permissions\Rbac\Role implements RoleInterface
 {
-    /**
-     * @var string
-     */
-    protected $name;
-
-    /**
-     * @var string[]
-     */
-    protected $permissions = [];
-
     /**
      * @var array
      */
@@ -32,25 +14,16 @@ class Role implements RoleInterface
      */
     public function __construct($name, array $options = [])
     {
-        $this->name = (string) $name;
-
+        parent::__construct($name);
         $this->options = $options;
     }
 
     /**
-     * @return string
+     * @return array
      */
-    public function getName()
+    public function getOptions()
     {
-        return $this->name;
-    }
-
-    /**
-     * @param string $permission
-     */
-    public function addPermission($permission)
-    {
-        $this->permissions[(string) $permission] = $permission;
+        return $this->options;
     }
 
     /**
@@ -77,22 +50,14 @@ class Role implements RoleInterface
             }
         }
 
+        $it = new \RecursiveIteratorIterator($this, \RecursiveIteratorIterator::CHILD_FIRST);
+        foreach ($it as $leaf) {
+            /** @var RoleInterface $leaf */
+            if ($leaf->hasPermission($permission)) {
+                return true;
+            }
+        }
+
         return false;
-    }
-
-    /**
-     * @return array
-     */
-    public function getPermissions()
-    {
-        return $this->permissions;
-    }
-
-    /**
-     * @return array
-     */
-    public function getOptions()
-    {
-        return $this->options;
     }
 }

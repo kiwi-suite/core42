@@ -32,7 +32,6 @@ return [
 
     'controller_plugins' => [
         'factories' => [
-            'permission'    => \Core42\Mvc\Controller\Plugin\Service\PermissionFactory::class,
         ],
     ],
 

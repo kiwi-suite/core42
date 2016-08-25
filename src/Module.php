@@ -11,8 +11,6 @@ namespace Core42;
 
 use Core42\Console\Console;
 use Core42\Mvc\Router\Http\AngularSegment;
-use Core42\Permission\Rbac\Strategy\RedirectStrategy;
-use Core42\Permission\Rbac\Strategy\UnauthorizedStrategy;
 use Zend\Db\Adapter\AdapterAbstractServiceFactory;
 use Zend\Form\FormAbstractServiceFactory;
 use Zend\InputFilter\InputFilterAbstractServiceFactory;
@@ -68,16 +66,6 @@ class Module implements
             ->getServiceManager()
             ->get('RoutePluginManager')
             ->setFactory(AngularSegment::class, RouteInvokableFactory::class);
-        
-        $e->getApplication()
-            ->getServiceManager()
-            ->get(RedirectStrategy::class)
-            ->attach($e->getTarget()->getEventManager());
-
-        $e->getApplication()
-            ->getServiceManager()
-            ->get(UnauthorizedStrategy::class)
-            ->attach($e->getTarget()->getEventManager());
     }
 
     /**

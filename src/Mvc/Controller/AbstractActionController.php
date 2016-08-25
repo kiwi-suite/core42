@@ -20,12 +20,6 @@ use Zend\Form\Form;
 use Zend\ServiceManager\ServiceLocatorInterface;
 use Zend\ServiceManager\ServiceManager;
 
-/**
- * Class AbstractActionController
- * @package Core42\Mvc\Controller
- *
- * @method \Core42\Mvc\Controller\Plugin\Permission permission(string $serviceName)
- */
 class AbstractActionController extends \Zend\Mvc\Controller\AbstractActionController
 {
     use DefaultGetterTrait;

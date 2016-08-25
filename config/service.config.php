@@ -34,20 +34,10 @@ use Core42\Navigation\Navigation;
 use Core42\Navigation\Options\NavigationOptions;
 use Core42\Navigation\Service\NavigationFactory;
 use Core42\Navigation\Service\NavigationOptionsFactory;
-use Core42\Permission\Rbac\Assertion\AssertionPluginManager;
-use Core42\Permission\Rbac\Guard\GuardPluginManager;
-use Core42\Permission\Rbac\Rbac;
-use Core42\Permission\Rbac\RbacManager;
-use Core42\Permission\Rbac\Role\RoleProviderPluginManager;
-use Core42\Permission\Rbac\Service\AssertionPluginManagerFactory;
-use Core42\Permission\Rbac\Service\GuardPluginManagerFactory;
-use Core42\Permission\Rbac\Service\RbacFactory;
-use Core42\Permission\Rbac\Service\RbacManagerFactory;
-use Core42\Permission\Rbac\Service\RedirectStrategyFactory;
-use Core42\Permission\Rbac\Service\RoleProviderPluginManagerFactory;
-use Core42\Permission\Rbac\Service\UnauthorizedStrategyFactory;
-use Core42\Permission\Rbac\Strategy\RedirectStrategy;
-use Core42\Permission\Rbac\Strategy\UnauthorizedStrategy;
+use Core42\Permission\Service\AssertionPluginManager;
+use Core42\Permission\Service\AssertionPluginManagerFactory;
+use Core42\Permission\Service\PermissionPluginManager;
+use Core42\Permission\Service\PermissionPluginManagerFactory;
 use Core42\Selector\Service\SelectorPluginManager;
 use Core42\Selector\Service\SelectorPluginManagerFactory;
 use Core42\TableGateway\MigrationTableGateway;
@@ -75,16 +65,11 @@ return [
 
             TreeRouteMatcher::class                         => TreeRouteMatcherFactory::class,
 
-            Rbac::class                                     => RbacFactory::class,
-            RbacManager::class                              => RbacManagerFactory::class,
-            RoleProviderPluginManager::class                => RoleProviderPluginManagerFactory::class,
-            GuardPluginManager::class                       => GuardPluginManagerFactory::class,
-            AssertionPluginManager::class                   => AssertionPluginManagerFactory::class,
-            RedirectStrategy::class                         => RedirectStrategyFactory::class,
-            UnauthorizedStrategy::class                     => UnauthorizedStrategyFactory::class,
-
             NavigationOptions::class                        => NavigationOptionsFactory::class,
             Navigation::class                               => NavigationFactory::class,
+
+            PermissionPluginManager::class                  => PermissionPluginManagerFactory::class,
+            AssertionPluginManager::class                   => AssertionPluginManagerFactory::class,
 
             Localization::class                             => LocalizationFactory::class,
 
@@ -112,8 +97,6 @@ return [
             DriverPluginManager::class                      => DriverPluginManagerFactory::class,
         ],
         'aliases' => [
-            'Permission'                                    => RbacManager::class,
-
             AdapterInterface::class                         => 'Db\Master',
 
             'Command'                                       => CommandPluginManager::class,
@@ -127,7 +110,6 @@ return [
             //Deprecated
             'Localization'                                  => Localization::class,
             'Core42\Navigation'                             => Navigation::class,
-            'Core42\Permission'                             => RbacManager::class,
             'TreeRouteMatcher'                              => TreeRouteMatcher::class,
             'Core42\FormPluginManager'                      => FormPluginManager::class,
             'Core42\SelectorPluginManager'                  => SelectorPluginManager::class,
