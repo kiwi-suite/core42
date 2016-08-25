@@ -62,15 +62,15 @@ class TransactionManager
                 $adapter->getDriver()->getConnection()->commit();
             }
         }
+
     }
 
     /**
-     * @param string $name
      * @throws \Exception
      */
-    public function forceCommit($name)
+    public function forceCommit()
     {
-        $this->commit($name, true);
+        $this->commit(true);
     }
 
     /**
@@ -78,6 +78,10 @@ class TransactionManager
      */
     public function rollback()
     {
+        if ($this->transactions == 0) {
+            return;
+
+        }
         $this->transactions = 0;
 
         foreach ($this->adapters as $adapter) {
