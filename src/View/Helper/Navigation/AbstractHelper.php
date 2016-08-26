@@ -2,13 +2,20 @@
 namespace Core42\View\Helper\Navigation;
 
 use Core42\Navigation\Navigation;
+use Core42\Navigation\Service\FilterPluginManager;
+use Core42\Navigation\Service\NavigationPluginManager;
 
 abstract class AbstractHelper extends \Zend\Form\View\Helper\AbstractHelper
 {
     /**
-     * @var Navigation
+     * @var NavigationPluginManager
      */
-    protected $navigation;
+    protected $navigationPluginManager;
+
+    /**
+     * @var FilterPluginManager
+     */
+    protected $filterPluginManager;
 
     /**
      * @var string
@@ -31,11 +38,20 @@ abstract class AbstractHelper extends \Zend\Form\View\Helper\AbstractHelper
     protected $maxDepth = -1;
 
     /**
-     * @param Navigation $navigation
+     * @var array
      */
-    public function __construct(Navigation $navigation)
-    {
-        $this->navigation = $navigation;
+    protected $filter = [];
+
+    /**
+     * @param NavigationPluginManager $navigationPluginManager
+     * @param FilterPluginManager $filterPluginManager
+     */
+    public function __construct(
+        NavigationPluginManager $navigationPluginManager,
+        FilterPluginManager $filterPluginManager
+    ) {
+        $this->navigationPluginManager = $navigationPluginManager;
+        $this->filterPluginManager = $filterPluginManager;
     }
 
     /**
@@ -101,15 +117,6 @@ abstract class AbstractHelper extends \Zend\Form\View\Helper\AbstractHelper
     }
 
     /**
-     * @param string $name
-     * @return \Core42\Navigation\Container
-     */
-    public function getContainer($name)
-    {
-        return $this->navigation->getContainer($name);
-    }
-
-    /**
      * @return string
      */
     abstract public function render();
@@ -120,5 +127,26 @@ abstract class AbstractHelper extends \Zend\Form\View\Helper\AbstractHelper
     public function __toString()
     {
         return $this->render();
+    }
+
+    /**
+     * @param string $filterName
+     * @param array $options
+     * @return $this
+     */
+    public function enableFilter($filterName, array $options = [])
+    {
+        $this->filter[$filterName] = $options;
+
+        return $this;
+    }
+
+    public function reset()
+    {
+        $this->partial = null;
+        $this->minDepth = -1;
+        $this->maxDepth = -1;
+        $this->filter = [];
+        $this->container = null;
     }
 }

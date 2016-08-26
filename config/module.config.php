@@ -30,6 +30,11 @@ return [
         ],
     ],
 
+    'navigation' => [
+        'service_manager' => [],
+        'filter_manager' => [],
+    ],
+
     'controller_plugins' => [
         'factories' => [
         ],

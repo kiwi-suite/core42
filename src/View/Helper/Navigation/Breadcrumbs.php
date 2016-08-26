@@ -19,7 +19,6 @@ class Breadcrumbs extends AbstractHelper
         $model = [
             'iterator' => $iterator,
             'minDepth' => $this->minDepth,
-            'navigation' => $this->navigation,
         ];
 
         return $this->view->render($this->partial, $model);

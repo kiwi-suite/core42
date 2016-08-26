@@ -1,37 +1,58 @@
 <?php
-/**
- * core42 (www.raum42.at)
- *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
- *
- */
-
 namespace Core42\Navigation;
 
-use Core42\Navigation\Page\Page;
+use Core42\Navigation\Page\PageInterface;
 
-class Container implements \RecursiveIterator
+
+class Container implements ContainerInterface
 {
     /**
      * @var int
      */
     protected $index = 0;
-
     /**
      * @var array
      */
     protected $children = [];
 
     /**
-     * @var string
-     */
-    protected $containerName;
-
-    /**
      * @var array
      */
     protected $sort = [];
+
+
+    /**
+     * @param PageInterface $page
+     */
+    public function addPage(PageInterface $page)
+    {
+        $hash = spl_object_hash($page);
+
+        $this->children[$hash] = $page;
+        $this->sort[] = $hash;
+    }
+
+    /**
+     * @param PageInterface $page
+     */
+    public function removePage(PageInterface $page)
+    {
+        /** @var PageInterface $page */
+        foreach ($this->children as $hash => $child) {
+            if ($page != $child) {
+                continue;
+            }
+            unset($this->children[$hash]);
+
+            $sortKey = array_search($hash, $this->sort);
+            if ($this->index >= $sortKey && $this->index > 0) {
+                $this->index--;
+            }
+
+            unset($this->sort[$sortKey]);
+            $this->sort = array_values($this->sort);
+        }
+    }
 
     /**
      *
@@ -41,9 +62,9 @@ class Container implements \RecursiveIterator
         $index = 0;
         $sort = [];
 
-        /** @var Page $page */
+        /** @var PageInterface $page */
         foreach ($this->children as $hash => $page) {
-            $order = $page->getOption('order');
+            $order = $page->getOrder();
             if ($order === null) {
                 $sort[$hash] = $index;
                 $index++;
@@ -61,10 +82,10 @@ class Container implements \RecursiveIterator
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
      * Return the current element
      * @link http://php.net/manual/en/iterator.current.php
      * @return mixed Can return any type.
+     * @since 5.0.0
      */
     public function current()
     {
@@ -72,10 +93,10 @@ class Container implements \RecursiveIterator
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
      * Move forward to next element
      * @link http://php.net/manual/en/iterator.next.php
      * @return void Any returned value is ignored.
+     * @since 5.0.0
      */
     public function next()
     {
@@ -83,10 +104,10 @@ class Container implements \RecursiveIterator
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
      * Return the key of the current element
      * @link http://php.net/manual/en/iterator.key.php
      * @return mixed scalar on success, or null on failure.
+     * @since 5.0.0
      */
     public function key()
     {
@@ -94,11 +115,11 @@ class Container implements \RecursiveIterator
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
      * Checks if current position is valid
      * @link http://php.net/manual/en/iterator.valid.php
      * @return boolean The return value will be casted to boolean and then evaluated.
      * Returns true on success or false on failure.
+     * @since 5.0.0
      */
     public function valid()
     {
@@ -106,10 +127,10 @@ class Container implements \RecursiveIterator
     }
 
     /**
-     * (PHP 5 &gt;= 5.0.0)<br/>
      * Rewind the Iterator to the first element
      * @link http://php.net/manual/en/iterator.rewind.php
      * @return void Any returned value is ignored.
+     * @since 5.0.0
      */
     public function rewind()
     {
@@ -117,10 +138,10 @@ class Container implements \RecursiveIterator
     }
 
     /**
-     * (PHP 5 &gt;= 5.1.0)<br/>
      * Returns if an iterator can be created for the current entry.
      * @link http://php.net/manual/en/recursiveiterator.haschildren.php
      * @return bool true if the current entry can be iterated over, otherwise returns false.
+     * @since 5.1.0
      */
     public function hasChildren()
     {
@@ -128,128 +149,14 @@ class Container implements \RecursiveIterator
     }
 
     /**
-     * (PHP 5 &gt;= 5.1.0)<br/>
      * Returns an iterator for the current entry.
      * @link http://php.net/manual/en/recursiveiterator.getchildren.php
      * @return \RecursiveIterator An iterator for the current entry.
+     * @since 5.1.0
      */
     public function getChildren()
     {
         return $this->children[$this->sort[$this->index]];
     }
 
-    /**
-     * @param Page $page
-     * @return $this
-     */
-    public function addPage(Page $page)
-    {
-        $page->setContainerName($this->getContainerName());
-
-        $hash = spl_object_hash($page);
-
-        $this->children[$hash] = $page;
-        $this->sort[] = $hash;
-
-        $page->setParent($this);
-
-        return $this;
-    }
-
-    /**
-     * @param string $containerName
-     * @return $this
-     */
-    public function setContainerName($containerName)
-    {
-        $this->containerName = $containerName;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getContainerName()
-    {
-        return $this->containerName;
-    }
-
-    /**
-     * @param string $attribute
-     * @param mixed $value
-     * @return Page|null
-     */
-    public function findOneByAttribute($attribute, $value)
-    {
-        $iterator = new \RecursiveIteratorIterator($this, \RecursiveIteratorIterator::SELF_FIRST);
-
-        /** @var Page $page */
-        foreach ($iterator as $page) {
-            if ($page->getAttribute($attribute) == $value) {
-                return $page;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @param string $attribute
-     * @param mixed $value
-     * @return Page[]
-     */
-    public function findByAttribute($attribute, $value)
-    {
-        $result = [];
-        $iterator = new \RecursiveIteratorIterator($this, \RecursiveIteratorIterator::SELF_FIRST);
-
-        /** @var Page $page */
-        foreach ($iterator as $page) {
-            if ($page->getAttribute($attribute) == $value) {
-                $result[] = $page;
-            }
-        }
-
-        return $result;
-    }
-
-    /**
-     * @param string $option
-     * @param mixed $value
-     * @return Page|null
-     */
-    public function findOneByOption($option, $value)
-    {
-        $iterator = new \RecursiveIteratorIterator($this, \RecursiveIteratorIterator::SELF_FIRST);
-
-        /** @var Page $page */
-        foreach ($iterator as $page) {
-            if ($page->getOption($option) == $value) {
-                return $page;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @param string $option
-     * @param mixed $value
-     * @return Page[]
-     */
-    public function findByOption($option, $value)
-    {
-        $result = [];
-        $iterator = new \RecursiveIteratorIterator($this, \RecursiveIteratorIterator::SELF_FIRST);
-
-        /** @var Page $page */
-        foreach ($iterator as $page) {
-            if ($page->getOption($option) == $value) {
-                $result[] = $page;
-            }
-        }
-
-        return $result;
-    }
 }

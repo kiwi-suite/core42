@@ -10,16 +10,27 @@ class Menu extends AbstractHelper
      */
     public function render()
     {
-        $filter = new IsAllowedFilter($this->getContainer($this->container), $this->navigation);
+        $filter = $this->navigationPluginManager->build($this->container);
+        foreach ($this->filter as $filterName => $filterOptions) {
+            $filterOptions['container'] = $filter;
+            $filter = $this->filterPluginManager->build($filterName, $filterOptions);
+        }
+
         $iterator = new \RecursiveIteratorIterator($filter, \RecursiveIteratorIterator::SELF_FIRST);
         $iterator->setMaxDepth($this->maxDepth);
+
+        foreach ($iterator as $page){
+
+        }
+        $iterator->rewind();
 
         $model = [
             'iterator' => $iterator,
             'minDepth' => $this->minDepth,
-            'navigation' => $this->navigation,
         ];
 
-        return $this->view->render($this->partial, $model);
+        $html = $this->view->render($this->partial, $model);
+        $this->reset();
+        return $html;
     }
 }

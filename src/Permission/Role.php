@@ -15,7 +15,7 @@ class Role extends \Zend\Permissions\Rbac\Role implements RoleInterface
     public function __construct($name, array $options = [])
     {
         parent::__construct($name);
-        $this->options = $options;
+        $this->setOptions($options);
     }
 
     /**
@@ -24,6 +24,14 @@ class Role extends \Zend\Permissions\Rbac\Role implements RoleInterface
     public function getOptions()
     {
         return $this->options;
+    }
+
+    /**
+     * @param array $options
+     */
+    public function setOptions(array $options)
+    {
+        $this->options = $options;
     }
 
     /**

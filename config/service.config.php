@@ -32,8 +32,12 @@ use Core42\Mvc\TreeRouteMatcher\Service\TreeRouteMatcherFactory;
 use Core42\Mvc\TreeRouteMatcher\TreeRouteMatcher;
 use Core42\Navigation\Navigation;
 use Core42\Navigation\Options\NavigationOptions;
+use Core42\Navigation\Service\FilterPluginManager;
+use Core42\Navigation\Service\FilterPluginManagerFactory;
 use Core42\Navigation\Service\NavigationFactory;
 use Core42\Navigation\Service\NavigationOptionsFactory;
+use Core42\Navigation\Service\NavigationPluginManager;
+use Core42\Navigation\Service\NavigationPluginManagerFactory;
 use Core42\Permission\Service\AssertionPluginManager;
 use Core42\Permission\Service\AssertionPluginManagerFactory;
 use Core42\Permission\Service\PermissionPluginManager;
@@ -65,11 +69,11 @@ return [
 
             TreeRouteMatcher::class                         => TreeRouteMatcherFactory::class,
 
-            NavigationOptions::class                        => NavigationOptionsFactory::class,
-            Navigation::class                               => NavigationFactory::class,
-
             PermissionPluginManager::class                  => PermissionPluginManagerFactory::class,
             AssertionPluginManager::class                   => AssertionPluginManagerFactory::class,
+
+            NavigationPluginManager::class                  => NavigationPluginManagerFactory::class,
+            FilterPluginManager::class                      => FilterPluginManagerFactory::class,
 
             Localization::class                             => LocalizationFactory::class,
 
@@ -104,12 +108,10 @@ return [
             'HydratorStrategy'                              => HydratorStrategyPluginManager::class,
             'Selector'                                      => SelectorPluginManager::class,
             'Form'                                          => FormPluginManager::class,
-            'Navigation'                                    => Navigation::class,
             'Cache'                                         => CachePluginManager::class,
 
             //Deprecated
             'Localization'                                  => Localization::class,
-            'Core42\Navigation'                             => Navigation::class,
             'TreeRouteMatcher'                              => TreeRouteMatcher::class,
             'Core42\FormPluginManager'                      => FormPluginManager::class,
             'Core42\SelectorPluginManager'                  => SelectorPluginManager::class,
