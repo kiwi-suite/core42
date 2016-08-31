@@ -9,6 +9,7 @@ use Core42\View\Helper\Service\AuthFactory;
 use Core42\View\Helper\Service\LocalizationFactory;
 use Core42\View\Helper\Service\ParamsFactory;
 use Core42\View\Helper\Service\PermissionFactory;
+use Core42\View\Helper\Uuid;
 use Core42\View\Helper\WordTruncate;
 use Zend\ServiceManager\Factory\InvokableFactory;
 
@@ -18,6 +19,7 @@ return [
             Params::class           => ParamsFactory::class,
             Auth::class             => AuthFactory::class,
             WordTruncate::class     => InvokableFactory::class,
+            Uuid::class             => InvokableFactory::class,
             'permission'            => PermissionFactory::class,
             'localization'          => LocalizationFactory::class,
             'menu'                  => MenuFactory::class,
@@ -27,6 +29,7 @@ return [
             'params' => Params::class,
             'auth'   => Auth::class,
             'wordTruncate' => WordTruncate::class,
+            'uuid'   => Uuid::class,
         ],
     ],
 
