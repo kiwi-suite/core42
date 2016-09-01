@@ -11,7 +11,6 @@ namespace Core42\Form\Service;
 
 use Zend\Form\FormInterface;
 use Zend\ServiceManager\AbstractPluginManager;
-use Zend\ServiceManager\ConfigInterface;
 
 class FormPluginManager extends AbstractPluginManager
 {
@@ -28,14 +27,16 @@ class FormPluginManager extends AbstractPluginManager
     protected $sharedByDefault = false;
 
     /**
-     * FormPluginManager constructor.
-     * @param \Interop\Container\ContainerInterface|null|ConfigInterface $configInstanceOrParentLocator
-     * @param array $config
+     * @param string $name
+     * @param array|null $options
+     * @return mixed
      */
-    public function __construct($configInstanceOrParentLocator, array $config)
+    public function get($name, array $options = null)
     {
-        $this->addAbstractFactory(new FormFallbackAbstractFactory());
+        if (!$this->has($name)) {
+            $this->setFactory($name, FormFactory::class);
+        }
 
-        parent::__construct($configInstanceOrParentLocator, $config);
+        return parent::get($name, $options);
     }
 }
