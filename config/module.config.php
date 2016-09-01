@@ -5,6 +5,7 @@ use Core42\View\Helper\Auth;
 use Core42\View\Helper\Navigation\Service\BreadcrumbsFactory;
 use Core42\View\Helper\Navigation\Service\MenuFactory;
 use Core42\View\Helper\Params;
+use Core42\View\Helper\Service\AssetUrlFactory;
 use Core42\View\Helper\Service\AuthFactory;
 use Core42\View\Helper\Service\LocalizationFactory;
 use Core42\View\Helper\Service\ParamsFactory;
@@ -20,6 +21,7 @@ return [
             Auth::class             => AuthFactory::class,
             WordTruncate::class     => InvokableFactory::class,
             Uuid::class             => InvokableFactory::class,
+            'assetUrl'              => AssetUrlFactory::class,
             'permission'            => PermissionFactory::class,
             'localization'          => LocalizationFactory::class,
             'menu'                  => MenuFactory::class,
