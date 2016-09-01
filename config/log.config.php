@@ -43,7 +43,7 @@ return [
             'stream' => [
                 'handler_type' => StreamHandler::class,
                 'config' => [
-                    'stream' => '/home/bernhard/dev/demos/digital-reporting/foobar.txt',
+                    'stream' => 'data/log/core.log',
                     'level' => Logger::ERROR
                 ]
             ],
@@ -60,11 +60,7 @@ return [
 
         'logger' => [
             'Log\Core' => [
-                'handlers' => ['stream' => Logger::DEBUG, 'foobar'],
-                'processors' => [],
-            ],
-            'Log\Test' => [
-                'handlers' => ['stream'],
+                'handlers' => ['stream' => Logger::DEBUG],
                 'processors' => [],
             ],
         ],
