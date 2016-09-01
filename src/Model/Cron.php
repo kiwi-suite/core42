@@ -41,6 +41,9 @@ namespace Core42\Model;
  */
 class Cron extends AbstractModel
 {
+    const STATUS_AUTO = 'auto';
+    const STATUS_MANUAL = 'manual';
+    const STATUS_DISABLED = 'disabled';
 
     /**
      * @var array
