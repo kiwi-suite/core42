@@ -119,14 +119,14 @@ return [
         ],
 
         'cron' => [
-            'route'                     => '[<name>] [--ignorelock|-i] [--silent] [--group=]',
+            'route'                     => '[<name>] [--ignorelock|-i] [--group=]',
             'command-name'              => CronCommand::class,
             'description'               => 'Start the cron tasks',
             'short_description'         => 'Start the cron tasks',
         ],
 
         'cron-wrapper' => [
-            'route'                     => '<name> [--ignorelock|-i] [--silent]',
+            'route'                     => '<name> [--ignorelock|-i]',
             'command-name'              => CronWrapperCommand::class,
             'description'               => 'Start a single cron task',
             'short_description'         => 'Start a single cron task',

@@ -32,8 +32,6 @@ namespace Core42\Model;
  * @method string getIntervalDayOfWeek() getIntervalDayOfWeek()
  * @method Cron setIntervalYear() setIntervalYear(string $interval_year)
  * @method string getIntervalYear() getIntervalYear()
- * @method Cron setLogfile() setLogfile(string $logfile)
- * @method string getLogfile() getLogfile()
  * @method Cron setCreated() setCreated(\DateTime $created)
  * @method \DateTime getCreated() getCreated()
  * @method Cron setUpdated() setUpdated(\DateTime $updated)
@@ -56,16 +54,21 @@ class Cron extends AbstractModel
         'command',
         'parameters',
         'lock',
-        'last_run',
-        'next_run',
-        'interval_minute',
-        'interval_hour',
-        'interval_day',
-        'interval_month',
-        'interval_day_of_week',
-        'interval_year',
-        'logfile',
+        'lastRun',
+        'nextRun',
+        'intervalMinute',
+        'intervalHour',
+        'intervalDay',
+        'intervalMonth',
+        'intervalDayOfWeek',
+        'intervalYear',
         'created',
         'updated',
     ];
+
+    public function getCronInterval()
+    {
+        return $this->getIntervalMinute() . ' ' . $this->getIntervalHour() . ' ' . $this->getIntervalDay() . ' ' .
+        $this->getIntervalMonth() . ' ' . $this->getIntervalDayOfWeek() . ' ' . $this->getIntervalYear();
+    }
 }

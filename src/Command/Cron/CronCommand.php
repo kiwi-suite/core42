@@ -30,11 +30,6 @@ class CronCommand extends AbstractCommand
     /**
      * @var bool
      */
-    protected $silent = false;
-
-    /**
-     * @var bool
-     */
     protected $ignoreLock = false;
 
     /**
@@ -48,35 +43,13 @@ class CronCommand extends AbstractCommand
     protected $group = null;
 
     /**
-     *
-     */
-    protected function preExecute()
-    {
-        $config = $this->getServiceManager()->get('Config');
-
-        if (isset($config['cron']['logger'])) {
-            $this->logger = $this->getServiceManager()->get($config['cron']['logger']);
-        } else {
-            $this->logger = new Logger([
-                'writers' => ['null'],
-            ]);
-        }
-
-        if (!$this->silent) {
-            $writer = new \Zend\Log\Writer\Stream('php://output');
-            $writer->setFormatter(new SimpleFormatter('%priorityName%: %message% %extra%'));
-            $this->logger->addWriter($writer);
-        }
-    }
-
-    /**
      * @return mixed
      */
     protected function execute()
     {
         set_time_limit(0);
 
-        $this->logger->info('starting cron run');
+        $this->consoleOutput("starting cron");
 
         $now = new \DateTime();
 
@@ -87,9 +60,9 @@ class CronCommand extends AbstractCommand
         if (empty($this->taskName)) {
             $where->equalTo('status', Cron::STATUS_AUTO)
                 ->nest()
-                ->lessThanOrEqualTo('next_run', $now->format('Y-m-d H:i:s'))
+                ->lessThanOrEqualTo('nextRun', $now->format('Y-m-d H:i:s'))
                 ->or
-                ->isNull('next_run')
+                ->isNull('nextRun')
                 ->unnest();
 
         } else {
@@ -108,10 +81,10 @@ class CronCommand extends AbstractCommand
 
         if (!empty($this->taskName)) {
             if ($tasks->count() == 0) {
-                $this->logger->warn(sprintf('cron task "%s" not found', $this->taskName));
+                $this->consoleOutput(sprintf('<error>cron task "%s" not found</error>', $this->taskName));
             }
         } else {
-            $this->logger->debug(sprintf("%d tasks found for execution", $tasks->count()));
+            $this->consoleOutput(sprintf("<info>%d tasks found for execution</info>", $tasks->count()));
         }
 
         $p = [];
@@ -119,23 +92,22 @@ class CronCommand extends AbstractCommand
             /* @var Cron $task */
 
             if ($task->getStatus() == Cron::STATUS_DISABLED) {
-                $this->logger->warn('trying to execute disabled task ' . $task->getName());
+                $this->consoleOutput(
+                    sprintf("<warning>trying to execute disabled task '%s'</warning>", $task->getName())
+                );
                 continue;
             }
 
             if ($task->getLock() !== null && !$this->ignoreLock) {
-                $this->logger->warn('trying to execute locked task ' . $task->getName());
+                $this->consoleOutput(
+                    sprintf("<warning>trying to execute locked task '%s'</warning>", $task->getName())
+                );
                 continue;
             }
 
-            $cmd = 'php module/core42/bin/fruit cron-wrapper ' . escapeshellarg($task->getName()) .  ' 2>&1 &';
-            //echo $cmd . "\n";
+            $cmd = PHP_BINARY . ' vendor/fruit42/core42/bin/fruit cron-wrapper ' . escapeshellarg($task->getName()) .  ' 2>&1 &';
 
             $descriptors = [];
-            if (!empty($task->getLogfile())) {
-                $descriptors[1] = ['file', $task->getLogfile(), 'a'];
-                $descriptors[2] = ['file', $task->getLogfile(), 'a'];
-            }
 
             $pipes = [];
             $p[] = proc_open($cmd, $descriptors, $pipes);
@@ -156,8 +128,6 @@ class CronCommand extends AbstractCommand
         if (!$this->ignoreLock) {
             $this->ignoreLock = $route->getMatchedParam('i');
         }
-
-        $this->silent = $route->getMatchedParam('silent');
 
         $name = $route->getMatchedParam('name');
         if (!empty($name)) {

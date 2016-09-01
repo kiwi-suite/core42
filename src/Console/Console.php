@@ -38,7 +38,7 @@ class Console extends \Zend\Console\Console
                             $matches[4],
                             ColorInterface::GREEN
                         );
-                    case 'comment':
+                    case 'warning':
                         return Console::getInstance()->colorize(
                             $matches[4],
                             ColorInterface::YELLOW

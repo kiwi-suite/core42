@@ -62,22 +62,6 @@ class CronWrapperCommand extends AbstractCommand
      */
     protected function preExecute()
     {
-        $config = $this->getServiceManager()->get('Config');
-
-        if (isset($config['cron']['logger'])) {
-            $this->logger = $this->getServiceManager()->get($config['cron']['logger']);
-        } else {
-            $this->logger = new Logger([
-                'writers' => ['null'],
-            ]);
-        }
-
-        if (!$this->silent) {
-            $writer = new \Zend\Log\Writer\Stream('php://output');
-            $writer->setFormatter(new SimpleFormatter('%priorityName%: %message% %extra%'));
-            $this->logger->addWriter($writer);
-        }
-
         $this->cronTableGateway = $this->getTableGateway(CronTableGateway::class);
 
         if (empty($this->taskName)) {
@@ -123,26 +107,31 @@ class CronWrapperCommand extends AbstractCommand
         try {
             $cronExpression = CronExpression::factory($this->task->getCronInterval());
         } catch (\InvalidArgumentException $e) {
-            $this->logger->warn(sprintf(
-                'cron task %s: unable to parse cron expression! (%s)',
+            $this->consoleOutput(
+                sprintf("<error>cron task %s: unable to parse cron expression! (%s)</error>"),
                 $this->task->getName(),
                 $this->task->getCronInterval()
-            ));
+            );
 
             return;
         }
 
-        $this->logger->info(sprintf("cron task %s started", $this->task->getName()));
+        $this->consoleOutput(sprintf(
+            "<info>cron task %s started</info>",
+            $this->task->getName()
+        ));
 
         if ($this->runCommand($this->task->getCommand(), $params, $output, $returnVar)) {
-            $this->logger->info(sprintf("cron task %s successful finished", $this->task->getName()));
+            $this->consoleOutput(sprintf(
+                "<info>cron task %s successful finished</info>",
+                $this->task->getName()
+            ));
         } else {
-            $this->logger->err(sprintf('cron task %s exited with status code %d', $this->task->getName(), $returnVar));
-        }
-
-        $logfile = $this->task->getLogfile();
-        if (!empty($logfile) && is_writable($logfile)) {
-            file_put_contents($logfile, $output, FILE_APPEND | LOCK_EX);
+            $this->consoleOutput(sprintf(
+                "<error>cron task %s exited with status code %d</error>",
+                $this->task->getName(),
+                $returnVar
+            ));
         }
 
         $nextRun = $cronExpression->getNextRunDate();
@@ -162,7 +151,7 @@ class CronWrapperCommand extends AbstractCommand
      */
     protected function runCommand($command, $params, &$output = null, &$returnVar = 0)
     {
-        $cmd = PHP_BINARY . ' vendor/fruit/core42/bin/fruit';
+        $cmd = PHP_BINARY . ' vendor/fruit42/core42/bin/fruit';
         $cmd .= " {$command}";
         foreach ($params as $name => $value) {
             if ($name == $value || $value === null) {
