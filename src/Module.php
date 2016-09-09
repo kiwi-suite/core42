@@ -60,8 +60,7 @@ class Module implements
         if (Console::isConsole()) {
             return;
         }
-        $e->getApplication()->getServiceManager()->get('Zend\Session\Service\SessionManager');
-        
+
         $e->getApplication()
             ->getServiceManager()
             ->get('RoutePluginManager')
