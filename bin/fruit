@@ -75,6 +75,9 @@ $application = new Application(
     $dispatcher
 );
 
+$application->setBanner(null);
+$application->setFooter(null);
+
 if (DEVELOPMENT_MODE === true){
 $template = <<<EOT
 ======================================================================
