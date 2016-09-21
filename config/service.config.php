@@ -14,6 +14,7 @@ use Core42\Db\TableGateway\Service\TableGatewayPluginManager;
 use Core42\Db\TableGateway\Service\TableGatewayPluginManagerFactory;
 use Core42\Db\Transaction\Service\TransactionManagerFactory;
 use Core42\Db\Transaction\TransactionManager;
+use Core42\Form\Service\FormElementManagerFactory;
 use Core42\Form\Service\FormPluginManager;
 use Core42\Form\Service\FormPluginManagerFactory;
 use Core42\Hydrator\Strategy\Service\StrategyPluginManager;
@@ -25,7 +26,6 @@ use Core42\Log\Service\HandlerPluginManager;
 use Core42\Log\Service\HandlerPluginManagerFactory;
 use Core42\Log\Service\LoggerFactory;
 use Core42\Mail\Transport\Service\TransportFactory;
-use Core42\Mvc\Environment\Environment;
 use Core42\Mvc\TreeRouteMatcher\Service\TreeRouteMatcherFactory;
 use Core42\Mvc\TreeRouteMatcher\TreeRouteMatcher;
 use Core42\Navigation\Service\FilterPluginManager;
@@ -43,7 +43,6 @@ use Core42\TableGateway\Service\MigrationTableGatewayFactory;
 use Core42\View\Http\Service\ExceptionStrategyFactory;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\I18n\Translator\TranslatorInterface;
-use Zend\ServiceManager\Factory\InvokableFactory;
 use Zend\Session\Service\SessionConfigFactory;
 use Zend\Session\Service\SessionManagerFactory;
 use Zend\Session\Service\StorageFactory;
@@ -56,7 +55,9 @@ return [
             CommandPluginManager::class                     => CommandPluginManagerFactory::class,
             TableGatewayPluginManager::class                => TableGatewayPluginManagerFactory::class,
             SelectorPluginManager::class                    => SelectorPluginManagerFactory::class,
+
             FormPluginManager::class                        => FormPluginManagerFactory::class,
+            'FormElementManager'                            => FormElementManagerFactory::class,
 
             TreeRouteMatcher::class                         => TreeRouteMatcherFactory::class,
 
@@ -70,8 +71,6 @@ return [
 
             ConsoleDispatcher::class                        => ConsoleDispatcherFactory::class,
             TransactionManager::class                       => TransactionManagerFactory::class,
-
-            Environment::class                              => InvokableFactory::class,
 
             HandlerPluginManager::class                     => HandlerPluginManagerFactory::class,
             'Log\Core'                                      => LoggerFactory::class,

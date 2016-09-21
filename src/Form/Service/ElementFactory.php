@@ -3,13 +3,11 @@ namespace Core42\Form\Service;
 
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
-use Zend\Form\Factory;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\Factory\FactoryInterface;
-use Zend\Stdlib\InitializableInterface;
 
-class FormFactory implements FactoryInterface
+class ElementFactory implements FactoryInterface
 {
 
     /**
@@ -26,13 +24,19 @@ class FormFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $form = new $requestedName();
-        $form->setFormFactory(new Factory($container->get('FormElementManager')));
-
-        if ($form instanceof InitializableInterface) {
-            $form->init();
+        if ($options === null) {
+            $options = [];
         }
 
-        return $form;
+        $name = null;
+        if (isset($options['name'])) {
+            $name = $options['name'];
+        }
+
+        if (isset($options['options'])) {
+            $options = $options['options'];
+        }
+
+        return new $requestedName($name, $options);
     }
 }

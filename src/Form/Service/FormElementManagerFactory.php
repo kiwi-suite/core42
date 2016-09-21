@@ -12,18 +12,16 @@ namespace Core42\Form\Service;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
-class FormPluginManagerFactory implements FactoryInterface
+class FormElementManagerFactory implements FactoryInterface
 {
     /**
      * @param ContainerInterface $container
      * @param $requestedName
      * @param array|null $options
-     * @return FormPluginManager
+     * @return FormElementManager
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        return new FormPluginManager(
-            $container->get('FormElementManager')
-        );
+        return new FormElementManager($container, $options ?: []);
     }
 }
