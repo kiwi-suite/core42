@@ -7,12 +7,12 @@
  *
  */
 
-namespace Core42\Hydrator\Strategy\Database\MySQL;
+namespace Core42\Hydrator\Strategy;
 
-use Core42\Hydrator\Strategy\Database\DatabaseStrategyInterface;
 use Zend\Hydrator\Strategy\StrategyInterface;
+use Zend\Json\Json;
 
-class DateTimeStrategy implements StrategyInterface, DatabaseStrategyInterface
+class JsonStrategy implements StrategyInterface
 {
     /**
      * Converts the given value so that it can be extracted by the hydrator.
@@ -23,11 +23,7 @@ class DateTimeStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function extract($value)
     {
-        if ($value instanceof \DateTime) {
-            return $value->format('Y-m-d H:i:s');
-        }
-
-        return $value;
+        return Json::encode($value);
     }
 
     /**
@@ -39,23 +35,6 @@ class DateTimeStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function hydrate($value)
     {
-        return new \DateTime($value);
-    }
-
-    /**
-     * @param  \Zend\Db\Metadata\Object\ColumnObject $column
-     * @return bool
-     */
-    public function isResponsible(\Zend\Db\Metadata\Object\ColumnObject $column)
-    {
-        return (in_array($column->getDataType(), ['datetime', 'timestamp']));
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'DateTime';
+        return Json::decode($value, Json::TYPE_ARRAY);
     }
 }

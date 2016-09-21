@@ -40,11 +40,6 @@ return [
         'filter_manager' => [],
     ],
 
-    'controller_plugins' => [
-        'factories' => [
-        ],
-    ],
-
     'controllers' => [
         'abstract_factories' => [
             'Core42\Mvc\Controller\Service\ControllerFallbackAbstractFactory'

@@ -2,8 +2,8 @@
 namespace Core42\TableGateway;
 
 use Core42\Db\TableGateway\AbstractTableGateway;
+use Core42\Hydrator\BaseHydrator;
 use Zend\Db\Adapter\Adapter;
-use Zend\ServiceManager\AbstractPluginManager;
 
 class MigrationTableGateway extends AbstractTableGateway
 {
@@ -34,17 +34,17 @@ class MigrationTableGateway extends AbstractTableGateway
     /**
      * MigrationTableGateway constructor.
      * @param Adapter $adapter
-     * @param AbstractPluginManager $hydratorStrategyPluginManager
+     * @param BaseHydrator $hydrator
      * @param Adapter $tablename
      * @param null $slave
      */
     public function __construct(
         Adapter $adapter,
-        AbstractPluginManager $hydratorStrategyPluginManager,
+        BaseHydrator $hydrator,
         $tablename,
         $slave = null
     ) {
         $this->table = $tablename;
-        parent::__construct($adapter, $hydratorStrategyPluginManager, $slave);
+        parent::__construct($adapter, $hydrator, $slave);
     }
 }

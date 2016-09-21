@@ -10,14 +10,12 @@
 namespace Core42\Db\TableGateway;
 
 use Core42\Db\ResultSet\ResultSet;
-use Core42\Hydrator\DatabaseHydrator;
+use Core42\Hydrator\BaseHydrator;
 use Core42\Model\ModelInterface;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\TableGateway\AbstractTableGateway as ZendAbstractTableGateway;
 use Zend\Db\TableGateway\Feature\FeatureSet;
 use Zend\Db\TableGateway\Feature\MasterSlaveFeature;
-use Core42\Db\TableGateway\Feature\HydratorFeature;
-use Zend\ServiceManager\AbstractPluginManager;
 
 abstract class AbstractTableGateway extends ZendAbstractTableGateway
 {
@@ -37,7 +35,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     protected $databaseTypeMap = [];
 
     /**
-     * @var DatabaseHydrator
+     * @var BaseHydrator
      */
     protected $hydrator;
 
@@ -54,12 +52,12 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     /**
      * @param Adapter $adapter
      * @param Adapter $slave
-     * @param AbstractPluginManager $hydratorStrategyPluginManager
+     * @param BaseHydrator $hydrator
      * @throws \Exception
      */
     public function __construct(
         Adapter $adapter,
-        AbstractPluginManager $hydratorStrategyPluginManager,
+        BaseHydrator $hydrator,
         Adapter $slave = null
     ) {
         $this->adapter = $adapter;
@@ -73,7 +71,8 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
             throw new \Exception("invalid model prototype");
         }
 
-        $this->hydrator = new DatabaseHydrator($this->underscoreSeparatedKeys);
+        $this->hydrator = $hydrator;
+        $this->hydrator->addStrategies($this->databaseTypeMap);
 
         $this->resultSetPrototype = new ResultSet($this->hydrator, $this->modelPrototype);
 
@@ -81,8 +80,6 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         if ($slave !== null) {
             $this->featureSet->addFeature(new MasterSlaveFeature($slave));
         }
-
-        $this->featureSet->addFeature(new HydratorFeature($hydratorStrategyPluginManager));
     }
 
     /**
@@ -105,7 +102,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     }
 
     /**
-     * @return \Core42\Hydrator\DatabaseHydrator
+     * @return BaseHydrator
      */
     public function getHydrator()
     {

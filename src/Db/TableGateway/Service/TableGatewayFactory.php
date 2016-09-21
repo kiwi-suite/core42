@@ -2,7 +2,7 @@
 namespace Core42\Db\TableGateway\Service;
 
 use Core42\Db\TableGateway\AbstractTableGateway;
-use Core42\Hydrator\Strategy\Service\HydratorStrategyPluginManager;
+use Core42\Hydrator\BaseHydrator;
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
@@ -33,10 +33,10 @@ class TableGatewayFactory implements FactoryInterface
             $slave =  $container->get('Db\Slave');
         }
 
-        $hydratorStrategyPluginManager = $container->get(HydratorStrategyPluginManager::class);
+        $hydrator = $container->get('HydratorManager')->get(BaseHydrator::class);
 
         /** @var AbstractTableGateway $gateway */
-        $gateway = new $requestedName($adapter, $hydratorStrategyPluginManager, $slave);
+        $gateway = new $requestedName($adapter, $hydrator, $slave);
 
         $gateway->initialize();
 

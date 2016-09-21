@@ -11,8 +11,7 @@ namespace Core42\Selector;
 
 use Core42\Db\ResultSet\ResultSet;
 use Core42\Db\TableGateway\AbstractTableGateway;
-use Core42\Hydrator\DatabaseHydrator;
-use Core42\Hydrator\Strategy\Service\HydratorStrategyPluginManager;
+use Core42\Hydrator\BaseHydrator;
 use Core42\Model\GenericModel;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Sql\Select;
@@ -58,14 +57,6 @@ abstract class AbstractDatabaseSelector extends AbstractSelector
     }
 
     /**
-     * @return HydratorStrategyPluginManager
-     */
-    protected function getHydratorStrategyManager()
-    {
-        return $this->getServiceManager()->get('Core42\HydratorStrategyPluginManager');
-    }
-
-    /**
      * @return Select|string|ResultSet
      */
     abstract protected function getSelect();
@@ -91,22 +82,14 @@ abstract class AbstractDatabaseSelector extends AbstractSelector
     }
 
     /**
-     * @return DatabaseHydrator
+     * @return BaseHydrator
      */
     protected function getHydrator()
     {
-        if ($this->hydrator instanceof HydratorInterface) {
-            return $this->hydrator;
+        if (!($this->hydrator instanceof HydratorInterface)) {
+            $this->hydrator = $this->getServiceManager()->get('HydratorManager')->get(BaseHydrator::class);
+            $this->hydrator->addStrategies($this->getDatabaseTypeMap());
         }
-        $this->hydrator = new DatabaseHydrator();
-
-        foreach ($this->getDatabaseTypeMap() as $name => $strategy) {
-            $this->hydrator->addStrategy(
-                $name,
-                $this->getHydratorStrategyManager()->get($strategy)
-            );
-        }
-
         return $this->hydrator;
     }
 

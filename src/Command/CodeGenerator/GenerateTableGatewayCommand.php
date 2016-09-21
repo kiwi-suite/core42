@@ -10,12 +10,9 @@
 namespace Core42\Command\CodeGenerator;
 
 use Core42\Command\AbstractCommand;
-use Core42\Hydrator\Strategy\Service\HydratorStrategyPluginManager;
 use Zend\Db\Metadata\Source\Factory;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\Code\Generator;
-use Zend\Code\Reflection;
-use Zend\Db\Adapter;
 
 class GenerateTableGatewayCommand extends AbstractCommand
 {
@@ -209,26 +206,22 @@ class GenerateTableGatewayCommand extends AbstractCommand
         $databaseTypeMap = [];
         $columns = $metadata->getColumns($this->tableName);
 
-        /** @var HydratorStrategyPluginManager $hydratorStrategyManager */
-        $hydratorStrategyManager = $this->getServiceManager()->get(HydratorStrategyPluginManager::class);
-        $aliases = $hydratorStrategyManager->getServiceAliases();
         foreach ($columns as $column) {
-            foreach ($aliases as $alias) {
-                $strategy = $hydratorStrategyManager->get($alias);
-                if ($strategy->isResponsible($column)) {
-                    $serviceName = $strategy->getName();
-                    if (empty($serviceName)) {
-                        $serviceName = $alias;
-                    }
 
-                    if (!$hydratorStrategyManager->has($serviceName)) {
-                        $serviceName = $alias;
-                    }
-
-                    $databaseTypeMap[$column->getName()] = $serviceName;
-
-                    break;
-                }
+            if ($column->getDataType() == "enum"
+                && in_array($column->getErrata("permitted_values"), [["true", "false"], ["false", "true"]])
+            ) {
+                $databaseTypeMap[$column->getName()] = 'Boolean';
+            } elseif (in_array($column->getDataType(), ['date'])) {
+                $databaseTypeMap[$column->getName()] = 'Date';
+            } elseif (in_array($column->getDataType(), ['datetime', 'timestamp'])) {
+                $databaseTypeMap[$column->getName()] = 'DateTime';
+            } elseif (in_array($column->getDataType(), ['decimal', 'numeric', 'float', 'double'])) {
+                $databaseTypeMap[$column->getName()] = 'Float';
+            } elseif (in_array($column->getDataType(), ['smallint', 'mediumint', 'int', 'bigint'])) {
+                $databaseTypeMap[$column->getName()] = 'Integer';
+            } else {
+                $databaseTypeMap[$column->getName()] = 'String';
             }
         }
 

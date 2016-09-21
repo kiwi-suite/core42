@@ -7,22 +7,12 @@
  *
  */
 
-namespace Core42\Hydrator\Strategy\Database\MySQL;
+namespace Core42\Hydrator\Strategy;
 
-use Core42\Hydrator\Strategy\Database\DatabaseStrategyInterface;
 use Zend\Hydrator\Strategy\StrategyInterface;
 
-class FloatStrategy implements StrategyInterface, DatabaseStrategyInterface
+class DateStrategy implements StrategyInterface
 {
-    /**
-     * @param  \Zend\Db\Metadata\Object\ColumnObject $column
-     * @return mixed
-     */
-    public function isResponsible(\Zend\Db\Metadata\Object\ColumnObject $column)
-    {
-        return (in_array($column->getDataType(), ['decimal', 'numeric', 'float', 'double']));
-    }
-
     /**
      * Converts the given value so that it can be extracted by the hydrator.
      *
@@ -32,7 +22,11 @@ class FloatStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function extract($value)
     {
-        return (float) $value;
+        if ($value instanceof \DateTime) {
+            return $value->format('Y-m-d');
+        }
+
+        return $value;
     }
 
     /**
@@ -44,14 +38,6 @@ class FloatStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function hydrate($value)
     {
-        return (float) $value;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'Float';
+        return \DateTime::createFromFormat('Y-m-d', $value);
     }
 }

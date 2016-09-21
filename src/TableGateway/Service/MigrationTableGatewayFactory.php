@@ -9,7 +9,7 @@
 
 namespace Core42\TableGateway\Service;
 
-use Core42\Hydrator\Strategy\Service\HydratorStrategyPluginManager;
+use Core42\Hydrator\BaseHydrator;
 use Core42\TableGateway\MigrationTableGateway;
 use Interop\Container\ContainerInterface;
 use Zend\ServiceManager\Factory\FactoryInterface;
@@ -30,14 +30,14 @@ class MigrationTableGatewayFactory implements FactoryInterface
             $slave = $container->get('Db\Slave');
         }
 
-        $hydratorStrategyPluginManager = $container->get(HydratorStrategyPluginManager::class);
+        $hydrator = $container->get('HydratorManager')->get(BaseHydrator::class);
 
         $config = $container->get('config');
         $config = $config['migration'];
 
         $gateway = new MigrationTableGateway(
             $adapter,
-            $hydratorStrategyPluginManager,
+            $hydrator,
             $config['table_name'],
             $slave
         );

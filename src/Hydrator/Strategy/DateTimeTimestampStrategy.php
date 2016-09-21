@@ -7,11 +7,11 @@
  *
  */
 
-namespace Core42\Hydrator\Strategy\Json;
+namespace Core42\Hydrator\Strategy;
 
 use Zend\Hydrator\Strategy\StrategyInterface;
 
-class DateTimeStrategy implements StrategyInterface
+class DateTimeTimestampStrategy implements StrategyInterface
 {
     /**
      * Converts the given value so that it can be extracted by the hydrator.
@@ -23,11 +23,7 @@ class DateTimeStrategy implements StrategyInterface
     public function extract($value)
     {
         if ($value instanceof \DateTime) {
-            return [
-                '@type'    => \DateTime::class,
-                'datetime' => $value->format('Y-m-d H:i:s'),
-                'timezone' => $value->getTimezone()->getName(),
-            ];
+            return $value->getTimestamp();
         }
 
         return $value;
@@ -42,11 +38,6 @@ class DateTimeStrategy implements StrategyInterface
      */
     public function hydrate($value)
     {
-        $return = $value;
-        if (is_array($value) && isset($value['@type']) && isset($value['datetime']) && isset($value['timezone'])) {
-            $return = new \DateTime($value['datetime'], new \DateTimeZone($value['timezone']));
-        }
-
-        return $return;
+        return new \DateTime('@' . $value);
     }
 }

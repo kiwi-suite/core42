@@ -26,20 +26,4 @@ class ResultSet extends HydratingResultSet
 
         return $object;
     }
-
-    /**
-     * Cast result set to array of arrays
-     *
-     * @return array
-     */
-    public function toArray()
-    {
-        $hydrator = new ModelHydrator();
-
-        $return = [];
-        foreach ($this as $row) {
-            $return[] = $hydrator->extract($row);
-        }
-        return $return;
-    }
 }

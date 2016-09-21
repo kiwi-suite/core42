@@ -7,12 +7,11 @@
  *
  */
 
-namespace Core42\Hydrator\Strategy\Database\MySQL;
+namespace Core42\Hydrator\Strategy;
 
-use Core42\Hydrator\Strategy\Database\DatabaseStrategyInterface;
 use Zend\Hydrator\Strategy\StrategyInterface;
 
-class DateTimeTimestampStrategy implements StrategyInterface, DatabaseStrategyInterface
+class DateTimeStrategy implements StrategyInterface
 {
     /**
      * Converts the given value so that it can be extracted by the hydrator.
@@ -24,7 +23,7 @@ class DateTimeTimestampStrategy implements StrategyInterface, DatabaseStrategyIn
     public function extract($value)
     {
         if ($value instanceof \DateTime) {
-            return $value->getTimestamp();
+            return $value->format('Y-m-d H:i:s');
         }
 
         return $value;
@@ -39,23 +38,6 @@ class DateTimeTimestampStrategy implements StrategyInterface, DatabaseStrategyIn
      */
     public function hydrate($value)
     {
-        return new \DateTime('@' . $value);
-    }
-
-    /**
-     * @param  \Zend\Db\Metadata\Object\ColumnObject $column
-     * @return bool
-     */
-    public function isResponsible(\Zend\Db\Metadata\Object\ColumnObject $column)
-    {
-        return false;
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'DateTimeTimestamp';
+        return \DateTime::createFromFormat('Y-m-d H:i:s', $value);
     }
 }

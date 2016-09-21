@@ -7,12 +7,11 @@
  *
  */
 
-namespace Core42\Hydrator\Strategy\Database\MySQL;
+namespace Core42\Hydrator\Strategy;
 
-use Core42\Hydrator\Strategy\Database\DatabaseStrategyInterface;
 use Zend\Hydrator\Strategy\StrategyInterface;
 
-class DateStrategy implements StrategyInterface, DatabaseStrategyInterface
+class BooleanStrategy implements StrategyInterface
 {
     /**
      * Converts the given value so that it can be extracted by the hydrator.
@@ -23,11 +22,7 @@ class DateStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function extract($value)
     {
-        if ($value instanceof \DateTime) {
-            return $value->format('Y-m-d');
-        }
-
-        return $value;
+        return ($value === true) ? "true" : "false";
     }
 
     /**
@@ -39,23 +34,6 @@ class DateStrategy implements StrategyInterface, DatabaseStrategyInterface
      */
     public function hydrate($value)
     {
-        return new \DateTime($value);
-    }
-
-    /**
-     * @param  \Zend\Db\Metadata\Object\ColumnObject $column
-     * @return bool
-     */
-    public function isResponsible(\Zend\Db\Metadata\Object\ColumnObject $column)
-    {
-        return (in_array($column->getDataType(), ['date']));
-    }
-
-    /**
-     * @return string
-     */
-    public function getName()
-    {
-        return 'Date';
+        return ($value === "true") ? true : false;
     }
 }
