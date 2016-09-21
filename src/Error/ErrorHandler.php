@@ -5,7 +5,6 @@ use Whoops\Handler\JsonResponseHandler;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
 use Whoops\Util\Misc;
-use Zend\Http\PhpEnvironment\Request;
 
 class ErrorHandler
 {
@@ -19,19 +18,14 @@ class ErrorHandler
      */
     protected static $template;
 
-    /**
-     * @var Request
-     */
-    protected $request;
-
     public static function setErrorTemplate($template)
     {
         self::$template = $template;
     }
 
-    public static function registerShutdown(Request $request = null)
+    public static function registerShutdown()
     {
-        register_shutdown_function(function() use ($request){
+        register_shutdown_function(function() {
             $error = error_get_last();
             if ($error && Misc::isLevelFatal($error['type'])) {
 
@@ -42,34 +36,32 @@ class ErrorHandler
                     $error['file'],
                     $error['line']
                 );
-                $self = new self($exception, $request);
+                $self = new self($exception);
                 return $self();
             }
         });
     }
 
-    public static function init($e, Request $request = null)
+    public static function init($e)
     {
         if (!($e instanceof \Throwable) && !($e instanceof \Exception)) {
             return;
         }
 
-        $self = new self($e, $request);
+        $self = new self($e);
         return $self();
     }
 
-    protected function __construct($e, Request $request = null)
+    protected function __construct($e)
     {
         $this->e = $e;
-        $this->request = $request;
     }
 
     public function __invoke()
     {
-        if ($this->request instanceof Request) {
-            $acceptTypes = $this->request->getHeader('accept')->getFieldValue();
+        if (!empty($_SERVER)) {
             foreach (['application/json', 'text/json', 'application/x-json'] as $check) {
-                if (strpos($acceptTypes, $check) !== false) {
+                if (strpos($_SERVER['HTTP_ACCEPT'], $check) !== false) {
                     $this->getJsonErrors();
                     return;
                 }
