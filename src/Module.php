@@ -10,8 +10,8 @@
 namespace Core42;
 
 use Core42\Console\Console;
-use Core42\ModuleManager\AbstractBaseModule;
 use Core42\ModuleManager\Feature\CliConfigProviderInterface;
+use Core42\ModuleManager\GetConfigTrait;
 use Core42\Mvc\Environment\Environment;
 use Core42\Mvc\Router\Http\AngularSegment;
 use Zend\Db\Adapter\AdapterAbstractServiceFactory;
@@ -26,11 +26,14 @@ use Zend\Router\RouteInvokableFactory;
 use Zend\Session\Service\ContainerAbstractServiceFactory;
 use Zend\Stdlib\ArrayUtils;
 
-class Module extends AbstractBaseModule implements
+class Module implements
+    ConfigProviderInterface,
     BootstrapListenerInterface,
     InitProviderInterface,
     CliConfigProviderInterface
 {
+    use GetConfigTrait;
+
     const ENVIRONMENT_CLI = 'cli';
     const ENVIRONMENT_DEVELOPMENT = 'development';
     /**

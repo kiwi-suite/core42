@@ -1,13 +1,11 @@
 <?php
 namespace Core42\ModuleManager;
 
-use Zend\ModuleManager\Feature\ConfigProviderInterface;
 use Zend\Stdlib\ArrayUtils;
 use Zend\Stdlib\Glob;
 
-abstract class AbstractBaseModule implements ConfigProviderInterface
+trait GetConfigTrait
 {
-
     public function getConfig()
     {
         $config = [];
