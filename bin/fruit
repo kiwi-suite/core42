@@ -18,6 +18,7 @@ chdir(__DIR__
 
 include 'config/settings.config.php';
 include 'vendor/autoload.php';
+require 'config/environment.config.php';
 
 $appConfig = require  'config/application.config.php';
 $developmentConfig = require  'config/development.config.php';
