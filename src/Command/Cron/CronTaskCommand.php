@@ -18,7 +18,7 @@ use Zend\Log\Logger;
 use Zend\Log\Formatter\Simple as SimpleFormatter;
 use ZF\Console\Route;
 
-class CronWrapperCommand extends AbstractCommand
+class CronTaskCommand extends AbstractCommand
 {
     use ConsoleAwareTrait;
 

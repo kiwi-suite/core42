@@ -6,7 +6,7 @@ use Core42\Command\Cache\ClearAppCacheCommand;
 use Core42\Command\CodeGenerator\GenerateDbClassesCommand;
 use Core42\Command\CodeGenerator\GenerateModuleCommand;
 use Core42\Command\Cron\CronCommand;
-use Core42\Command\Cron\CronWrapperCommand;
+use Core42\Command\Cron\CronTaskCommand;
 use Core42\Command\Development\DevelopmentCommand;
 use Core42\Command\Maintenance\MaintenanceCommand;
 use Core42\Command\Migration\ListCommand;
@@ -18,6 +18,7 @@ use Core42\Command\Migration\RollbackCommand;
 return [
     'cli' => [
         'migration-make' => [
+            'group'                     => 'migrations',
             'route'                     => 'migration-make --directory=',
             'command-name'              => MakeCommand::class,
             'description'               => 'Create a migration file into the configured migration directory',
@@ -27,12 +28,14 @@ return [
             ]
         ],
         'migration-list' => [
+            'group'                     => 'migrations',
             'route'                     => 'migration-list',
             'command-name'              => ListCommand::class,
             'description'               => 'List all migrated and pending migrations',
             'short_description'         => 'List of migrations',
         ],
         'migration-migrate' => [
+            'group'                     => 'migrations',
             'route'                     => 'migration-migrate [--limit=]',
             'command-name'              => MigrateCommand::class,
             'description'               => 'Run migrations',
@@ -43,6 +46,7 @@ return [
             ]
         ],
         'migration-rollback' => [
+            'group'                     => 'migrations',
             'route'                     => 'migration-rollback [--limit=]',
             'command-name'              => RollbackCommand::class,
             'description'               => 'Rollback the last migrations',
@@ -53,6 +57,7 @@ return [
             ]
         ],
         'migration-reset' => [
+            'group'                     => 'migrations',
             'route'                     => 'migration-reset',
             'command-name'              => ResetCommand::class,
             'description'               => 'Resets all Migrations. Synonym of migration-rollback with limit=amount '
@@ -61,6 +66,7 @@ return [
         ],
 
         'development' => [
+            'group'                     => 'developer',
             'route'                     => 'development (on|off)',
             'command-name'              => DevelopmentCommand::class,
             'description'               => 'Enables/Disables the development mode. Useful for loading dev-modules or '
@@ -69,6 +75,7 @@ return [
         ],
 
         'maintenance' => [
+            'group'                     => 'setup',
             'route'                     => 'maintenance (on|off)',
             'command-name'              => MaintenanceCommand::class,
             'description'               => 'Enables/Disables maintenance.',
@@ -76,6 +83,7 @@ return [
         ],
 
         'assets' => [
+            'group'                     => 'setup',
             'route'                     => 'assets [--copy|-c]',
             'command-name'              => AssetsCommand::class,
             'description'               => 'Copy or symlink all registered assets into a target directory (for '
@@ -84,6 +92,7 @@ return [
         ],
 
         'generate-db-classes' => [
+            'group'                     => 'developer',
             'route'                     => 'generate-db-classes --namespace= --directory= [--name=] [--table=] [--all=] [--adapter=] [--getter-setter]',
             'command-name'              => GenerateDbClassesCommand::class,
             'description'               => 'generates model based on database schema',
@@ -101,6 +110,7 @@ return [
         ],
 
         'generate-module' => [
+            'group'                     => 'developer',
             'route'                     => 'generate-module --name=',
             'command-name'              => GenerateModuleCommand::class,
             'description'               => 'generates a module skeleton directory structure',
@@ -112,6 +122,7 @@ return [
         ],
 
         'clear-app-cache' => [
+            'group'                     => 'cache',
             'route'                     => 'clear-app-cache',
             'command-name'              => ClearAppCacheCommand::class,
             'description'               => 'Clears config cache and module map cache',
@@ -119,15 +130,17 @@ return [
         ],
 
         'cron' => [
+            'group'                     => 'cron',
             'route'                     => '[<name>] [--ignorelock|-i] [--group=]',
             'command-name'              => CronCommand::class,
             'description'               => 'Start the cron tasks',
             'short_description'         => 'Start the cron tasks',
         ],
 
-        'cron-wrapper' => [
+        'cron-task' => [
+            'group'                     => 'cron',
             'route'                     => '<name> [--ignorelock|-i]',
-            'command-name'              => CronWrapperCommand::class,
+            'command-name'              => CronTaskCommand::class,
             'description'               => 'Start a single cron task',
             'short_description'         => 'Start a single cron task',
         ],
