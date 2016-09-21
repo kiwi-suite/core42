@@ -15,7 +15,7 @@ class GenericModel extends AbstractModel
      * @param  string $name
      * @param  mixed $value
      * @param bool $strict
-     * @return $this
+     * @return ModelInterface
      * @throws \Exception
      */
     protected function set($name, $value, $strict = false)
@@ -24,8 +24,6 @@ class GenericModel extends AbstractModel
             $this->properties[] = $name;
         }
 
-        $this->data[$name] =  $value;
-
-        return $this;
+        return parent::set($name, $value, $strict);
     }
 }

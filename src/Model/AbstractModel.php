@@ -104,7 +104,26 @@ abstract class AbstractModel implements ModelInterface
      */
     public function toArray()
     {
-        return $this->data;
+        return $this->recursiveToArray($this->data);
+    }
+
+    /**
+     * @param array $array
+     * @return array
+     */
+    protected function recursiveToArray(array $array)
+    {
+        $result = [];
+        foreach ($array as $name => $value) {
+            if ($value instanceof ModelInterface) {
+                $value = $value->toArray();
+            } elseif (is_array($value) || $value instanceof \Traversable){
+                $value = $this->recursiveToArray($value);
+            }
+            $result[$name] = $value;
+        }
+
+        return $result;
     }
 
     /**
@@ -158,7 +177,7 @@ abstract class AbstractModel implements ModelInterface
      * @param  string $name
      * @param  mixed $value
      * @param bool $strict
-     * @return $this
+     * @return ModelInterface
      * @throws \Exception
      */
     protected function set($name, $value, $strict = false)
@@ -178,7 +197,7 @@ abstract class AbstractModel implements ModelInterface
     /**
      * @param $method
      * @param $params
-     * @return BaseModel|mixed|null
+     * @return mixed
      * @throws \Exception
      */
     public function __call($method, $params)
@@ -193,5 +212,39 @@ abstract class AbstractModel implements ModelInterface
         }
 
         throw new \Exception("Method {$method} not found");
+    }
+
+    /**
+     * @return string
+     */
+    public function serialize()
+    {
+        return serialize([
+            'data' => $this->data,
+            'properties' => $this->properties
+        ]);
+    }
+
+    /**
+     * @param string $serialized
+     */
+    public function unserialize($serialized)
+    {
+        $unserialized = unserialize($serialized);
+
+        $this->properties = $unserialized['properties'];
+        $this->populate($unserialized['data']);
+        $this->memento();
+    }
+
+    /**
+     * @return array
+     */
+    function jsonSerialize()
+    {
+        return [
+            'data' => $this->data,
+            'properties' => $this->properties
+        ];
     }
 }

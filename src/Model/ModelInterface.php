@@ -9,7 +9,10 @@
 
 namespace Core42\Model;
 
-interface ModelInterface
+
+use Zend\Stdlib\ArraySerializableInterface;
+
+interface ModelInterface extends \Serializable, ArraySerializableInterface, \JsonSerializable
 {
     /**
      * @return void
@@ -30,18 +33,7 @@ interface ModelInterface
     /**
      * @return array
      */
-    public function getArrayCopy();
-
-    /**
-     * @return array
-     */
     public function toArray();
-
-    /**
-     * @param array $data
-     * @return void
-     */
-    public function exchangeArray(array $data);
 
     /**
      * @param array $data
