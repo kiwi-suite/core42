@@ -10,9 +10,7 @@
 namespace Core42\Form\Service;
 
 
-use Interop\Container\ContainerInterface;
 use Zend\Form\FormElementManager\FormElementManagerV3Polyfill;
-use Zend\Form\FormFactoryAwareInterface;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 
 class FormElementManager extends FormElementManagerV3Polyfill
@@ -65,26 +63,5 @@ class FormElementManager extends FormElementManagerV3Polyfill
             $this->setInvokableClass($name);
         }
         return parent::get($name, $options, $usePeeringServiceManagers);
-    }
-
-
-    /**
-     * @param ContainerInterface $container
-     * @param mixed $instance
-     */
-    public function injectFactory(ContainerInterface $container, $instance)
-    {
-        if (! $instance instanceof FormFactoryAwareInterface) {
-            return;
-        }
-
-        $factory = new Factory();
-        $instance->setFormFactory($factory);
-        $factory->setFormElementManager($this);
-
-        if ($container && $container->has('InputFilterManager')) {
-            $inputFilters = $container->get('InputFilterManager');
-            $factory->getInputFilterFactory()->setInputFilterManager($inputFilters);
-        }
     }
 }
