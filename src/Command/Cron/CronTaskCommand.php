@@ -48,6 +48,11 @@ class CronTaskCommand extends AbstractCommand
     protected $cronTableGateway;
 
     /**
+     * @var bool
+     */
+    protected $transaction = false;
+
+    /**
      * @param string $taskName
      * @return $this
      */

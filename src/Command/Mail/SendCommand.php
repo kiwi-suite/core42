@@ -72,6 +72,11 @@ class SendCommand extends AbstractCommand
     protected $replyTo = [];
 
     /**
+     * @var bool
+     */
+    protected $transaction = false;
+
+    /**
      *
      */
     protected function configure()

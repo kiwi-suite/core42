@@ -55,6 +55,11 @@ class GenerateDbClassesCommand extends AbstractCommand
     protected $adapterName = 'Db\Master';
 
     /**
+     * @var bool
+     */
+    protected $transaction = false;
+
+    /**
      * @param string $directory
      * @return $this
      */

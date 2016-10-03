@@ -19,6 +19,11 @@ class GenerateModuleCommand extends AbstractCommand
     use ConsoleAwareTrait;
 
     /**
+     * @var bool
+     */
+    protected $transaction = false;
+
+    /**
      * @var string
      */
     protected $name;

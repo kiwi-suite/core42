@@ -23,6 +23,11 @@ class MaintenanceCommand extends AbstractCommand
     private $enable = false;
 
     /**
+     * @var bool
+     */
+    protected $transaction = false;
+
+    /**
      * @param boolean $enable
      * @return $this
      */

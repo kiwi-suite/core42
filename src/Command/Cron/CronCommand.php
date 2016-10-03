@@ -43,6 +43,11 @@ class CronCommand extends AbstractCommand
     protected $group = null;
 
     /**
+     * @var bool
+     */
+    protected $transaction = false;
+
+    /**
      * @return mixed
      */
     protected function execute()

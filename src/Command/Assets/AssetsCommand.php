@@ -26,6 +26,11 @@ class AssetsCommand extends AbstractCommand
     /**
      * @var bool
      */
+    protected $transaction = false;
+
+    /**
+     * @var bool
+     */
     private $copy = false;
 
     /**

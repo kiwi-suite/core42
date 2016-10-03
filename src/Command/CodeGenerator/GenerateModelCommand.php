@@ -50,6 +50,11 @@ class GenerateModelCommand extends AbstractCommand
     private $generateSetterGetter = false;
 
     /**
+     * @var bool
+     */
+    protected $transaction = false;
+
+    /**
      * @param mixed $adapterName
      * @return $this
      */

@@ -18,6 +18,12 @@ class ClearAppCacheCommand extends AbstractCommand
     use ConsoleAwareTrait;
 
     /**
+     * @var bool
+     */
+    protected $transaction = false;
+
+
+    /**
      *
      */
     protected function execute()

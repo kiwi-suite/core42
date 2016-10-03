@@ -46,6 +46,10 @@ class GenerateTableGatewayCommand extends AbstractCommand
      */
     private $model;
 
+    /**
+     * @var bool
+     */
+    protected $transaction = false;
 
     /**
      * @param mixed $adapterName
