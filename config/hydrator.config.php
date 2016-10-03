@@ -3,6 +3,7 @@ namespace Core42;
 
 use Core42\Hydrator\BaseHydrator;
 use Core42\Hydrator\Service\BaseHydratorFactory;
+use Core42\Hydrator\Strategy\ArrayStrategy;
 use Core42\Hydrator\Strategy\BooleanStrategy;
 use Core42\Hydrator\Strategy\DateStrategy;
 use Core42\Hydrator\Strategy\DateTimeStrategy;
@@ -24,16 +25,18 @@ return [
             IntegerStrategy::class              => InvokableFactory::class,
             StringStrategy::class               => InvokableFactory::class,
             JsonStrategy::class                 => InvokableFactory::class,
+            ArrayStrategy::class                => InvokableFactory::class,
         ],
         'aliases' => [
-            'Boolean'                           => BooleanStrategy::class,
-            'Date'                              => DateStrategy::class,
-            'DateTime'                          => DateTimeStrategy::class,
-            'DateTimeTimestamp'                 => DateTimeTimestampStrategy::class,
-            'Float'                             => FloatStrategy::class,
-            'Integer'                           => IntegerStrategy::class,
-            'String'                            => StringStrategy::class,
-            'Json'                              => JsonStrategy::class,
+            'boolean'                           => BooleanStrategy::class,
+            'date'                              => DateStrategy::class,
+            'dateTime'                          => DateTimeStrategy::class,
+            'dateTimeTimestamp'                 => DateTimeTimestampStrategy::class,
+            'float'                             => FloatStrategy::class,
+            'integer'                           => IntegerStrategy::class,
+            'string'                            => StringStrategy::class,
+            'json'                              => JsonStrategy::class,
+            'array'                             => ArrayStrategy::class,
         ],
     ],
 

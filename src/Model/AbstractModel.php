@@ -117,7 +117,9 @@ abstract class AbstractModel implements ModelInterface
         foreach ($array as $name => $value) {
             if ($value instanceof ModelInterface) {
                 $value = $value->toArray();
-            } elseif (is_array($value) || $value instanceof \Traversable){
+            }
+
+            if (is_array($value)){
                 $value = $this->recursiveToArray($value);
             }
             $result[$name] = $value;

@@ -103,15 +103,29 @@ class BaseHydrator extends ArraySerializable
     public function addStrategies(array $strategies)
     {
         foreach ($strategies as $name => $strategy) {
-            if (is_string($strategy)) {
-                $strategy = $this->strategyPluginManager->get($strategy);
-            }
-
-            if (!($strategy instanceof StrategyInterface)) {
-                throw new \Exception("invalid strategy");
-            }
-
-            $this->addStrategy($name, $strategy);
+            $this->addStrategy($name, $this->getStrategyObject($strategy));
         }
+    }
+
+    /**
+     * @param $strategy
+     * @return StrategyInterface
+     * @throws \Exception
+     */
+    public function getStrategyObject($strategy)
+    {
+        if ($strategy instanceof StrategyInterface) {
+            return $strategy;
+        }
+
+        if (is_string($strategy)) {
+            $strategy = $this->strategyPluginManager->get($strategy);
+        }
+
+        if (!($strategy instanceof StrategyInterface)) {
+            throw new \Exception("invalid strategy");
+        }
+
+        return $strategy;
     }
 }
