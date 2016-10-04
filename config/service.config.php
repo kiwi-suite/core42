@@ -1,6 +1,7 @@
 <?php
 namespace Core42;
 
+use Cocur\Slugify\Slugify;
 use Core42\Cache\Service\CachePluginManager;
 use Core42\Cache\Service\CachePluginManagerFactory;
 use Core42\Cache\Service\DriverPluginManager;
@@ -43,6 +44,7 @@ use Core42\TableGateway\Service\MigrationTableGatewayFactory;
 use Core42\View\Http\Service\ExceptionStrategyFactory;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\I18n\Translator\TranslatorInterface;
+use Zend\ServiceManager\Factory\InvokableFactory;
 use Zend\Session\Service\SessionConfigFactory;
 use Zend\Session\Service\SessionManagerFactory;
 use Zend\Session\Service\StorageFactory;
@@ -68,6 +70,8 @@ return [
             FilterPluginManager::class                      => FilterPluginManagerFactory::class,
 
             Localization::class                             => LocalizationFactory::class,
+
+            Slugify::class                                  => InvokableFactory::class,
 
             ConsoleDispatcher::class                        => ConsoleDispatcherFactory::class,
             TransactionManager::class                       => TransactionManagerFactory::class,
