@@ -45,6 +45,12 @@ try {
         $appConfig = ArrayUtils::merge($appConfig, $developmentConfig);
     }
 
+    if ($appConfig['module_listener_options']['config_cache_enabled'] === true
+        && !is_dir($appConfig['module_listener_options']['cache_dir'])
+    ) {
+        @mkdir($appConfig['module_listener_options']['cache_dir'], 0777, true);
+    }
+
     Application::init($appConfig)->run();
 } catch (\Throwable $e) {
     echo ErrorHandler::init($e);
