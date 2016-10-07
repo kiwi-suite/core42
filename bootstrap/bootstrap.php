@@ -9,7 +9,7 @@ if (file_exists('data/maintenance/on')) {
     http_response_code(503);
 
     ob_start();
-    include_once 'data/maintenance/template.phtml';
+    include_once 'resources/maintenance.phtml';
     echo ob_get_clean();
     return;
 }
@@ -26,7 +26,7 @@ require 'vendor/autoload.php';
 require 'config/environment.config.php';
 
 try {
-    ErrorHandler::setErrorTemplate('data/error/template.phtml');
+    ErrorHandler::setErrorTemplate('resources/error.phtml');
 
     if (! class_exists(Application::class)) {
         throw new RuntimeException(

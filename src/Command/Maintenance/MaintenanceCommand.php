@@ -43,15 +43,15 @@ class MaintenanceCommand extends AbstractCommand
      */
     protected function preExecute()
     {
-        if (!is_dir('data/development')) {
-            $created = mkdir('data/development', 0777, true);
+        if (!is_dir('data/maintenance')) {
+            $created = mkdir('data/maintenance', 0777, true);
             if ($created === false) {
-                $this->addError('directory', "directory 'data/development' can't be created");
+                $this->addError('directory', "directory 'data/maintenance' can't be created");
             }
         }
 
-        if (!is_writable('data/development')) {
-            $this->addError('directory', "directory 'data/development' isn't writable");
+        if (!is_writable('data/maintenance')) {
+            $this->addError('directory', "directory 'data/maintenance' isn't writable");
         }
     }
 
