@@ -15,6 +15,7 @@ namespace Core42\View\Helper\Service;
 use Core42\View\Helper\AssetUrl;
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
+use Zend\Json\Json;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\Factory\FactoryInterface;
@@ -48,8 +49,37 @@ class AssetUrlFactory implements FactoryInterface
             $assetUrl = '';
         }
 
+        $prependCommit = $container->get('Config')['prepend_commit'];
+        if ($prependCommit === true) {
+            $assetUrl = $this->appendCommitHash($assetUrl);
+        }
+
         return new AssetUrl(
             $assetUrl
         );
+    }
+
+    /**
+     * @param string $assetUrl
+     * @return string
+     */
+    protected function appendCommitHash($assetUrl)
+    {
+        if (!file_exists('data/version/revision.json')) {
+            return $assetUrl;
+        }
+
+        try {
+            $revision = Json::decode(file_get_contents('data/version/revision.json'), Json::TYPE_ARRAY);
+        } catch (\Exception $e) {
+            return $assetUrl;
+        }
+
+        if (empty($revision['revision_hash_short'])) {
+            return $assetUrl;
+        }
+
+        $assetUrl = rtrim($assetUrl, '/');
+        return  $assetUrl . "/v-" . rawurlencode($revision['revision_hash_short']);
     }
 }

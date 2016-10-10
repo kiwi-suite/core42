@@ -13,6 +13,7 @@ use Core42\Command\Migration\MakeCommand;
 use Core42\Command\Migration\MigrateCommand;
 use Core42\Command\Migration\ResetCommand;
 use Core42\Command\Migration\RollbackCommand;
+use Core42\Command\Revision\CreateFileCommand;
 
 return [
     'cli' => [
@@ -92,6 +93,14 @@ return [
                 '--copy|-c'             => 'Copy all files instead of a symlink',
                 '--force|-f'            => 'Override when target folder already exists',
             ],
+        ],
+
+        'revision-file-create' => [
+            'group'                     => 'setup',
+            'route'                     => 'revision-file-create',
+            'command-name'              => CreateFileCommand::class,
+            'description'               => 'Creates a revision file',
+            'short_description'         => 'Creates a revision file',
         ],
 
         'generate-db-classes' => [
