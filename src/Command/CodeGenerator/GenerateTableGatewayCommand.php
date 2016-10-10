@@ -1,10 +1,13 @@
 <?php
-/**
- * core42 (www.raum42.at)
+
+/*
+ * core42
  *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
- *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
  */
 
 namespace Core42\Command\CodeGenerator;
@@ -17,27 +20,27 @@ use Zend\Code\Generator;
 class GenerateTableGatewayCommand extends AbstractCommand
 {
     /**
-     * @type \Zend\Db\Adapter\Adapter
+     * @var \Zend\Db\Adapter\Adapter
      */
     private $adapter;
 
     /**
-     * @type string
+     * @var string
      */
     private $adapterName = 'Db\Master';
 
     /**
-     * @type string
+     * @var string
      */
     private $className;
 
     /**
-     * @type string
+     * @var string
      */
     private $directory;
 
     /**
-     * @type string
+     * @var string
      */
     private $tableName;
 
@@ -112,39 +115,45 @@ class GenerateTableGatewayCommand extends AbstractCommand
     protected function preExecute()
     {
         if (empty($this->className)) {
-            $this->addError('className', "className parameter not set");
+            $this->addError('className', 'className parameter not set');
+
             return;
         }
 
         if (empty($this->directory)) {
-            $this->addError('directory', "directory parameter not set");
+            $this->addError('directory', 'directory parameter not set');
+
             return;
         }
 
         if (empty($this->tableName)) {
-            $this->addError('tableName', "tableName parameter not set");
+            $this->addError('tableName', 'tableName parameter not set');
+
             return;
         }
 
         if (empty($this->model)) {
-            $this->addError('model', "model parameter not set");
+            $this->addError('model', 'model parameter not set');
+
             return;
         }
 
         if (!is_dir($this->directory)) {
-            $this->addError('directory', "directory '".$this->directory."' doesn't exist");
+            $this->addError('directory', "directory '" . $this->directory . "' doesn't exist");
+
             return;
         }
 
         if (!is_writable($this->directory)) {
-            $this->addError("directory", "directory '".$this->directory."' isn't writeable");
+            $this->addError('directory', "directory '" . $this->directory . "' isn't writeable");
+
             return;
         }
 
         try {
             $this->adapter = $this->getServiceManager()->get($this->adapterName);
         } catch (ServiceNotFoundException $e) {
-            $this->addError("adapter", "adapter '".$this->adapterName."' not found");
+            $this->addError('adapter', "adapter '" . $this->adapterName . "' not found");
         }
 
         $this->directory = rtrim($this->directory, '/') . '/';
@@ -158,9 +167,9 @@ class GenerateTableGatewayCommand extends AbstractCommand
         $metadata = Factory::createSourceFromAdapter($this->adapter);
         $metadata->getTable($this->tableName);
 
-        $parts =  explode("\\", $this->className);
+        $parts = explode('\\', $this->className);
         $class = array_pop($parts);
-        $namespace = implode("\\", $parts);
+        $namespace = implode('\\', $parts);
 
         $classGenerator = new Generator\ClassGenerator();
         $classGenerator->setNamespaceName($namespace)
@@ -168,7 +177,7 @@ class GenerateTableGatewayCommand extends AbstractCommand
             ->setName($class)
             ->setExtendedClass('Core42\Db\TableGateway\AbstractTableGateway');
 
-        $property = new Generator\PropertyGenerator("table");
+        $property = new Generator\PropertyGenerator('table');
         $property->setDefaultValue($this->tableName)
             ->setDocBlock(
                 new Generator\DocBlockGenerator(
@@ -190,7 +199,7 @@ class GenerateTableGatewayCommand extends AbstractCommand
         if ($pkc) {
             $primaryKey = $pkc->getColumns();
 
-            $property = new Generator\PropertyGenerator("primaryKey");
+            $property = new Generator\PropertyGenerator('primaryKey');
             $property->setDefaultValue(
                 $primaryKey,
                 Generator\ValueGenerator::TYPE_ARRAY_SHORT,
@@ -211,9 +220,8 @@ class GenerateTableGatewayCommand extends AbstractCommand
         $columns = $metadata->getColumns($this->tableName);
 
         foreach ($columns as $column) {
-
-            if ($column->getDataType() == "enum"
-                && in_array($column->getErrata("permitted_values"), [["true", "false"], ["false", "true"]])
+            if ($column->getDataType() == 'enum'
+                && in_array($column->getErrata('permitted_values'), [['true', 'false'], ['false', 'true']])
             ) {
                 $databaseTypeMap[$column->getName()] = 'Boolean';
             } elseif (in_array($column->getDataType(), ['date'])) {
@@ -229,7 +237,7 @@ class GenerateTableGatewayCommand extends AbstractCommand
             }
         }
 
-        $property = new Generator\PropertyGenerator("databaseTypeMap");
+        $property = new Generator\PropertyGenerator('databaseTypeMap');
         $property->setDefaultValue(
             $databaseTypeMap,
             Generator\ValueGenerator::TYPE_ARRAY_SHORT,
@@ -246,7 +254,7 @@ class GenerateTableGatewayCommand extends AbstractCommand
         $classGenerator->addPropertyFromGenerator($property);
 
 
-        $property = new Generator\PropertyGenerator("modelPrototype");
+        $property = new Generator\PropertyGenerator('modelPrototype');
         $property->setDefaultValue($this->model)
             ->setDocBlock(
                 new Generator\DocBlockGenerator(
@@ -259,6 +267,6 @@ class GenerateTableGatewayCommand extends AbstractCommand
         $classGenerator->addPropertyFromGenerator($property);
 
         $filename = $this->directory . $class . '.php';
-        file_put_contents($filename, "<?php\n".$classGenerator->generate());
+        file_put_contents($filename, "<?php\n" . $classGenerator->generate());
     }
 }

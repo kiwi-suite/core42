@@ -1,10 +1,13 @@
 <?php
-/**
- * core42 (www.raum42.at)
+
+/*
+ * core42
  *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
- *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
  */
 
 namespace Core42\Db\TableGateway;
@@ -68,7 +71,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         }
 
         if (!($this->modelPrototype instanceof ModelInterface)) {
-            throw new \Exception("invalid model prototype");
+            throw new \Exception('invalid model prototype');
         }
 
         $this->hydrator = $hydrator;
@@ -98,6 +101,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         if (is_object($this->modelPrototype)) {
             return clone $this->modelPrototype;
         }
+
         return new $this->modelPrototype;
     }
 
@@ -149,7 +153,6 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     }
 
     /**
-     *
      * @see \Zend\Db\TableGateway\AbstractTableGateway::update()
      */
     public function update($set, $where = null)
@@ -157,7 +160,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         if ($set instanceof ModelInterface) {
             $where = $this->getPrimaryValues($set);
             if (empty($where)) {
-                throw new \Exception("no primary key set");
+                throw new \Exception('no primary key set');
             }
 
             $updateSet = $this->getHydrator()->extractArray($set->diff());
@@ -177,7 +180,6 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     }
 
     /**
-     *
      * @see \Zend\Db\TableGateway\AbstractTableGateway::delete()
      */
     public function delete($where)
@@ -195,7 +197,6 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     }
 
     /**
-     *
      * @param  string|int|array                 $values
      * @return \Core42\Model\AbstractModel|null
      * @throws \Exception
@@ -203,13 +204,13 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     public function selectByPrimary($values)
     {
         if (!is_array($values) && !is_int($values) && !is_string($values)) {
-            throw new \Exception("invalid value");
+            throw new \Exception('invalid value');
         }
 
         $primary = $this->getPrimaryKey();
 
         if ((!is_array($values) && count($primary) != 1) || count($values) != count($primary)) {
-            throw new \Exception("invalid value");
+            throw new \Exception('invalid value');
         }
 
         if (!is_array($values)) {
@@ -217,12 +218,12 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         }
 
         if (count(array_diff(array_keys($values), $primary)) > 0) {
-            throw new \Exception("invalid value");
+            throw new \Exception('invalid value');
         }
 
         $resultSet = $this->select($values);
         if ($resultSet->count() == 0) {
-            return null;
+            return;
         }
 
         return $resultSet->current();

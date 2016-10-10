@@ -1,4 +1,15 @@
 <?php
+
+/*
+ * core42
+ *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
+ */
+
 namespace Core42\Permission;
 
 use Core42\Permission\Service\AssertionPluginManager;
@@ -36,7 +47,6 @@ class Permission extends Rbac implements PermissionInterface
         $this->assertionPluginManager = $assertionPluginManager;
         $this->identity = $identity;
         $this->guestRole = $guestRole;
-
     }
 
     /**
@@ -47,7 +57,7 @@ class Permission extends Rbac implements PermissionInterface
         $roles = [];
         $it = new \RecursiveIteratorIterator($this, \RecursiveIteratorIterator::CHILD_FIRST);
         foreach ($it as $leaf) {
-            /** @var RoleInterface $leaf */
+            /* @var RoleInterface $leaf */
             $roles[] = $leaf->getName();
         }
 
@@ -57,7 +67,7 @@ class Permission extends Rbac implements PermissionInterface
     /**
      * @param string|RoleInterface $role
      * @param string $permission
-     * @param string|AssertionInterface|Callable|null $assert
+     * @param string|AssertionInterface|callable|null $assert
      * @return bool
      * @throws \Exception
      */
@@ -75,7 +85,7 @@ class Permission extends Rbac implements PermissionInterface
     }
 
     /**
-     * @param string|AssertionInterface|Callable|null $assert
+     * @param string|AssertionInterface|callable|null $assert
      * @return bool
      * @throws \Exception
      */

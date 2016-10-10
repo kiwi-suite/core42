@@ -1,10 +1,13 @@
 <?php
-/**
- * core42 (www.raum42.at)
+
+/*
+ * core42
  *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
- *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
  */
 
 namespace Core42\Command\Development;
@@ -18,7 +21,7 @@ class DevelopmentCommand extends AbstractCommand
     use ConsoleAwareTrait;
 
     /**
-     * @var boolean
+     * @var bool
      */
     private $enable = false;
 
@@ -28,12 +31,12 @@ class DevelopmentCommand extends AbstractCommand
     protected $transaction = false;
 
     /**
-     * @param boolean $enable
+     * @param bool $enable
      * @return $this
      */
     public function enableDevelopment($enable)
     {
-        $this->enable = (boolean) $enable;
+        $this->enable = (bool) $enable;
 
         return $this;
     }
@@ -62,17 +65,17 @@ class DevelopmentCommand extends AbstractCommand
     {
         if ($this->enable === true && !file_exists('data/development/on')) {
             touch('data/development/on');
-            $this->consoleOutput("development mode enabled");
+            $this->consoleOutput('development mode enabled');
 
             return;
         } elseif ($this->enable === false && file_exists('data/development/on')) {
             unlink('data/development/on');
-            $this->consoleOutput("development mode disabled");
+            $this->consoleOutput('development mode disabled');
 
             return;
         }
 
-        $this->consoleOutput("<info>development mode already ".(($this->enable) ? 'enabled': 'disabled')."</info>");
+        $this->consoleOutput('<info>development mode already ' . (($this->enable) ? 'enabled' : 'disabled') . '</info>');
     }
 
     /**
@@ -80,6 +83,6 @@ class DevelopmentCommand extends AbstractCommand
      */
     public function consoleSetup(Route $route)
     {
-        $this->enableDevelopment($route->getMatchedParam("on"));
+        $this->enableDevelopment($route->getMatchedParam('on'));
     }
 }

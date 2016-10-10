@@ -1,10 +1,13 @@
 <?php
-/**
- * core42 (www.raum42.at)
+
+/*
+ * core42
  *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2016 raum42 OG (http://www.raum42.at)
- *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
  */
 
 namespace Core42\Command\Mail;
@@ -100,6 +103,7 @@ class SendCommand extends AbstractCommand
     public function setLayout(MailModel $layout)
     {
         $this->layout = $layout;
+
         return $this;
     }
 
@@ -110,6 +114,7 @@ class SendCommand extends AbstractCommand
     public function setSubject($subject)
     {
         $this->subject = $subject;
+
         return $this;
     }
 
@@ -122,6 +127,7 @@ class SendCommand extends AbstractCommand
     {
         $address = ($name == null) ? $email : [$email, $name];
         $this->from = $address;
+
         return $this;
     }
 
@@ -144,6 +150,7 @@ class SendCommand extends AbstractCommand
     {
         $address = ($name == null) ? $email : [$email, $name];
         $this->to[] = $address;
+
         return $this;
     }
 
@@ -156,6 +163,7 @@ class SendCommand extends AbstractCommand
     {
         $address = ($name == null) ? $email : [$email, $name];
         $this->cc[] = $address;
+
         return $this;
     }
 
@@ -168,6 +176,7 @@ class SendCommand extends AbstractCommand
     {
         $address = ($name == null) ? $email : [$email, $name];
         $this->bcc[] = $address;
+
         return $this;
     }
 
@@ -180,6 +189,7 @@ class SendCommand extends AbstractCommand
     {
         $address = ($name == null) ? $email : [$email, $name];
         $this->replyTo[] = $address;
+
         return $this;
     }
 
@@ -190,6 +200,7 @@ class SendCommand extends AbstractCommand
     public function setBody(MailModel $body)
     {
         $this->body = $body;
+
         return $this;
     }
 
@@ -200,6 +211,7 @@ class SendCommand extends AbstractCommand
     public function setAttachments(array $attachments)
     {
         $this->attachments = $attachments;
+
         return $this;
     }
 
@@ -210,6 +222,7 @@ class SendCommand extends AbstractCommand
     public function addAttachment($attachment)
     {
         $this->attachments[] = $attachment;
+
         return $this;
     }
 
@@ -219,7 +232,8 @@ class SendCommand extends AbstractCommand
     protected function preExecute()
     {
         if (!($this->body instanceof MailModel)) {
-            $this->addError("body", "invalid body");
+            $this->addError('body', 'invalid body');
+
             return;
         }
 
@@ -237,7 +251,8 @@ class SendCommand extends AbstractCommand
         }
 
         if (!$this->layout->hasHtmlTemplate() && !$this->layout->hasPlainTemplate()) {
-            $this->addError("layout", "either html or plain layout must be specified");
+            $this->addError('layout', 'either html or plain layout must be specified');
+
             return;
         }
 
@@ -259,7 +274,7 @@ class SendCommand extends AbstractCommand
             if (!empty($projectConfig['email_from'])) {
                 $this->from = $projectConfig['email_from'];
             } else {
-                $this->addError("from", "no from specified");
+                $this->addError('from', 'no from specified');
             }
         }
 
@@ -280,7 +295,7 @@ class SendCommand extends AbstractCommand
 
         $phpRenderer = new PhpRenderer();
         $phpRenderer->setResolver($viewResolver);
-        $phpRenderer->setHelperPluginManager($this->getServiceManager()->get("ViewHelperManager"));
+        $phpRenderer->setHelperPluginManager($this->getServiceManager()->get('ViewHelperManager'));
 
         foreach ($this->parts as $type => $options) {
             if (!$this->body->hasTemplate($type)) {

@@ -1,10 +1,13 @@
 <?php
-/**
- * core42 (www.raum42.at)
+
+/*
+ * core42
  *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
- *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
  */
 
 namespace Core42\Mail\Transport\Service;
@@ -36,12 +39,12 @@ class TransportFactory implements FactoryInterface
      */
     private function getConfig(ContainerInterface $container)
     {
-        $config = $container->get("Config");
+        $config = $container->get('Config');
 
         if (isset($config['mail']['transport'])) {
             return $config['mail']['transport'];
         }
 
-        throw new \Exception("mail transport config not provided");
+        throw new \Exception('mail transport config not provided');
     }
 }

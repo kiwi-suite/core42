@@ -1,8 +1,18 @@
 <?php
+
+/*
+ * core42
+ *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
+ */
+
 namespace Core42\Navigation;
 
 use Core42\Navigation\Page\PageInterface;
-
 
 class Container implements ContainerInterface
 {
@@ -20,7 +30,6 @@ class Container implements ContainerInterface
      */
     protected $sort = [];
 
-
     /**
      * @param PageInterface $page
      */
@@ -37,7 +46,7 @@ class Container implements ContainerInterface
      */
     public function removePage(PageInterface $page)
     {
-        /** @var PageInterface $page */
+        /* @var PageInterface $page */
         foreach ($this->children as $hash => $child) {
             if ($page != $child) {
                 continue;
@@ -117,7 +126,7 @@ class Container implements ContainerInterface
     /**
      * Checks if current position is valid
      * @link http://php.net/manual/en/iterator.valid.php
-     * @return boolean The return value will be casted to boolean and then evaluated.
+     * @return bool The return value will be casted to boolean and then evaluated.
      * Returns true on success or false on failure.
      * @since 5.0.0
      */
@@ -158,5 +167,4 @@ class Container implements ContainerInterface
     {
         return $this->children[$this->sort[$this->index]];
     }
-
 }

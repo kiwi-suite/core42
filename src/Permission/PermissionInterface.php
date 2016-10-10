@@ -1,4 +1,15 @@
 <?php
+
+/*
+ * core42
+ *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
+ */
+
 namespace Core42\Permission;
 
 use Zend\Permissions\Rbac\AssertionInterface;
@@ -43,7 +54,7 @@ interface PermissionInterface
 
     /**
      * @param  string                           $permission
-     * @param  AssertionInterface|Callable|null|string $assert
+     * @param  AssertionInterface|callable|null|string $assert
      * @param  RoleInterface|string             $role
      * @return bool
      */

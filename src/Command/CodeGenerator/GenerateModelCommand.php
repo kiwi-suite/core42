@@ -1,10 +1,13 @@
 <?php
-/**
- * core42 (www.raum42.at)
+
+/*
+ * core42
  *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
- *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
  */
 
 namespace Core42\Command\CodeGenerator;
@@ -13,34 +16,33 @@ use Core42\Command\AbstractCommand;
 use Zend\Db\Metadata\Source\Factory;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\Code\Generator;
-use Zend\Code\Reflection;
 use Zend\Db\Adapter;
 use Zend\Filter\Word\UnderscoreToCamelCase;
 
 class GenerateModelCommand extends AbstractCommand
 {
     /**
-     * @type \Zend\Db\Adapter\Adapter
+     * @var \Zend\Db\Adapter\Adapter
      */
     private $adapter;
 
     /**
-     * @type string
+     * @var string
      */
     private $adapterName = 'Db\Master';
 
     /**
-     * @type string
+     * @var string
      */
     private $className;
 
     /**
-     * @type string
+     * @var string
      */
     private $directory;
 
     /**
-     * @type string
+     * @var string
      */
     private $tableName;
 
@@ -99,7 +101,7 @@ class GenerateModelCommand extends AbstractCommand
     }
 
     /**
-     * @param boolean $generateSetterGetter
+     * @param bool $generateSetterGetter
      * @return $this
      */
     public function setGenerateSetterGetter($generateSetterGetter)
@@ -115,34 +117,39 @@ class GenerateModelCommand extends AbstractCommand
     protected function preExecute()
     {
         if (!isset($this->className)) {
-            $this->addError('className', "className parameter not set");
+            $this->addError('className', 'className parameter not set');
+
             return;
         }
 
         if (!isset($this->directory)) {
-            $this->addError('directory', "directory parameter not set");
+            $this->addError('directory', 'directory parameter not set');
+
             return;
         }
 
         if (empty($this->tableName)) {
-            $this->addError('tableName', "tableName parameter not set");
+            $this->addError('tableName', 'tableName parameter not set');
+
             return;
         }
 
         if (!is_dir($this->directory)) {
-            $this->addError('directory', "directory '".$this->directory."' doesn't exist");
+            $this->addError('directory', "directory '" . $this->directory . "' doesn't exist");
+
             return;
         }
 
         if (!is_writable($this->directory)) {
-            $this->addError("directory", "directory '".$this->directory."' isn't writeable");
+            $this->addError('directory', "directory '" . $this->directory . "' isn't writeable");
+
             return;
         }
 
         try {
             $this->adapter = $this->getServiceManager()->get($this->adapterName);
         } catch (ServiceNotFoundException $e) {
-            $this->addError("adapter", "adapter '".$this->adapterName."' not found");
+            $this->addError('adapter', "adapter '" . $this->adapterName . "' not found");
         }
 
         $this->directory = rtrim($this->directory, '/') . '/';
@@ -156,9 +163,9 @@ class GenerateModelCommand extends AbstractCommand
         $metadata = Factory::createSourceFromAdapter($this->adapter);
         $columns = $metadata->getColumns($this->tableName);
 
-        $parts =  explode("\\", $this->className);
+        $parts = explode('\\', $this->className);
         $class = array_pop($parts);
-        $namespace = implode("\\", $parts);
+        $namespace = implode('\\', $parts);
 
         $modelClass = new Generator\ClassGenerator();
         $modelClass->setNamespaceName($namespace)
@@ -182,15 +189,15 @@ class GenerateModelCommand extends AbstractCommand
 
             if ($this->generateSetterGetter === false) {
                 $setterMethodDocBlock = new Generator\DocBlock\Tag\MethodTag(
-                    "set".$method,
+                    'set' . $method,
                     [$class],
-                    "set".$method."(".$type." \$".$column->getName().")"
+                    'set' . $method . '(' . $type . ' $' . $column->getName() . ')'
                 );
 
                 $getterMethodDocBlock = new Generator\DocBlock\Tag\MethodTag(
-                    "get".$method,
+                    'get' . $method,
                     [$type],
-                    "get".$method."()"
+                    'get' . $method . '()'
                 );
 
                 $tags[] = $setterMethodDocBlock;
@@ -204,25 +211,25 @@ class GenerateModelCommand extends AbstractCommand
                 $docBlockReturn->setTypes('$this');
 
                 $methods[] = new Generator\MethodGenerator(
-                    'set'.$method,
+                    'set' . $method,
                     [
                         new Generator\ParameterGenerator(
                             $column->getName(),
                             null,
                             null
-                        )
+                        ),
                     ],
                     Generator\MethodGenerator::FLAG_PUBLIC,
                     implode("\n", [
-                        '$this->set(\''.$column->getName().'\', $'.$column->getName().');',
-                        'return $this;'
+                        '$this->set(\'' . $column->getName() . '\', $' . $column->getName() . ');',
+                        'return $this;',
                     ]),
                     new Generator\DocBlockGenerator(
                         null,
                         null,
                         [
                             $docBlockParam,
-                            $docBlockReturn
+                            $docBlockReturn,
                         ]
                     )
                 );
@@ -232,15 +239,15 @@ class GenerateModelCommand extends AbstractCommand
                 $docBlockReturn->setTypes($this->getPropertyTypeByColumnObject($column));
 
                 $methods[] = new Generator\MethodGenerator(
-                    'get'.$method,
+                    'get' . $method,
                     [],
                     Generator\MethodGenerator::FLAG_PUBLIC,
-                    "return \$this->get('".$column->getName()."');",
+                    "return \$this->get('" . $column->getName() . "');",
                     new Generator\DocBlockGenerator(
                         null,
                         null,
                         [
-                            $docBlockReturn
+                            $docBlockReturn,
                         ]
                     )
                 );
@@ -254,7 +261,7 @@ class GenerateModelCommand extends AbstractCommand
             $modelClass->setDocBlock($docBlock);
         }
 
-        $propertyGenerator = new Generator\PropertyGenerator("properties");
+        $propertyGenerator = new Generator\PropertyGenerator('properties');
         $propertyGenerator->setDefaultValue(
             $properties,
             Generator\ValueGenerator::TYPE_ARRAY_SHORT,
@@ -279,36 +286,37 @@ class GenerateModelCommand extends AbstractCommand
      */
     protected function getPropertyTypeByColumnObject(\Zend\Db\Metadata\Object\ColumnObject $column)
     {
-        switch($column->getDataType()){
-            case "boolean":
-            case "bool":
-                return "boolean";
-            case "enum":
-                $check = [["true", "false"], ["false", "true"]];
-                if (in_array($column->getErrata("permitted_values"), $check)) {
-                    return "boolean";
+        switch ($column->getDataType()) {
+            case 'boolean':
+            case 'bool':
+                return 'boolean';
+            case 'enum':
+                $check = [['true', 'false'], ['false', 'true']];
+                if (in_array($column->getErrata('permitted_values'), $check)) {
+                    return 'boolean';
                 }
-                return "string";
-            case "decimal":
-            case "numeric":
-            case "float":
-            case "double":
-                return "float";
-            case "int":
-            case "integer":
-            case "tinyint":
-            case "mediumint":
-            case "bigint":
-                return "int";
-            case "datetime":
-            case "date":
-            case "timestamp":
+
+                return 'string';
+            case 'decimal':
+            case 'numeric':
+            case 'float':
+            case 'double':
+                return 'float';
+            case 'int':
+            case 'integer':
+            case 'tinyint':
+            case 'mediumint':
+            case 'bigint':
+                return 'int';
+            case 'datetime':
+            case 'date':
+            case 'timestamp':
                 return '\DateTime';
-            case "varchar":
-            case "char":
-            case "text":
+            case 'varchar':
+            case 'char':
+            case 'text':
             default:
-                return "string";
+                return 'string';
         }
     }
 }

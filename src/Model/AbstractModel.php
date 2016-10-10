@@ -1,10 +1,13 @@
 <?php
-/**
- * core42 (www.raum42.at)
+
+/*
+ * core42
  *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
- *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
  */
 
 namespace Core42\Model;
@@ -61,7 +64,7 @@ abstract class AbstractModel implements ModelInterface
     public function hasChanged($property = null)
     {
         if ($property === null) {
-            return (count($this->diff()) > 0);
+            return count($this->diff()) > 0;
         }
 
         if (!in_array($property, $this->properties)) {
@@ -119,7 +122,7 @@ abstract class AbstractModel implements ModelInterface
                 $value = $value->toArray();
             }
 
-            if (is_array($value)){
+            if (is_array($value)) {
                 $value = $this->recursiveToArray($value);
             }
             $result[$name] = $value;
@@ -207,9 +210,9 @@ abstract class AbstractModel implements ModelInterface
         $return = null;
 
         $variableName = lcfirst(substr($method, 3));
-        if (strncasecmp($method, "get", 3) === 0) {
+        if (strncasecmp($method, 'get', 3) === 0) {
             return $this->get($variableName);
-        } elseif (strncasecmp($method, "set", 3) === 0) {
+        } elseif (strncasecmp($method, 'set', 3) === 0) {
             return $this->set($variableName, $params[0], true);
         }
 
@@ -223,7 +226,7 @@ abstract class AbstractModel implements ModelInterface
     {
         return serialize([
             'data' => $this->data,
-            'properties' => $this->properties
+            'properties' => $this->properties,
         ]);
     }
 
@@ -242,11 +245,11 @@ abstract class AbstractModel implements ModelInterface
     /**
      * @return array
      */
-    function jsonSerialize()
+    public function jsonSerialize()
     {
         return [
             'data' => $this->data,
-            'properties' => $this->properties
+            'properties' => $this->properties,
         ];
     }
 }
