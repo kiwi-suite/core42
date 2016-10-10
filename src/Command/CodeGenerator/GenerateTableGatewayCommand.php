@@ -223,17 +223,17 @@ class GenerateTableGatewayCommand extends AbstractCommand
             if ($column->getDataType() == 'enum'
                 && in_array($column->getErrata('permitted_values'), [['true', 'false'], ['false', 'true']])
             ) {
-                $databaseTypeMap[$column->getName()] = 'Boolean';
+                $databaseTypeMap[$column->getName()] = 'boolean';
             } elseif (in_array($column->getDataType(), ['date'])) {
-                $databaseTypeMap[$column->getName()] = 'Date';
+                $databaseTypeMap[$column->getName()] = 'date';
             } elseif (in_array($column->getDataType(), ['datetime', 'timestamp'])) {
-                $databaseTypeMap[$column->getName()] = 'DateTime';
+                $databaseTypeMap[$column->getName()] = 'dateTime';
             } elseif (in_array($column->getDataType(), ['decimal', 'numeric', 'float', 'double'])) {
-                $databaseTypeMap[$column->getName()] = 'Float';
+                $databaseTypeMap[$column->getName()] = 'float';
             } elseif (in_array($column->getDataType(), ['smallint', 'mediumint', 'int', 'bigint'])) {
-                $databaseTypeMap[$column->getName()] = 'Integer';
+                $databaseTypeMap[$column->getName()] = 'integer';
             } else {
-                $databaseTypeMap[$column->getName()] = 'String';
+                $databaseTypeMap[$column->getName()] = 'string';
             }
         }
 

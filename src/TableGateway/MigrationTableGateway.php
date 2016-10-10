@@ -32,8 +32,8 @@ class MigrationTableGateway extends AbstractTableGateway
      * @var array
      */
     protected $databaseTypeMap = [
-        'name' => 'String',
-        'created' => 'DateTime',
+        'name' => 'string',
+        'created' => 'dateTime',
     ];
 
     /**
