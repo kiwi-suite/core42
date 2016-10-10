@@ -4,7 +4,6 @@ namespace Core42;
 use Core42\Command\Assets\AssetsCommand;
 use Core42\Command\Cache\ClearAppCacheCommand;
 use Core42\Command\CodeGenerator\GenerateDbClassesCommand;
-use Core42\Command\CodeGenerator\GenerateModuleCommand;
 use Core42\Command\Cron\CronCommand;
 use Core42\Command\Cron\CronTaskCommand;
 use Core42\Command\Development\DevelopmentCommand;
@@ -84,11 +83,15 @@ return [
 
         'assets' => [
             'group'                     => 'setup',
-            'route'                     => 'assets [--copy|-c]',
+            'route'                     => 'assets [--copy|-c] [--force|-f]',
             'command-name'              => AssetsCommand::class,
             'description'               => 'Copy or symlink all registered assets into a target directory (for '
                                                 .'example public directory) to be accessible over the webserver',
             'short_description'         => 'Copy or symlink all registered assets',
+            'options_descriptions'      => [
+                '--copy|-c'             => 'Copy all files instead of a symlink',
+                '--force|-f'            => 'Override when target folder already exists',
+            ],
         ],
 
         'generate-db-classes' => [
@@ -105,18 +108,6 @@ return [
                 '--all'                 => 'generate db classes for all tables with the given prefix',
                 '--adapter'             => 'Optional adapter name',
                 '--getter-setter'       => 'Generate Getter & Setter instead of PphDoc',
-            ],
-            'development'               => true,
-        ],
-
-        'generate-module' => [
-            'group'                     => 'developer',
-            'route'                     => 'generate-module --name=',
-            'command-name'              => GenerateModuleCommand::class,
-            'description'               => 'generates a module skeleton directory structure',
-            'short_description'         => 'generate a module',
-            'options_descriptions'      => [
-                '--name'                => 'Name of the module in CamelCase (Namespace)',
             ],
             'development'               => true,
         ],

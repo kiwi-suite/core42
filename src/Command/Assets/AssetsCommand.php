@@ -14,6 +14,8 @@ namespace Core42\Command\Assets;
 
 use Core42\Command\AbstractCommand;
 use Core42\Command\ConsoleAwareTrait;
+use Falc\Flysystem\Plugin\Symlink\Local\DeleteSymlink;
+use Falc\Flysystem\Plugin\Symlink\Local\IsSymlink;
 use Falc\Flysystem\Plugin\Symlink\Local\Symlink;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
@@ -37,6 +39,11 @@ class AssetsCommand extends AbstractCommand
     private $copy = false;
 
     /**
+     * @var bool
+     */
+    private $force = false;
+
+    /**
      * @var array|null
      */
     private $assetConfig;
@@ -48,6 +55,17 @@ class AssetsCommand extends AbstractCommand
     public function setCopy($copy)
     {
         $this->copy = (bool) $copy;
+
+        return $this;
+    }
+
+    /**
+     * @param bool $force
+     * @return $this
+     */
+    public function setForce($force)
+    {
+        $this->force = (bool) $force;
 
         return $this;
     }
@@ -82,6 +100,8 @@ class AssetsCommand extends AbstractCommand
     {
         $filesystem = new Filesystem(new Local(getcwd()));
         $filesystem->addPlugin(new Symlink());
+        $filesystem->addPlugin(new IsSymlink());
+        $filesystem->addPlugin(new DeleteSymlink());
         $filesystem->addPlugin(new ListPaths());
         $filesystem->addPlugin(new ListFiles());
         $filesystem->addPlugin(new EmptyDir());
@@ -93,7 +113,19 @@ class AssetsCommand extends AbstractCommand
             $filesystem->createDir(dirname($target));
 
             if ($this->copy === true) {
-                $filesystem->emptyDir($target);
+                if ($this->force == false && file_exists($target)) {
+                    $this->consoleOutput(sprintf("<error>'%s' already exists</error>", $target));
+
+                    continue;
+                }
+                if ($filesystem->isSymlink($target)) {
+                    $filesystem->deleteSymlink($target);
+                }
+
+                if (file_exists($target)) {
+                    $filesystem->emptyDir($target);
+                    @rmdir($target);
+                }
 
                 $files = $filesystem->listFiles($source, true);
                 foreach ($files as $fileData) {
@@ -112,6 +144,21 @@ class AssetsCommand extends AbstractCommand
                 continue;
             }
 
+            if ($filesystem->isSymlink($target)) {
+                $filesystem->deleteSymlink($target);
+            }
+
+            if ($this->force == false && file_exists($target)) {
+                $this->consoleOutput(sprintf("<error>'%s' already exists</error>", $target));
+
+                continue;
+            }
+
+            if (file_exists($target)) {
+                $filesystem->emptyDir($target);
+                @rmdir($target);
+            }
+
             $filesystem->symlink($source, $target);
             $this->consoleOutput("created symlink for '{$source}' (target '{$target}')");
         }
@@ -123,5 +170,6 @@ class AssetsCommand extends AbstractCommand
     public function consoleSetup(Route $route)
     {
         $this->setCopy($route->getMatchedParam('copy') || $route->getMatchedParam('c'));
+        $this->setForce($route->getMatchedParam('force') || $route->getMatchedParam('f'));
     }
 }
