@@ -19,7 +19,7 @@ class CronTableGateway extends AbstractTableGateway
     /**
      * @var string
      */
-    protected $table = 'cron';
+    protected $table = 'core42_cron';
 
     /**
      * @var array

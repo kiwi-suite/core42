@@ -17,17 +17,11 @@ use Core42\Command\ConsoleAwareTrait;
 use Core42\Model\Cron;
 use Core42\TableGateway\CronTableGateway;
 use Zend\Db\Sql\Where;
-use Zend\Log\Logger;
 use ZF\Console\Route;
 
 class CronCommand extends AbstractCommand
 {
     use ConsoleAwareTrait;
-
-    /**
-     * @var Logger
-     */
-    protected $logger;
 
     /**
      * @var bool
