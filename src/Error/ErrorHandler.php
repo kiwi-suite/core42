@@ -1,4 +1,15 @@
 <?php
+
+/*
+ * core42
+ *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
+ */
+
 namespace Core42\Error;
 
 use Whoops\Handler\JsonResponseHandler;
@@ -25,10 +36,9 @@ class ErrorHandler
 
     public static function registerShutdown()
     {
-        register_shutdown_function(function() {
+        register_shutdown_function(function () {
             $error = error_get_last();
             if ($error && Misc::isLevelFatal($error['type'])) {
-
                 $exception = new \ErrorException(
                     $error['message'],
                     $error['type'],
@@ -37,6 +47,7 @@ class ErrorHandler
                     $error['line']
                 );
                 $self = new self($exception);
+
                 return $self();
             }
         });
@@ -49,6 +60,7 @@ class ErrorHandler
         }
 
         $self = new self($e);
+
         return $self();
     }
 
@@ -63,6 +75,7 @@ class ErrorHandler
             foreach (['application/json', 'text/json', 'application/x-json'] as $check) {
                 if (strpos($_SERVER['HTTP_ACCEPT'], $check) !== false) {
                     $this->getJsonErrors();
+
                     return;
                 }
             }
@@ -86,7 +99,7 @@ class ErrorHandler
         $whoops = new Run();
 
         $handler = new PrettyPageHandler();
-        $handler->setPageTitle("Error 500");
+        $handler->setPageTitle('Error 500');
 
         $whoops->pushHandler($handler);
         $whoops->$method($this->e);
@@ -100,7 +113,6 @@ class ErrorHandler
         ob_clean();
         $error = $this->e;
         include_once self::$template;
-        return;
     }
 
     protected function getJsonErrors()
@@ -122,7 +134,5 @@ class ErrorHandler
         http_response_code(500);
 
         echo '[]';
-
-        return;
     }
 }

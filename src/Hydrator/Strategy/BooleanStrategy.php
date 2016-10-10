@@ -1,10 +1,13 @@
 <?php
-/**
- * core42 (www.raum42.at)
+
+/*
+ * core42
  *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
- *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
  */
 
 namespace Core42\Hydrator\Strategy;
@@ -22,7 +25,7 @@ class BooleanStrategy implements StrategyInterface
      */
     public function extract($value)
     {
-        return ($value === true) ? "true" : "false";
+        return ($value === true) ? 'true' : 'false';
     }
 
     /**
@@ -34,6 +37,6 @@ class BooleanStrategy implements StrategyInterface
      */
     public function hydrate($value)
     {
-        return ($value === "true") ? true : false;
+        return ($value === 'true') ? true : false;
     }
 }

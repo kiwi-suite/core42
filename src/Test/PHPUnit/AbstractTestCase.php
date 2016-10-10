@@ -1,10 +1,13 @@
 <?php
-/**
- * core42 (www.raum42.at)
+
+/*
+ * core42
  *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2015 raum42 OG (http://www.raum42.at)
- *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
  */
 
 namespace Core42\Test\PHPUnit;
@@ -190,11 +193,11 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
         // reset server datas
         if (!$keepPersistence) {
             $_SESSION = [];
-            $_COOKIE  = [];
+            $_COOKIE = [];
         }
 
-        $_GET     = [];
-        $_POST    = [];
+        $_GET = [];
+        $_POST = [];
 
         // reset singleton
         StaticEventManager::resetInstance();
@@ -211,7 +214,7 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
     public function triggerApplicationEvent($eventName)
     {
         $events = $this->getApplication()->getEventManager();
-        $event  = $this->getApplication()->getMvcEvent();
+        $event = $this->getApplication()->getMvcEvent();
 
         if ($eventName != MvcEvent::EVENT_ROUTE && $eventName != MvcEvent::EVENT_DISPATCH) {
             return $events->trigger($eventName, $event);
@@ -241,7 +244,7 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
     {
         $moduleManager = $this->getApplicationServiceLocator()->get('ModuleManager');
         $modulesLoaded = $moduleManager->getModules();
-        $list          = array_diff($modules, $modulesLoaded);
+        $list = array_diff($modules, $modulesLoaded);
         if ($list) {
             throw new \PHPUnit_Framework_ExpectationFailedException(
                 sprintf('Several modules are not loaded "%s"', implode(', ', $list))
@@ -259,7 +262,7 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
     {
         $moduleManager = $this->getApplicationServiceLocator()->get('ModuleManager');
         $modulesLoaded = $moduleManager->getModules();
-        $list          = array_intersect($modules, $modulesLoaded);
+        $list = array_intersect($modules, $modulesLoaded);
         if ($list) {
             throw new \PHPUnit_Framework_ExpectationFailedException(
                 sprintf('Several modules WAS not loaded "%s"', implode(', ', $list))
@@ -366,7 +369,6 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
             $statementMock
                 ->method('execute')
                 ->will($onConsecutiveCalls);
-
         } else {
             $resultSet = new \Zend\Db\ResultSet\ResultSet();
             $resultSet->initialize($dataSet);
@@ -384,6 +386,5 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
         $tableGatewayMock->expects($this->any())
             ->method('getSql')
             ->willReturn($sqlMock);
-
     }
 }

@@ -1,14 +1,16 @@
 <?php
-/**
- * core42 (www.raum42.at)
+
+/*
+ * core42
  *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
- *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
  */
 
 namespace Core42\Hydrator\Service;
-
 
 use Core42\Hydrator\BaseHydrator;
 use Core42\Hydrator\Strategy\Service\StrategyPluginManager;
@@ -20,7 +22,6 @@ use Zend\ServiceManager\Factory\FactoryInterface;
 
 class BaseHydratorFactory implements FactoryInterface
 {
-
     /**
      * Create an object
      *

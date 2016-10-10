@@ -1,10 +1,13 @@
 <?php
-/**
- * core42 (www.raum42.at)
+
+/*
+ * core42
  *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
- *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
  */
 
 namespace Core42\Hydrator;
@@ -18,7 +21,7 @@ class BaseHydrator extends ArraySerializable
     /**
      * @var bool
      */
-    protected $allowNull =  true;
+    protected $allowNull = true;
 
     /**
      * @var StrategyPluginManager
@@ -43,6 +46,7 @@ class BaseHydrator extends ArraySerializable
         foreach ($data as $name => $value) {
             $data[$name] = $this->extractValue($name, $value);
         }
+
         return $data;
     }
 
@@ -55,6 +59,7 @@ class BaseHydrator extends ArraySerializable
         foreach ($data as $name => $value) {
             $data[$name] = $this->hydrateValue($name, $value);
         }
+
         return $data;
     }
 
@@ -63,7 +68,7 @@ class BaseHydrator extends ArraySerializable
      */
     public function allowNull($allowNull)
     {
-        $this->allowNull = (boolean) $allowNull;
+        $this->allowNull = (bool) $allowNull;
     }
 
     /**
@@ -123,7 +128,7 @@ class BaseHydrator extends ArraySerializable
         }
 
         if (!($strategy instanceof StrategyInterface)) {
-            throw new \Exception("invalid strategy");
+            throw new \Exception('invalid strategy');
         }
 
         return $strategy;

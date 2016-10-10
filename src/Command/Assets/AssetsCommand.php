@@ -1,10 +1,13 @@
 <?php
-/**
- * core42 (www.raum42.at)
+
+/*
+ * core42
  *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
- *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
  */
 
 namespace Core42\Command\Assets;
@@ -44,7 +47,7 @@ class AssetsCommand extends AbstractCommand
      */
     public function setCopy($copy)
     {
-        $this->copy = (boolean) $copy;
+        $this->copy = (bool) $copy;
 
         return $this;
     }
@@ -94,14 +97,14 @@ class AssetsCommand extends AbstractCommand
 
                 $files = $filesystem->listFiles($source, true);
                 foreach ($files as $fileData) {
-                    if ($fileData['type'] == "dir") {
+                    if ($fileData['type'] == 'dir') {
                         continue;
                     }
 
-                    $dirname = $target . DIRECTORY_SEPARATOR . str_replace($source, "", $fileData['dirname']);
+                    $dirname = $target . DIRECTORY_SEPARATOR . str_replace($source, '', $fileData['dirname']);
                     $filesystem->createDir($dirname);
 
-                    $filename = $target . DIRECTORY_SEPARATOR . str_replace($source, "", $fileData['path']);
+                    $filename = $target . DIRECTORY_SEPARATOR . str_replace($source, '', $fileData['path']);
                     $filesystem->copy($fileData['path'], $filename);
                 }
                 $this->consoleOutput("created directory for '{$source}'");
@@ -119,6 +122,6 @@ class AssetsCommand extends AbstractCommand
      */
     public function consoleSetup(Route $route)
     {
-        $this->setCopy($route->getMatchedParam("copy") || $route->getMatchedParam("c"));
+        $this->setCopy($route->getMatchedParam('copy') || $route->getMatchedParam('c'));
     }
 }

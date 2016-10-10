@@ -1,10 +1,13 @@
 <?php
-/**
- * core42 (www.raum42.at)
+
+/*
+ * core42
  *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2015 raum42 OG (http://www.raum42.at)
- *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
  */
 
 namespace Core42\Command\Cron;
@@ -15,7 +18,6 @@ use Core42\Model\Cron;
 use Core42\TableGateway\CronTableGateway;
 use Cron\CronExpression;
 use Zend\Log\Logger;
-use Zend\Log\Formatter\Simple as SimpleFormatter;
 use ZF\Console\Route;
 
 class CronTaskCommand extends AbstractCommand
@@ -59,6 +61,7 @@ class CronTaskCommand extends AbstractCommand
     public function setTaskName($taskName)
     {
         $this->taskName = $taskName;
+
         return $this;
     }
 
@@ -71,6 +74,7 @@ class CronTaskCommand extends AbstractCommand
 
         if (empty($this->taskName)) {
             $this->addError('name', 'task name is required');
+
             return;
         }
 
@@ -113,7 +117,7 @@ class CronTaskCommand extends AbstractCommand
             $cronExpression = CronExpression::factory($this->task->getCronInterval());
         } catch (\InvalidArgumentException $e) {
             $this->consoleOutput(
-                sprintf("<error>cron task %s: unable to parse cron expression! (%s)</error>"),
+                sprintf('<error>cron task %s: unable to parse cron expression! (%s)</error>'),
                 $this->task->getName(),
                 $this->task->getCronInterval()
             );
@@ -122,18 +126,18 @@ class CronTaskCommand extends AbstractCommand
         }
 
         $this->consoleOutput(sprintf(
-            "<info>cron task %s started</info>",
+            '<info>cron task %s started</info>',
             $this->task->getName()
         ));
 
         if ($this->runCommand($this->task->getCommand(), $params, $output, $returnVar)) {
             $this->consoleOutput(sprintf(
-                "<info>cron task %s successful finished</info>",
+                '<info>cron task %s successful finished</info>',
                 $this->task->getName()
             ));
         } else {
             $this->consoleOutput(sprintf(
-                "<error>cron task %s exited with status code %d</error>",
+                '<error>cron task %s exited with status code %d</error>',
                 $this->task->getName(),
                 $returnVar
             ));
@@ -144,7 +148,6 @@ class CronTaskCommand extends AbstractCommand
         $this->task->setNextRun($nextRun);
         $this->task->setLock(null);
         $this->cronTableGateway->update($this->task);
-
     }
 
     /**
@@ -166,7 +169,7 @@ class CronTaskCommand extends AbstractCommand
                 $cmd .= " --{$name} {$value}";
             }
         }
-        $cmd .= " 2>&1";
+        $cmd .= ' 2>&1';
 
         exec($cmd, $output, $returnVar);
 
@@ -183,7 +186,6 @@ class CronTaskCommand extends AbstractCommand
      */
     public function consoleSetup(Route $route)
     {
-
         $name = $route->getMatchedParam('name');
         if (!empty($name)) {
             $this->taskName = $name;

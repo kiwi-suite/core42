@@ -1,10 +1,13 @@
 <?php
-/**
- * core42 (www.raum42.at)
+
+/*
+ * core42
  *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
- *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
  */
 
 namespace Core42;
@@ -36,13 +39,13 @@ class Module implements
 
     const ENVIRONMENT_CLI = 'cli';
     const ENVIRONMENT_DEVELOPMENT = 'development';
+
     /**
      * @param \Zend\EventManager\EventInterface $e
      * @return array|void
      */
     public function onBootstrap(\Zend\EventManager\EventInterface $e)
     {
-
         if (Console::isConsole()) {
             return;
         }
@@ -78,7 +81,7 @@ class Module implements
     public function onMergeConfig(ModuleEvent $e)
     {
         $configListener = $e->getConfigListener();
-        $config         = $configListener->getMergedConfig(false);
+        $config = $configListener->getMergedConfig(false);
 
         $abstractFactories = $config['service_manager']['abstract_factories'];
         foreach ($abstractFactories as $key => $class) {
@@ -86,7 +89,7 @@ class Module implements
                 AdapterAbstractServiceFactory::class,
                 FormAbstractServiceFactory::class,
                 ContainerAbstractServiceFactory::class,
-                InputFilterAbstractServiceFactory::class
+                InputFilterAbstractServiceFactory::class,
             ])) {
                 unset($abstractFactories[$key]);
             }
@@ -120,7 +123,7 @@ class Module implements
             return;
         }
         $configListener = $e->getConfigListener();
-        $config         = $configListener->getMergedConfig(false);
+        $config = $configListener->getMergedConfig(false);
         $config = ArrayUtils::merge($config, $cliConfig);
         $configListener->setMergedConfig($config);
     }

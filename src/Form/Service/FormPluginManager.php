@@ -1,10 +1,13 @@
 <?php
-/**
- * core42 (www.raum42.at)
+
+/*
+ * core42
  *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
- *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
  */
 
 namespace Core42\Form\Service;
@@ -69,7 +72,7 @@ class FormPluginManager extends AbstractPluginManager
     public function addAbstractFactory($factory)
     {
         throw new \Exception(
-            "This is a proxy class for FormElementManager - please use FormElementManager to set services"
+            'This is a proxy class for FormElementManager - please use FormElementManager to set services'
         );
     }
 
@@ -80,7 +83,7 @@ class FormPluginManager extends AbstractPluginManager
     public function addInitializer($initializer)
     {
         throw new \Exception(
-            "This is a proxy class for FormElementManager - please use FormElementManager to set services"
+            'This is a proxy class for FormElementManager - please use FormElementManager to set services'
         );
     }
 
@@ -92,7 +95,7 @@ class FormPluginManager extends AbstractPluginManager
     public function addDelegator($name, $factory)
     {
         throw new \Exception(
-            "This is a proxy class for FormElementManager - please use FormElementManager to set services"
+            'This is a proxy class for FormElementManager - please use FormElementManager to set services'
         );
     }
 
@@ -104,7 +107,7 @@ class FormPluginManager extends AbstractPluginManager
     public function setShared($name, $flag)
     {
         throw new \Exception(
-            "This is a proxy class for FormElementManager - please use FormElementManager to set services"
+            'This is a proxy class for FormElementManager - please use FormElementManager to set services'
         );
     }
 
@@ -116,7 +119,7 @@ class FormPluginManager extends AbstractPluginManager
     public function setInvokableClass($name, $class = null)
     {
         throw new \Exception(
-            "This is a proxy class for FormElementManager - please use FormElementManager to set services"
+            'This is a proxy class for FormElementManager - please use FormElementManager to set services'
         );
     }
 
@@ -128,7 +131,7 @@ class FormPluginManager extends AbstractPluginManager
     public function setAlias($alias, $target)
     {
         throw new \Exception(
-            "This is a proxy class for FormElementManager - please use FormElementManager to set services"
+            'This is a proxy class for FormElementManager - please use FormElementManager to set services'
         );
     }
 
@@ -140,7 +143,7 @@ class FormPluginManager extends AbstractPluginManager
     public function setFactory($name, $factory)
     {
         throw new \Exception(
-            "This is a proxy class for FormElementManager - please use FormElementManager to set services"
+            'This is a proxy class for FormElementManager - please use FormElementManager to set services'
         );
     }
 
@@ -152,7 +155,7 @@ class FormPluginManager extends AbstractPluginManager
     public function setService($name, $service)
     {
         throw new \Exception(
-            "This is a proxy class for FormElementManager - please use FormElementManager to set services"
+            'This is a proxy class for FormElementManager - please use FormElementManager to set services'
         );
     }
 
@@ -163,7 +166,7 @@ class FormPluginManager extends AbstractPluginManager
     public function setAllowOverride($flag)
     {
         throw new \Exception(
-            "This is a proxy class for FormElementManager - please use FormElementManager to set services"
+            'This is a proxy class for FormElementManager - please use FormElementManager to set services'
         );
     }
 }

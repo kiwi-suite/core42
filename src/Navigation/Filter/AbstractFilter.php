@@ -1,4 +1,15 @@
 <?php
+
+/*
+ * core42
+ *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
+ */
+
 namespace Core42\Navigation\Filter;
 
 use Core42\Navigation\Page\PageInterface;
@@ -13,18 +24,19 @@ abstract class AbstractFilter extends \RecursiveFilterIterator
      */
     public function accept()
     {
-        $accepted = (boolean) $this->isAccepted();
+        $accepted = (bool) $this->isAccepted();
         if ($accepted === false && $this->current() instanceof PageInterface) {
             $parent = $this->current()->getParent();
             if (!empty($parent)) {
                 $parent->removePage($this->current());
             }
         }
+
         return $accepted;
     }
 
     /**
-     * @return boolean
+     * @return bool
      */
     abstract protected function isAccepted();
 }

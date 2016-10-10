@@ -1,10 +1,13 @@
 <?php
-/**
- * core42 (www.raum42.at)
+
+/*
+ * core42
  *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
- *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
  */
 
 namespace Core42\Command\CodeGenerator;
@@ -123,7 +126,7 @@ class GenerateDbClassesCommand extends AbstractCommand
     }
 
     /**
-     * @param boolean $generateGetterSetter
+     * @param bool $generateGetterSetter
      */
     public function setGenerateGetterSetter($generateGetterSetter)
     {
@@ -136,51 +139,59 @@ class GenerateDbClassesCommand extends AbstractCommand
     protected function preExecute()
     {
         if (empty($this->directory)) {
-            $this->addError('directory', "directory parameter not set");
+            $this->addError('directory', 'directory parameter not set');
+
             return;
         }
 
         if (empty($this->namespace)) {
-            $this->addError('namespace', "namespace parameter not set");
+            $this->addError('namespace', 'namespace parameter not set');
+
             return;
         }
 
         if ($this->all !== null && !empty($this->table) && !empty($this->name)) {
-            $this->addError('all', "both usage of name/table arguments and --all argument is not allowed");
+            $this->addError('all', 'both usage of name/table arguments and --all argument is not allowed');
         }
         if ($this->all === null && empty($this->table) && empty($this->name)) {
-            $this->addError('all', "Whether name/table arguments or --all argument are missing");
+            $this->addError('all', 'Whether name/table arguments or --all argument are missing');
+
             return;
         }
 
         if (!$this->getServiceManager()->has($this->adapterName)) {
-            $this->addError("adapter", "adapter '".$this->adapterName."' not found");
+            $this->addError('adapter', "adapter '" . $this->adapterName . "' not found");
 
             return;
         }
 
         if (!is_dir($this->directory)) {
-            $this->addError('directory', "directory '".$this->directory."' doesn't exist");
+            $this->addError('directory', "directory '" . $this->directory . "' doesn't exist");
+
             return;
         }
 
-        if (!is_dir($this->directory . "/" . 'Model')) {
-            $this->addError('directory', "directory '".$this->directory."/Model' doesn't exist");
+        if (!is_dir($this->directory . '/' . 'Model')) {
+            $this->addError('directory', "directory '" . $this->directory . "/Model' doesn't exist");
+
             return;
         }
 
-        if (!is_dir($this->directory . "/" . 'TableGateway')) {
-            $this->addError('directory', "directory '".$this->directory."/TableGateway' doesn't exist");
+        if (!is_dir($this->directory . '/' . 'TableGateway')) {
+            $this->addError('directory', "directory '" . $this->directory . "/TableGateway' doesn't exist");
+
             return;
         }
 
-        if (!is_writable($this->directory. "/" . 'Model')) {
-            $this->addError("directory", "directory '".$this->directory."/Model' isn't writeable");
+        if (!is_writable($this->directory . '/' . 'Model')) {
+            $this->addError('directory', "directory '" . $this->directory . "/Model' isn't writeable");
+
             return;
         }
 
-        if (!is_writable($this->directory. "/" . 'TableGateway')) {
-            $this->addError("directory", "directory '".$this->directory."/TableGateway' isn't writeable");
+        if (!is_writable($this->directory . '/' . 'TableGateway')) {
+            $this->addError('directory', "directory '" . $this->directory . "/TableGateway' isn't writeable");
+
             return;
         }
 
@@ -257,22 +268,22 @@ class GenerateDbClassesCommand extends AbstractCommand
      */
     public function consoleSetup(Route $route)
     {
-        $this->setDirectory($route->getMatchedParam("directory"));
-        $this->setNamespace($route->getMatchedParam("namespace"));
+        $this->setDirectory($route->getMatchedParam('directory'));
+        $this->setNamespace($route->getMatchedParam('namespace'));
 
-        $table = $route->getMatchedParam("table");
+        $table = $route->getMatchedParam('table');
         if (!empty($table)) {
             $this->setTable($table);
         }
 
-        $name = $route->getMatchedParam("name");
+        $name = $route->getMatchedParam('name');
         if (!empty($name)) {
             $this->setName($name);
         }
 
         $this->setAll($route->getMatchedParam('all', null));
 
-        $this->setGenerateGetterSetter($route->getMatchedParam("getter-setter"));
+        $this->setGenerateGetterSetter($route->getMatchedParam('getter-setter'));
 
         $adapterName = $route->getMatchedParam('adapter');
         if (!empty($adapterName)) {

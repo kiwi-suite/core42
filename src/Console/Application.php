@@ -1,10 +1,13 @@
 <?php
-/**
- * core42 (www.raum42.at)
+
+/*
+ * core42
  *
- * @link      http://www.raum42.at
- * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
- *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
  */
 
 namespace Core42\Console;
@@ -60,15 +63,16 @@ class Application extends \ZF\Console\Application
         } elseif (in_array($name, $this->routeCollection->getRouteNames())) {
             $route = $this->routeCollection->getRoute($name);
             $this->showUsageMessageForRoute($route);
+
             return;
         }
 
 
-        $maxSpaces = $this->calcMaxString($this->routeCollection->getRouteNames()) +  2;
+        $maxSpaces = $this->calcMaxString($this->routeCollection->getRouteNames()) + 2;
 
         foreach ($this->groups as $groupName => $groupCommands) {
-            $console->writeLine("");
-            $groupName = ($groupName != "*") ? $groupName : "misc";
+            $console->writeLine('');
+            $groupName = ($groupName != '*') ? $groupName : 'misc';
             $console->writeLine(ucfirst($groupName) . ':', ColorInterface::YELLOW);
 
             foreach ($groupCommands as $routeName) {
@@ -87,6 +91,7 @@ class Application extends \ZF\Console\Application
 
         if ($name) {
             $this->showUnrecognizedRouteMessage($name);
+
             return;
         }
     }
@@ -101,7 +106,6 @@ class Application extends \ZF\Console\Application
      */
     protected function setupAutocompleteCommand(RouteCollection $routeCollection, DispatcherInterface $dispatcher)
     {
-
     }
 
     /**
@@ -114,6 +118,5 @@ class Application extends \ZF\Console\Application
      */
     protected function setupVersionCommand(RouteCollection $routeCollection, DispatcherInterface $dispatcher)
     {
-
     }
 }

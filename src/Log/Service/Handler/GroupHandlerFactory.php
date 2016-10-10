@@ -1,20 +1,22 @@
 <?php
-/**
- * core42 (www.raum42.at)
+
+/*
+ * core42
  *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2016 raum42 OG (http://www.raum42.at)
- *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
  */
 
 namespace Core42\Log\Service\Handler;
 
 use Core42\Log\Service\HandlerPluginManager;
 use Interop\Container\ContainerInterface;
-use Interop\Container\Exception\ContainerException;
 use Monolog\Handler\GroupHandler;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
-use \Zend\ServiceManager\Factory\FactoryInterface;
+use Zend\ServiceManager\Factory\FactoryInterface;
 
 class GroupHandlerFactory implements FactoryInterface
 {
@@ -37,7 +39,7 @@ class GroupHandlerFactory implements FactoryInterface
         foreach ($options['handlers'] as $handler) {
             $handlers[] = $handlerPluginManager->get($handler);
         }
-        
+
         $bubble = (!empty($options['bubble'])) ? $options['bubble'] : true;
 
         return new GroupHandler($handlers, $bubble);
