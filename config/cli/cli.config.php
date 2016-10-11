@@ -4,6 +4,7 @@ namespace Core42;
 use Core42\Command\Assets\AssetsCommand;
 use Core42\Command\Cache\ClearAppCacheCommand;
 use Core42\Command\CodeGenerator\GenerateDbClassesCommand;
+use Core42\Command\Config\ConfigGetCommand;
 use Core42\Command\Cron\CronCommand;
 use Core42\Command\Cron\CronTaskCommand;
 use Core42\Command\Development\DevelopmentCommand;
@@ -143,6 +144,17 @@ return [
             'command-name'              => CronTaskCommand::class,
             'description'               => 'Start a single cron task',
             'short_description'         => 'Start a single cron task',
+        ],
+
+        'config' => [
+            'group'                     => 'setup',
+            'route'                     => '[<key>]',
+            'command-name'              => ConfigGetCommand::class,
+            'description'               => 'Display config information on a given config key',
+            'short_description'         => 'Display config information',
+            'options_descriptions'      => [
+                'key'                => 'config key. Subkeys are possible through a '.' separator',
+            ],
         ],
     ],
 ];
