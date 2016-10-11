@@ -16,7 +16,7 @@ use Core42\Command\AbstractCommand;
 use Core42\Command\ConsoleAwareTrait;
 use ZF\Console\Route;
 
-class ClearAppCacheCommand extends AbstractCommand
+class ListCacheCommand extends AbstractCommand
 {
     use ConsoleAwareTrait;
 
@@ -30,6 +30,16 @@ class ClearAppCacheCommand extends AbstractCommand
      */
     protected function execute()
     {
+        $caches = ['app-cache' => 'internal'];
+
+        $cacheConfig = $this->getServiceManager()->get('config')['cache']['caches'];
+        foreach ($cacheConfig as $name => $spec) {
+            $caches[$name] = $spec['driver'];
+        }
+
+        foreach ($caches as $name => $cache) {
+            $this->consoleOutput("<info>{$name}</info> [driver: {$cache}]");
+        }
     }
 
     /**

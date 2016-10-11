@@ -33,7 +33,7 @@ if ($appConfig['module_listener_options']['config_cache_enabled'] === true
     @mkdir($appConfig['module_listener_options']['cache_dir'], 0777, true);
 }
 
-if (!empty($argv[1]) && $argv[1] == 'clear-app-cache') {
+if (!empty($argv[1]) && $argv[1] == 'cache-clear' && !empty($argv[2]) && in_array($argv[2], ['app-cache', '-a', '--all'])) {
     $dir = rtrim($appConfig['module_listener_options']['cache_dir'], '/') . '/';
     if (file_exists($dir . 'module-classmap-cache.' . $appConfig['module_listener_options']['module_map_cache_key'] . '.php')) {
         unlink($dir . 'module-classmap-cache.' . $appConfig['module_listener_options']['module_map_cache_key'] . '.php');

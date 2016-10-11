@@ -2,7 +2,8 @@
 namespace Core42;
 
 use Core42\Command\Assets\AssetsCommand;
-use Core42\Command\Cache\ClearAppCacheCommand;
+use Core42\Command\Cache\ClearCacheCommand;
+use Core42\Command\Cache\ListCacheCommand;
 use Core42\Command\CodeGenerator\GenerateDbClassesCommand;
 use Core42\Command\Config\ConfigGetCommand;
 use Core42\Command\Cron\CronCommand;
@@ -122,12 +123,24 @@ return [
             'development'               => true,
         ],
 
-        'clear-app-cache' => [
+        'cache-clear' => [
             'group'                     => 'cache',
-            'route'                     => 'clear-app-cache',
-            'command-name'              => ClearAppCacheCommand::class,
-            'description'               => 'Clears config cache and module map cache',
-            'short_description'         => 'Clears config cache and module map cache',
+            'route'                     => 'cache-clear [<cache>] [--all|-a]',
+            'command-name'              => ClearCacheCommand::class,
+            'description'               => 'Clear selected cache',
+            'short_description'         => 'Clear selected cache',
+            'options_descriptions'      => [
+                'cache'                => 'clear selected cache',
+                '--all|-a'             => 'clear all caches',
+            ],
+        ],
+
+        'cache-list' => [
+            'group'                     => 'cache',
+            'route'                     => 'cache-list',
+            'command-name'              => ListCacheCommand::class,
+            'description'               => 'List all available caches',
+            'short_description'         => 'List all available caches',
         ],
 
         'cron' => [
