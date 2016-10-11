@@ -21,27 +21,40 @@ class AssetUrl extends AbstractHelper
      */
     protected $assetUrl;
 
-    public function __construct($assetUrl)
+    /**
+     * @var array
+     */
+    protected $assetConfig = [];
+
+    public function __construct($assetUrl, array $assetConfig)
     {
         $this->setAssetUrl($assetUrl);
+
+        $this->assetConfig = $assetConfig;
     }
 
     /**
      * @param null|string $file
+     * @param null $name
      * @return string
      * @throws \Exception
      */
-    public function __invoke($file = null)
+    public function __invoke($file = "", $name = null)
     {
         if (null === $this->assetUrl) {
             throw new \Exception('No base path provided');
         }
 
-        if (null !== $file) {
+        $directory = "";
+        if ($name !== null && !empty($this->assetConfig[$name])) {
+            $directory = '/' . trim($this->assetConfig[$name], '/');
+        }
+
+        if (!empty($file)) {
             $file = '/' . ltrim($file, '/');
         }
 
-        return $this->assetUrl . $file;
+        return $this->assetUrl . $directory . $file;
     }
 
     /**

@@ -2,7 +2,10 @@
 namespace Core42;
 
 return [
-    'asset_url' => null,
-    'prepend_commit' => false,
-    'assets' => [],
+    'assets' => [
+        'asset_url' => null,
+        'prepend_commit' => false,
+
+        'directories' => [],
+    ],
 ];

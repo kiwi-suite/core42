@@ -76,7 +76,7 @@ class AssetsCommand extends AbstractCommand
     protected function preExecute()
     {
         $config = $this->getServiceManager()->get('config');
-        $this->assetConfig = $config['assets'];
+        $this->assetConfig = $config['assets']['directories'];
         foreach ($this->assetConfig as $name => $config) {
             if (empty($config['target'])) {
                 $this->addError('target', "target doesn't exist for asset key '{$name}'");

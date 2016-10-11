@@ -36,7 +36,7 @@ class AssetUrlFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $assetUrl = $container->get('Config')['asset_url'];
+        $assetUrl = $container->get('Config')['assets']['asset_url'];
         if ($assetUrl === null) {
             $request = $container->get('Request');
 
@@ -49,13 +49,21 @@ class AssetUrlFactory implements FactoryInterface
             $assetUrl = '';
         }
 
-        $prependCommit = $container->get('Config')['prepend_commit'];
+        $prependCommit = $container->get('Config')['assets']['prepend_commit'];
         if ($prependCommit === true) {
             $assetUrl = $this->appendCommitHash($assetUrl);
         }
 
+        $directories = [];
+        $assetDirectories = $container->get('Config')['assets']['directories'];
+        foreach ($assetDirectories as $name => $dir) {
+            $baseUrl = (!empty($dir['base_url'])) ? $dir['base_url'] : '';
+            $directories[$name] = $baseUrl;
+        }
+
         return new AssetUrl(
-            $assetUrl
+            $assetUrl,
+            $directories
         );
     }
 
