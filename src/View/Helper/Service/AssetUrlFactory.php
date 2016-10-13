@@ -37,16 +37,24 @@ class AssetUrlFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $assetUrl = $container->get('Config')['assets']['asset_url'];
-        if ($assetUrl === null) {
+        if (empty($assetUrl)) {
+            $assetUrl = '/';
+        }
+
+        $prependBasePath = $container->get('Config')['assets']['prepend_base_path'];
+        if ($prependBasePath === true) {
             $request = $container->get('Request');
 
             if (is_callable([$request, 'getBasePath'])) {
-                $assetUrl = $request->getBasePath();
+                $assetUrl = rtrim($assetUrl, '/');
+                $assetUrl .= $request->getBasePath();
             }
         }
 
-        if (empty($assetUrl)) {
-            $assetUrl = '';
+        $assetPath = $container->get('Config')['assets']['asset_path'];
+        if (!empty($assetPath)) {
+            $assetUrl = rtrim($assetUrl, '/');
+            $assetUrl .= $assetPath;
         }
 
         $prependCommit = $container->get('Config')['assets']['prepend_commit'];
@@ -57,12 +65,11 @@ class AssetUrlFactory implements FactoryInterface
         $directories = [];
         $assetDirectories = $container->get('Config')['assets']['directories'];
         foreach ($assetDirectories as $name => $dir) {
-            $baseUrl = (!empty($dir['base_url'])) ? $dir['base_url'] : '';
-            $directories[$name] = $baseUrl;
+            $directories[$name] = $dir['target'];
         }
 
         return new AssetUrl(
-            $assetUrl,
+            rtrim($assetUrl, '/'),
             $directories
         );
     }

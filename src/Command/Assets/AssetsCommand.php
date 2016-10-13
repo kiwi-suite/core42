@@ -91,6 +91,28 @@ class AssetsCommand extends AbstractCommand
                 $this->addError('source', "source directory '{$config['source']}' doesn't exists");
             }
         }
+
+        if ($this->force == false && file_exists('data/assets')) {
+            $this->consoleOutput(sprintf("<error>'%s' already exists</error>", 'data/assets'));
+
+            return;
+        }
+
+
+        if (!is_dir('data/assets')) {
+            $created = mkdir('data/assets', 0777, true);
+            if ($created === false) {
+                $this->addError('directory', "directory 'data/assets' can't be created");
+
+                return;
+            }
+        }
+
+        if (!is_writable('data/assets')) {
+            $this->addError('directory', "directory 'data/assets' isn't writable");
+
+            return;
+        }
     }
 
     /**
@@ -100,33 +122,21 @@ class AssetsCommand extends AbstractCommand
     {
         $filesystem = new Filesystem(new Local(getcwd()));
         $filesystem->addPlugin(new Symlink());
-        $filesystem->addPlugin(new IsSymlink());
-        $filesystem->addPlugin(new DeleteSymlink());
         $filesystem->addPlugin(new ListPaths());
         $filesystem->addPlugin(new ListFiles());
         $filesystem->addPlugin(new EmptyDir());
 
-        foreach ($this->assetConfig as $config) {
-            $source = $config['source'];
-            $target = rtrim($config['target'], DIRECTORY_SEPARATOR);
+        $filesystem->emptyDir('data/assets');
 
-            $filesystem->createDir(dirname($target));
+        foreach ($this->assetConfig as $config) {
+            $source = trim($config['source'], '/');
+            $target = 'data/assets/' . trim($config['target'], '/');
+
+            if (!is_dir(dirname($target))) {
+                $filesystem->createDir(dirname($target));
+            }
 
             if ($this->copy === true) {
-                if ($this->force == false && file_exists($target)) {
-                    $this->consoleOutput(sprintf("<error>'%s' already exists</error>", $target));
-
-                    continue;
-                }
-                if ($filesystem->isSymlink($target)) {
-                    $filesystem->deleteSymlink($target);
-                }
-
-                if (file_exists($target)) {
-                    $filesystem->emptyDir($target);
-                    @rmdir($target);
-                }
-
                 $files = $filesystem->listFiles($source, true);
                 foreach ($files as $fileData) {
                     if ($fileData['type'] == 'dir') {
@@ -142,21 +152,6 @@ class AssetsCommand extends AbstractCommand
                 $this->consoleOutput("created directory for '{$source}'");
 
                 continue;
-            }
-
-            if ($filesystem->isSymlink($target)) {
-                $filesystem->deleteSymlink($target);
-            }
-
-            if ($this->force == false && file_exists($target)) {
-                $this->consoleOutput(sprintf("<error>'%s' already exists</error>", $target));
-
-                continue;
-            }
-
-            if (file_exists($target)) {
-                $filesystem->emptyDir($target);
-                @rmdir($target);
             }
 
             $filesystem->symlink($source, $target);
