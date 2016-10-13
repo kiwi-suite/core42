@@ -120,11 +120,13 @@ class AssetsCommand extends AbstractCommand
      */
     protected function execute()
     {
-        $filesystem = new Filesystem(new Local(getcwd()));
+        $filesystem = new Filesystem(new Local(getcwd(), LOCK_EX, Local::SKIP_LINKS));
         $filesystem->addPlugin(new Symlink());
         $filesystem->addPlugin(new ListPaths());
         $filesystem->addPlugin(new ListFiles());
         $filesystem->addPlugin(new EmptyDir());
+        $filesystem->addPlugin(new IsSymlink());
+        $filesystem->addPlugin(new DeleteSymlink());
 
         $filesystem->emptyDir('data/assets');
 
@@ -152,6 +154,10 @@ class AssetsCommand extends AbstractCommand
                 $this->consoleOutput("created directory for '{$source}'");
 
                 continue;
+            }
+
+            if ($filesystem->isSymlink($target)) {
+                $filesystem->deleteSymlink($target);
             }
 
             $filesystem->symlink($source, $target);
