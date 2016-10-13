@@ -16,6 +16,7 @@ use Core42\Command\Migration\MigrateCommand;
 use Core42\Command\Migration\ResetCommand;
 use Core42\Command\Migration\RollbackCommand;
 use Core42\Command\Revision\CreateFileCommand;
+use Core42\Command\Setup\SetupCommand;
 
 return [
     'cli' => [
@@ -74,6 +75,15 @@ return [
             'description'               => 'Enables/Disables the development mode. Useful for loading dev-modules or '
                                                 .'disabling servicemanager caching',
             'short_description'         => 'Enables/Disables the development mode',
+        ],
+
+        'setup' => [
+            'group'                     => 'setup',
+            'route'                     => 'setup',
+            'command-name'              => SetupCommand::class,
+            'description'               => 'Setup a project',
+            'short_description'         => 'Setup a project',
+            'development'               => true,
         ],
 
         'maintenance' => [
