@@ -31,6 +31,11 @@ class ConfigGetCommand extends AbstractCommand
     protected $requestedConfig;
 
     /**
+     * @var bool
+     */
+    protected $transaction = false;
+
+    /**
      * @param string $requestedKey
      * @return $this
      */
