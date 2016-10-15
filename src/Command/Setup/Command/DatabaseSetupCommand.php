@@ -13,6 +13,8 @@ class DatabaseSetupCommand extends AbstractCommand
 {
     use ConsoleAwareTrait;
 
+    protected $transaction = false;
+
     /**
      * @return mixed
      */
