@@ -43,7 +43,7 @@ class AssetSetupCommand extends AbstractCommand
         $filesystem->addPlugin(new Symlink());
 
         if (!file_exists('public/assets')) {
-            $filesystem->symlink('data/assets', 'public/assets');
+            $filesystem->symlink('resources/assets', 'public/assets');
         }
     }
 

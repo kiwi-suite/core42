@@ -99,17 +99,17 @@ class AssetsCommand extends AbstractCommand
         }
 
 
-        if (!is_dir('data/assets')) {
-            $created = mkdir('data/assets', 0777, true);
+        if (!is_dir('resources/assets')) {
+            $created = mkdir('resources/assets', 0777, true);
             if ($created === false) {
-                $this->addError('directory', "directory 'data/assets' can't be created");
+                $this->addError('directory', "directory 'resources/assets' can't be created");
 
                 return;
             }
         }
 
-        if (!is_writable('data/assets')) {
-            $this->addError('directory', "directory 'data/assets' isn't writable");
+        if (!is_writable('resources/assets')) {
+            $this->addError('directory', "directory 'resources/assets' isn't writable");
 
             return;
         }
@@ -132,7 +132,7 @@ class AssetsCommand extends AbstractCommand
 
         foreach ($this->assetConfig as $config) {
             $source = trim($config['source'], '/');
-            $target = 'data/assets/' . trim($config['target'], '/');
+            $target = 'resources/assets/' . trim($config['target'], '/');
 
             if (!is_dir(dirname($target))) {
                 $filesystem->createDir(dirname($target));
