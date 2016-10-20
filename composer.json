@@ -75,5 +75,10 @@
         "psr-4": {
             "Core42\\": "src/"
         }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Core42Test\\": "src/"
+        }
     }
 }
