@@ -13,6 +13,7 @@
 namespace Core42\Hydrator;
 
 use Core42\Hydrator\Strategy\Service\StrategyPluginManager;
+use Core42\Model\ModelInterface;
 use Zend\Hydrator\ArraySerializable;
 use Zend\Hydrator\Strategy\StrategyInterface;
 

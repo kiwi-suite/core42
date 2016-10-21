@@ -15,6 +15,7 @@ namespace Core42\Command\Cron;
 use Core42\Command\AbstractCommand;
 use Core42\Command\ConsoleAwareTrait;
 use Core42\Model\Cron;
+use Core42\Stdlib\DateTime;
 use Core42\TableGateway\CronTableGateway;
 use Cron\CronExpression;
 use ZF\Console\Route;
@@ -103,8 +104,8 @@ class CronTaskCommand extends AbstractCommand
                 : 0;
         }
 
-        $this->task->setLastRun(new \DateTime());
-        $this->task->setLock(new \DateTime());
+        $this->task->setLastRun(new DateTime());
+        $this->task->setLock(new DateTime());
         $this->cronTableGateway->update($this->task);
 
         try {

@@ -308,10 +308,11 @@ class GenerateModelCommand extends AbstractCommand
             case 'mediumint':
             case 'bigint':
                 return 'int';
-            case 'datetime':
             case 'date':
+                return 'Date';
+            case 'datetime':
             case 'timestamp':
-                return '\DateTime';
+                return 'DateTime';
             case 'varchar':
             case 'char':
             case 'text':

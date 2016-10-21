@@ -11,12 +11,13 @@
  */
 
 namespace Core42\Model;
+use Core42\Stdlib\DateTime;
 
 /**
  * @method Migration setName() setName(string $name)
  * @method string getName() getName()
- * @method Migration setCreated() setCreated(\DateTime $created)
- * @method \DateTime getCreated() getCreated()
+ * @method Migration setCreated() setCreated(DateTime $created)
+ * @method DateTime getCreated() getCreated()
  */
 class Migration extends AbstractModel
 {

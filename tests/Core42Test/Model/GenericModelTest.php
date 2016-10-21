@@ -10,6 +10,7 @@
 namespace Core42Test\Model;
 
 use Core42\Model\GenericModel;
+use Core42\Stdlib\DateTime;
 
 class GenericModelTest extends \PHPUnit_Framework_TestCase
 {
@@ -28,7 +29,7 @@ class GenericModelTest extends \PHPUnit_Framework_TestCase
         $array = [
             'int'           => 1,
             'string'        => 'test',
-            'datetime'      => new \DateTime(),
+            'datetime'      => new DateTime(),
             'array'         => [1,2,3],
             'booleanTrue'   => true,
             'booleanFalse'  => false,

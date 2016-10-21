@@ -13,6 +13,7 @@
 namespace Core42\Command\Migration;
 
 use Core42\Command\ConsoleAwareTrait;
+use Core42\Stdlib\DateTime;
 use Zend\Code\Generator\ClassGenerator;
 use Zend\Code\Generator\MethodGenerator;
 use Zend\Code\Generator\ParameterGenerator;
@@ -72,7 +73,7 @@ class MakeCommand extends AbstractCommand
     protected function execute()
     {
         do {
-            $date = new \DateTime();
+            $date = new DateTime();
             $migrationName = 'Migration' . $date->format('YmdHis');
             $filename = $this->directory . $date->format('Y-m-d\tHis') . '.php';
         } while (file_exists($filename));

@@ -14,6 +14,7 @@ namespace Core42\Command\Migration;
 
 use Core42\Command\ConsoleAwareTrait;
 use Core42\Model\Migration;
+use Core42\Stdlib\DateTime;
 use Core42\TableGateway\MigrationTableGateway;
 use ZF\Console\Route;
 
@@ -80,7 +81,7 @@ class MigrateCommand extends AbstractCommand
 
             $migrationObject = new Migration();
             $migrationObject->setName($migration['name'])
-                                ->setCreated(new \DateTime());
+                                ->setCreated(new DateTime());
 
             $migrationTableGateway->insert($migrationObject);
             $migrationCounter++;

@@ -11,6 +11,7 @@
  */
 
 namespace Core42\Model;
+use Core42\Stdlib\DateTime;
 
 /**
  * @method Cron setId() setId(int $id)
@@ -25,12 +26,12 @@ namespace Core42\Model;
  * @method string getCommand() getCommand()
  * @method Cron setParameters() setParameters(string $parameters)
  * @method string getParameters() getParameters()
- * @method Cron setLock() setLock(\DateTime $lock)
- * @method \DateTime getLock() getLock()
- * @method Cron setLastRun() setLastRun(\DateTime $last_run)
- * @method \DateTime getLastRun() getLastRun()
- * @method Cron setNextRun() setNextRun(\DateTime $next_run)
- * @method \DateTime getNextRun() getNextRun()
+ * @method Cron setLock() setLock(DateTime $lock)
+ * @method DateTime getLock() getLock()
+ * @method Cron setLastRun() setLastRun(DateTime $last_run)
+ * @method DateTime getLastRun() getLastRun()
+ * @method Cron setNextRun() setNextRun(DateTime $next_run)
+ * @method DateTime getNextRun() getNextRun()
  * @method Cron setIntervalMinute() setIntervalMinute(string $interval_minute)
  * @method string getIntervalMinute() getIntervalMinute()
  * @method Cron setIntervalHour() setIntervalHour(string $interval_hour)
@@ -43,10 +44,10 @@ namespace Core42\Model;
  * @method string getIntervalDayOfWeek() getIntervalDayOfWeek()
  * @method Cron setIntervalYear() setIntervalYear(string $interval_year)
  * @method string getIntervalYear() getIntervalYear()
- * @method Cron setCreated() setCreated(\DateTime $created)
- * @method \DateTime getCreated() getCreated()
- * @method Cron setUpdated() setUpdated(\DateTime $updated)
- * @method \DateTime getUpdated() getUpdated()
+ * @method Cron setCreated() setCreated(DateTime $created)
+ * @method DateTime getCreated() getCreated()
+ * @method Cron setUpdated() setUpdated(DateTime $updated)
+ * @method DateTime getUpdated() getUpdated()
  */
 class Cron extends AbstractModel
 {

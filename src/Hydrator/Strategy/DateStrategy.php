@@ -12,6 +12,7 @@
 
 namespace Core42\Hydrator\Strategy;
 
+use Core42\Stdlib\Date;
 use Zend\Hydrator\Strategy\StrategyInterface;
 
 class DateStrategy implements StrategyInterface
@@ -41,6 +42,6 @@ class DateStrategy implements StrategyInterface
      */
     public function hydrate($value)
     {
-        return \DateTime::createFromFormat('Y-m-d', $value);
+        return Date::createFromFormat('Y-m-d', $value);
     }
 }

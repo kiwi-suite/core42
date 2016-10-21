@@ -15,6 +15,7 @@ namespace Core42\Command\Cron;
 use Core42\Command\AbstractCommand;
 use Core42\Command\ConsoleAwareTrait;
 use Core42\Model\Cron;
+use Core42\Stdlib\DateTime;
 use Core42\TableGateway\CronTableGateway;
 use Zend\Db\Sql\Where;
 use ZF\Console\Route;
@@ -52,7 +53,7 @@ class CronCommand extends AbstractCommand
 
         $this->consoleOutput('starting cron');
 
-        $now = new \DateTime();
+        $now = new DateTime();
 
         /* @var CronTableGateway $timedTaskTableGateway */
         $timedTaskTableGateway = $this->getTableGateway(CronTableGateway::class);

@@ -12,6 +12,7 @@
 
 namespace Core42\Hydrator\Strategy;
 
+use Core42\Stdlib\DateTime;
 use Zend\Hydrator\Strategy\StrategyInterface;
 
 class DateTimeTimestampStrategy implements StrategyInterface
@@ -25,7 +26,7 @@ class DateTimeTimestampStrategy implements StrategyInterface
      */
     public function extract($value)
     {
-        if ($value instanceof \DateTime) {
+        if ($value instanceof DateTime) {
             return $value->getTimestamp();
         }
 
@@ -41,6 +42,6 @@ class DateTimeTimestampStrategy implements StrategyInterface
      */
     public function hydrate($value)
     {
-        return new \DateTime('@' . $value);
+        return new DateTime('@' . $value);
     }
 }
