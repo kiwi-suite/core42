@@ -80,12 +80,12 @@ class AssetUrlFactory implements FactoryInterface
      */
     protected function appendCommitHash($assetUrl)
     {
-        if (!file_exists('data/version/revision.json')) {
+        if (!file_exists('resources/version/revision.json')) {
             return $assetUrl;
         }
 
         try {
-            $revision = Json::decode(file_get_contents('data/version/revision.json'), Json::TYPE_ARRAY);
+            $revision = Json::decode(file_get_contents('resources/version/revision.json'), Json::TYPE_ARRAY);
         } catch (\Exception $e) {
             return $assetUrl;
         }

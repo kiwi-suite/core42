@@ -8,8 +8,8 @@ class Composer
 {
     public static function createComposerInfo(Event $event)
     {
-        if (!is_dir('data/version')) {
-            @mkdir('data/version', 0777, true);
+        if (!is_dir('resources/version')) {
+            @mkdir('resources/version', 0777, true);
         }
 
         $composer = $event->getComposer();
@@ -19,6 +19,6 @@ class Composer
             $packages[$package->getPrettyName()] = $package->getPrettyVersion();
         }
 
-        file_put_contents('data/version/packages.json', Json::encode($packages, false, ['prettyPrint' => true]));
+        file_put_contents('resources/version/packages.json', Json::encode($packages, false, ['prettyPrint' => true]));
     }
 }

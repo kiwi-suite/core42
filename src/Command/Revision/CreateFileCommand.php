@@ -44,11 +44,11 @@ class CreateFileCommand extends AbstractCommand
 
         $result['revision_hash_short'] = substr($result['revision_hash'], 0, 7);
 
-        if (!is_dir('data/version')) {
-            @mkdir('data/version', 0777, true);
+        if (!is_dir('resources/version')) {
+            @mkdir('resources/version', 0777, true);
         }
 
-        file_put_contents('data/version/revision.json', Json::encode($result, false, ['prettyPrint' => true]));
+        file_put_contents('resources/version/revision.json', Json::encode($result, false, ['prettyPrint' => true]));
 
         return $result;
     }
