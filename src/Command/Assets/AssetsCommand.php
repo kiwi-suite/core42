@@ -92,7 +92,7 @@ class AssetsCommand extends AbstractCommand
             }
         }
 
-        if ($this->force == false && file_exists('data/assets')) {
+        if ($this->force == false && file_exists('resources/assets')) {
             $this->consoleOutput(sprintf("<error>'%s' already exists</error>", 'data/assets'));
 
             return;
@@ -128,7 +128,7 @@ class AssetsCommand extends AbstractCommand
         $filesystem->addPlugin(new IsSymlink());
         $filesystem->addPlugin(new DeleteSymlink());
 
-        $filesystem->emptyDir('data/assets');
+        $filesystem->emptyDir('resources/assets');
 
         foreach ($this->assetConfig as $config) {
             $source = trim($config['source'], '/');
