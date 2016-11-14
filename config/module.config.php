@@ -8,6 +8,7 @@ use Core42\View\Helper\Params;
 use Core42\View\Helper\Service\AssetUrlFactory;
 use Core42\View\Helper\Service\AuthFactory;
 use Core42\View\Helper\Service\LocalizationFactory;
+use Core42\View\Helper\Service\MobileDetectFactory;
 use Core42\View\Helper\Service\ParamsFactory;
 use Core42\View\Helper\Service\PermissionFactory;
 use Core42\View\Helper\Uuid;
@@ -26,6 +27,7 @@ return [
             'localization'          => LocalizationFactory::class,
             'menu'                  => MenuFactory::class,
             'breadcrumbs'           => BreadcrumbsFactory::class,
+            'mobileDetect'          => MobileDetectFactory::class,
         ],
         'aliases' => [
             'params' => Params::class,
