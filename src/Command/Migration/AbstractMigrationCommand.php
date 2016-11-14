@@ -12,13 +12,14 @@
 
 namespace Core42\Command\Migration;
 
+use Core42\Command\AbstractCommand;
 use Core42\Model\Migration;
 use Core42\Stdlib\Filesystem;
 use Core42\TableGateway\MigrationTableGateway;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Metadata\Source\Factory;
 
-abstract class AbstractCommand extends \Core42\Command\AbstractCommand
+abstract class AbstractMigrationCommand extends AbstractCommand
 {
     /**
      * @var array|null
@@ -100,7 +101,7 @@ abstract class AbstractCommand extends \Core42\Command\AbstractCommand
     protected function getAllMigrations()
     {
         /** @var \Core42\TableGateway\MigrationTableGateway $migrationTableGateway */
-        $migrationTableGateway = $this->getServiceManager()->get('TableGateway')->get(MigrationTableGateway::class);
+        $migrationTableGateway = $this->getTableGateway(MigrationTableGateway::class);
         $resultSet = $migrationTableGateway->select();
 
         $migratedMigrations = [];
@@ -129,6 +130,10 @@ abstract class AbstractCommand extends \Core42\Command\AbstractCommand
                 ];
             }
         }
+
+        usort($migrations, function ($array1, $array2) {
+            return ((int) $array1['name'] < (int) $array2['name']) ? -1 : 1;
+        });
 
         return $migrations;
     }

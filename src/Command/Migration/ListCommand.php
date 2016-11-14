@@ -15,7 +15,7 @@ namespace Core42\Command\Migration;
 use Core42\Command\ConsoleAwareTrait;
 use ZF\Console\Route;
 
-class ListCommand extends AbstractCommand
+class ListCommand extends AbstractMigrationCommand
 {
     use ConsoleAwareTrait;
 

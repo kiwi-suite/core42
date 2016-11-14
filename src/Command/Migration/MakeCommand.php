@@ -19,7 +19,7 @@ use Zend\Code\Generator\MethodGenerator;
 use Zend\Code\Generator\ParameterGenerator;
 use ZF\Console\Route;
 
-class MakeCommand extends AbstractCommand
+class MakeCommand extends AbstractMigrationCommand
 {
     use ConsoleAwareTrait;
 

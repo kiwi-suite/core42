@@ -16,7 +16,7 @@ use Core42\Command\ConsoleAwareTrait;
 use Core42\TableGateway\MigrationTableGateway;
 use ZF\Console\Route;
 
-class RollbackCommand extends AbstractCommand
+class RollbackCommand extends AbstractMigrationCommand
 {
     use ConsoleAwareTrait;
 

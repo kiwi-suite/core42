@@ -18,7 +18,7 @@ use Core42\Stdlib\DateTime;
 use Core42\TableGateway\MigrationTableGateway;
 use ZF\Console\Route;
 
-class MigrateCommand extends AbstractCommand
+class MigrateCommand extends AbstractMigrationCommand
 {
     use ConsoleAwareTrait;
 
