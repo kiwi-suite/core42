@@ -18,9 +18,10 @@ class DateTimeStrategy implements StrategyInterface
 {
     /**
      * @param mixed $value
+     * @param array $spec
      * @return bool|DateTime
      */
-    public function hydrate($value)
+    public function hydrate($value, array $spec = [])
     {
         return DateTime::createFromFormat('Y-m-d H:i:s', $value);
     }

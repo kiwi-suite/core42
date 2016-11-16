@@ -14,9 +14,12 @@ namespace Core42\Hydrator\Mutator\Strategy;
 
 class IntegerStrategy implements StrategyInterface
 {
-
-
-    public function hydrate($value)
+    /**
+     * @param mixed $value
+     * @param array $spec
+     * @return string
+     */
+    public function hydrate($value, array $spec = [])
     {
         return $this->castToInt($value);
     }

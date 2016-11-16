@@ -5,7 +5,8 @@ interface StrategyInterface
 {
     /**
      * @param mixed $value
+     * @param array $spec
      * @return mixed
      */
-    public function hydrate($value);
+    public function hydrate($value, array $spec = []);
 }

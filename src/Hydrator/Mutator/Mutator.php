@@ -30,7 +30,8 @@ class Mutator
         $newData = [];
         $specification = $this->normalizeSpecification($specification);
 
-        foreach ($specification as $name => $type) {
+        foreach ($specification as $name => $spec) {
+            $type = $spec['type'];
             if (!array_key_exists($name, $data)) {
                 $newData[$name] = null;
                 continue;
@@ -42,7 +43,7 @@ class Mutator
                 $strategy = $this->strategyPluginManager->get($type);
             }
 
-            $newData[$name] = $strategy->hydrate($data[$name]);
+            $newData[$name] = $strategy->hydrate($data[$name], $spec);
         }
 
 
@@ -65,7 +66,7 @@ class Mutator
             if (empty($spec['type'])) {
                 throw new \Exception("invalid specification. missing key 'type'");
             }
-            $normalized[$spec['name']] = $spec['type'];
+            $normalized[$spec['name']] = $spec;
         }
 
         return $normalized;
