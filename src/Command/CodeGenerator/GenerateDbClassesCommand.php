@@ -153,8 +153,8 @@ class GenerateDbClassesCommand extends AbstractCommand
         if ($this->all !== null && !empty($this->table) && !empty($this->name)) {
             $this->addError('all', 'both usage of name/table arguments and --all argument is not allowed');
         }
-        if ($this->all === null && empty($this->table) && empty($this->name)) {
-            $this->addError('all', 'Whether name/table arguments or --all argument are missing');
+        if ($this->all === null && (empty($this->table) || empty($this->name))) {
+            $this->addError('all', 'Whether name/table arguments or --all argument are required');
 
             return;
         }

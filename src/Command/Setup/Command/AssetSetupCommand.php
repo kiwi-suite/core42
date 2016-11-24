@@ -4,7 +4,7 @@ namespace Core42\Command\Setup\Command;
 use Core42\Command\AbstractCommand;
 use Core42\Command\Assets\AssetsCommand;
 use Core42\Command\ConsoleAwareTrait;
-use Falc\Flysystem\Plugin\Symlink\Local\Symlink;
+use Core42\Stdlib\Symlink;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use Zend\Code\Generator\FileGenerator;

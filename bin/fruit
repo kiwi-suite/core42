@@ -4,17 +4,7 @@ use Zend\Console\Console;
 use Core42\Console\Application;
 use ZF\Console\Dispatcher;
 
-chdir(__DIR__
-    . DIRECTORY_SEPARATOR
-    . '..'
-    . DIRECTORY_SEPARATOR
-    . '..'
-    . DIRECTORY_SEPARATOR
-    . '..'
-    . DIRECTORY_SEPARATOR
-    . '..'
-    . DIRECTORY_SEPARATOR
-);
+chdir(__DIR__ . '/../../../../');
 
 include 'config/settings.config.php';
 include 'vendor/autoload.php';

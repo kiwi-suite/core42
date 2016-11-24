@@ -60,7 +60,6 @@
         "guzzlehttp/guzzle": "6.2.0",
         "filp/whoops": "2.1.2",
         "league/flysystem": "^1.0",
-        "falc/flysystem-local-symlink-plugin": "^1.2",
         "ramsey/uuid": "^3.5",
         "cocur/slugify": "2.3",
         "dflydev/apache-mime-types": "1.0.1",

@@ -14,9 +14,9 @@ namespace Core42\Command\Assets;
 
 use Core42\Command\AbstractCommand;
 use Core42\Command\ConsoleAwareTrait;
-use Falc\Flysystem\Plugin\Symlink\Local\DeleteSymlink;
-use Falc\Flysystem\Plugin\Symlink\Local\IsSymlink;
-use Falc\Flysystem\Plugin\Symlink\Local\Symlink;
+use Core42\Stdlib\DeleteSymlink;
+use Core42\Stdlib\IsSymlink;
+use Core42\Stdlib\Symlink;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Plugin\EmptyDir;
@@ -145,10 +145,10 @@ class AssetsCommand extends AbstractCommand
                         continue;
                     }
 
-                    $dirname = $target . DIRECTORY_SEPARATOR . str_replace($source, '', $fileData['dirname']);
+                    $dirname = $target . '/' . str_replace($source, '', $fileData['dirname']);
                     $filesystem->createDir($dirname);
 
-                    $filename = $target . DIRECTORY_SEPARATOR . str_replace($source, '', $fileData['path']);
+                    $filename = $target . '/' . str_replace($source, '', $fileData['path']);
                     $filesystem->copy($fileData['path'], $filename);
                 }
                 $this->consoleOutput("created directory for '{$source}'");

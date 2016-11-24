@@ -16,6 +16,7 @@ use Core42\Command\AbstractCommand;
 use Core42\Model\Migration;
 use Core42\Stdlib\Filesystem;
 use Core42\TableGateway\MigrationTableGateway;
+use Zend\Console\Console;
 use Zend\Db\Adapter\Adapter;
 use Zend\Db\Metadata\Source\Factory;
 
@@ -77,6 +78,10 @@ abstract class AbstractMigrationCommand extends AbstractCommand
         return array_map(function ($dir) {
             $dir = rtrim($dir, '/') . '/';
 
+            if (Console::isWindows()) {
+                $dir = str_replace('\\', '/', $dir);
+            }
+
             do {
                 $dir = preg_replace(
                     ['#//|/\./#', '#/([^/]*)/\.\./#'],
@@ -88,7 +93,11 @@ abstract class AbstractMigrationCommand extends AbstractCommand
             } while ($count > 0);
 
             if (Filesystem::isAbsolutePath($dir)) {
-                $dir = str_replace(getcwd() . DIRECTORY_SEPARATOR, '', $dir);
+                $cwd = getcwd() . DIRECTORY_SEPARATOR;
+                if (Console::isWindows()) {
+                    $cwd = str_replace('\\', '/', $cwd);
+                }
+                $dir = str_replace($cwd, '', $dir);
             }
 
             return $dir;
