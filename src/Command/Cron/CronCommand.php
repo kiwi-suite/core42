@@ -106,7 +106,7 @@ class CronCommand extends AbstractCommand
                 continue;
             }
 
-            $cmd = PHP_BINARY . ' vendor/fruit42/core42/bin/fruit cron-wrapper ' . escapeshellarg($task->getName()) . ' 2>&1 &';
+            $cmd = PHP_BINARY . ' vendor/fruit42/core42/bin/fruit cron-task ' . escapeshellarg($task->getName()) . ' 2>&1 &';
 
             $descriptors = [];
 
