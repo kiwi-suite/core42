@@ -220,6 +220,30 @@ abstract class AbstractModel implements ModelInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function __get($name)
+    {
+        return $this->get($name, true);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function __set($name, $value)
+    {
+        return $this->set($name, $value, true);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function __isset($name)
+    {
+        return array_key_exists($name, $this->data);
+    }
+
+    /**
      * @return string
      */
     public function serialize()

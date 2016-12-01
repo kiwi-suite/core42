@@ -117,7 +117,7 @@ return [
 
         'generate-db-classes' => [
             'group'                     => 'developer',
-            'route'                     => 'generate-db-classes --namespace= --directory= [--name=] [--table=] [--all=] [--adapter=] [--getter-setter]',
+            'route'                     => 'generate-db-classes --namespace= --directory= [--name=] [--table=] [--all=] [--adapter=] [--getter-setter] [--overwrite]',
             'command-name'              => GenerateDbClassesCommand::class,
             'description'               => 'generates model based on database schema',
             'short_description'         => 'generate model from database',
@@ -129,6 +129,7 @@ return [
                 '--all'                 => 'generate db classes for all tables with the given prefix',
                 '--adapter'             => 'Optional adapter name',
                 '--getter-setter'       => 'Generate Getter & Setter instead of PphDoc',
+                '--overwrite'           => 'overwrites existing files instead of merging their content',
             ],
             'development'               => true,
         ],

@@ -39,7 +39,7 @@ class MigrationTableGateway extends AbstractTableGateway
     /**
      * @var string
      */
-    protected $modelPrototype = 'Core42\\Model\\Migration';
+    protected $modelPrototype = \Core42\Model\Migration::class;
 
     /**
      * MigrationTableGateway constructor.

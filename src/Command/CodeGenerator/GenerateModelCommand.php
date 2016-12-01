@@ -13,12 +13,18 @@
 namespace Core42\Command\CodeGenerator;
 
 use Core42\Command\AbstractCommand;
+use Zend\Code\Annotation\AnnotationManager;
+use Zend\Code\Reflection\FileReflection;
 use Zend\Db\Metadata\Source\Factory;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\Code\Generator;
 use Zend\Db\Adapter;
 use Zend\Filter\Word\UnderscoreToCamelCase;
 
+/**
+ * Class GenerateModelCommand
+ * @package Core42\Command\CodeGenerator
+ */
 class GenerateModelCommand extends AbstractCommand
 {
     /**
@@ -51,6 +57,11 @@ class GenerateModelCommand extends AbstractCommand
      */
     private $generateSetterGetter = false;
 
+    /**
+     * @var bool
+     */
+    private $overwrite = false;
+    
     /**
      * @var bool
      */
@@ -99,7 +110,7 @@ class GenerateModelCommand extends AbstractCommand
 
         return $this;
     }
-
+    
     /**
      * @param bool $generateSetterGetter
      * @return $this
@@ -110,7 +121,18 @@ class GenerateModelCommand extends AbstractCommand
 
         return $this;
     }
-
+    
+    /**
+     * @param boolean $overwrite
+     * @return $this
+     */
+    public function setOverwrite($overwrite)
+    {
+        $this->overwrite = $overwrite;
+        
+        return $this;
+    }
+    
     /**
      *
      */
@@ -167,14 +189,21 @@ class GenerateModelCommand extends AbstractCommand
         $class = array_pop($parts);
         $namespace = implode('\\', $parts);
 
-        $modelClass = new Generator\ClassGenerator();
-        $modelClass->setNamespaceName($namespace)
+        $classGenerator = new Generator\ClassGenerator();
+        $classGenerator->setNamespaceName($namespace)
             ->addUse('Core42\Model\AbstractModel')
             ->setName($class)
             ->setExtendedClass('Core42\Model\AbstractModel');
 
+        $filename = $this->directory . $class . '.php';
+        if (file_exists($filename) && !$this->overwrite) {
+            $this->readExistingModel($filename, $classGenerator);
+        }
+
         $filter = new UnderscoreToCamelCase();
 
+        $hasDate = false;
+        $hasDateTime = false;
         $tags = [];
         $properties = [];
         $methods = [];
@@ -185,17 +214,17 @@ class GenerateModelCommand extends AbstractCommand
 
             $properties[] = $column->getName();
 
-            $type = $this->getPropertyTypeByColumnObject($column);
+            $type = $this->getPropertyTypeByColumnObject($column, $hasDate, $hasDateTime);
 
             if ($this->generateSetterGetter === false) {
                 $setterMethodDocBlock = new Generator\DocBlock\Tag\MethodTag(
-                    'set' . $method,
+                    null,
                     [$class],
                     'set' . $method . '(' . $type . ' $' . $column->getName() . ')'
                 );
 
                 $getterMethodDocBlock = new Generator\DocBlock\Tag\MethodTag(
-                    'get' . $method,
+                    null,
                     [$type],
                     'get' . $method . '()'
                 );
@@ -203,9 +232,10 @@ class GenerateModelCommand extends AbstractCommand
                 $tags[] = $setterMethodDocBlock;
                 $tags[] = $getterMethodDocBlock;
             } else {
+
                 $docBlockParam = new Generator\DocBlock\Tag\ParamTag();
                 $docBlockParam->setVariableName($column->getName());
-                $docBlockParam->setTypes($this->getPropertyTypeByColumnObject($column));
+                $docBlockParam->setTypes($type);
 
                 $docBlockReturn = new Generator\DocBlock\Tag\ReturnTag();
                 $docBlockReturn->setTypes('$this');
@@ -236,7 +266,7 @@ class GenerateModelCommand extends AbstractCommand
 
                 //getter
                 $docBlockReturn = new Generator\DocBlock\Tag\ReturnTag();
-                $docBlockReturn->setTypes($this->getPropertyTypeByColumnObject($column));
+                $docBlockReturn->setTypes($type);
 
                 $methods[] = new Generator\MethodGenerator(
                     'get' . $method,
@@ -254,14 +284,22 @@ class GenerateModelCommand extends AbstractCommand
             }
         }
 
+        if ($hasDate) {
+            $classGenerator->addUse('Core42\Stdlib\Date');
+        }
+        if ($hasDateTime) {
+            $classGenerator->addUse('Core42\Stdlib\DateTime');
+        }
+
         if (!empty($tags)) {
             $docBlock = new Generator\DocBlockGenerator();
             $docBlock->setTags($tags);
 
-            $modelClass->setDocBlock($docBlock);
+            $classGenerator->setDocBlock($docBlock);
         }
 
         $propertyGenerator = new Generator\PropertyGenerator('properties');
+        $propertyGenerator->setVisibility(Generator\PropertyGenerator::VISIBILITY_PROTECTED);
         $propertyGenerator->setDefaultValue(
             $properties,
             Generator\ValueGenerator::TYPE_ARRAY_SHORT,
@@ -272,19 +310,72 @@ class GenerateModelCommand extends AbstractCommand
             null,
             [new Generator\DocBlock\Tag\GenericTag('var', 'array')]
         ));
-        $modelClass->addPropertyFromGenerator($propertyGenerator);
+        $classGenerator->addPropertyFromGenerator($propertyGenerator);
 
-        $modelClass->addMethods($methods);
+        $classGenerator->addMethods($methods);
 
-        $filename = $this->directory . $class . '.php';
-        file_put_contents($filename, "<?php\n" . $modelClass->generate());
+        file_put_contents($filename, "<?php\n" . $classGenerator->generate());
+    }
+
+    /**
+     * @param string $filename
+     * @param Generator\ClassGenerator $classGenerator
+     */
+    protected function readExistingModel($filename, Generator\ClassGenerator $classGenerator)
+    {
+        $file = new FileReflection($filename, true);
+        $class = $file->getClass();
+
+        $filter = new UnderscoreToCamelCase();
+        
+        $constants = $class->getConstants();
+        if (!empty($constants)) {
+            foreach ($constants as $name => $value) {
+                $classGenerator->addConstant($name, $value);
+            }
+        }
+
+        $tmpMethods = $class->getMethods();
+        $methods = [];
+        foreach ($tmpMethods as $method) {
+            if ($method->class == $class->getName()) {
+                $methods[] = $method;
+            }
+        }
+        unset($tmpMethods);
+
+        $properties = $class->getDefaultProperties();
+        foreach ($properties['properties'] as $property) {
+
+            $methodName = ucfirst($filter->filter($property));
+
+            foreach($methods as $key => $method) {
+                if ($method->getName() == ('set' . $methodName)) {
+                    unset($methods[$key]);
+                    continue;
+                }
+                if ($method->getName() == ('get' . $methodName)) {
+                    unset($methods[$key]);
+                    continue;
+                }
+            }
+        }
+
+        if (!empty($methods)) {
+            foreach ($methods as $reflection) {
+                $method =  Generator\MethodGenerator::fromReflection($reflection);
+                $classGenerator->addMethodFromGenerator($method);
+            }
+        }
     }
 
     /**
      * @param \Zend\Db\Metadata\Object\ColumnObject $column
+     * @param boolean $hasDate
+     * @param boolean $hasDateTime
      * @return string
      */
-    protected function getPropertyTypeByColumnObject(\Zend\Db\Metadata\Object\ColumnObject $column)
+    protected function getPropertyTypeByColumnObject(\Zend\Db\Metadata\Object\ColumnObject $column, &$hasDate, &$hasDateTime)
     {
         switch ($column->getDataType()) {
             case 'boolean':
@@ -309,9 +400,11 @@ class GenerateModelCommand extends AbstractCommand
             case 'bigint':
                 return 'int';
             case 'date':
+                $hasDate = true;
                 return 'Date';
             case 'datetime':
             case 'timestamp':
+                $hasDateTime = true;
                 return 'DateTime';
             case 'varchar':
             case 'char':

@@ -13,6 +13,7 @@
 namespace Core42\Command\CodeGenerator;
 
 use Core42\Command\AbstractCommand;
+use Zend\Code\Reflection\FileReflection;
 use Zend\Db\Metadata\Source\Factory;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\Code\Generator;
@@ -43,6 +44,11 @@ class GenerateTableGatewayCommand extends AbstractCommand
      * @var string
      */
     private $tableName;
+
+    /**
+     * @var bool
+     */
+    private $overwrite;
 
     /**
      * @var string
@@ -94,6 +100,17 @@ class GenerateTableGatewayCommand extends AbstractCommand
     public function setClassName($className)
     {
         $this->className = $className;
+
+        return $this;
+    }
+
+    /**
+     * @param boolean $overwrite
+     * @return $this
+     */
+    public function setOverwrite($overwrite)
+    {
+        $this->overwrite = $overwrite;
 
         return $this;
     }
@@ -171,11 +188,18 @@ class GenerateTableGatewayCommand extends AbstractCommand
         $class = array_pop($parts);
         $namespace = implode('\\', $parts);
 
+        $filename = $this->directory . $class . '.php';
+
         $classGenerator = new Generator\ClassGenerator();
         $classGenerator->setNamespaceName($namespace)
             ->addUse('Core42\Db\TableGateway\AbstractTableGateway')
             ->setName($class)
             ->setExtendedClass('Core42\Db\TableGateway\AbstractTableGateway');
+
+        $restoredDatabaseTypeMap = [];
+        if (file_exists($filename) && !$this->overwrite) {
+            $this->readExisting($filename, $classGenerator, $restoredDatabaseTypeMap);
+        }
 
         $property = new Generator\PropertyGenerator('table');
         $property->setDefaultValue($this->tableName)
@@ -220,7 +244,9 @@ class GenerateTableGatewayCommand extends AbstractCommand
         $columns = $metadata->getColumns($this->tableName);
 
         foreach ($columns as $column) {
-            if ($column->getDataType() == 'enum'
+            if (array_key_exists($column->getName(), $restoredDatabaseTypeMap)) {
+                $databaseTypeMap[$column->getName()] = $restoredDatabaseTypeMap[$column->getName()];
+            } elseif ($column->getDataType() == 'enum'
                 && in_array($column->getErrata('permitted_values'), [['true', 'false'], ['false', 'true']])
             ) {
                 $databaseTypeMap[$column->getName()] = 'boolean';
@@ -255,7 +281,7 @@ class GenerateTableGatewayCommand extends AbstractCommand
 
 
         $property = new Generator\PropertyGenerator('modelPrototype');
-        $property->setDefaultValue($this->model)
+        $property->setDefaultValue('\\' . $this->model . '::class', Generator\PropertyValueGenerator::TYPE_CONSTANT)
             ->setDocBlock(
                 new Generator\DocBlockGenerator(
                     null,
@@ -266,7 +292,40 @@ class GenerateTableGatewayCommand extends AbstractCommand
             ->setFlags(Generator\PropertyGenerator::FLAG_PROTECTED);
         $classGenerator->addPropertyFromGenerator($property);
 
-        $filename = $this->directory . $class . '.php';
+
         file_put_contents($filename, "<?php\n" . $classGenerator->generate());
+    }
+
+    /**
+     * @param string $filename
+     * @param Generator\ClassGenerator $classGenerator
+     * @param array $databaseTypeMap
+     */
+    protected function readExisting($filename, Generator\ClassGenerator $classGenerator, &$databaseTypeMap)
+    {
+        $file = new FileReflection($filename, true);
+        $class = $file->getClass();
+
+        $properties = $class->getDefaultProperties();
+        foreach ($properties['databaseTypeMap'] as $column => $type) {
+            if ($type == 'json') {
+                $databaseTypeMap[$column] = $type;
+            }
+        }
+
+        $constants = $class->getConstants();
+        if (!empty($constants)) {
+            foreach ($constants as $name => $value) {
+                $classGenerator->addConstant($name, $value);
+            }
+        }
+
+        $methods = $class->getMethods();
+        foreach ($methods as $reflection) {
+            if ($reflection->class == $class->getName()) {
+                $method =  Generator\MethodGenerator::fromReflection($reflection);
+                $classGenerator->addMethodFromGenerator($method);
+            }
+        }
     }
 }
