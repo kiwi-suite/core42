@@ -35,7 +35,7 @@ class CreateFileCommand extends AbstractCommand
         $result = [];
 
         $result['revision_type'] = 'none';
-        $result['revision_hash'] = md5(Uuid::uuid4()->toString());
+        $result['revision_hash'] = md5(Uuid::uuid4()->toString()) . substr(md5(Uuid::uuid4()->toString()), 0, 8);
         $rev = $this->getGitRevision();
         if ($rev !== false) {
             $result['revision_type'] = 'git';
