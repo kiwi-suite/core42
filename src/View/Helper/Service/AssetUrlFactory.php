@@ -12,10 +12,10 @@
 
 namespace Core42\View\Helper\Service;
 
+use Core42\Asset\Hash\CommitHashInterface;
 use Core42\View\Helper\AssetUrl;
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
-use Zend\Json\Json;
 use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\ServiceManager\Factory\FactoryInterface;
@@ -59,7 +59,10 @@ class AssetUrlFactory implements FactoryInterface
 
         $prependCommit = $container->get('Config')['assets']['prepend_commit'];
         if ($prependCommit === true) {
-            $assetUrl = $this->appendCommitHash($assetUrl);
+            $assetUrl = $this->appendCommitHash(
+                $assetUrl,
+                $container->get($container->get('Config')['assets']['commit_strategy'])
+            );
         }
 
         $directories = [];
@@ -76,25 +79,19 @@ class AssetUrlFactory implements FactoryInterface
 
     /**
      * @param string $assetUrl
+     * @param CommitHashInterface $commitHash
      * @return string
      */
-    protected function appendCommitHash($assetUrl)
+    protected function appendCommitHash($assetUrl, CommitHashInterface $commitHash)
     {
-        if (!file_exists('resources/version/revision.json')) {
+        $commitHash = $commitHash->getHash();
+
+        if (empty($commitHash)) {
             return $assetUrl;
         }
 
-        try {
-            $revision = Json::decode(file_get_contents('resources/version/revision.json'), Json::TYPE_ARRAY);
-        } catch (\Exception $e) {
-            return $assetUrl;
-        }
-
-        if (empty($revision['revision_hash_short'])) {
-            return $assetUrl;
-        }
-
+        $commitHash = '/' . trim($commitHash, '/');
         $assetUrl = rtrim($assetUrl, '/');
-        return  $assetUrl . "/v-" . rawurlencode($revision['revision_hash_short']);
+        return  $assetUrl . $commitHash;
     }
 }

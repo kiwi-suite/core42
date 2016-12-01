@@ -2,6 +2,9 @@
 namespace Core42;
 
 use Cocur\Slugify\Slugify;
+use Core42\Asset\Hash\DefaultCommitHash;
+use Core42\Asset\Hash\LongCommitHash;
+use Core42\Asset\Hash\ShortCommitHash;
 use Core42\Cache\Service\CachePluginManager;
 use Core42\Cache\Service\CachePluginManagerFactory;
 use Core42\Cache\Service\DriverPluginManager;
@@ -102,6 +105,10 @@ return [
 
             Mutator::class                                  => MutatorFactory::class,
             MutatorStrategyPluginManager::class             => MutatorStrategyPluginManagerFactory::class,
+
+            DefaultCommitHash::class                        => InvokableFactory::class,
+            ShortCommitHash::class                          => InvokableFactory::class,
+            LongCommitHash::class                           => InvokableFactory::class,
         ],
         'aliases' => [
             AdapterInterface::class                         => 'Db\Master',
