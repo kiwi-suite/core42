@@ -64,10 +64,14 @@ class CreateFileCommand extends AbstractCommand
         }
 
         $ref = trim(file_get_contents(getcwd() . '/.git/HEAD'));
-        if (substr($ref, 0 , 5) != 'ref: ') {
+
+        if (strlen($ref) === 40) {
+            return $ref;
+        }elseif (substr($ref, 0 , 5) == 'ref: ') {
+            $ref = trim(substr($ref, 5));
+        } else {
             return false;
         }
-        $ref = trim(substr($ref, 5));
 
         if (!file_exists(getcwd() . '/.git/' . $ref)) {
             return false;
