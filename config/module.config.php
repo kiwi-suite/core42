@@ -11,6 +11,7 @@ use Core42\View\Helper\Service\LocalizationFactory;
 use Core42\View\Helper\Service\MobileDetectFactory;
 use Core42\View\Helper\Service\ParamsFactory;
 use Core42\View\Helper\Service\PermissionFactory;
+use Core42\View\Helper\Service\SlugifyFactory;
 use Core42\View\Helper\Uuid;
 use Core42\View\Helper\WordTruncate;
 use Zend\ServiceManager\Factory\InvokableFactory;
@@ -28,6 +29,7 @@ return [
             'menu'                  => MenuFactory::class,
             'breadcrumbs'           => BreadcrumbsFactory::class,
             'mobileDetect'          => MobileDetectFactory::class,
+            'slugify'               => SlugifyFactory::class,
         ],
         'aliases' => [
             'params' => Params::class,
