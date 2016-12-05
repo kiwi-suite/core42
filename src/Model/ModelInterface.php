@@ -42,4 +42,22 @@ interface ModelInterface extends \Serializable, ArraySerializableInterface, \Jso
      * @return void
      */
     public function populate(array $data);
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function __isset($name);
+
+    /**
+     * @param string $name
+     * @param mixed $value
+     */
+    public function __set($name, $value);
+
+    /**
+     * @param string $name
+     * @return mixed
+     */
+    public function __get($name);
 }
