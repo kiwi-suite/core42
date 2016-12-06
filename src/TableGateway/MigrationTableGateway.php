@@ -14,6 +14,7 @@ namespace Core42\TableGateway;
 
 use Core42\Db\TableGateway\AbstractTableGateway;
 use Core42\Hydrator\BaseHydrator;
+use Core42\Model\Migration;
 use Zend\Db\Adapter\Adapter;
 
 class MigrationTableGateway extends AbstractTableGateway
@@ -39,7 +40,7 @@ class MigrationTableGateway extends AbstractTableGateway
     /**
      * @var string
      */
-    protected $modelPrototype = \Core42\Model\Migration::class;
+    protected $modelPrototype = Migration::class;
 
     /**
      * MigrationTableGateway constructor.
