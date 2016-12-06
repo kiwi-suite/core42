@@ -42,8 +42,18 @@ class Permission extends AbstractHelper
         return $this;
     }
 
-    public function isGranted($permission, $assert = null, $role = null)
+    /**
+     * @param $permission
+     * @param null|string $assert
+     * @param array $params
+     * @param string $role
+     * @return bool
+     */
+    public function authorized($permission, $assert = null, array $params = [], $role = null)
     {
-        return $this->permissionPluginManager->get($this->serviceName)->isGranted($permission, $assert, $role);
+        return $this
+            ->permissionPluginManager
+            ->get($this->serviceName)
+            ->authorized($permission, $assert, $params, $role);
     }
 }

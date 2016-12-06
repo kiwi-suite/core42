@@ -65,13 +65,25 @@ class Permission extends Rbac implements PermissionInterface
     }
 
     /**
-     * @param string|RoleInterface $role
+     * @param string|\Zend\Permissions\Rbac\RoleInterface $role
+     * @param string $permission
+     * @param null $assert
+     * @return bool
+     */
+    public function isGranted($role, $permission, $assert = null)
+    {
+        return $this->authorized($permission, $assert, [], $role);
+    }
+
+    /**
      * @param string $permission
      * @param string|AssertionInterface|callable|null $assert
+     * @param array $params
+     * @param string $role
      * @return bool
      * @throws \Exception
      */
-    public function isGranted($permission, $assert = null, $role = null)
+    public function authorized($permission, $assert = null, array $params = [], $role = null)
     {
         if ($role === null) {
             $role = $this->getIdentity()->getRole();
@@ -86,10 +98,11 @@ class Permission extends Rbac implements PermissionInterface
 
     /**
      * @param string|AssertionInterface|callable|null $assert
+     * @param array $params
      * @return bool
      * @throws \Exception
      */
-    public function assert($assert)
+    public function assert($assert, array $params = [])
     {
         if ($assert instanceof AssertionInterface) {
             return (bool) $assert->assert($this);
@@ -100,7 +113,7 @@ class Permission extends Rbac implements PermissionInterface
         }
 
         if (is_string($assert) && $this->assertionPluginManager->has($assert)) {
-            return (bool) $this->assertionPluginManager->get($assert)->assert($this);
+            return (bool) $this->assertionPluginManager->get($assert, $params)->assert($this);
         }
 
         throw new \Exception(

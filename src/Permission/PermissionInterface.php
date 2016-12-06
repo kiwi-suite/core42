@@ -53,10 +53,11 @@ interface PermissionInterface
     public function getIdentity();
 
     /**
-     * @param  string                           $permission
-     * @param  AssertionInterface|callable|null|string $assert
-     * @param  RoleInterface|string             $role
+     * @param string $permission
+     * @param string|AssertionInterface|callable|null $assert
+     * @param array $params
+     * @param string $role
      * @return bool
      */
-    public function isGranted($permission, $assert = null, $role = null);
+    public function authorized($permission, $assert = null, array $params = [], $role = null);
 }
