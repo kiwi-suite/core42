@@ -232,7 +232,7 @@ abstract class AbstractModel implements ModelInterface
      */
     public function __set($name, $value)
     {
-        return $this->set($name, $value);
+        return $this->set($name, $value, true);
     }
 
     /**
@@ -240,7 +240,7 @@ abstract class AbstractModel implements ModelInterface
      */
     public function __isset($name)
     {
-        return array_key_exists($name, $this->data);
+        return array_key_exists($name, $this->properties);
     }
 
     /**
@@ -277,30 +277,4 @@ abstract class AbstractModel implements ModelInterface
         ];
     }
 
-    /**
-     * @param string $name
-     * @return mixed
-     */
-    public function __get($name)
-    {
-        return $this->get($name);
-    }
-
-    /**
-     * @param string $name
-     * @param mixed $value
-     */
-    public function __set($name, $value)
-    {
-        $this->set($name, $value, true);
-    }
-
-    /**
-     * @param string $name
-     * @return bool
-     */
-    public function __isset($name)
-    {
-        return array_key_exists($name, $this->properties);
-    }
 }
