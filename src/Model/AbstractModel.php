@@ -224,7 +224,7 @@ abstract class AbstractModel implements ModelInterface
      */
     public function __get($name)
     {
-        return $this->get($name, true);
+        return $this->get($name);
     }
 
     /**
@@ -232,7 +232,7 @@ abstract class AbstractModel implements ModelInterface
      */
     public function __set($name, $value)
     {
-        return $this->set($name, $value, true);
+        return $this->set($name, $value);
     }
 
     /**
