@@ -53,6 +53,11 @@ class GenerateDbClassesCommand extends AbstractCommand
     protected $generateGetterSetter = false;
 
     /**
+     * @var bool
+     */
+    protected $overwrite = false;
+    
+    /**
      * @var string
      */
     protected $adapterName = 'Db\Master';
@@ -119,18 +124,35 @@ class GenerateDbClassesCommand extends AbstractCommand
 
     /**
      * @param string $all
+     * @return $this
      */
     public function setAll($all)
     {
         $this->all = $all;
+
+        return $this;
     }
 
     /**
      * @param bool $generateGetterSetter
+     * @return $this
      */
     public function setGenerateGetterSetter($generateGetterSetter)
     {
         $this->generateGetterSetter = $generateGetterSetter;
+
+        return $this;
+    }
+
+    /**
+     * @param boolean $overwrite
+     * @return $this
+     */
+    public function setOverwrite($overwrite)
+    {
+        $this->overwrite = $overwrite;
+        
+        return $this;
     }
 
     /**
@@ -150,8 +172,10 @@ class GenerateDbClassesCommand extends AbstractCommand
             return;
         }
 
-        if ($this->all !== null && !empty($this->table) && !empty($this->name)) {
+        if ($this->all !== null && (!empty($this->table) || !empty($this->name))) {
             $this->addError('all', 'both usage of name/table arguments and --all argument is not allowed');
+            
+            return;
         }
         if ($this->all === null && (empty($this->table) || empty($this->name))) {
             $this->addError('all', 'Whether name/table arguments or --all argument are required');
@@ -250,6 +274,7 @@ class GenerateDbClassesCommand extends AbstractCommand
             ->setClassName($modelClassName)
             ->setTableName($table)
             ->setGenerateSetterGetter($this->generateGetterSetter)
+            ->setOverwrite($this->overwrite)
             ->run();
 
         /** @var GenerateTableGatewayCommand $generateTableGateway */
@@ -259,6 +284,7 @@ class GenerateDbClassesCommand extends AbstractCommand
             ->setClassName($tableGatewayClassName)
             ->setTableName($table)
             ->setModel($modelClassName)
+            ->setOverwrite($this->overwrite)
             ->run();
     }
 
@@ -284,6 +310,7 @@ class GenerateDbClassesCommand extends AbstractCommand
         $this->setAll($route->getMatchedParam('all', null));
 
         $this->setGenerateGetterSetter($route->getMatchedParam('getter-setter'));
+        $this->setOverwrite($route->getMatchedParam('overwrite'));
 
         $adapterName = $route->getMatchedParam('adapter');
         if (!empty($adapterName)) {

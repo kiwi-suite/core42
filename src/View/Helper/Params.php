@@ -33,7 +33,7 @@ class Params extends AbstractHelper
      * @param Request $request
      * @param RouteMatch $routeMatch
      */
-    public function __construct(Request $request, RouteMatch $routeMatch)
+    public function __construct(Request $request, RouteMatch $routeMatch = null)
     {
         $this->request = $request;
 
