@@ -279,9 +279,11 @@ class GenerateTableGatewayCommand extends AbstractCommand
             ->setFlags(Generator\PropertyGenerator::FLAG_PROTECTED);
         $classGenerator->addPropertyFromGenerator($property);
 
+        $classGenerator->addUse($this->model);
+        $shortName = (new \ReflectionClass($this->model))->getShortName();
 
         $property = new Generator\PropertyGenerator('modelPrototype');
-        $property->setDefaultValue('\\' . $this->model . '::class', Generator\PropertyValueGenerator::TYPE_CONSTANT)
+        $property->setDefaultValue($shortName . '::class', Generator\PropertyValueGenerator::TYPE_CONSTANT)
             ->setDocBlock(
                 new Generator\DocBlockGenerator(
                     null,
@@ -291,8 +293,7 @@ class GenerateTableGatewayCommand extends AbstractCommand
             )
             ->setFlags(Generator\PropertyGenerator::FLAG_PROTECTED);
         $classGenerator->addPropertyFromGenerator($property);
-
-
+        
         file_put_contents($filename, "<?php\n" . $classGenerator->generate());
     }
 
