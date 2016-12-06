@@ -1,4 +1,15 @@
 <?php
+
+/*
+ * core42
+ *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
+ */
+
 namespace Core42\Permission;
 
 use Zend\Permissions\Rbac\AssertionInterface;
@@ -42,10 +53,11 @@ interface PermissionInterface
     public function getIdentity();
 
     /**
-     * @param  string                           $permission
-     * @param  AssertionInterface|Callable|null|string $assert
-     * @param  RoleInterface|string             $role
+     * @param string $permission
+     * @param string|AssertionInterface|callable|null $assert
+     * @param array $params
+     * @param string $role
      * @return bool
      */
-    public function isGranted($permission, $assert = null, $role = null);
+    public function authorized($permission, $assert = null, array $params = [], $role = null);
 }

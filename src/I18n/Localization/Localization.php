@@ -1,10 +1,13 @@
 <?php
-/**
- * core42 (www.raum42.at)
+
+/*
+ * core42
  *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
- *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
  */
 
 namespace Core42\I18n\Localization;
@@ -53,7 +56,7 @@ class Localization extends AbstractOptions
     public function setType($type)
     {
         if (!in_array($type, [self::TYPE_LANGUAGE, self::TYPE_REGION])) {
-            throw new \Exception("invalid type");
+            throw new \Exception('invalid type');
         }
 
         $this->type = $type;
@@ -98,8 +101,8 @@ class Localization extends AbstractOptions
     public function getAvailableLocaleDisplay($locale)
     {
         $options = $this->getLocaleOptions($locale);
-        if ($options !== false && array_key_exists("name", $options)) {
-            $name = $options["name"];
+        if ($options !== false && array_key_exists('name', $options)) {
+            $name = $options['name'];
         } elseif ($options !== false) {
             if ($this->type == self::TYPE_REGION) {
                 $name = \Locale::getDisplayRegion($locale);
@@ -107,7 +110,7 @@ class Localization extends AbstractOptions
                 $name = \Locale::getDisplayLanguage($locale);
             }
         } else {
-            $name = "";
+            $name = '';
         }
 
         return $name;
@@ -191,7 +194,7 @@ class Localization extends AbstractOptions
      */
     public function hasActiveLocale()
     {
-        return ($this->activeLocale !== null);
+        return $this->activeLocale !== null;
     }
 
     /**
@@ -202,6 +205,7 @@ class Localization extends AbstractOptions
         if (!$this->hasActiveLocale()) {
             return false;
         }
+
         return $this->activeLocale;
     }
 
@@ -213,6 +217,7 @@ class Localization extends AbstractOptions
         if (!$this->hasActiveLocale()) {
             return false;
         }
+
         return \Locale::getPrimaryLanguage($this->activeLocale);
     }
 
@@ -239,7 +244,7 @@ class Localization extends AbstractOptions
     public function getDefaultLocale()
     {
         if (count($this->locales) == 0) {
-            throw new \Exception("no locales set");
+            throw new \Exception('no locales set');
         }
 
         foreach ($this->getAvailableLocales() as $_locale) {

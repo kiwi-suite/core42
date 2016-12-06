@@ -1,10 +1,13 @@
 <?php
-/**
- * core42 (www.raum42.at)
+
+/*
+ * core42
  *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2015 raum42 OG (http://www.raum42.at)
- *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
  */
 
 namespace Core42\Command\Cron;
@@ -12,20 +15,14 @@ namespace Core42\Command\Cron;
 use Core42\Command\AbstractCommand;
 use Core42\Command\ConsoleAwareTrait;
 use Core42\Model\Cron;
+use Core42\Stdlib\DateTime;
 use Core42\TableGateway\CronTableGateway;
 use Zend\Db\Sql\Where;
-use Zend\Log\Logger;
-use Zend\Log\Formatter\Simple as SimpleFormatter;
 use ZF\Console\Route;
 
 class CronCommand extends AbstractCommand
 {
     use ConsoleAwareTrait;
-
-    /**
-     * @var Logger
-     */
-    protected $logger;
 
     /**
      * @var bool
@@ -54,9 +51,9 @@ class CronCommand extends AbstractCommand
     {
         set_time_limit(0);
 
-        $this->consoleOutput("starting cron");
+        $this->consoleOutput('starting cron');
 
-        $now = new \DateTime();
+        $now = new DateTime();
 
         /* @var CronTableGateway $timedTaskTableGateway */
         $timedTaskTableGateway = $this->getTableGateway(CronTableGateway::class);
@@ -69,7 +66,6 @@ class CronCommand extends AbstractCommand
                 ->or
                 ->isNull('nextRun')
                 ->unnest();
-
         } else {
             $where->equalTo('name', $this->taskName);
         }
@@ -79,7 +75,7 @@ class CronCommand extends AbstractCommand
         }
 
         if (!empty($this->group)) {
-            $where->equalTo("group", $this->group);
+            $where->equalTo('group', $this->group);
         }
 
         $tasks = $timedTaskTableGateway->select($where);
@@ -89,7 +85,7 @@ class CronCommand extends AbstractCommand
                 $this->consoleOutput(sprintf('<error>cron task "%s" not found</error>', $this->taskName));
             }
         } else {
-            $this->consoleOutput(sprintf("<info>%d tasks found for execution</info>", $tasks->count()));
+            $this->consoleOutput(sprintf('<info>%d tasks found for execution</info>', $tasks->count()));
         }
 
         $p = [];
@@ -110,7 +106,7 @@ class CronCommand extends AbstractCommand
                 continue;
             }
 
-            $cmd = PHP_BINARY . ' vendor/fruit42/core42/bin/fruit cron-wrapper ' . escapeshellarg($task->getName()) .  ' 2>&1 &';
+            $cmd = PHP_BINARY . ' vendor/fruit42/core42/bin/fruit cron-task ' . escapeshellarg($task->getName()) . ' 2>&1 &';
 
             $descriptors = [];
 

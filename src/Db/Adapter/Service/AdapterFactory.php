@@ -1,8 +1,17 @@
 <?php
+
+/*
+ * core42
+ *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
+ */
+
 namespace Core42\Db\Adapter\Service;
 
-use BjyProfiler\Db\Adapter\ProfilingAdapter;
-use BjyProfiler\Db\Profiler\Profiler;
 use Interop\Container\ContainerInterface;
 use Interop\Container\Exception\ContainerException;
 use Zend\Db\Adapter\Adapter;
@@ -12,7 +21,6 @@ use Zend\ServiceManager\Factory\FactoryInterface;
 
 class AdapterFactory implements FactoryInterface
 {
-
     /**
      * Create an object
      *
@@ -32,20 +40,6 @@ class AdapterFactory implements FactoryInterface
             throw new ServiceNotCreatedException("Can't create DB Adapter with name {$requestedName}");
         }
         $config = $config['db']['adapters'][$requestedName];
-
-
-        if (DEVELOPMENT_MODE === true && php_sapi_name() !== 'cli' && class_exists(ProfilingAdapter::class)) {
-            $adapter = new ProfilingAdapter($config);
-            $adapter->setProfiler(new Profiler());
-
-            $options = [];
-            if (isset($config['options']) && is_array($config['options'])) {
-                $options = $config['options'];
-            }
-
-            $adapter->injectProfilingStatementPrototype($options);
-            return $adapter;
-        }
 
         return new Adapter($config);
     }

@@ -1,4 +1,15 @@
 <?php
+
+/*
+ * core42
+ *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
+ */
+
 namespace Core42\Test\PHPUnit;
 
 use Zend\Mvc\Service\ServiceManagerConfig;
@@ -11,15 +22,15 @@ class Bootstrap
      */
     protected static $config = [
         'modules' => [],
-        'module_listener_options' => array(
-            'module_paths'              => array(
+        'module_listener_options' => [
+            'module_paths'              => [
                 './module',
                 './vendor',
-            ),
+            ],
             'config_cache_enabled'      => false,
             'module_map_cache_enabled'  => false,
             'check_dependencies'        => false,
-        ),
+        ],
     ];
 
     /**

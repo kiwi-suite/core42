@@ -1,10 +1,13 @@
 <?php
-/**
- * core42 (www.raum42.at)
+
+/*
+ * core42
  *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
- *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
  */
 
 namespace Core42\Command\Migration;
@@ -13,7 +16,7 @@ use Core42\Command\ConsoleAwareTrait;
 use Core42\TableGateway\MigrationTableGateway;
 use ZF\Console\Route;
 
-class RollbackCommand extends AbstractCommand
+class RollbackCommand extends AbstractMigrationCommand
 {
     use ConsoleAwareTrait;
 
@@ -80,7 +83,7 @@ class RollbackCommand extends AbstractCommand
 
             $this->consoleOutput("Migration {$migration['name']} rolled back");
         }
-        $this->consoleOutput("");
+        $this->consoleOutput('');
 
         if ($migrationCounter > 0) {
             $this->consoleOutput("{$migrationCounter} Migrations rolled back");
@@ -88,7 +91,7 @@ class RollbackCommand extends AbstractCommand
             return;
         }
 
-        $this->consoleOutput("Nothing to rollback");
+        $this->consoleOutput('Nothing to rollback');
     }
 
     /**

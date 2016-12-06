@@ -1,10 +1,13 @@
 <?php
-/**
- * core42 (www.raum42.at)
+
+/*
+ * core42
  *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
- *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
  */
 
 namespace Core42\View\Helper;
@@ -30,7 +33,7 @@ class Params extends AbstractHelper
      * @param Request $request
      * @param RouteMatch $routeMatch
      */
-    public function __construct(Request $request, RouteMatch $routeMatch)
+    public function __construct(Request $request, RouteMatch $routeMatch = null)
     {
         $this->request = $request;
 
@@ -38,7 +41,6 @@ class Params extends AbstractHelper
     }
 
     /**
-     *
      * @param  string $param
      * @param  mixed  $default
      * @return mixed
@@ -53,7 +55,6 @@ class Params extends AbstractHelper
     }
 
     /**
-     *
      * @param  string                  $name
      * @param  mixed                   $default
      * @return array|\ArrayAccess|null
@@ -68,7 +69,6 @@ class Params extends AbstractHelper
     }
 
     /**
-     *
      * @param  string                                 $header
      * @param  mixed                                  $default
      * @return null|\Zend\Http\Header\HeaderInterface
@@ -83,7 +83,6 @@ class Params extends AbstractHelper
     }
 
     /**
-     *
      * @param  string $param
      * @param  mixed  $default
      * @return mixed
@@ -98,7 +97,6 @@ class Params extends AbstractHelper
     }
 
     /**
-     *
      * @param  string $param
      * @param  mixed  $default
      * @return mixed
@@ -113,7 +111,6 @@ class Params extends AbstractHelper
     }
 
     /**
-     *
      * @param  string $param
      * @param  mixed  $default
      * @return mixed
@@ -121,7 +118,7 @@ class Params extends AbstractHelper
     public function fromRoute($param = null, $default = null)
     {
         if (empty($this->routeMatch)) {
-            return "";
+            return '';
         }
         if ($param === null) {
             return $this->routeMatch->getParams();

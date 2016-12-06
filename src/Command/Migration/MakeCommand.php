@@ -1,21 +1,25 @@
 <?php
-/**
- * core42 (www.raum42.at)
+
+/*
+ * core42
  *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
- *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
  */
 
 namespace Core42\Command\Migration;
 
 use Core42\Command\ConsoleAwareTrait;
+use Core42\Stdlib\DateTime;
 use Zend\Code\Generator\ClassGenerator;
 use Zend\Code\Generator\MethodGenerator;
 use Zend\Code\Generator\ParameterGenerator;
 use ZF\Console\Route;
 
-class MakeCommand extends AbstractCommand
+class MakeCommand extends AbstractMigrationCommand
 {
     use ConsoleAwareTrait;
 
@@ -43,13 +47,13 @@ class MakeCommand extends AbstractCommand
         $this->directory = rtrim($this->directory, '/') . '/';
 
         if (!is_dir($this->directory)) {
-            $this->addError('directory', "directory '".$this->directory."' doesn't exist");
+            $this->addError('directory', "directory '" . $this->directory . "' doesn't exist");
 
             return;
         }
 
         if (!is_writable($this->directory)) {
-            $this->addError("directory", "directory '".$this->directory."' isn't writeable");
+            $this->addError('directory', "directory '" . $this->directory . "' isn't writeable");
 
             return;
         }
@@ -57,7 +61,7 @@ class MakeCommand extends AbstractCommand
         $migrationDirs = $this->getMigrationDirectories();
 
         if (!in_array($this->directory, $migrationDirs)) {
-            $this->addError("directory", "directory '".$this->directory."' is not inside a migration directory");
+            $this->addError('directory', "directory '" . $this->directory . "' is not inside a migration directory");
 
             return;
         }
@@ -69,19 +73,19 @@ class MakeCommand extends AbstractCommand
     protected function execute()
     {
         do {
-            $date = new \DateTime();
+            $date = new DateTime();
             $migrationName = 'Migration' . $date->format('YmdHis');
             $filename = $this->directory . $date->format('Y-m-d\tHis') . '.php';
         } while (file_exists($filename));
 
         $classGenerator = new ClassGenerator($migrationName);
 
-        $classGenerator->addMethod("up", [
-            new ParameterGenerator('serviceManager', 'Zend\ServiceManager\ServiceManager')
+        $classGenerator->addMethod('up', [
+            new ParameterGenerator('serviceManager', 'Zend\ServiceManager\ServiceManager'),
         ], MethodGenerator::FLAG_PUBLIC, "\n");
 
-        $classGenerator->addMethod("down", [
-            new ParameterGenerator('serviceManager', 'Zend\ServiceManager\ServiceManager')
+        $classGenerator->addMethod('down', [
+            new ParameterGenerator('serviceManager', 'Zend\ServiceManager\ServiceManager'),
         ], MethodGenerator::FLAG_PUBLIC, "\n");
 
         file_put_contents($filename, "<?php\n" . $classGenerator->generate());

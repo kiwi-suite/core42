@@ -2,6 +2,9 @@
 namespace Core42;
 
 use Cocur\Slugify\Slugify;
+use Core42\Asset\Hash\DefaultCommitHash;
+use Core42\Asset\Hash\LongCommitHash;
+use Core42\Asset\Hash\ShortCommitHash;
 use Core42\Cache\Service\CachePluginManager;
 use Core42\Cache\Service\CachePluginManagerFactory;
 use Core42\Cache\Service\DriverPluginManager;
@@ -18,6 +21,8 @@ use Core42\Db\Transaction\TransactionManager;
 use Core42\Form\Service\FormElementManagerFactory;
 use Core42\Form\Service\FormPluginManager;
 use Core42\Form\Service\FormPluginManagerFactory;
+use Core42\Hydrator\Mutator\Mutator;
+use Core42\Hydrator\Mutator\Service\MutatorFactory;
 use Core42\Hydrator\Strategy\Service\StrategyPluginManager;
 use Core42\Hydrator\Strategy\Service\StrategyPluginManagerFactory;
 use Core42\I18n\Localization\Localization;
@@ -48,6 +53,8 @@ use Zend\ServiceManager\Factory\InvokableFactory;
 use Zend\Session\Service\SessionConfigFactory;
 use Zend\Session\Service\SessionManagerFactory;
 use Zend\Session\Service\StorageFactory;
+use Core42\Hydrator\Mutator\Service\StrategyPluginManager as MutatorStrategyPluginManager;
+use Core42\Hydrator\Mutator\Service\StrategyPluginManagerFactory as MutatorStrategyPluginManagerFactory;
 
 return [
     'service_manager' => [
@@ -95,6 +102,13 @@ return [
             DriverPluginManager::class                      => DriverPluginManagerFactory::class,
 
             StrategyPluginManager::class                    => StrategyPluginManagerFactory::class,
+
+            Mutator::class                                  => MutatorFactory::class,
+            MutatorStrategyPluginManager::class             => MutatorStrategyPluginManagerFactory::class,
+
+            DefaultCommitHash::class                        => InvokableFactory::class,
+            ShortCommitHash::class                          => InvokableFactory::class,
+            LongCommitHash::class                           => InvokableFactory::class,
         ],
         'aliases' => [
             AdapterInterface::class                         => 'Db\Master',

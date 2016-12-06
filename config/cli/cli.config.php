@@ -2,9 +2,10 @@
 namespace Core42;
 
 use Core42\Command\Assets\AssetsCommand;
-use Core42\Command\Cache\ClearAppCacheCommand;
+use Core42\Command\Cache\ClearCacheCommand;
+use Core42\Command\Cache\ListCacheCommand;
 use Core42\Command\CodeGenerator\GenerateDbClassesCommand;
-use Core42\Command\CodeGenerator\GenerateModuleCommand;
+use Core42\Command\Config\ConfigGetCommand;
 use Core42\Command\Cron\CronCommand;
 use Core42\Command\Cron\CronTaskCommand;
 use Core42\Command\Development\DevelopmentCommand;
@@ -14,6 +15,8 @@ use Core42\Command\Migration\MakeCommand;
 use Core42\Command\Migration\MigrateCommand;
 use Core42\Command\Migration\ResetCommand;
 use Core42\Command\Migration\RollbackCommand;
+use Core42\Command\Revision\CreateFileCommand;
+use Core42\Command\Setup\SetupCommand;
 
 return [
     'cli' => [
@@ -74,6 +77,15 @@ return [
             'short_description'         => 'Enables/Disables the development mode',
         ],
 
+        'setup' => [
+            'group'                     => 'setup',
+            'route'                     => 'setup',
+            'command-name'              => SetupCommand::class,
+            'description'               => 'Setup a project',
+            'short_description'         => 'Setup a project',
+            'development'               => true,
+        ],
+
         'maintenance' => [
             'group'                     => 'setup',
             'route'                     => 'maintenance (on|off)',
@@ -84,16 +96,28 @@ return [
 
         'assets' => [
             'group'                     => 'setup',
-            'route'                     => 'assets [--copy|-c]',
+            'route'                     => 'assets [--copy|-c] [--force|-f]',
             'command-name'              => AssetsCommand::class,
             'description'               => 'Copy or symlink all registered assets into a target directory (for '
                                                 .'example public directory) to be accessible over the webserver',
             'short_description'         => 'Copy or symlink all registered assets',
+            'options_descriptions'      => [
+                '--copy|-c'             => 'Copy all files instead of a symlink',
+                '--force|-f'            => 'Override when target folder already exists',
+            ],
+        ],
+
+        'revision-file-create' => [
+            'group'                     => 'setup',
+            'route'                     => 'revision-file-create',
+            'command-name'              => CreateFileCommand::class,
+            'description'               => 'Creates a revision file',
+            'short_description'         => 'Creates a revision file',
         ],
 
         'generate-db-classes' => [
             'group'                     => 'developer',
-            'route'                     => 'generate-db-classes --namespace= --directory= [--name=] [--table=] [--all=] [--adapter=] [--getter-setter]',
+            'route'                     => 'generate-db-classes --namespace= --directory= [--name=] [--table=] [--all=] [--adapter=] [--getter-setter] [--overwrite]',
             'command-name'              => GenerateDbClassesCommand::class,
             'description'               => 'generates model based on database schema',
             'short_description'         => 'generate model from database',
@@ -105,28 +129,29 @@ return [
                 '--all'                 => 'generate db classes for all tables with the given prefix',
                 '--adapter'             => 'Optional adapter name',
                 '--getter-setter'       => 'Generate Getter & Setter instead of PphDoc',
+                '--overwrite'           => 'overwrites existing files instead of merging their content',
             ],
             'development'               => true,
         ],
 
-        'generate-module' => [
-            'group'                     => 'developer',
-            'route'                     => 'generate-module --name=',
-            'command-name'              => GenerateModuleCommand::class,
-            'description'               => 'generates a module skeleton directory structure',
-            'short_description'         => 'generate a module',
-            'options_descriptions'      => [
-                '--name'                => 'Name of the module in CamelCase (Namespace)',
-            ],
-            'development'               => true,
-        ],
-
-        'clear-app-cache' => [
+        'cache-clear' => [
             'group'                     => 'cache',
-            'route'                     => 'clear-app-cache',
-            'command-name'              => ClearAppCacheCommand::class,
-            'description'               => 'Clears config cache and module map cache',
-            'short_description'         => 'Clears config cache and module map cache',
+            'route'                     => 'cache-clear [<cache>] [--all|-a]',
+            'command-name'              => ClearCacheCommand::class,
+            'description'               => 'Clear selected cache',
+            'short_description'         => 'Clear selected cache',
+            'options_descriptions'      => [
+                'cache'                => 'clear selected cache',
+                '--all|-a'             => 'clear all caches',
+            ],
+        ],
+
+        'cache-list' => [
+            'group'                     => 'cache',
+            'route'                     => 'cache-list',
+            'command-name'              => ListCacheCommand::class,
+            'description'               => 'List all available caches',
+            'short_description'         => 'List all available caches',
         ],
 
         'cron' => [
@@ -143,6 +168,17 @@ return [
             'command-name'              => CronTaskCommand::class,
             'description'               => 'Start a single cron task',
             'short_description'         => 'Start a single cron task',
+        ],
+
+        'config' => [
+            'group'                     => 'setup',
+            'route'                     => '[<key>]',
+            'command-name'              => ConfigGetCommand::class,
+            'description'               => 'Display config information on a given config key',
+            'short_description'         => 'Display config information',
+            'options_descriptions'      => [
+                'key'                => 'config key. Subkeys are possible through a '.' separator',
+            ],
         ],
     ],
 ];

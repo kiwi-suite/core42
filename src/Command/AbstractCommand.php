@@ -1,19 +1,19 @@
 <?php
-/**
- * core42 (www.raum42.at)
+
+/*
+ * core42
  *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
- *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
  */
 
 namespace Core42\Command;
 
-use Core42\Db\TableGateway\AbstractTableGateway;
 use Core42\Db\Transaction\TransactionManager;
-use Core42\Selector\SelectorInterface;
 use Core42\Stdlib\DefaultGetterTrait;
-use Psr\Cache\CacheItemPoolInterface;
 use Zend\ServiceManager\ServiceManager;
 
 abstract class AbstractCommand implements CommandInterface
@@ -56,12 +56,12 @@ abstract class AbstractCommand implements CommandInterface
     }
 
     /**
-     * @param boolean $dryRun
+     * @param bool $dryRun
      * @return \Core42\Command\AbstractCommand
      */
     public function setDryRun($dryRun)
     {
-        $this->dryRun = (boolean) $dryRun;
+        $this->dryRun = (bool) $dryRun;
 
         return $this;
     }
@@ -72,7 +72,7 @@ abstract class AbstractCommand implements CommandInterface
      */
     final public function enableThrowExceptions($enable)
     {
-        $this->throwCommandExceptions = (boolean) $enable;
+        $this->throwCommandExceptions = (bool) $enable;
 
         return $this;
     }
@@ -131,7 +131,6 @@ abstract class AbstractCommand implements CommandInterface
      */
     protected function init()
     {
-
     }
 
     /**
@@ -139,7 +138,6 @@ abstract class AbstractCommand implements CommandInterface
      */
     protected function configure()
     {
-
     }
 
     /**
@@ -147,7 +145,6 @@ abstract class AbstractCommand implements CommandInterface
      */
     protected function preExecute()
     {
-
     }
 
     /**
@@ -160,7 +157,6 @@ abstract class AbstractCommand implements CommandInterface
      */
     protected function postExecute()
     {
-
     }
 
     /**
@@ -168,7 +164,6 @@ abstract class AbstractCommand implements CommandInterface
      */
     protected function shutdown()
     {
-
     }
 
     /**
@@ -215,7 +210,7 @@ abstract class AbstractCommand implements CommandInterface
      */
     public function hasErrors()
     {
-        return (count($this->errors) > 0);
+        return count($this->errors) > 0;
     }
 
     /**

@@ -1,6 +1,16 @@
 <?php
-namespace Core42\View\Http\Service;
 
+/*
+ * core42
+ *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
+ */
+
+namespace Core42\View\Http\Service;
 
 use Core42\View\Http\ExceptionStrategy;
 use Interop\Container\ContainerInterface;
@@ -29,7 +39,7 @@ class ExceptionStrategyFactory implements FactoryInterface
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
         $strategy = new ExceptionStrategy();
-        $config   = $this->getConfig($container);
+        $config = $this->getConfig($container);
 
         $this->injectDisplayExceptions($strategy, $config);
         $this->injectExceptionTemplate($strategy, $config);

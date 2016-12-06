@@ -1,15 +1,19 @@
 <?php
-/**
- * core42 (www.raum42.at)
+
+/*
+ * core42
  *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
- *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
  */
 
 namespace Core42\Command\CodeGenerator;
 
 use Core42\Command\AbstractCommand;
+use Zend\Code\Reflection\FileReflection;
 use Zend\Db\Metadata\Source\Factory;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
 use Zend\Code\Generator;
@@ -17,29 +21,34 @@ use Zend\Code\Generator;
 class GenerateTableGatewayCommand extends AbstractCommand
 {
     /**
-     * @type \Zend\Db\Adapter\Adapter
+     * @var \Zend\Db\Adapter\Adapter
      */
     private $adapter;
 
     /**
-     * @type string
+     * @var string
      */
     private $adapterName = 'Db\Master';
 
     /**
-     * @type string
+     * @var string
      */
     private $className;
 
     /**
-     * @type string
+     * @var string
      */
     private $directory;
 
     /**
-     * @type string
+     * @var string
      */
     private $tableName;
+
+    /**
+     * @var bool
+     */
+    private $overwrite;
 
     /**
      * @var string
@@ -96,6 +105,17 @@ class GenerateTableGatewayCommand extends AbstractCommand
     }
 
     /**
+     * @param boolean $overwrite
+     * @return $this
+     */
+    public function setOverwrite($overwrite)
+    {
+        $this->overwrite = $overwrite;
+
+        return $this;
+    }
+
+    /**
      * @param string $model
      * @return $this
      */
@@ -112,39 +132,45 @@ class GenerateTableGatewayCommand extends AbstractCommand
     protected function preExecute()
     {
         if (empty($this->className)) {
-            $this->addError('className', "className parameter not set");
+            $this->addError('className', 'className parameter not set');
+
             return;
         }
 
         if (empty($this->directory)) {
-            $this->addError('directory', "directory parameter not set");
+            $this->addError('directory', 'directory parameter not set');
+
             return;
         }
 
         if (empty($this->tableName)) {
-            $this->addError('tableName', "tableName parameter not set");
+            $this->addError('tableName', 'tableName parameter not set');
+
             return;
         }
 
         if (empty($this->model)) {
-            $this->addError('model', "model parameter not set");
+            $this->addError('model', 'model parameter not set');
+
             return;
         }
 
         if (!is_dir($this->directory)) {
-            $this->addError('directory', "directory '".$this->directory."' doesn't exist");
+            $this->addError('directory', "directory '" . $this->directory . "' doesn't exist");
+
             return;
         }
 
         if (!is_writable($this->directory)) {
-            $this->addError("directory", "directory '".$this->directory."' isn't writeable");
+            $this->addError('directory', "directory '" . $this->directory . "' isn't writeable");
+
             return;
         }
 
         try {
             $this->adapter = $this->getServiceManager()->get($this->adapterName);
         } catch (ServiceNotFoundException $e) {
-            $this->addError("adapter", "adapter '".$this->adapterName."' not found");
+            $this->addError('adapter', "adapter '" . $this->adapterName . "' not found");
         }
 
         $this->directory = rtrim($this->directory, '/') . '/';
@@ -158,9 +184,11 @@ class GenerateTableGatewayCommand extends AbstractCommand
         $metadata = Factory::createSourceFromAdapter($this->adapter);
         $metadata->getTable($this->tableName);
 
-        $parts =  explode("\\", $this->className);
+        $parts = explode('\\', $this->className);
         $class = array_pop($parts);
-        $namespace = implode("\\", $parts);
+        $namespace = implode('\\', $parts);
+
+        $filename = $this->directory . $class . '.php';
 
         $classGenerator = new Generator\ClassGenerator();
         $classGenerator->setNamespaceName($namespace)
@@ -168,7 +196,12 @@ class GenerateTableGatewayCommand extends AbstractCommand
             ->setName($class)
             ->setExtendedClass('Core42\Db\TableGateway\AbstractTableGateway');
 
-        $property = new Generator\PropertyGenerator("table");
+        $restoredDatabaseTypeMap = [];
+        if (file_exists($filename) && !$this->overwrite) {
+            $this->readExisting($filename, $classGenerator, $restoredDatabaseTypeMap);
+        }
+
+        $property = new Generator\PropertyGenerator('table');
         $property->setDefaultValue($this->tableName)
             ->setDocBlock(
                 new Generator\DocBlockGenerator(
@@ -190,7 +223,7 @@ class GenerateTableGatewayCommand extends AbstractCommand
         if ($pkc) {
             $primaryKey = $pkc->getColumns();
 
-            $property = new Generator\PropertyGenerator("primaryKey");
+            $property = new Generator\PropertyGenerator('primaryKey');
             $property->setDefaultValue(
                 $primaryKey,
                 Generator\ValueGenerator::TYPE_ARRAY_SHORT,
@@ -211,25 +244,26 @@ class GenerateTableGatewayCommand extends AbstractCommand
         $columns = $metadata->getColumns($this->tableName);
 
         foreach ($columns as $column) {
-
-            if ($column->getDataType() == "enum"
-                && in_array($column->getErrata("permitted_values"), [["true", "false"], ["false", "true"]])
+            if (array_key_exists($column->getName(), $restoredDatabaseTypeMap)) {
+                $databaseTypeMap[$column->getName()] = $restoredDatabaseTypeMap[$column->getName()];
+            } elseif ($column->getDataType() == 'enum'
+                && in_array($column->getErrata('permitted_values'), [['true', 'false'], ['false', 'true']])
             ) {
-                $databaseTypeMap[$column->getName()] = 'Boolean';
+                $databaseTypeMap[$column->getName()] = 'boolean';
             } elseif (in_array($column->getDataType(), ['date'])) {
-                $databaseTypeMap[$column->getName()] = 'Date';
+                $databaseTypeMap[$column->getName()] = 'date';
             } elseif (in_array($column->getDataType(), ['datetime', 'timestamp'])) {
-                $databaseTypeMap[$column->getName()] = 'DateTime';
+                $databaseTypeMap[$column->getName()] = 'dateTime';
             } elseif (in_array($column->getDataType(), ['decimal', 'numeric', 'float', 'double'])) {
-                $databaseTypeMap[$column->getName()] = 'Float';
+                $databaseTypeMap[$column->getName()] = 'float';
             } elseif (in_array($column->getDataType(), ['smallint', 'mediumint', 'int', 'bigint'])) {
-                $databaseTypeMap[$column->getName()] = 'Integer';
+                $databaseTypeMap[$column->getName()] = 'integer';
             } else {
-                $databaseTypeMap[$column->getName()] = 'String';
+                $databaseTypeMap[$column->getName()] = 'string';
             }
         }
 
-        $property = new Generator\PropertyGenerator("databaseTypeMap");
+        $property = new Generator\PropertyGenerator('databaseTypeMap');
         $property->setDefaultValue(
             $databaseTypeMap,
             Generator\ValueGenerator::TYPE_ARRAY_SHORT,
@@ -245,9 +279,11 @@ class GenerateTableGatewayCommand extends AbstractCommand
             ->setFlags(Generator\PropertyGenerator::FLAG_PROTECTED);
         $classGenerator->addPropertyFromGenerator($property);
 
+        $classGenerator->addUse($this->model);
+        $shortName = (new \ReflectionClass($this->model))->getShortName();
 
-        $property = new Generator\PropertyGenerator("modelPrototype");
-        $property->setDefaultValue($this->model)
+        $property = new Generator\PropertyGenerator('modelPrototype');
+        $property->setDefaultValue($shortName . '::class', Generator\PropertyValueGenerator::TYPE_CONSTANT)
             ->setDocBlock(
                 new Generator\DocBlockGenerator(
                     null,
@@ -257,8 +293,40 @@ class GenerateTableGatewayCommand extends AbstractCommand
             )
             ->setFlags(Generator\PropertyGenerator::FLAG_PROTECTED);
         $classGenerator->addPropertyFromGenerator($property);
+        
+        file_put_contents($filename, "<?php\n" . $classGenerator->generate());
+    }
 
-        $filename = $this->directory . $class . '.php';
-        file_put_contents($filename, "<?php\n".$classGenerator->generate());
+    /**
+     * @param string $filename
+     * @param Generator\ClassGenerator $classGenerator
+     * @param array $databaseTypeMap
+     */
+    protected function readExisting($filename, Generator\ClassGenerator $classGenerator, &$databaseTypeMap)
+    {
+        $file = new FileReflection($filename, true);
+        $class = $file->getClass();
+
+        $properties = $class->getDefaultProperties();
+        foreach ($properties['databaseTypeMap'] as $column => $type) {
+            if ($type == 'json') {
+                $databaseTypeMap[$column] = $type;
+            }
+        }
+
+        $constants = $class->getConstants();
+        if (!empty($constants)) {
+            foreach ($constants as $name => $value) {
+                $classGenerator->addConstant($name, $value);
+            }
+        }
+
+        $methods = $class->getMethods();
+        foreach ($methods as $reflection) {
+            if ($reflection->class == $class->getName()) {
+                $method =  Generator\MethodGenerator::fromReflection($reflection);
+                $classGenerator->addMethodFromGenerator($method);
+            }
+        }
     }
 }

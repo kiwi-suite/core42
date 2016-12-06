@@ -1,17 +1,22 @@
 <?php
-/**
- * core42 (www.raum42.at)
+
+/*
+ * core42
  *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
- *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
  */
 
 namespace Core42\Command\Assets;
 
 use Core42\Command\AbstractCommand;
 use Core42\Command\ConsoleAwareTrait;
-use Falc\Flysystem\Plugin\Symlink\Local\Symlink;
+use Core42\Stdlib\DeleteSymlink;
+use Core42\Stdlib\IsSymlink;
+use Core42\Stdlib\Symlink;
 use League\Flysystem\Adapter\Local;
 use League\Flysystem\Filesystem;
 use League\Flysystem\Plugin\EmptyDir;
@@ -34,6 +39,11 @@ class AssetsCommand extends AbstractCommand
     private $copy = false;
 
     /**
+     * @var bool
+     */
+    private $force = false;
+
+    /**
      * @var array|null
      */
     private $assetConfig;
@@ -44,7 +54,18 @@ class AssetsCommand extends AbstractCommand
      */
     public function setCopy($copy)
     {
-        $this->copy = (boolean) $copy;
+        $this->copy = (bool) $copy;
+
+        return $this;
+    }
+
+    /**
+     * @param bool $force
+     * @return $this
+     */
+    public function setForce($force)
+    {
+        $this->force = (bool) $force;
 
         return $this;
     }
@@ -55,7 +76,7 @@ class AssetsCommand extends AbstractCommand
     protected function preExecute()
     {
         $config = $this->getServiceManager()->get('config');
-        $this->assetConfig = $config['assets'];
+        $this->assetConfig = $config['assets']['directories'];
         foreach ($this->assetConfig as $name => $config) {
             if (empty($config['target'])) {
                 $this->addError('target', "target doesn't exist for asset key '{$name}'");
@@ -70,6 +91,28 @@ class AssetsCommand extends AbstractCommand
                 $this->addError('source', "source directory '{$config['source']}' doesn't exists");
             }
         }
+
+        if ($this->force == false && file_exists('resources/assets')) {
+            $this->consoleOutput(sprintf("<error>'%s' already exists</error>", 'data/assets'));
+
+            return;
+        }
+
+
+        if (!is_dir('resources/assets')) {
+            $created = mkdir('resources/assets', 0777, true);
+            if ($created === false) {
+                $this->addError('directory', "directory 'resources/assets' can't be created");
+
+                return;
+            }
+        }
+
+        if (!is_writable('resources/assets')) {
+            $this->addError('directory', "directory 'resources/assets' isn't writable");
+
+            return;
+        }
     }
 
     /**
@@ -77,36 +120,44 @@ class AssetsCommand extends AbstractCommand
      */
     protected function execute()
     {
-        $filesystem = new Filesystem(new Local(getcwd()));
+        $filesystem = new Filesystem(new Local(getcwd(), LOCK_EX, Local::SKIP_LINKS));
         $filesystem->addPlugin(new Symlink());
         $filesystem->addPlugin(new ListPaths());
         $filesystem->addPlugin(new ListFiles());
         $filesystem->addPlugin(new EmptyDir());
+        $filesystem->addPlugin(new IsSymlink());
+        $filesystem->addPlugin(new DeleteSymlink());
+
+        $filesystem->emptyDir('resources/assets');
 
         foreach ($this->assetConfig as $config) {
-            $source = $config['source'];
-            $target = rtrim($config['target'], DIRECTORY_SEPARATOR);
+            $source = trim($config['source'], '/');
+            $target = 'resources/assets/' . trim($config['target'], '/');
 
-            $filesystem->createDir(dirname($target));
+            if (!is_dir(dirname($target))) {
+                $filesystem->createDir(dirname($target));
+            }
 
             if ($this->copy === true) {
-                $filesystem->emptyDir($target);
-
                 $files = $filesystem->listFiles($source, true);
                 foreach ($files as $fileData) {
-                    if ($fileData['type'] == "dir") {
+                    if ($fileData['type'] == 'dir') {
                         continue;
                     }
 
-                    $dirname = $target . DIRECTORY_SEPARATOR . str_replace($source, "", $fileData['dirname']);
+                    $dirname = $target . '/' . str_replace($source, '', $fileData['dirname']);
                     $filesystem->createDir($dirname);
 
-                    $filename = $target . DIRECTORY_SEPARATOR . str_replace($source, "", $fileData['path']);
+                    $filename = $target . '/' . str_replace($source, '', $fileData['path']);
                     $filesystem->copy($fileData['path'], $filename);
                 }
                 $this->consoleOutput("created directory for '{$source}'");
 
                 continue;
+            }
+
+            if ($filesystem->isSymlink($target)) {
+                $filesystem->deleteSymlink($target);
             }
 
             $filesystem->symlink($source, $target);
@@ -119,6 +170,7 @@ class AssetsCommand extends AbstractCommand
      */
     public function consoleSetup(Route $route)
     {
-        $this->setCopy($route->getMatchedParam("copy") || $route->getMatchedParam("c"));
+        $this->setCopy($route->getMatchedParam('copy') || $route->getMatchedParam('c'));
+        $this->setForce($route->getMatchedParam('force') || $route->getMatchedParam('f'));
     }
 }

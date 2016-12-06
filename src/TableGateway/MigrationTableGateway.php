@@ -1,4 +1,15 @@
 <?php
+
+/*
+ * core42
+ *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
+ */
+
 namespace Core42\TableGateway;
 
 use Core42\Db\TableGateway\AbstractTableGateway;
@@ -7,7 +18,6 @@ use Zend\Db\Adapter\Adapter;
 
 class MigrationTableGateway extends AbstractTableGateway
 {
-
     /**
      * @var string
      */
@@ -22,14 +32,14 @@ class MigrationTableGateway extends AbstractTableGateway
      * @var array
      */
     protected $databaseTypeMap = [
-        'name' => 'String',
-        'created' => 'DateTime',
+        'name' => 'string',
+        'created' => 'dateTime',
     ];
 
     /**
      * @var string
      */
-    protected $modelPrototype = 'Core42\\Model\\Migration';
+    protected $modelPrototype = \Core42\Model\Migration::class;
 
     /**
      * MigrationTableGateway constructor.

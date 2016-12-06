@@ -1,4 +1,15 @@
 <?php
+
+/*
+ * core42
+ *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
+ */
+
 namespace Core42\Mail\Transport;
 
 class Factory
@@ -54,6 +65,7 @@ class Factory
     protected static function createMailTransport($options)
     {
         $extraParams = (isset($options['extra'])) ? $options['extra'] : null;
+
         return \Swift_MailTransport::newInstance($extraParams);
     }
 
@@ -64,6 +76,7 @@ class Factory
     protected static function createSendmailTransport($options)
     {
         $command = (isset($options['command'])) ? $options['command'] : null;
+
         return \Swift_SendmailTransport::newInstance($command);
     }
 

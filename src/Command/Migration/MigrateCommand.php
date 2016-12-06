@@ -1,20 +1,24 @@
 <?php
-/**
- * core42 (www.raum42.at)
+
+/*
+ * core42
  *
- * @link http://www.raum42.at
- * @copyright Copyright (c) 2010-2014 raum42 OG (http://www.raum42.at)
- *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
  */
 
 namespace Core42\Command\Migration;
 
 use Core42\Command\ConsoleAwareTrait;
 use Core42\Model\Migration;
+use Core42\Stdlib\DateTime;
 use Core42\TableGateway\MigrationTableGateway;
 use ZF\Console\Route;
 
-class MigrateCommand extends AbstractCommand
+class MigrateCommand extends AbstractMigrationCommand
 {
     use ConsoleAwareTrait;
 
@@ -77,14 +81,14 @@ class MigrateCommand extends AbstractCommand
 
             $migrationObject = new Migration();
             $migrationObject->setName($migration['name'])
-                                ->setCreated(new \DateTime());
+                                ->setCreated(new DateTime());
 
             $migrationTableGateway->insert($migrationObject);
             $migrationCounter++;
 
             $this->consoleOutput("Migration {$migration['name']} migrated");
         }
-        $this->consoleOutput("");
+        $this->consoleOutput('');
 
         if ($migrationCounter > 0) {
             $this->consoleOutput("{$migrationCounter} Migrations migrated");
@@ -92,7 +96,7 @@ class MigrateCommand extends AbstractCommand
             return;
         }
 
-        $this->consoleOutput("Nothing to migrate");
+        $this->consoleOutput('Nothing to migrate');
     }
 
     /**

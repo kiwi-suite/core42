@@ -1,8 +1,20 @@
 <?php
+
+/*
+ * core42
+ *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
+ */
+
 namespace Core42\Cache\Service;
 
 use Core42\Cache\Driver\Service\ApcFactory;
 use Core42\Cache\Driver\Service\BlackHoleFactory;
+use Core42\Cache\Driver\Service\CompositeFactory;
 use Core42\Cache\Driver\Service\EphemeralFactory;
 use Core42\Cache\Driver\Service\FileSystemFactory;
 use Core42\Cache\Driver\Service\MemcacheFactory;
@@ -10,6 +22,7 @@ use Core42\Cache\Driver\Service\RedisFactory;
 use Core42\Cache\Driver\Service\SqliteFactory;
 use Stash\Driver\Apc;
 use Stash\Driver\BlackHole;
+use Stash\Driver\Composite;
 use Stash\Driver\Ephemeral;
 use Stash\Driver\FileSystem;
 use Stash\Driver\Memcache;
@@ -38,5 +51,6 @@ class DriverPluginManager extends AbstractPluginManager
         Memcache::class         => MemcacheFactory::class,
         Redis::class            => RedisFactory::class,
         Sqlite::class           => SqliteFactory::class,
+        Composite::class        => CompositeFactory::class,
     ];
 }

@@ -9,6 +9,8 @@
 
 namespace Core42Test\Model;
 
+use Core42\Stdlib\DateTime;
+
 class MigrationTest extends \PHPUnit_Framework_TestCase
 {
 
@@ -39,7 +41,7 @@ class MigrationTest extends \PHPUnit_Framework_TestCase
      */
     public function testSetGetCreated()
     {
-        $dateTime = new \DateTime();
+        $dateTime = new DateTime();
 
         $result = $this->migration->setCreated($dateTime);
 
