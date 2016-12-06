@@ -13,6 +13,7 @@
 namespace Core42\TableGateway;
 
 use Core42\Db\TableGateway\AbstractTableGateway;
+use Core42\Model\Cron;
 
 class CronTableGateway extends AbstractTableGateway
 {
@@ -52,5 +53,5 @@ class CronTableGateway extends AbstractTableGateway
     /**
      * @var string
      */
-    protected $modelPrototype = \Core42\Model\Cron::class;
+    protected $modelPrototype = Cron::class;
 }
