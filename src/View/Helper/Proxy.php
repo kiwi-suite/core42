@@ -43,4 +43,42 @@ class Proxy extends AbstractHelper
 
         return call_user_func_array([$this->object, $method], $attributes);
     }
+
+    /**
+     * @param string $name
+     */
+    public function __get($name)
+    {
+        if (empty($this->object)) {
+            return;
+        }
+
+        return $this->object->{$name};
+    }
+
+    /**
+     * @param string $name
+     * @param mixed $value
+     */
+    public function __set($name, $value)
+    {
+        if (empty($this->object)) {
+            return;
+        }
+
+        $this->object->{$name} = $value;
+    }
+
+    /**
+     * @param string $name
+     * @return bool
+     */
+    public function __isset($name)
+    {
+        if (empty($this->object)) {
+            return false;
+        }
+
+        return isset($this->object->{$name});
+    }
 }
