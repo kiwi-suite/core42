@@ -59,7 +59,7 @@ return [
         'processor_definitions' => [],
 
         'logger' => [
-            'Log\Core' => [
+            'core' => [
                 'handlers' => ['stream' => Logger::DEBUG],
                 'processors' => [],
             ],

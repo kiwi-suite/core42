@@ -31,6 +31,8 @@ use Core42\I18n\Translator\Service\TranslatorFactory;
 use Core42\Log\Service\HandlerPluginManager;
 use Core42\Log\Service\HandlerPluginManagerFactory;
 use Core42\Log\Service\LoggerFactory;
+use Core42\Log\Service\LoggerPluginManager;
+use Core42\Log\Service\LoggerPluginManagerFactory;
 use Core42\Mail\Transport\Service\TransportFactory;
 use Core42\Mvc\TreeRouteMatcher\Service\TreeRouteMatcherFactory;
 use Core42\Mvc\TreeRouteMatcher\TreeRouteMatcher;
@@ -84,7 +86,7 @@ return [
             TransactionManager::class                       => TransactionManagerFactory::class,
 
             HandlerPluginManager::class                     => HandlerPluginManagerFactory::class,
-            'Log\Core'                                      => LoggerFactory::class,
+            LoggerPluginManager::class                      => LoggerPluginManagerFactory::class,
 
             TranslatorInterface::class                      => TranslatorFactory::class,
 
@@ -118,14 +120,7 @@ return [
             'Selector'                                      => SelectorPluginManager::class,
             'Form'                                          => FormPluginManager::class,
             'Cache'                                         => CachePluginManager::class,
-
-            //Deprecated
-            'Localization'                                  => Localization::class,
-            'TreeRouteMatcher'                              => TreeRouteMatcher::class,
-            'Core42\FormPluginManager'                      => FormPluginManager::class,
-            'Core42\SelectorPluginManager'                  => SelectorPluginManager::class,
-            'Core42\TableGatewayPluginManager'              => TableGatewayPluginManager::class,
-            'Core42\CommandPluginManager'                   => CommandPluginManager::class,
+            'Logger'                                        => LoggerPluginManager::class,
         ],
     ],
 

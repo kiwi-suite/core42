@@ -16,6 +16,7 @@ use Core42\Command\CommandInterface;
 use Core42\Command\Form\FormCommand;
 use Core42\Db\TableGateway\AbstractTableGateway;
 use Core42\Selector\SelectorInterface;
+use Monolog\Logger;
 use Psr\Cache\CacheItemPoolInterface;
 use Zend\Form\Form;
 use Zend\ServiceManager\ServiceManager;
@@ -86,5 +87,14 @@ trait DefaultGetterTrait
     protected function getCache($cacheName)
     {
         return $this->getServiceManager()->get('Cache')->get($cacheName);
+    }
+
+    /**
+     * @param string $logName
+     * @return Logger
+     */
+    protected function getLogger($logName)
+    {
+        return $this->getServiceManager()->get('Logger')->get($logName);
     }
 }

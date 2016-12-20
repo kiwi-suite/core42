@@ -48,7 +48,7 @@ class CreateFileCommand extends AbstractCommand
             @mkdir('resources/version', 0777, true);
         }
 
-        file_put_contents('resources/version/revision.json', Json::encode($result, false, ['prettyPrint' => true]));
+        @file_put_contents('resources/version/revision.json', Json::encode($result, false, ['prettyPrint' => true]));
 
         return $result;
     }

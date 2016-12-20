@@ -13,23 +13,25 @@
 namespace Core42\Log\Service;
 
 use Interop\Container\ContainerInterface;
-use Monolog\Logger;
+use Interop\Container\Exception\ContainerException;
+use Zend\ServiceManager\Exception\ServiceNotCreatedException;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
-use Zend\ServiceManager\Factory\FactoryInterface;
+use Zend\ServiceManager\Factory\AbstractFactoryInterface;
+use Monolog\Logger;
 
-class LoggerFactory implements FactoryInterface
+class AbstractLoggerFactory implements AbstractFactoryInterface
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+
+    public function canCreate(ContainerInterface $container, $requestedName)
     {
         $config = $container->get('Config');
 
-        if (!isset($config['log']['logger'][$requestedName])) {
-            throw new ServiceNotFoundException('unable to get config for "' . $requestedName . '"');
-        }
-        $config = $config['log']['logger'][$requestedName];
+        return isset($config['log']['logger'][$requestedName]);
+    }
+
+    public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
+    {
+        $config = $container->get('Config')['log']['logger'][$requestedName];
 
         /* @var HandlerPluginManager $handlerPluginManager */
         $handlerPluginManager = $container->get(HandlerPluginManager::class);
