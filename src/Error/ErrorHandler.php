@@ -16,6 +16,7 @@ use Whoops\Handler\JsonResponseHandler;
 use Whoops\Handler\PrettyPageHandler;
 use Whoops\Run;
 use Whoops\Util\Misc;
+use Zend\ServiceManager\ServiceManager;
 
 class ErrorHandler
 {
@@ -29,11 +30,22 @@ class ErrorHandler
      */
     protected static $template;
 
+    /**
+     * @var ServiceManager
+     */
+    protected static $serviceManager;
+
+    /**
+     * @param $template
+     */
     public static function setErrorTemplate($template)
     {
         self::$template = $template;
     }
 
+    /**
+     *
+     */
     public static function registerShutdown()
     {
         register_shutdown_function(function () {
@@ -53,6 +65,9 @@ class ErrorHandler
         });
     }
 
+    /**
+     * @param $e
+     */
     public static function init($e)
     {
         if (!($e instanceof \Throwable) && !($e instanceof \Exception)) {
@@ -64,13 +79,36 @@ class ErrorHandler
         return $self();
     }
 
+    /**
+     * @param ServiceManager $serviceManager
+     */
+    public static function setServiceManager(ServiceManager $serviceManager)
+    {
+        self::$serviceManager = $serviceManager;
+    }
+
+    /**
+     * ErrorHandler constructor.
+     * @param $e
+     */
     protected function __construct($e)
     {
         $this->e = $e;
     }
 
+    /**
+     *
+     */
     public function __invoke()
     {
+        try {
+            $this->logErrors();
+        } catch (\Throwable $e) {
+
+        } catch (\Exception $e) {
+
+        }
+
         if (!empty($_SERVER)) {
             foreach (['application/json', 'text/json', 'application/x-json'] as $check) {
                 if (strpos($_SERVER['HTTP_ACCEPT'], $check) !== false) {
@@ -115,6 +153,9 @@ class ErrorHandler
         include_once self::$template;
     }
 
+    /**
+     *
+     */
     protected function getJsonErrors()
     {
         if (DEVELOPMENT_MODE === true) {
@@ -134,5 +175,15 @@ class ErrorHandler
         http_response_code(500);
 
         echo '[]';
+    }
+
+    protected function logErrors()
+    {
+        if (!(self::$serviceManager instanceof ServiceManager)) {
+            return;
+        }
+
+        $logger = self::$serviceManager->get('Logger')->get('error');
+        $logger->error($this->e->getMessage() . ' in ' . $this->e->getFile() . ':' . $this->e->getLine());
     }
 }

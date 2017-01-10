@@ -51,7 +51,9 @@ try {
         @mkdir($appConfig['module_listener_options']['cache_dir'], 0777, true);
     }
 
-    Application::init($appConfig)->run();
+    $app = Application::init($appConfig);
+    ErrorHandler::setServiceManager($app->getServiceManager());
+    $app->run();
 } catch (\Throwable $e) {
     echo ErrorHandler::init($e);
 } catch (\Exception $e) {
