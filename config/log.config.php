@@ -40,17 +40,24 @@ use Monolog\Logger;
 return [
     'log' => [
         'handler_definitions' => [
-            'stream' => [
+            'core' => [
                 'handler_type' => StreamHandler::class,
                 'config' => [
                     'stream' => 'data/log/core.log',
                     'level' => Logger::ERROR
                 ]
             ],
+            'error' => [
+                'handler_type' => StreamHandler::class,
+                'config' => [
+                    'stream' => 'data/log/error.log',
+                    'level' => Logger::ERROR
+                ]
+            ],
             'filter' => [
                 'handler_type' => FilterHandler::class,
                 'config' => [
-                    'handler' => 'stream',
+                    'handler' => 'core',
                     'min_level' => Logger::INFO,
                     'max_level' => Logger::ERROR
                 ]
@@ -59,8 +66,12 @@ return [
         'processor_definitions' => [],
 
         'logger' => [
+            'error' => [
+                'handlers' => ['error' => Logger::DEBUG],
+                'processors' => [],
+            ],
             'core' => [
-                'handlers' => ['stream' => Logger::DEBUG],
+                'handlers' => ['core' => Logger::DEBUG],
                 'processors' => [],
             ],
         ],
