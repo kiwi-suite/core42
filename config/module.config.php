@@ -7,6 +7,7 @@ use Core42\View\Helper\Navigation\Service\MenuFactory;
 use Core42\View\Helper\Params;
 use Core42\View\Helper\Service\AssetUrlFactory;
 use Core42\View\Helper\Service\AuthFactory;
+use Core42\View\Helper\Service\CspFactory;
 use Core42\View\Helper\Service\LocalizationFactory;
 use Core42\View\Helper\Service\MobileDetectFactory;
 use Core42\View\Helper\Service\ParamsFactory;
@@ -30,6 +31,7 @@ return [
             'breadcrumbs'           => BreadcrumbsFactory::class,
             'mobileDetect'          => MobileDetectFactory::class,
             'slugify'               => SlugifyFactory::class,
+            'csp'                   => CspFactory::class,
         ],
         'aliases' => [
             'params' => Params::class,
