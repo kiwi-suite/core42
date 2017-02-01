@@ -240,7 +240,7 @@ abstract class AbstractModel implements ModelInterface
      */
     public function __isset($name)
     {
-        return array_key_exists($name, $this->properties);
+        return in_array($name, $this->properties);
     }
 
     /**
