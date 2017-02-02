@@ -2,6 +2,7 @@
 namespace Core42;
 
 use Core42\View\Helper\Auth;
+use Core42\View\Helper\InlineScript;
 use Core42\View\Helper\Navigation\Service\BreadcrumbsFactory;
 use Core42\View\Helper\Navigation\Service\MenuFactory;
 use Core42\View\Helper\Params;
@@ -32,12 +33,19 @@ return [
             'mobileDetect'          => MobileDetectFactory::class,
             'slugify'               => SlugifyFactory::class,
             'csp'                   => CspFactory::class,
+
+            InlineScript::class     => InvokableFactory::class,
+
         ],
         'aliases' => [
             'params' => Params::class,
             'auth'   => Auth::class,
             'wordTruncate' => WordTruncate::class,
             'uuid'   => Uuid::class,
+
+            'inlinescript'          => InlineScript::class,
+            'inlineScript'          => InlineScript::class,
+            'InlineScript'          => InlineScript::class,
         ],
     ],
 
