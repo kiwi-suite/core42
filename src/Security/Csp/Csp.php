@@ -103,7 +103,7 @@ class Csp
                 continue;
             }
 
-            if ($this->getCspOptions()->getNonce() === true) {
+            if ($this->getCspOptions()->getNonce() === true && !in_array("'unsafe-inline'", $options)) {
                 $options[] = "'nonce-" . $this->getNonce() . "'";
             }
 
