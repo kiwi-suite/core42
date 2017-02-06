@@ -18,6 +18,8 @@ return [
             'form_ancestors'=> false,
             'plugin_types'  => false,
             'child_src'     => false,
+            'frame_src'     => false,
+            'frame_ancestors'=> false,
         ],
     ],
 ];

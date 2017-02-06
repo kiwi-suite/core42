@@ -30,7 +30,9 @@ class Csp
         'form-action',
         'form-ancestors',
         'plugin-types',
-        'child-src'
+        'child-src',
+        'frame-src',
+        'frame-ancestors',
     ];
 
     /**
