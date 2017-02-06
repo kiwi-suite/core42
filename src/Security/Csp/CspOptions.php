@@ -76,6 +76,16 @@ class CspOptions extends AbstractOptions
     protected $childSrc         = false;
 
     /**
+     * @var bool|array
+     */
+    protected $frameSrc         = false;
+
+    /**
+     * @var bool|array
+     */
+    protected $frameAncestors   = false;
+
+    /**
      * @return bool
      */
     public function getEnable()
@@ -324,6 +334,42 @@ class CspOptions extends AbstractOptions
     public function setChildSrc($childSrc)
     {
         $this->childSrc = $childSrc;
+        return $this;
+    }
+
+    /**
+     * @return array|bool
+     */
+    public function getFrameSrc()
+    {
+        return $this->frameSrc;
+    }
+
+    /**
+     * @param array|bool $frameSrc
+     * @return CspOptions
+     */
+    public function setFrameSrc($frameSrc)
+    {
+        $this->frameSrc = $frameSrc;
+        return $this;
+    }
+
+    /**
+     * @return array|bool
+     */
+    public function getFrameAncestors()
+    {
+        return $this->frameAncestors;
+    }
+
+    /**
+     * @param array|bool $frameAncestors
+     * @return CspOptions
+     */
+    public function setFrameAncestors($frameAncestors)
+    {
+        $this->frameAncestors = $frameAncestors;
         return $this;
     }
 }
