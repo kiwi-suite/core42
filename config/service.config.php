@@ -44,6 +44,8 @@ use Core42\Permission\Service\AssertionPluginManager;
 use Core42\Permission\Service\AssertionPluginManagerFactory;
 use Core42\Permission\Service\PermissionPluginManager;
 use Core42\Permission\Service\PermissionPluginManagerFactory;
+use Core42\Security\Csp\Csp;
+use Core42\Security\Csp\Service\CspFactory;
 use Core42\Selector\Service\SelectorPluginManager;
 use Core42\Selector\Service\SelectorPluginManagerFactory;
 use Core42\TableGateway\MigrationTableGateway;
@@ -111,6 +113,8 @@ return [
             DefaultCommitHash::class                        => InvokableFactory::class,
             ShortCommitHash::class                          => InvokableFactory::class,
             LongCommitHash::class                           => InvokableFactory::class,
+
+            Csp::class                                      => CspFactory::class,
         ],
         'aliases' => [
             AdapterInterface::class                         => 'Db\Master',

@@ -17,8 +17,10 @@ use Core42\ModuleManager\Feature\CliConfigProviderInterface;
 use Core42\ModuleManager\GetConfigTrait;
 use Core42\Mvc\Environment\Environment;
 use Core42\Mvc\Router\Http\AngularSegment;
+use Core42\Security\Csp\Csp;
 use Zend\Db\Adapter\AdapterAbstractServiceFactory;
 use Zend\Form\FormAbstractServiceFactory;
+use Zend\Http\PhpEnvironment\Response;
 use Zend\InputFilter\InputFilterAbstractServiceFactory;
 use Zend\ModuleManager\Feature\BootstrapListenerInterface;
 use Zend\ModuleManager\Feature\ConfigProviderInterface;
@@ -55,6 +57,10 @@ class Module implements
             ->getServiceManager()
             ->get('RoutePluginManager')
             ->setFactory(AngularSegment::class, RouteInvokableFactory::class);
+
+        $e->getApplication()
+            ->getEventManager()
+            ->attach('finish', [$this, 'cspProtection'], 100);
     }
 
     /**
@@ -143,5 +149,22 @@ class Module implements
         }
 
         return $config;
+    }
+
+    public function cspProtection($e)
+    {
+        $serviceManager = $e->getApplication()->getServiceManager();
+
+        /** @var Csp $csp */
+        $csp = $serviceManager->get(Csp::class);
+        if ($csp->getCspOptions()->getEnable() === false) {
+           return;
+        }
+
+        if (!($e->getResponse() instanceof Response)) {
+            return;
+        }
+
+        $csp->writeHeaders($e->getResponse());
     }
 }
