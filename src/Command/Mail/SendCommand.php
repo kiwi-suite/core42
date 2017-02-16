@@ -15,12 +15,11 @@ namespace Core42\Command\Mail;
 use Core42\Command\AbstractCommand;
 use Core42\View\Model\MailModel;
 use Zend\View\Renderer\PhpRenderer;
-use Swift_Message;
 
 class SendCommand extends AbstractCommand
 {
     /**
-     * @var Swift_Message
+     * @var \Swift_Message
      */
     protected $mailMessage;
 
@@ -84,7 +83,7 @@ class SendCommand extends AbstractCommand
      */
     protected function configure()
     {
-        $this->mailMessage = Swift_Message::newInstance();
+        $this->mailMessage = \Swift_Message::newInstance();
 
         $this->parts = [
             'plain' => [
@@ -125,7 +124,7 @@ class SendCommand extends AbstractCommand
      */
     public function setFrom($email, $name = null)
     {
-        $address = ($name == null) ? $email : [$email, $name];
+        $address = ($name == null) ? $email : [$email => $name];
         $this->from = $address;
 
         return $this;
@@ -148,7 +147,7 @@ class SendCommand extends AbstractCommand
      */
     public function addTo($email, $name = null)
     {
-        $address = ($name == null) ? $email : [$email, $name];
+        $address = ($name == null) ? $email : [$email => $name];
         $this->to[] = $address;
 
         return $this;
@@ -161,7 +160,7 @@ class SendCommand extends AbstractCommand
      */
     public function addCc($email, $name = null)
     {
-        $address = ($name == null) ? $email : [$email, $name];
+        $address = ($name == null) ? $email : [$email => $name];
         $this->cc[] = $address;
 
         return $this;
@@ -174,7 +173,7 @@ class SendCommand extends AbstractCommand
      */
     public function addBcc($email, $name = null)
     {
-        $address = ($name == null) ? $email : [$email, $name];
+        $address = ($name == null) ? $email : [$email => $name];
         $this->bcc[] = $address;
 
         return $this;
@@ -187,7 +186,7 @@ class SendCommand extends AbstractCommand
      */
     public function addReplyTo($email, $name = null)
     {
-        $address = ($name == null) ? $email : [$email, $name];
+        $address = ($name == null) ? $email : [$email => $name];
         $this->replyTo[] = $address;
 
         return $this;
@@ -280,9 +279,15 @@ class SendCommand extends AbstractCommand
 
         $this->mailMessage->setFrom($this->from);
         $this->mailMessage->setTo($this->to);
-        $this->mailMessage->setCc($this->cc);
-        $this->mailMessage->setBcc($this->bcc);
-        $this->mailMessage->setReplyTo($this->replyTo);
+        if (!empty($this->cc)) {
+            $this->mailMessage->setCc($this->cc);
+        }
+        if (!empty($this->bcc)) {
+            $this->mailMessage->setBcc($this->bcc);
+        }
+        if (!empty($this->replyTo)) {
+            $this->mailMessage->setReplyTo($this->replyTo);
+        }
     }
 
     /**
@@ -308,7 +313,20 @@ class SendCommand extends AbstractCommand
         }
 
         foreach ($this->attachments as $attachment) {
-            $this->mailMessage->attach(\Swift_Attachment::fromPath($attachment));
+            if (is_string($attachment)) {
+                $this->mailMessage->attach(\Swift_Attachment::fromPath($attachment));
+            } else {
+                $embeded = \Swift_EmbeddedFile::newInstance(
+                    $attachment['content'],
+                    $attachment['filename'],
+                    $attachment['type']
+                );
+                if (isset($attachment['id'])) {
+                    $embeded->setId($attachment['id']);
+                }
+
+                $cid = $this->mailMessage->embed($embeded);
+            }
         }
 
         $transport = $this->getServiceManager()->get('Core42\Mail\Transport');

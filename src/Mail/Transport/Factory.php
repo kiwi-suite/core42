@@ -12,6 +12,8 @@
 
 namespace Core42\Mail\Transport;
 
+use Core42\Mail\Transport\FileTransport;
+
 class Factory
 {
     /**
@@ -39,6 +41,9 @@ class Factory
                 break;
             case 'mail':
                 $transport = self::createMailTransport($config['options']);
+                break;
+            case 'file':
+                $transport = self::createFileTransport($config['options']);
                 break;
             case 'null':
             default:
@@ -75,14 +80,32 @@ class Factory
      */
     protected static function createSendmailTransport($options)
     {
-        $command = (isset($options['command'])) ? $options['command'] : null;
-
-        return \Swift_SendmailTransport::newInstance($command);
+        if ((isset($options['command']))) {
+            return \Swift_SendmailTransport::newInstance($options['command']);
+        } else {
+            return \Swift_SendmailTransport::newInstance();
+        }
     }
 
     /**
      * @param $options
-     * @return \Swift_MailTransport
+     * @return FileTransport
+     */
+    protected static function createFileTransport($options)
+    {
+        $eventDispatcher = \Swift_DependencyContainer::getInstance()->lookup('transport.eventdispatcher');
+
+        $path = (isset($options['path'])) ? $options['path'] : null;
+
+        $transport = new FileTransport($eventDispatcher);
+        $transport->setPath($path);
+
+        return $transport;
+    }
+
+    /**
+     * @param $options
+     * @return \Swift_SmtpTransport
      */
     protected static function createSmtpTransport($options)
     {
