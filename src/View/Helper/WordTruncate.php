@@ -12,21 +12,28 @@
 
 namespace Core42\View\Helper;
 
+use Ramsey\Uuid\Uuid;
 use Zend\View\Helper\AbstractHelper;
 
 class WordTruncate extends AbstractHelper
 {
     /**
+     * @param string $string
+     * @param $width
      * @return string
      */
     public function __invoke($string, $width)
     {
+        $width = (int) $width;
+
         if (strlen($string) <= $width) {
             return $string;
         }
 
-        $wordWrap = wordwrap($string, $width, "\n{{#wrap#}}");
+        $uuid = Uuid::uuid4()->toString();
 
-        return substr($wordWrap, 0, strpos($wordWrap, "\n{{#wrap#}}"));
+        $wordWrap = wordwrap($string, $width, "\n{{#wrap#" . $uuid . "}}");
+
+        return substr($wordWrap, 0, strpos($wordWrap, "\n{{#wrap#" . $uuid . "}}"));
     }
 }

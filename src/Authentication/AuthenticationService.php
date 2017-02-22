@@ -84,6 +84,10 @@ class AuthenticationService implements AuthenticationServiceInterface
     public function authenticate()
     {
         if (empty($this->authResult)) {
+            if ($this->hasIdentity()) {
+                $this->clearIdentity();
+            }
+
             return new Result(
                 Result::FAILURE_UNCATEGORIZED,
                 null,

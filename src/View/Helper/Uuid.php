@@ -39,7 +39,7 @@ class Uuid extends AbstractHelper
      * @param $name
      * @return string
      */
-    public static function uuid3($ns, $name)
+    public function uuid3($ns, $name)
     {
         return \Ramsey\Uuid\Uuid::uuid3($ns, $name)->toString();
     }
@@ -47,7 +47,7 @@ class Uuid extends AbstractHelper
     /**
      * @return string
      */
-    public static function uuid4()
+    public function uuid4()
     {
         return \Ramsey\Uuid\Uuid::uuid4()->toString();
     }
@@ -57,7 +57,7 @@ class Uuid extends AbstractHelper
      * @param $name
      * @return string
      */
-    public static function uuid5($ns, $name)
+    public function uuid5($ns, $name)
     {
         return \Ramsey\Uuid\Uuid::uuid5($ns, $name)->toString();
     }
