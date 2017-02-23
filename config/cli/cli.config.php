@@ -1,4 +1,15 @@
 <?php
+
+/*
+ * core42
+ *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
+ */
+
 namespace Core42;
 
 use Core42\Command\Assets\AssetsCommand;
@@ -27,8 +38,8 @@ return [
             'description'               => 'Create a migration file into the configured migration directory',
             'short_description'         => 'Create a migration file',
             'options_descriptions'      => [
-                '--directory'       => 'directory where migration will be created'
-            ]
+                '--directory'       => 'directory where migration will be created',
+            ],
         ],
         'migration-list' => [
             'group'                     => 'migrations',
@@ -45,8 +56,8 @@ return [
             'short_description'         => 'Run migrations',
             'options_descriptions'      => [
                 '--limit'           => 'Only the given number of pending migrations will be migrated. Default: '
-                                            .'All pending migrations will be migrated'
-            ]
+                                            . 'All pending migrations will be migrated',
+            ],
         ],
         'migration-rollback' => [
             'group'                     => 'migrations',
@@ -56,15 +67,15 @@ return [
             'short_description'         => 'Rollback the last migrations',
             'options_descriptions'      => [
                 '--limit'           => 'Only the given number of migrated migrations will be rolled back. Default: '
-                                            .'The last migration will be rolled back'
-            ]
+                                            . 'The last migration will be rolled back',
+            ],
         ],
         'migration-reset' => [
             'group'                     => 'migrations',
             'route'                     => 'migration-reset',
             'command-name'              => ResetCommand::class,
             'description'               => 'Resets all Migrations. Synonym of migration-rollback with limit=amount '
-                                                .'of migrations',
+                                                . 'of migrations',
             'short_description'         => 'Resets all Migrations',
         ],
 
@@ -73,7 +84,7 @@ return [
             'route'                     => 'development (on|off)',
             'command-name'              => DevelopmentCommand::class,
             'description'               => 'Enables/Disables the development mode. Useful for loading dev-modules or '
-                                                .'disabling servicemanager caching',
+                                                . 'disabling servicemanager caching',
             'short_description'         => 'Enables/Disables the development mode',
         ],
 
@@ -99,7 +110,7 @@ return [
             'route'                     => 'assets [--copy|-c] [--force|-f]',
             'command-name'              => AssetsCommand::class,
             'description'               => 'Copy or symlink all registered assets into a target directory (for '
-                                                .'example public directory) to be accessible over the webserver',
+                                                . 'example public directory) to be accessible over the webserver',
             'short_description'         => 'Copy or symlink all registered assets',
             'options_descriptions'      => [
                 '--copy|-c'             => 'Copy all files instead of a symlink',
@@ -177,7 +188,7 @@ return [
             'description'               => 'Display config information on a given config key',
             'short_description'         => 'Display config information',
             'options_descriptions'      => [
-                'key'                => 'config key. Subkeys are possible through a '.' separator',
+                'key'                => 'config key. Subkeys are possible through a ' . ' separator',
             ],
         ],
     ],

@@ -1,4 +1,15 @@
 <?php
+
+/*
+ * core42
+ *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
+ */
+
 namespace Core42;
 
 use Cocur\Slugify\Slugify;
@@ -30,7 +41,6 @@ use Core42\I18n\Localization\Service\LocalizationFactory;
 use Core42\I18n\Translator\Service\TranslatorFactory;
 use Core42\Log\Service\HandlerPluginManager;
 use Core42\Log\Service\HandlerPluginManagerFactory;
-use Core42\Log\Service\LoggerFactory;
 use Core42\Log\Service\LoggerPluginManager;
 use Core42\Log\Service\LoggerPluginManagerFactory;
 use Core42\Mail\Transport\Service\TransportFactory;

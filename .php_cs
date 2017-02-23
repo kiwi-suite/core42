@@ -56,7 +56,6 @@ return PhpCsFixer\Config::create()
     ])
     ->setFinder(
         PhpCsFixer\Finder::create()
-            ->exclude('tests')
-            ->in(__DIR__)
+            ->in('src')
     )
 ;
