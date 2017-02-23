@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42\Test\PHPUnit;
 
@@ -115,8 +116,8 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
     /**
      * Set the application config
      * @param  array                      $applicationConfig
-     * @return $this
      * @throws LogicException
+     * @return $this
      */
     public function setApplicationConfig($applicationConfig)
     {
@@ -184,6 +185,7 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
      * Reset the request
      *
      * @return $this
+     * @param mixed $keepPersistence
      */
     public function reset($keepPersistence = false)
     {
@@ -244,13 +246,13 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
     {
         $moduleManager = $this->getApplicationServiceLocator()->get('ModuleManager');
         $modulesLoaded = $moduleManager->getModules();
-        $list = array_diff($modules, $modulesLoaded);
+        $list = \array_diff($modules, $modulesLoaded);
         if ($list) {
             throw new \PHPUnit_Framework_ExpectationFailedException(
-                sprintf('Several modules are not loaded "%s"', implode(', ', $list))
+                \sprintf('Several modules are not loaded "%s"', \implode(', ', $list))
             );
         }
-        $this->assertEquals(count($list), 0);
+        $this->assertEquals(\count($list), 0);
     }
 
     /**
@@ -262,13 +264,13 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
     {
         $moduleManager = $this->getApplicationServiceLocator()->get('ModuleManager');
         $modulesLoaded = $moduleManager->getModules();
-        $list = array_intersect($modules, $modulesLoaded);
+        $list = \array_intersect($modules, $modulesLoaded);
         if ($list) {
             throw new \PHPUnit_Framework_ExpectationFailedException(
-                sprintf('Several modules WAS not loaded "%s"', implode(', ', $list))
+                \sprintf('Several modules WAS not loaded "%s"', \implode(', ', $list))
             );
         }
-        $this->assertEquals(count($list), 0);
+        $this->assertEquals(\count($list), 0);
     }
 
     /**
@@ -305,7 +307,7 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        if (is_array($dataSet)) {
+        if (\is_array($dataSet)) {
             $resultSet = new ResultSet();
             $resultSet->setObjectPrototype($modelPrototype);
             $resultSet->initialize($dataSet);
@@ -364,7 +366,7 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
                 $resultSets[] = $resultSet;
             }
 
-            $onConsecutiveCalls = call_user_func_array([$this, 'onConsecutiveCalls'], $resultSets);
+            $onConsecutiveCalls = \call_user_func_array([$this, 'onConsecutiveCalls'], $resultSets);
 
             $statementMock
                 ->method('execute')

@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42\View\Helper;
 
@@ -35,6 +36,10 @@ class Permission extends AbstractHelper
         $this->permissionPluginManager = $permissionPluginManager;
     }
 
+    /**
+     * @param string $name
+     * @return $this
+     */
     public function __invoke($name)
     {
         $this->serviceName = $name;

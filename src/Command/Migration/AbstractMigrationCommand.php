@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42\Command\Migration;
 
@@ -52,7 +53,7 @@ abstract class AbstractMigrationCommand extends AbstractCommand
 
 
         $metadata = Factory::createSourceFromAdapter($adapter);
-        if (in_array($migrationConfig['table_name'], $metadata->getTableNames())) {
+        if (\in_array($migrationConfig['table_name'], $metadata->getTableNames())) {
             return;
         }
 
@@ -75,15 +76,15 @@ abstract class AbstractMigrationCommand extends AbstractCommand
     {
         $migrationConfig = $this->getMigrationConfig();
 
-        return array_map(function ($dir) {
-            $dir = rtrim($dir, '/') . '/';
+        return \array_map(function ($dir) {
+            $dir = \rtrim($dir, '/') . '/';
 
             if (Console::isWindows()) {
-                $dir = str_replace('\\', '/', $dir);
+                $dir = \str_replace('\\', '/', $dir);
             }
 
             do {
-                $dir = preg_replace(
+                $dir = \preg_replace(
                     ['#//|/\./#', '#/([^/]*)/\.\./#'],
                     '/',
                     $dir,
@@ -93,11 +94,11 @@ abstract class AbstractMigrationCommand extends AbstractCommand
             } while ($count > 0);
 
             if (Filesystem::isAbsolutePath($dir)) {
-                $cwd = getcwd() . DIRECTORY_SEPARATOR;
+                $cwd = \getcwd() . DIRECTORY_SEPARATOR;
                 if (Console::isWindows()) {
-                    $cwd = str_replace('\\', '/', $cwd);
+                    $cwd = \str_replace('\\', '/', $cwd);
                 }
-                $dir = str_replace($cwd, '', $dir);
+                $dir = \str_replace($cwd, '', $dir);
             }
 
             return $dir;
@@ -125,22 +126,22 @@ abstract class AbstractMigrationCommand extends AbstractCommand
 
         foreach ($migrationDirs as $dir) {
             $globPattern = $dir . '[0-9][0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]t[0-9][0-9][0-9][0-9][0-9][0-9].php';
-            foreach (glob($globPattern) as $filename) {
+            foreach (\glob($globPattern) as $filename) {
                 require_once $filename;
-                $class = $this->getClassnameByFilename(pathinfo($filename, PATHINFO_FILENAME));
+                $class = $this->getClassnameByFilename(\pathinfo($filename, PATHINFO_FILENAME));
 
-                $name = $this->getMigrationNameByFilename(pathinfo($filename, PATHINFO_FILENAME));
+                $name = $this->getMigrationNameByFilename(\pathinfo($filename, PATHINFO_FILENAME));
 
                 $migrations[] = [
                     'name'      => $name,
                     'filename'  => $filename,
-                    'instance'  => new $class,
+                    'instance'  => new $class(),
                     'migrated'  => (isset($migratedMigrations[$name])) ? $migratedMigrations[$name] : null,
                 ];
             }
         }
 
-        usort($migrations, function ($array1, $array2) {
+        \usort($migrations, function ($array1, $array2) {
             return ((int) $array1['name'] < (int) $array2['name']) ? -1 : 1;
         });
 
@@ -153,7 +154,7 @@ abstract class AbstractMigrationCommand extends AbstractCommand
      */
     protected function getMigrationNameByFilename($filename)
     {
-        return str_replace(['-', 't'], '', $filename);
+        return \str_replace(['-', 't'], '', $filename);
     }
 
     /**
@@ -162,6 +163,6 @@ abstract class AbstractMigrationCommand extends AbstractCommand
      */
     protected function getClassnameByFilename($filename)
     {
-        return 'Migration' . str_replace(['-', 't'], '', $filename);
+        return 'Migration' . \str_replace(['-', 't'], '', $filename);
     }
 }

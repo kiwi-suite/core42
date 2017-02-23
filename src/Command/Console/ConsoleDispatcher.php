@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42\Command\Console;
 
@@ -46,13 +47,13 @@ class ConsoleDispatcher
         $command = $this->serviceManager->get('Command')->get($commandName);
         $valid = false;
 
-        $class = get_class($command);
+        $class = \get_class($command);
         do {
-            if (in_array('Core42\Command\ConsoleAwareTrait', class_uses($class))) {
+            if (\in_array('Core42\Command\ConsoleAwareTrait', \class_uses($class))) {
                 $valid = true;
                 break;
             }
-        } while ($class = get_parent_class($class));
+        } while ($class = \get_parent_class($class));
 
         if (!$valid) {
             $console->writeLine(
@@ -79,12 +80,12 @@ class ConsoleDispatcher
         $commandName = null;
 
         foreach ($cliConfig as $name => $info) {
-            if (!array_key_exists('name', $info) && is_string($name)) {
+            if (!\array_key_exists('name', $info) && \is_string($name)) {
                 $info['name'] = $name;
             }
 
             if ($routeName == $info['name']) {
-                $commandName = (array_key_exists('command-name', $info)) ? $info['command-name'] : null;
+                $commandName = (\array_key_exists('command-name', $info)) ? $info['command-name'] : null;
                 break;
             }
         }

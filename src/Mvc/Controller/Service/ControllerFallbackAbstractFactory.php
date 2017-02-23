@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42\Mvc\Controller\Service;
 
@@ -26,15 +27,15 @@ class ControllerFallbackAbstractFactory implements AbstractFactoryInterface
      */
     protected function getFQCN($name)
     {
-        if (class_exists($name)) {
+        if (\class_exists($name)) {
             return $name;
         }
 
-        if (strpos($name, '\\') === false) {
+        if (\mb_strpos($name, '\\') === false) {
             return false;
         }
 
-        $parts = explode('\\', $name, 2);
+        $parts = \explode('\\', $name, 2);
 
         return '\\' . $parts[0] . '\\Controller\\' . $parts[1] . 'Controller';
     }
@@ -53,7 +54,7 @@ class ControllerFallbackAbstractFactory implements AbstractFactoryInterface
             return false;
         }
 
-        return class_exists($fqcn);
+        return \class_exists($fqcn);
     }
 
     /**
@@ -62,11 +63,11 @@ class ControllerFallbackAbstractFactory implements AbstractFactoryInterface
      * @param  ContainerInterface $container
      * @param  string $requestedName
      * @param  null|array $options
-     * @return object
-     * @throws ServiceNotFoundException if unable to resolve the service.
+     * @throws ServiceNotFoundException if unable to resolve the service
      * @throws ServiceNotCreatedException if an exception is raised when
-     *     creating a service.
+     *     creating a service
      * @throws ContainerException if any other error occurs
+     * @return object
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {

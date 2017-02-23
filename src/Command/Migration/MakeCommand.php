@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42\Command\Migration;
 
@@ -44,15 +45,15 @@ class MakeCommand extends AbstractMigrationCommand
      */
     protected function preExecute()
     {
-        $this->directory = rtrim($this->directory, '/') . '/';
+        $this->directory = \rtrim($this->directory, '/') . '/';
 
-        if (!is_dir($this->directory)) {
+        if (!\is_dir($this->directory)) {
             $this->addError('directory', "directory '" . $this->directory . "' doesn't exist");
 
             return;
         }
 
-        if (!is_writable($this->directory)) {
+        if (!\is_writable($this->directory)) {
             $this->addError('directory', "directory '" . $this->directory . "' isn't writeable");
 
             return;
@@ -60,7 +61,7 @@ class MakeCommand extends AbstractMigrationCommand
 
         $migrationDirs = $this->getMigrationDirectories();
 
-        if (!in_array($this->directory, $migrationDirs)) {
+        if (!\in_array($this->directory, $migrationDirs)) {
             $this->addError('directory', "directory '" . $this->directory . "' is not inside a migration directory");
 
             return;
@@ -76,7 +77,7 @@ class MakeCommand extends AbstractMigrationCommand
             $date = new DateTime();
             $migrationName = 'Migration' . $date->format('YmdHis');
             $filename = $this->directory . $date->format('Y-m-d\tHis') . '.php';
-        } while (file_exists($filename));
+        } while (\file_exists($filename));
 
         $classGenerator = new ClassGenerator($migrationName);
 
@@ -88,7 +89,7 @@ class MakeCommand extends AbstractMigrationCommand
             new ParameterGenerator('serviceManager', 'Zend\ServiceManager\ServiceManager'),
         ], MethodGenerator::FLAG_PUBLIC, "\n");
 
-        file_put_contents($filename, "<?php\n" . $classGenerator->generate());
+        \file_put_contents($filename, "<?php\n" . $classGenerator->generate());
 
         $this->consoleOutput("'{$migrationName}' created at '{$filename}'");
     }

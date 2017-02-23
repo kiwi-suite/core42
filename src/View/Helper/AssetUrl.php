@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42\View\Helper;
 
@@ -36,8 +37,8 @@ class AssetUrl extends AbstractHelper
     /**
      * @param null|string $file
      * @param null $name
-     * @return string
      * @throws \Exception
+     * @return string
      */
     public function __invoke($file = "", $name = null)
     {
@@ -47,11 +48,11 @@ class AssetUrl extends AbstractHelper
 
         $directory = "";
         if ($name !== null && !empty($this->assetConfig[$name])) {
-            $directory = '/' . trim($this->assetConfig[$name], '/');
+            $directory = '/' . \trim($this->assetConfig[$name], '/');
         }
 
         if (!empty($file)) {
-            $file = '/' . ltrim($file, '/');
+            $file = '/' . \ltrim($file, '/');
         }
 
         return $this->assetUrl . $directory . $file;
@@ -63,7 +64,7 @@ class AssetUrl extends AbstractHelper
      */
     public function setAssetUrl($assetUrl)
     {
-        $this->assetUrl = rtrim($assetUrl, '/');
+        $this->assetUrl = \rtrim($assetUrl, '/');
 
         return $this;
     }

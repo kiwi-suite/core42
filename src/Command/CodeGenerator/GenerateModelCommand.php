@@ -5,15 +5,15 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
 
+
 namespace Core42\Command\CodeGenerator;
 
 use Core42\Command\AbstractCommand;
-use Zend\Code\Annotation\AnnotationManager;
 use Zend\Code\Reflection\FileReflection;
 use Zend\Db\Metadata\Source\Factory;
 use Zend\ServiceManager\Exception\ServiceNotFoundException;
@@ -61,7 +61,7 @@ class GenerateModelCommand extends AbstractCommand
      * @var bool
      */
     private $overwrite = false;
-    
+
     /**
      * @var bool
      */
@@ -110,7 +110,7 @@ class GenerateModelCommand extends AbstractCommand
 
         return $this;
     }
-    
+
     /**
      * @param bool $generateSetterGetter
      * @return $this
@@ -121,18 +121,18 @@ class GenerateModelCommand extends AbstractCommand
 
         return $this;
     }
-    
+
     /**
-     * @param boolean $overwrite
+     * @param bool $overwrite
      * @return $this
      */
     public function setOverwrite($overwrite)
     {
         $this->overwrite = $overwrite;
-        
+
         return $this;
     }
-    
+
     /**
      *
      */
@@ -156,13 +156,13 @@ class GenerateModelCommand extends AbstractCommand
             return;
         }
 
-        if (!is_dir($this->directory)) {
+        if (!\is_dir($this->directory)) {
             $this->addError('directory', "directory '" . $this->directory . "' doesn't exist");
 
             return;
         }
 
-        if (!is_writable($this->directory)) {
+        if (!\is_writable($this->directory)) {
             $this->addError('directory', "directory '" . $this->directory . "' isn't writeable");
 
             return;
@@ -174,7 +174,7 @@ class GenerateModelCommand extends AbstractCommand
             $this->addError('adapter', "adapter '" . $this->adapterName . "' not found");
         }
 
-        $this->directory = rtrim($this->directory, '/') . '/';
+        $this->directory = \rtrim($this->directory, '/') . '/';
     }
 
     /**
@@ -185,9 +185,9 @@ class GenerateModelCommand extends AbstractCommand
         $metadata = Factory::createSourceFromAdapter($this->adapter);
         $columns = $metadata->getColumns($this->tableName);
 
-        $parts = explode('\\', $this->className);
-        $class = array_pop($parts);
-        $namespace = implode('\\', $parts);
+        $parts = \explode('\\', $this->className);
+        $class = \array_pop($parts);
+        $namespace = \implode('\\', $parts);
 
         $classGenerator = new Generator\ClassGenerator();
         $classGenerator->setNamespaceName($namespace)
@@ -196,7 +196,7 @@ class GenerateModelCommand extends AbstractCommand
             ->setExtendedClass('Core42\Model\AbstractModel');
 
         $filename = $this->directory . $class . '.php';
-        if (file_exists($filename) && !$this->overwrite) {
+        if (\file_exists($filename) && !$this->overwrite) {
             $this->readExistingModel($filename, $classGenerator);
         }
 
@@ -210,7 +210,7 @@ class GenerateModelCommand extends AbstractCommand
         foreach ($columns as $column) {
             /* @type \Zend\Db\Metadata\Object\ColumnObject $column */
 
-            $method = ucfirst($filter->filter($column->getName()));
+            $method = \ucfirst($filter->filter($column->getName()));
 
             $properties[] = $column->getName();
 
@@ -232,7 +232,6 @@ class GenerateModelCommand extends AbstractCommand
                 $tags[] = $setterMethodDocBlock;
                 $tags[] = $getterMethodDocBlock;
             } else {
-
                 $docBlockParam = new Generator\DocBlock\Tag\ParamTag();
                 $docBlockParam->setVariableName($column->getName());
                 $docBlockParam->setTypes($type);
@@ -250,7 +249,7 @@ class GenerateModelCommand extends AbstractCommand
                         ),
                     ],
                     Generator\MethodGenerator::FLAG_PUBLIC,
-                    implode("\n", [
+                    \implode("\n", [
                         '$this->set(\'' . $column->getName() . '\', $' . $column->getName() . ');',
                         'return $this;',
                     ]),
@@ -314,7 +313,7 @@ class GenerateModelCommand extends AbstractCommand
 
         $classGenerator->addMethods($methods);
 
-        file_put_contents($filename, "<?php\n" . $classGenerator->generate());
+        \file_put_contents($filename, "<?php\n" . $classGenerator->generate());
     }
 
     /**
@@ -327,7 +326,7 @@ class GenerateModelCommand extends AbstractCommand
         $class = $file->getClass();
 
         $filter = new UnderscoreToCamelCase();
-        
+
         $constants = $class->getConstants();
         if (!empty($constants)) {
             foreach ($constants as $name => $value) {
@@ -346,10 +345,9 @@ class GenerateModelCommand extends AbstractCommand
 
         $properties = $class->getDefaultProperties();
         foreach ($properties['properties'] as $property) {
+            $methodName = \ucfirst($filter->filter($property));
 
-            $methodName = ucfirst($filter->filter($property));
-
-            foreach($methods as $key => $method) {
+            foreach ($methods as $key => $method) {
                 if ($method->getName() == ('set' . $methodName)) {
                     unset($methods[$key]);
                     continue;
@@ -371,8 +369,8 @@ class GenerateModelCommand extends AbstractCommand
 
     /**
      * @param \Zend\Db\Metadata\Object\ColumnObject $column
-     * @param boolean $hasDate
-     * @param boolean $hasDateTime
+     * @param bool $hasDate
+     * @param bool $hasDateTime
      * @return string
      */
     protected function getPropertyTypeByColumnObject(\Zend\Db\Metadata\Object\ColumnObject $column, &$hasDate, &$hasDateTime)
@@ -383,7 +381,7 @@ class GenerateModelCommand extends AbstractCommand
                 return 'boolean';
             case 'enum':
                 $check = [['true', 'false'], ['false', 'true']];
-                if (in_array($column->getErrata('permitted_values'), $check)) {
+                if (\in_array($column->getErrata('permitted_values'), $check)) {
                     return 'boolean';
                 }
 

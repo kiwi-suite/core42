@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42\Permission;
 
@@ -80,8 +81,8 @@ class Permission extends Rbac implements PermissionInterface
      * @param string|AssertionInterface|callable|null $assert
      * @param array $params
      * @param string $role
-     * @return bool
      * @throws \Exception
+     * @return bool
      */
     public function authorized($permission, $assert = null, array $params = [], $role = null)
     {
@@ -99,8 +100,8 @@ class Permission extends Rbac implements PermissionInterface
     /**
      * @param string|AssertionInterface|callable|null $assert
      * @param array $params
-     * @return bool
      * @throws \Exception
+     * @return bool
      */
     public function assert($assert, array $params = [])
     {
@@ -108,11 +109,11 @@ class Permission extends Rbac implements PermissionInterface
             return (bool) $assert->assert($this);
         }
 
-        if (is_callable($assert)) {
+        if (\is_callable($assert)) {
             return (bool) $assert($this);
         }
 
-        if (is_string($assert) && $this->assertionPluginManager->has($assert)) {
+        if (\is_string($assert) && $this->assertionPluginManager->has($assert)) {
             return (bool) $this->assertionPluginManager->get($assert, $params)->assert($this);
         }
 

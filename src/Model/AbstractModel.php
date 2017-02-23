@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42\Model;
 
@@ -58,28 +59,28 @@ abstract class AbstractModel implements ModelInterface
 
     /**
      * @param null|string $property
-     * @return true
      * @throws \Exception
+     * @return true
      */
     public function hasChanged($property = null)
     {
         if ($property === null) {
-            return count($this->diff()) > 0;
+            return \count($this->diff()) > 0;
         }
 
-        if (!in_array($property, $this->properties)) {
-            throw new \Exception(sprintf("'%s' not set in property array", $property));
+        if (!\in_array($property, $this->properties)) {
+            throw new \Exception(\sprintf("'%s' not set in property array", $property));
         }
 
-        if (!array_key_exists($property, $this->data) && !array_key_exists($property, $this->memento)) {
+        if (!\array_key_exists($property, $this->data) && !\array_key_exists($property, $this->memento)) {
             return false;
         }
 
-        if (array_key_exists($property, $this->data) && !array_key_exists($property, $this->memento)) {
+        if (\array_key_exists($property, $this->data) && !\array_key_exists($property, $this->memento)) {
             return true;
         }
 
-        if (!array_key_exists($property, $this->data) && array_key_exists($property, $this->memento)) {
+        if (!\array_key_exists($property, $this->data) && \array_key_exists($property, $this->memento)) {
             return true;
         }
 
@@ -122,7 +123,7 @@ abstract class AbstractModel implements ModelInterface
                 $value = $value->toArray();
             }
 
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $value = $this->recursiveToArray($value);
             }
             $result[$name] = $value;
@@ -162,16 +163,16 @@ abstract class AbstractModel implements ModelInterface
     /**
      * @param  string $name
      * @param mixed $default
-     * @return mixed
      * @throws \Exception
+     * @return mixed
      */
     protected function get($name, $default = null)
     {
-        if (!in_array($name, $this->properties)) {
-            throw new \Exception(sprintf("'%s' not set in property array", $name));
+        if (!\in_array($name, $this->properties)) {
+            throw new \Exception(\sprintf("'%s' not set in property array", $name));
         }
 
-        if (!array_key_exists($name, $this->data)) {
+        if (!\array_key_exists($name, $this->data)) {
             return $default;
         }
 
@@ -182,14 +183,14 @@ abstract class AbstractModel implements ModelInterface
      * @param  string $name
      * @param  mixed $value
      * @param bool $strict
-     * @return ModelInterface
      * @throws \Exception
+     * @return ModelInterface
      */
     protected function set($name, $value, $strict = false)
     {
-        if (!in_array($name, $this->properties)) {
+        if (!\in_array($name, $this->properties)) {
             if ($strict === true) {
-                throw new \Exception(sprintf("'%s' not set in property array", $name));
+                throw new \Exception(\sprintf("'%s' not set in property array", $name));
             }
 
             return $this;
@@ -202,17 +203,17 @@ abstract class AbstractModel implements ModelInterface
     /**
      * @param $method
      * @param $params
-     * @return mixed
      * @throws \Exception
+     * @return mixed
      */
     public function __call($method, $params)
     {
         $return = null;
 
-        $variableName = lcfirst(substr($method, 3));
-        if (strncasecmp($method, 'get', 3) === 0) {
+        $variableName = \lcfirst(\mb_substr($method, 3));
+        if (\strncasecmp($method, 'get', 3) === 0) {
             return $this->get($variableName);
-        } elseif (strncasecmp($method, 'set', 3) === 0) {
+        } elseif (\strncasecmp($method, 'set', 3) === 0) {
             return $this->set($variableName, $params[0], true);
         }
 
@@ -240,7 +241,7 @@ abstract class AbstractModel implements ModelInterface
      */
     public function __isset($name)
     {
-        return in_array($name, $this->properties);
+        return \in_array($name, $this->properties);
     }
 
     /**
@@ -248,7 +249,7 @@ abstract class AbstractModel implements ModelInterface
      */
     public function serialize()
     {
-        return serialize([
+        return \serialize([
             'data' => $this->data,
             'properties' => $this->properties,
         ]);
@@ -259,7 +260,7 @@ abstract class AbstractModel implements ModelInterface
      */
     public function unserialize($serialized)
     {
-        $unserialized = unserialize($serialized);
+        $unserialized = \unserialize($serialized);
 
         $this->properties = $unserialized['properties'];
         $this->populate($unserialized['data']);
@@ -276,5 +277,4 @@ abstract class AbstractModel implements ModelInterface
             'properties' => $this->properties,
         ];
     }
-
 }

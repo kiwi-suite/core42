@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42;
 
@@ -92,7 +93,7 @@ class Module implements
 
         $abstractFactories = $config['service_manager']['abstract_factories'];
         foreach ($abstractFactories as $key => $class) {
-            if (in_array($class, [
+            if (\in_array($class, [
                 AdapterAbstractServiceFactory::class,
                 FormAbstractServiceFactory::class,
                 ContainerAbstractServiceFactory::class,
@@ -102,7 +103,7 @@ class Module implements
             }
         }
 
-        $config['service_manager']['abstract_factories'] = array_values($abstractFactories);
+        $config['service_manager']['abstract_factories'] = \array_values($abstractFactories);
 
         unset($config['service_manager']['factories']['Zend\Db\Adapter\Adapter']);
 
@@ -119,7 +120,7 @@ class Module implements
             }
 
             $moduleConfig = $module->getCliConfig();
-            if (!is_array($moduleConfig)) {
+            if (!\is_array($moduleConfig)) {
                 continue;
             }
 
@@ -141,7 +142,7 @@ class Module implements
     public function getCliConfig()
     {
         $config = [];
-        $configPath = dirname((new \ReflectionClass($this))->getFileName()) . '/../config/cli/*.config.php';
+        $configPath = \dirname((new \ReflectionClass($this))->getFileName()) . '/../config/cli/*.config.php';
 
         $entries = Glob::glob($configPath);
         foreach ($entries as $file) {
@@ -158,7 +159,7 @@ class Module implements
         /** @var Csp $csp */
         $csp = $serviceManager->get(Csp::class);
         if ($csp->getCspOptions()->getEnable() === false) {
-           return;
+            return;
         }
 
         if (!($e->getResponse() instanceof Response)) {

@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42\Command\Maintenance;
 
@@ -46,14 +47,14 @@ class MaintenanceCommand extends AbstractCommand
      */
     protected function preExecute()
     {
-        if (!is_dir('data/maintenance')) {
-            $created = mkdir('data/maintenance', 0777, true);
+        if (!\is_dir('data/maintenance')) {
+            $created = \mkdir('data/maintenance', 0777, true);
             if ($created === false) {
                 $this->addError('directory', "directory 'data/maintenance' can't be created");
             }
         }
 
-        if (!is_writable('data/maintenance')) {
+        if (!\is_writable('data/maintenance')) {
             $this->addError('directory', "directory 'data/maintenance' isn't writable");
         }
     }
@@ -63,13 +64,13 @@ class MaintenanceCommand extends AbstractCommand
      */
     protected function execute()
     {
-        if ($this->enable === true && !file_exists('data/maintenance/on')) {
-            touch('data/maintenance/on');
+        if ($this->enable === true && !\file_exists('data/maintenance/on')) {
+            \touch('data/maintenance/on');
             $this->consoleOutput('maintenance mode enabled');
 
             return;
-        } elseif ($this->enable === false && file_exists('data/maintenance/on')) {
-            unlink('data/maintenance/on');
+        } elseif ($this->enable === false && \file_exists('data/maintenance/on')) {
+            \unlink('data/maintenance/on');
             $this->consoleOutput('maintenance mode disabled');
 
             return;

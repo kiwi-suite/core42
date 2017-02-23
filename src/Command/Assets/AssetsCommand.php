@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42\Command\Assets;
 
@@ -87,20 +88,20 @@ class AssetsCommand extends AbstractCommand
                 continue;
             }
 
-            if (!is_dir($config['source'])) {
+            if (!\is_dir($config['source'])) {
                 $this->addError('source', "source directory '{$config['source']}' doesn't exists");
             }
         }
 
-        if ($this->force == false && file_exists('resources/assets')) {
-            $this->consoleOutput(sprintf("<error>'%s' already exists</error>", 'data/assets'));
+        if ($this->force == false && \file_exists('resources/assets')) {
+            $this->consoleOutput(\sprintf("<error>'%s' already exists</error>", 'data/assets'));
 
             return;
         }
 
 
-        if (!is_dir('resources/assets')) {
-            $created = mkdir('resources/assets', 0777, true);
+        if (!\is_dir('resources/assets')) {
+            $created = \mkdir('resources/assets', 0777, true);
             if ($created === false) {
                 $this->addError('directory', "directory 'resources/assets' can't be created");
 
@@ -108,7 +109,7 @@ class AssetsCommand extends AbstractCommand
             }
         }
 
-        if (!is_writable('resources/assets')) {
+        if (!\is_writable('resources/assets')) {
             $this->addError('directory', "directory 'resources/assets' isn't writable");
 
             return;
@@ -120,7 +121,7 @@ class AssetsCommand extends AbstractCommand
      */
     protected function execute()
     {
-        $filesystem = new Filesystem(new Local(getcwd(), LOCK_EX, Local::SKIP_LINKS));
+        $filesystem = new Filesystem(new Local(\getcwd(), LOCK_EX, Local::SKIP_LINKS));
         $filesystem->addPlugin(new Symlink());
         $filesystem->addPlugin(new ListPaths());
         $filesystem->addPlugin(new ListFiles());
@@ -131,11 +132,11 @@ class AssetsCommand extends AbstractCommand
         $filesystem->emptyDir('resources/assets');
 
         foreach ($this->assetConfig as $config) {
-            $source = trim($config['source'], '/');
-            $target = 'resources/assets/' . trim($config['target'], '/');
+            $source = \trim($config['source'], '/');
+            $target = 'resources/assets/' . \trim($config['target'], '/');
 
-            if (!is_dir(dirname($target))) {
-                $filesystem->createDir(dirname($target));
+            if (!\is_dir(\dirname($target))) {
+                $filesystem->createDir(\dirname($target));
             }
 
             if ($this->copy === true) {
@@ -145,10 +146,10 @@ class AssetsCommand extends AbstractCommand
                         continue;
                     }
 
-                    $dirname = $target . '/' . str_replace($source, '', $fileData['dirname']);
+                    $dirname = $target . '/' . \str_replace($source, '', $fileData['dirname']);
                     $filesystem->createDir($dirname);
 
-                    $filename = $target . '/' . str_replace($source, '', $fileData['path']);
+                    $filename = $target . '/' . \str_replace($source, '', $fileData['path']);
                     $filesystem->copy($fileData['path'], $filename);
                 }
                 $this->consoleOutput("created directory for '{$source}'");

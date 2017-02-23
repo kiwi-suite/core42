@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42\Permission;
 
@@ -56,14 +57,14 @@ class Role extends \Zend\Permissions\Rbac\Role implements RoleInterface
             return true;
         }
 
-        $permissionParts = explode('/', $permission);
+        $permissionParts = \explode('/', $permission);
 
-        for ($i = 0; $i < count($permissionParts); $i++) {
+        for ($i = 0; $i < \count($permissionParts); $i++) {
             $checkPermission = [];
             for ($j = 0; $j <= $i; $j++) {
                 $checkPermission[] = $permissionParts[$j];
 
-                if (isset($this->permissions[implode('/', $checkPermission) . '*'])) {
+                if (isset($this->permissions[\implode('/', $checkPermission) . '*'])) {
                     return true;
                 }
             }

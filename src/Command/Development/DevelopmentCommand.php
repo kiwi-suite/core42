@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42\Command\Development;
 
@@ -46,14 +47,14 @@ class DevelopmentCommand extends AbstractCommand
      */
     protected function preExecute()
     {
-        if (!is_dir('data/development')) {
-            $created = mkdir('data/development', 0777, true);
+        if (!\is_dir('data/development')) {
+            $created = \mkdir('data/development', 0777, true);
             if ($created === false) {
                 $this->addError('directory', "directory 'data/development' can't be created");
             }
         }
 
-        if (!is_writable('data/development')) {
+        if (!\is_writable('data/development')) {
             $this->addError('directory', "directory 'data/development' isn't writable");
         }
     }
@@ -63,13 +64,13 @@ class DevelopmentCommand extends AbstractCommand
      */
     protected function execute()
     {
-        if ($this->enable === true && !file_exists('data/development/on')) {
-            touch('data/development/on');
+        if ($this->enable === true && !\file_exists('data/development/on')) {
+            \touch('data/development/on');
             $this->consoleOutput('development mode enabled');
 
             return;
-        } elseif ($this->enable === false && file_exists('data/development/on')) {
-            unlink('data/development/on');
+        } elseif ($this->enable === false && \file_exists('data/development/on')) {
+            \unlink('data/development/on');
             $this->consoleOutput('development mode disabled');
 
             return;

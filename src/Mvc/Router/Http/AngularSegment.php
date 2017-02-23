@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42\Mvc\Router\Http;
 
@@ -27,12 +28,12 @@ class AngularSegment extends Segment
         $key = (string) $value;
         if (!isset(static::$cacheEncode[$key])) {
             $isAngularVar = false;
-            if (substr($value, 0, 2) == '{{' && substr($value, -2) == '}}') {
+            if (\mb_substr($value, 0, 2) == '{{' && \mb_substr($value, -2) == '}}') {
                 $isAngularVar = true;
-                $value = trim(substr($value, 2, -2));
+                $value = \trim(\mb_substr($value, 2, -2));
             }
-            static::$cacheEncode[$key] = rawurlencode($value);
-            static::$cacheEncode[$key] = strtr(static::$cacheEncode[$key], static::$urlencodeCorrectionMap);
+            static::$cacheEncode[$key] = \rawurlencode($value);
+            static::$cacheEncode[$key] = \strtr(static::$cacheEncode[$key], static::$urlencodeCorrectionMap);
             if ($isAngularVar === true) {
                 static::$cacheEncode[$key] = '{{ ' . static::$cacheEncode[$key] . ' }}';
             }

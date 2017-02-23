@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42\Error;
 
@@ -48,8 +49,8 @@ class ErrorHandler
      */
     public static function registerShutdown()
     {
-        register_shutdown_function(function () {
-            $error = error_get_last();
+        \register_shutdown_function(function () {
+            $error = \error_get_last();
             if ($error && Misc::isLevelFatal($error['type'])) {
                 $exception = new \ErrorException(
                     $error['message'],
@@ -104,14 +105,12 @@ class ErrorHandler
         try {
             $this->logErrors();
         } catch (\Throwable $e) {
-
         } catch (\Exception $e) {
-
         }
 
         if (!empty($_SERVER)) {
             foreach (['application/json', 'text/json', 'application/x-json'] as $check) {
-                if (strpos($_SERVER['HTTP_ACCEPT'], $check) !== false) {
+                if (\mb_strpos($_SERVER['HTTP_ACCEPT'], $check) !== false) {
                     $this->getJsonErrors();
 
                     return;
@@ -148,7 +147,7 @@ class ErrorHandler
      */
     protected function getDisplayTemplate()
     {
-        ob_clean();
+        \ob_clean();
         $error = $this->e;
         include_once self::$template;
     }
@@ -171,8 +170,8 @@ class ErrorHandler
             return;
         }
 
-        header('Content-Type: application/json');
-        http_response_code(500);
+        \header('Content-Type: application/json');
+        \http_response_code(500);
 
         echo '[]';
     }
