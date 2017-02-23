@@ -69,7 +69,8 @@
         "mtdowling/cron-expression": "v1.1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "^5.7 || ^6.0.6"
+        "phpunit/phpunit": "^5.7 || ^6.0.6",
+        "friendsofphp/php-cs-fixer": "^2.0"
     },
     "bin": [
         "bin/fruit"
