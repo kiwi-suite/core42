@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42\Command\Config;
 
@@ -54,11 +55,11 @@ class ConfigGetCommand extends AbstractCommand
         $this->requestedConfig = $this->getServiceManager()->get('config');
 
         if (!empty($this->requestedKey)) {
-            $keyParts = explode(".", $this->requestedKey);
+            $keyParts = \explode(".", $this->requestedKey);
 
             foreach ($keyParts as $part) {
-                if (!array_key_exists($part, $this->requestedConfig)) {
-                    $this->addError("key", sprintf("key '%s' doesn't exist in config", $this->requestedKey));
+                if (!\array_key_exists($part, $this->requestedConfig)) {
+                    $this->addError("key", \sprintf("key '%s' doesn't exist in config", $this->requestedKey));
 
                     return;
                 }
@@ -82,21 +83,21 @@ class ConfigGetCommand extends AbstractCommand
      */
     protected function displayConfig($config, $level)
     {
-        $padding = str_repeat(" ", $level * 4);
-        if (!is_array($config)) {
-            $this->consoleOutput($padding . var_export($config, true));
+        $padding = \str_repeat(" ", $level * 4);
+        if (!\is_array($config)) {
+            $this->consoleOutput($padding . \var_export($config, true));
 
             return;
         }
 
         foreach ($config as $key => $value) {
-            if (is_array($value)) {
-                $this->consoleOutput($padding . '[' .$key . '] =>');
+            if (\is_array($value)) {
+                $this->consoleOutput($padding . '[' . $key . '] =>');
                 $this->displayConfig($value, $level + 1);
                 continue;
             }
 
-            $this->consoleOutput($padding . '[' . $key . '] => ' . var_export($value, true));
+            $this->consoleOutput($padding . '[' . $key . '] => ' . \var_export($value, true));
         }
     }
 

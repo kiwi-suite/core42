@@ -6,3 +6,6 @@ nbproject
 .idea
 .project
 .settings
+.php_cs.cache
+vendor
+composer.lock

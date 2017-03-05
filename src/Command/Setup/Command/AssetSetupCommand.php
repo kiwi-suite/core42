@@ -1,4 +1,15 @@
 <?php
+
+/*
+ * core42
+ *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
+ */
+
 namespace Core42\Command\Setup\Command;
 
 use Core42\Command\AbstractCommand;
@@ -34,15 +45,15 @@ class AssetSetupCommand extends AbstractCommand
         $valueGenerator->setType(ValueGenerator::TYPE_ARRAY_SHORT);
 
         $filegenerator = new FileGenerator();
-        $filegenerator->setBody("return " . $valueGenerator->generate() .  ";" . PHP_EOL);
+        $filegenerator->setBody("return " . $valueGenerator->generate() . ";" . PHP_EOL);
 
         $this->consoleOutput("<info>config written to 'config/autoload/local.assets.config.php'</info>");
-        file_put_contents("config/autoload/local.assets.config.php", $filegenerator->generate());
+        \file_put_contents("config/autoload/local.assets.config.php", $filegenerator->generate());
 
-        $filesystem = new Filesystem(new Local(getcwd()));
+        $filesystem = new Filesystem(new Local(\getcwd()));
         $filesystem->addPlugin(new Symlink());
 
-        if (!file_exists('public/assets')) {
+        if (!\file_exists('public/assets')) {
             $filesystem->symlink('resources/assets', 'public/assets');
         }
     }

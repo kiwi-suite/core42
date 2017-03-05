@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42\Console;
 
@@ -33,7 +34,7 @@ class Application extends \ZF\Console\Application
 
             $this->groups[$group][] = $route['name'];
         }
-        uksort($this->groups, function ($value1, $value2) {
+        \uksort($this->groups, function ($value1, $value2) {
             if ($value1 == '*' && $value2 != '*') {
                 return 1;
             }
@@ -41,10 +42,10 @@ class Application extends \ZF\Console\Application
                 return -1;
             }
 
-            return strcmp($value1, $value2);
+            return \strcmp($value1, $value2);
         });
         foreach ($this->groups as &$commands) {
-            sort($commands);
+            \sort($commands);
         }
 
         parent::__construct($name, $version, $routes, $console, $dispatcher);
@@ -60,7 +61,7 @@ class Application extends \ZF\Console\Application
         if ($name === null) {
             $console->writeLine('Available commands:', ColorInterface::YELLOW);
             $console->writeLine('');
-        } elseif (in_array($name, $this->routeCollection->getRouteNames())) {
+        } elseif (\in_array($name, $this->routeCollection->getRouteNames())) {
             $route = $this->routeCollection->getRoute($name);
             $this->showUsageMessageForRoute($route);
 
@@ -73,7 +74,7 @@ class Application extends \ZF\Console\Application
         foreach ($this->groups as $groupName => $groupCommands) {
             $console->writeLine('');
             $groupName = ($groupName != '*') ? $groupName : 'misc';
-            $console->writeLine(ucfirst($groupName) . ':', ColorInterface::YELLOW);
+            $console->writeLine(\ucfirst($groupName) . ':', ColorInterface::YELLOW);
 
             foreach ($groupCommands as $routeName) {
                 $route = $this->routeCollection->getRoute($routeName);
@@ -83,9 +84,9 @@ class Application extends \ZF\Console\Application
                 }
 
                 $routeName = $route->getName();
-                $spaces = $maxSpaces - strlen($routeName);
+                $spaces = $maxSpaces - \mb_strlen($routeName);
                 $console->write(' ' . $routeName, ColorInterface::GREEN);
-                $console->writeLine(str_repeat(' ', $spaces) . $route->getShortDescription());
+                $console->writeLine(\str_repeat(' ', $spaces) . $route->getShortDescription());
             }
         }
 

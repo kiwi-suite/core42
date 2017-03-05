@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42\Stdlib;
 
@@ -49,13 +50,13 @@ class IsSymlink implements PluginInterface
      *
      * Tells whether the specified $filename exists and is a symlink.
      *
-     * @param   string  $filename   Filename.
-     * @return  boolean             True if $filename is a symlink. Else false.
+     * @param   string  $filename   filename
+     * @return  bool             True if $filename is a symlink. Else false.
      */
     public function handle($filename)
     {
         $filename = $this->filesystem->getAdapter()->applyPathPrefix($filename);
 
-        return is_link($filename);
+        return \is_link($filename);
     }
 }

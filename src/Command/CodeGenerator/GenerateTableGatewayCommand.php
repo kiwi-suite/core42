@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42\Command\CodeGenerator;
 
@@ -105,7 +106,7 @@ class GenerateTableGatewayCommand extends AbstractCommand
     }
 
     /**
-     * @param boolean $overwrite
+     * @param bool $overwrite
      * @return $this
      */
     public function setOverwrite($overwrite)
@@ -155,13 +156,13 @@ class GenerateTableGatewayCommand extends AbstractCommand
             return;
         }
 
-        if (!is_dir($this->directory)) {
+        if (!\is_dir($this->directory)) {
             $this->addError('directory', "directory '" . $this->directory . "' doesn't exist");
 
             return;
         }
 
-        if (!is_writable($this->directory)) {
+        if (!\is_writable($this->directory)) {
             $this->addError('directory', "directory '" . $this->directory . "' isn't writeable");
 
             return;
@@ -173,7 +174,7 @@ class GenerateTableGatewayCommand extends AbstractCommand
             $this->addError('adapter', "adapter '" . $this->adapterName . "' not found");
         }
 
-        $this->directory = rtrim($this->directory, '/') . '/';
+        $this->directory = \rtrim($this->directory, '/') . '/';
     }
 
     /**
@@ -184,9 +185,9 @@ class GenerateTableGatewayCommand extends AbstractCommand
         $metadata = Factory::createSourceFromAdapter($this->adapter);
         $metadata->getTable($this->tableName);
 
-        $parts = explode('\\', $this->className);
-        $class = array_pop($parts);
-        $namespace = implode('\\', $parts);
+        $parts = \explode('\\', $this->className);
+        $class = \array_pop($parts);
+        $namespace = \implode('\\', $parts);
 
         $filename = $this->directory . $class . '.php';
 
@@ -197,7 +198,7 @@ class GenerateTableGatewayCommand extends AbstractCommand
             ->setExtendedClass('Core42\Db\TableGateway\AbstractTableGateway');
 
         $restoredDatabaseTypeMap = [];
-        if (file_exists($filename) && !$this->overwrite) {
+        if (\file_exists($filename) && !$this->overwrite) {
             $this->readExisting($filename, $classGenerator, $restoredDatabaseTypeMap);
         }
 
@@ -244,19 +245,19 @@ class GenerateTableGatewayCommand extends AbstractCommand
         $columns = $metadata->getColumns($this->tableName);
 
         foreach ($columns as $column) {
-            if (array_key_exists($column->getName(), $restoredDatabaseTypeMap)) {
+            if (\array_key_exists($column->getName(), $restoredDatabaseTypeMap)) {
                 $databaseTypeMap[$column->getName()] = $restoredDatabaseTypeMap[$column->getName()];
             } elseif ($column->getDataType() == 'enum'
-                && in_array($column->getErrata('permitted_values'), [['true', 'false'], ['false', 'true']])
+                && \in_array($column->getErrata('permitted_values'), [['true', 'false'], ['false', 'true']])
             ) {
                 $databaseTypeMap[$column->getName()] = 'boolean';
-            } elseif (in_array($column->getDataType(), ['date'])) {
+            } elseif (\in_array($column->getDataType(), ['date'])) {
                 $databaseTypeMap[$column->getName()] = 'date';
-            } elseif (in_array($column->getDataType(), ['datetime', 'timestamp'])) {
+            } elseif (\in_array($column->getDataType(), ['datetime', 'timestamp'])) {
                 $databaseTypeMap[$column->getName()] = 'dateTime';
-            } elseif (in_array($column->getDataType(), ['decimal', 'numeric', 'float', 'double'])) {
+            } elseif (\in_array($column->getDataType(), ['decimal', 'numeric', 'float', 'double'])) {
                 $databaseTypeMap[$column->getName()] = 'float';
-            } elseif (in_array($column->getDataType(), ['smallint', 'mediumint', 'int', 'bigint'])) {
+            } elseif (\in_array($column->getDataType(), ['smallint', 'mediumint', 'int', 'bigint'])) {
                 $databaseTypeMap[$column->getName()] = 'integer';
             } else {
                 $databaseTypeMap[$column->getName()] = 'string';
@@ -293,8 +294,8 @@ class GenerateTableGatewayCommand extends AbstractCommand
             )
             ->setFlags(Generator\PropertyGenerator::FLAG_PROTECTED);
         $classGenerator->addPropertyFromGenerator($property);
-        
-        file_put_contents($filename, "<?php\n" . $classGenerator->generate());
+
+        \file_put_contents($filename, "<?php\n" . $classGenerator->generate());
     }
 
     /**

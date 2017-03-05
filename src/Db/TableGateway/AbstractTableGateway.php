@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42\Db\TableGateway;
 
@@ -65,9 +66,9 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     ) {
         $this->adapter = $adapter;
 
-        if (is_string($this->modelPrototype)) {
+        if (\is_string($this->modelPrototype)) {
             $className = $this->modelPrototype;
-            $this->modelPrototype = new $className;
+            $this->modelPrototype = new $className();
         }
 
         if (!($this->modelPrototype instanceof ModelInterface)) {
@@ -98,11 +99,11 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
      */
     public function getModel()
     {
-        if (is_object($this->modelPrototype)) {
+        if (\is_object($this->modelPrototype)) {
             return clone $this->modelPrototype;
         }
 
-        return new $this->modelPrototype;
+        return new $this->modelPrototype();
     }
 
     /**
@@ -130,10 +131,10 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
         if ($set instanceof ModelInterface) {
             $insertSet = $this->getHydrator()->extract($set);
             $result = parent::insert($insertSet);
-            if (($primaryKeyValue = $this->lastInsertValue) && count($this->getPrimaryKey()) == 1) {
-                $where = array_flip($this->getPrimaryKey());
-                reset($where);
-                $where[key($where)] = $primaryKeyValue;
+            if (($primaryKeyValue = $this->lastInsertValue) && \count($this->getPrimaryKey()) == 1) {
+                $where = \array_flip($this->getPrimaryKey());
+                \reset($where);
+                $where[\key($where)] = $primaryKeyValue;
             } else {
                 $where = $this->getPrimaryValues($set);
             }
@@ -142,7 +143,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
             $set->memento();
 
             return $result;
-        } elseif (is_array($set)) {
+        } elseif (\is_array($set)) {
             $set = $this->getHydrator()->extractArray($set);
         }
         if (empty($set)) {
@@ -154,6 +155,8 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
 
     /**
      * @see \Zend\Db\TableGateway\AbstractTableGateway::update()
+     * @param mixed $set
+     * @param null|mixed $where
      */
     public function update($set, $where = null)
     {
@@ -165,10 +168,10 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
 
             $updateSet = $this->getHydrator()->extractArray($set->diff());
             $set->memento();
-        } elseif (is_array($set)) {
+        } elseif (\is_array($set)) {
             $updateSet = $this->getHydrator()->extractArray($set);
 
-            if (is_array($where)) {
+            if (\is_array($where)) {
                 $where = $this->getHydrator()->extractArray($where);
             }
         }
@@ -181,6 +184,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
 
     /**
      * @see \Zend\Db\TableGateway\AbstractTableGateway::delete()
+     * @param mixed $where
      */
     public function delete($where)
     {
@@ -189,7 +193,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
             if (empty($where)) {
                 return 0;
             }
-        } elseif (is_array($where)) {
+        } elseif (\is_array($where)) {
             $where = $this->getHydrator()->extractArray($where);
         }
 
@@ -198,26 +202,26 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
 
     /**
      * @param  string|int|array                 $values
-     * @return \Core42\Model\AbstractModel|null
      * @throws \Exception
+     * @return \Core42\Model\AbstractModel|null
      */
     public function selectByPrimary($values)
     {
-        if (!is_array($values) && !is_int($values) && !is_string($values)) {
+        if (!\is_array($values) && !\is_int($values) && !\is_string($values)) {
             throw new \Exception('invalid value');
         }
 
         $primary = $this->getPrimaryKey();
 
-        if ((!is_array($values) && count($primary) != 1) || count($values) != count($primary)) {
+        if ((!\is_array($values) && \count($primary) != 1) || \count($values) != \count($primary)) {
             throw new \Exception('invalid value');
         }
 
-        if (!is_array($values)) {
+        if (!\is_array($values)) {
             $values = [$primary[0] => $values];
         }
 
-        if (count(array_diff(array_keys($values), $primary)) > 0) {
+        if (\count(\array_diff(\array_keys($values), $primary)) > 0) {
             throw new \Exception('invalid value');
         }
 
@@ -245,9 +249,9 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
     {
         $values = $this->getHydrator()->extract($model);
 
-        $values = array_intersect_key($values, array_flip($this->getPrimaryKey()));
+        $values = \array_intersect_key($values, \array_flip($this->getPrimaryKey()));
 
-        return array_filter($values, function ($var) {
+        return \array_filter($values, function ($var) {
             return !empty($var);
         });
     }
@@ -282,6 +286,6 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
      */
     public function getColumns()
     {
-        return array_keys($this->databaseTypeMap);
+        return \array_keys($this->databaseTypeMap);
     }
 }

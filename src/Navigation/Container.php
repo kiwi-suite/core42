@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42\Navigation;
 
@@ -35,7 +36,7 @@ class Container implements ContainerInterface
      */
     public function addPage(PageInterface $page)
     {
-        $hash = spl_object_hash($page);
+        $hash = \spl_object_hash($page);
 
         $this->children[$hash] = $page;
         $this->sort[] = $hash;
@@ -53,13 +54,13 @@ class Container implements ContainerInterface
             }
             unset($this->children[$hash]);
 
-            $sortKey = array_search($hash, $this->sort);
+            $sortKey = \array_search($hash, $this->sort);
             if ($this->index >= $sortKey && $this->index > 0) {
                 $this->index--;
             }
 
             unset($this->sort[$sortKey]);
-            $this->sort = array_values($this->sort);
+            $this->sort = \array_values($this->sort);
         }
     }
 
@@ -86,14 +87,14 @@ class Container implements ContainerInterface
             }
         }
 
-        asort($sort);
-        $this->sort = array_keys($sort);
+        \asort($sort);
+        $this->sort = \array_keys($sort);
     }
 
     /**
      * Return the current element
-     * @link http://php.net/manual/en/iterator.current.php
-     * @return mixed Can return any type.
+     * @see http://php.net/manual/en/iterator.current.php
+     * @return mixed can return any type
      * @since 5.0.0
      */
     public function current()
@@ -103,8 +104,8 @@ class Container implements ContainerInterface
 
     /**
      * Move forward to next element
-     * @link http://php.net/manual/en/iterator.next.php
-     * @return void Any returned value is ignored.
+     * @see http://php.net/manual/en/iterator.next.php
+     * @return void any returned value is ignored
      * @since 5.0.0
      */
     public function next()
@@ -114,8 +115,8 @@ class Container implements ContainerInterface
 
     /**
      * Return the key of the current element
-     * @link http://php.net/manual/en/iterator.key.php
-     * @return mixed scalar on success, or null on failure.
+     * @see http://php.net/manual/en/iterator.key.php
+     * @return mixed scalar on success, or null on failure
      * @since 5.0.0
      */
     public function key()
@@ -125,7 +126,7 @@ class Container implements ContainerInterface
 
     /**
      * Checks if current position is valid
-     * @link http://php.net/manual/en/iterator.valid.php
+     * @see http://php.net/manual/en/iterator.valid.php
      * @return bool The return value will be casted to boolean and then evaluated.
      * Returns true on success or false on failure.
      * @since 5.0.0
@@ -137,8 +138,8 @@ class Container implements ContainerInterface
 
     /**
      * Rewind the Iterator to the first element
-     * @link http://php.net/manual/en/iterator.rewind.php
-     * @return void Any returned value is ignored.
+     * @see http://php.net/manual/en/iterator.rewind.php
+     * @return void any returned value is ignored
      * @since 5.0.0
      */
     public function rewind()
@@ -148,19 +149,19 @@ class Container implements ContainerInterface
 
     /**
      * Returns if an iterator can be created for the current entry.
-     * @link http://php.net/manual/en/recursiveiterator.haschildren.php
-     * @return bool true if the current entry can be iterated over, otherwise returns false.
+     * @see http://php.net/manual/en/recursiveiterator.haschildren.php
+     * @return bool true if the current entry can be iterated over, otherwise returns false
      * @since 5.1.0
      */
     public function hasChildren()
     {
-        return count($this->children) > 0;
+        return \count($this->children) > 0;
     }
 
     /**
      * Returns an iterator for the current entry.
-     * @link http://php.net/manual/en/recursiveiterator.getchildren.php
-     * @return \RecursiveIterator An iterator for the current entry.
+     * @see http://php.net/manual/en/recursiveiterator.getchildren.php
+     * @return \RecursiveIterator an iterator for the current entry
      * @since 5.1.0
      */
     public function getChildren()

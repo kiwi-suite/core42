@@ -10,7 +10,7 @@
     ],
     "homepage": "https://www.raum42.at/",
     "require": {
-        "php": "^5.5 || ^7.0",
+        "php": "^5.6 || ^7.0",
         "ext-intl" : "*",
         "composer/installers": "~1.0",
 
@@ -68,6 +68,10 @@
         "zfcampus/zf-console": "1.3.0",
         "mtdowling/cron-expression": "v1.1.0"
     },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7 || ^6.0.6",
+        "friendsofphp/php-cs-fixer": "^2.0"
+    },
     "bin": [
         "bin/fruit"
     ],
@@ -78,7 +82,7 @@
     },
     "autoload-dev": {
         "psr-4": {
-            "Core42Test\\": "src/"
+            "Core42Test\\": "tests/"
         }
     }
 }

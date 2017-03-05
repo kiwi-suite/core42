@@ -1,4 +1,15 @@
 <?php
+
+/*
+ * core42
+ *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
+ */
+
 namespace Core42;
 
 use Stash\Driver\Composite;
@@ -16,7 +27,7 @@ return [
             'filesystem' => [
                 'driver' => FileSystem::class,
                 'options' => [
-                    'path' => 'data/cache'
+                    'path' => 'data/cache',
                 ],
             ],
 
@@ -24,14 +35,14 @@ return [
                 'driver' => Composite::class,
                 'options' => [
                     'drivers' => 'ephemeral, filesystem',
-                ]
+                ],
             ],
 
             'development' => [
                 'driver' => Composite::class,
                 'options' => [
                     'drivers' => 'ephemeral',
-                ]
+                ],
             ],
         ],
     ],

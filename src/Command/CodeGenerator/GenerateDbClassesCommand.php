@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42\Command\CodeGenerator;
 
@@ -56,7 +57,7 @@ class GenerateDbClassesCommand extends AbstractCommand
      * @var bool
      */
     protected $overwrite = false;
-    
+
     /**
      * @var string
      */
@@ -145,13 +146,13 @@ class GenerateDbClassesCommand extends AbstractCommand
     }
 
     /**
-     * @param boolean $overwrite
+     * @param bool $overwrite
      * @return $this
      */
     public function setOverwrite($overwrite)
     {
         $this->overwrite = $overwrite;
-        
+
         return $this;
     }
 
@@ -174,7 +175,7 @@ class GenerateDbClassesCommand extends AbstractCommand
 
         if ($this->all !== null && (!empty($this->table) || !empty($this->name))) {
             $this->addError('all', 'both usage of name/table arguments and --all argument is not allowed');
-            
+
             return;
         }
         if ($this->all === null && (empty($this->table) || empty($this->name))) {
@@ -189,37 +190,37 @@ class GenerateDbClassesCommand extends AbstractCommand
             return;
         }
 
-        if (!is_dir($this->directory)) {
+        if (!\is_dir($this->directory)) {
             $this->addError('directory', "directory '" . $this->directory . "' doesn't exist");
 
             return;
         }
 
-        if (!is_dir($this->directory . '/' . 'Model')) {
+        if (!\is_dir($this->directory . '/' . 'Model')) {
             $this->addError('directory', "directory '" . $this->directory . "/Model' doesn't exist");
 
             return;
         }
 
-        if (!is_dir($this->directory . '/' . 'TableGateway')) {
+        if (!\is_dir($this->directory . '/' . 'TableGateway')) {
             $this->addError('directory', "directory '" . $this->directory . "/TableGateway' doesn't exist");
 
             return;
         }
 
-        if (!is_writable($this->directory . '/' . 'Model')) {
+        if (!\is_writable($this->directory . '/' . 'Model')) {
             $this->addError('directory', "directory '" . $this->directory . "/Model' isn't writeable");
 
             return;
         }
 
-        if (!is_writable($this->directory . '/' . 'TableGateway')) {
+        if (!\is_writable($this->directory . '/' . 'TableGateway')) {
             $this->addError('directory', "directory '" . $this->directory . "/TableGateway' isn't writeable");
 
             return;
         }
 
-        $this->directory = rtrim($this->directory, '/') . '/';
+        $this->directory = \rtrim($this->directory, '/') . '/';
     }
 
     /**
@@ -235,16 +236,16 @@ class GenerateDbClassesCommand extends AbstractCommand
             $filter = new UnderscoreToCamelCase();
 
             foreach ($tables as $table) {
-                if (in_array($table, ['migrations'])) {
+                if (\in_array($table, ['migrations'])) {
                     continue;
                 }
-                if ($this->all != '*' && substr($table, 0, strlen($this->all)) != $this->all) {
+                if ($this->all != '*' && \mb_substr($table, 0, \mb_strlen($this->all)) != $this->all) {
                     continue;
                 }
 
                 $this->consoleOutput('Generate files for: ' . $table);
 
-                $name = ucfirst($filter->filter(strtolower($table)));
+                $name = \ucfirst($filter->filter(\mb_strtolower($table)));
                 $this->generate($name, $table);
             }
 

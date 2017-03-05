@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42\Stdlib;
 
@@ -50,21 +51,21 @@ class DeleteSymlink implements PluginInterface
      *
      * Deletes a symlink.
      *
-     * @param   string  $symlink    Symlink name.
-     * @return  boolean             True on success. False on failure.
+     * @param   string  $symlink    symlink name
+     * @return  bool             True on success. False on failure.
      */
     public function handle($symlink)
     {
         $symlink = $this->filesystem->getAdapter()->applyPathPrefix($symlink);
 
-        if (!is_link($symlink)) {
+        if (!\is_link($symlink)) {
             return false;
         }
 
-        if (Console::isWindows() && is_dir($symlink)) {
-            return rmdir($symlink);
+        if (Console::isWindows() && \is_dir($symlink)) {
+            return \rmdir($symlink);
         } else {
-            return unlink($symlink);
+            return \unlink($symlink);
         }
     }
 }

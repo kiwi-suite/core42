@@ -1,4 +1,15 @@
 <?php
+
+/*
+ * core42
+ *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
+ */
+
 namespace Core42\Command\Setup\Command;
 
 use Core42\Command\AbstractCommand;
@@ -58,10 +69,10 @@ class DatabaseSetupCommand extends AbstractCommand
         $valueGenerator->setType(ValueGenerator::TYPE_ARRAY_SHORT);
 
         $filegenerator = new FileGenerator();
-        $filegenerator->setBody("return " . $valueGenerator->generate() .  ";" . PHP_EOL);
+        $filegenerator->setBody("return " . $valueGenerator->generate() . ";" . PHP_EOL);
 
         $this->consoleOutput("<info>config written to 'config/autoload/local.database.config.php'</info>");
-        file_put_contents("config/autoload/local.database.config.php", $filegenerator->generate());
+        \file_put_contents("config/autoload/local.database.config.php", $filegenerator->generate());
     }
 
     protected function ask()
@@ -97,7 +108,7 @@ class DatabaseSetupCommand extends AbstractCommand
             'password'  => $password,
             'hostname'  => $hostname,
             'options'   => [
-                'buffer_results' => false
+                'buffer_results' => false,
             ],
             'charset'   => 'utf8',
         ];

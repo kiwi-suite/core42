@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42\Command\Service;
 
@@ -38,11 +39,11 @@ class CommandPluginManager extends AbstractPluginManager
     public function get($name, array $options = null)
     {
         if (!$this->has($name)) {
-            if (!$this->autoAddInvokableClass || !class_exists($name)) {
-                throw new ServiceNotFoundException(sprintf(
+            if (!$this->autoAddInvokableClass || !\class_exists($name)) {
+                throw new ServiceNotFoundException(\sprintf(
                     'A plugin by the name "%s" was not found in the plugin manager %s',
                     $name,
-                    get_class($this)
+                    \get_class($this)
                 ));
             }
 

@@ -1,4 +1,15 @@
 <?php
+
+/*
+ * core42
+ *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
+ */
+
 namespace Core42\Security\Csp;
 
 use Zend\Filter\Word\DashToCamelCase;
@@ -69,7 +80,7 @@ class Csp
      */
     protected function generateNonce()
     {
-        $this->nonce = base64_encode(random_bytes(16));
+        $this->nonce = \base64_encode(\random_bytes(16));
     }
 
     public function writeHeaders(Response $response)
@@ -94,24 +105,24 @@ class Csp
         $headers = [];
         $dashToCamelCase = new DashToCamelCase();
         foreach ($this->types as $type) {
-            $method = 'get' . ucfirst($dashToCamelCase->filter($type));
+            $method = 'get' . \ucfirst($dashToCamelCase->filter($type));
 
             $options = $this->getCspOptions()->{$method}();
             if ($options === false) {
                 continue;
             }
 
-            if (!is_array($options)) {
+            if (!\is_array($options)) {
                 continue;
             }
 
-            if ($this->getCspOptions()->getNonce() === true && !in_array("'unsafe-inline'", $options)) {
+            if ($this->getCspOptions()->getNonce() === true && !\in_array("'unsafe-inline'", $options)) {
                 $options[] = "'nonce-" . $this->getNonce() . "'";
             }
 
-            $headers[] = $type . ' ' . implode(" ", $options);
+            $headers[] = $type . ' ' . \implode(" ", $options);
         }
 
-        return implode("; ", $headers);
+        return \implode("; ", $headers);
     }
 }

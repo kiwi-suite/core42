@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42\Hydrator;
 
@@ -115,8 +116,8 @@ class BaseHydrator extends ArraySerializable
 
     /**
      * @param $strategy
-     * @return StrategyInterface
      * @throws \Exception
+     * @return StrategyInterface
      */
     public function getStrategyObject($strategy)
     {
@@ -124,7 +125,7 @@ class BaseHydrator extends ArraySerializable
             return $strategy;
         }
 
-        if (is_string($strategy)) {
+        if (\is_string($strategy)) {
             $strategy = $this->strategyPluginManager->get($strategy);
         }
 

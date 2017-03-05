@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42\Selector;
 
@@ -45,7 +46,7 @@ abstract class AbstractDatabaseSelector extends AbstractSelector
     {
         parent::init();
 
-        if (!is_array($this->getDatabaseTypeMap())) {
+        if (!\is_array($this->getDatabaseTypeMap())) {
             throw new \Exception("'getDatabaseTypeMap' doesn't return an array");
         }
     }
@@ -118,7 +119,7 @@ abstract class AbstractDatabaseSelector extends AbstractSelector
 
         $resultSet = new ResultSet($this->getHydrator(), $this->getModel());
 
-        if (is_string($select)) {
+        if (\is_string($select)) {
             $resultSet = $this->getAdapter()->query($select, Adapter::QUERY_MODE_EXECUTE, $resultSet);
         } elseif ($select instanceof Select) {
             $statement = $this->getSql()->prepareStatementForSqlObject($select);

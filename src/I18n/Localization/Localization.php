@@ -5,10 +5,11 @@
  *
  * @package core42
  * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2016 raum42 (https://www.raum42.at)
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
  * @license MIT License
  * @author raum42 <kiwi@raum42.at>
  */
+
 
 namespace Core42\I18n\Localization;
 
@@ -55,7 +56,7 @@ class Localization extends AbstractOptions
      */
     public function setType($type)
     {
-        if (!in_array($type, [self::TYPE_LANGUAGE, self::TYPE_REGION])) {
+        if (!\in_array($type, [self::TYPE_LANGUAGE, self::TYPE_REGION])) {
             throw new \Exception('invalid type');
         }
 
@@ -75,7 +76,7 @@ class Localization extends AbstractOptions
      */
     public function setLocales(array $locales)
     {
-        $this->locales = array_filter($locales);
+        $this->locales = \array_filter($locales);
     }
 
     /**
@@ -91,7 +92,7 @@ class Localization extends AbstractOptions
      */
     public function getAvailableLocales()
     {
-        return array_keys($this->locales);
+        return \array_keys($this->locales);
     }
 
     /**
@@ -101,7 +102,7 @@ class Localization extends AbstractOptions
     public function getAvailableLocaleDisplay($locale)
     {
         $options = $this->getLocaleOptions($locale);
-        if ($options !== false && array_key_exists('name', $options)) {
+        if ($options !== false && \array_key_exists('name', $options)) {
             $name = $options['name'];
         } elseif ($options !== false) {
             if ($this->type == self::TYPE_REGION) {
@@ -141,7 +142,7 @@ class Localization extends AbstractOptions
         $possibleLocales = [];
 
         foreach ($this->locales as $_locale => $options) {
-            if (array_key_exists('lang', $options)) {
+            if (\array_key_exists('lang', $options)) {
                 if ($options['lang'] == $lang) {
                     $possibleLocales[] = $_locale;
                 }
@@ -158,8 +159,8 @@ class Localization extends AbstractOptions
             return false;
         }
 
-        if (count($possibleLocales) == 1) {
-            return current($possibleLocales);
+        if (\count($possibleLocales) == 1) {
+            return \current($possibleLocales);
         }
 
         foreach ($possibleLocales as $_locale) {
@@ -168,12 +169,12 @@ class Localization extends AbstractOptions
                 continue;
             }
 
-            if (is_array($options) && array_key_exists('default', $options) && $options['default'] === true) {
+            if (\is_array($options) && \array_key_exists('default', $options) && $options['default'] === true) {
                 return $_locale;
             }
         }
 
-        return current($possibleLocales);
+        return \current($possibleLocales);
     }
 
     /**
@@ -182,7 +183,7 @@ class Localization extends AbstractOptions
      */
     public function getLocaleOptions($locale)
     {
-        if (!array_key_exists($locale, $this->locales)) {
+        if (!\array_key_exists($locale, $this->locales)) {
             return false;
         }
 
@@ -229,7 +230,7 @@ class Localization extends AbstractOptions
         \Locale::setDefault($locale);
 
         foreach (['.utf8', '.UTF-8', ''] as $encodigPrefix) {
-            if ((setlocale(LC_ALL, \Locale::canonicalize($locale) . $encodigPrefix)) !== false) {
+            if ((\setlocale(LC_ALL, \Locale::canonicalize($locale) . $encodigPrefix)) !== false) {
                 break;
             }
         }
@@ -238,12 +239,12 @@ class Localization extends AbstractOptions
     }
 
     /**
-     * @return string
      * @throws \Exception
+     * @return string
      */
     public function getDefaultLocale()
     {
-        if (count($this->locales) == 0) {
+        if (\count($this->locales) == 0) {
             throw new \Exception('no locales set');
         }
 
@@ -253,12 +254,12 @@ class Localization extends AbstractOptions
                 continue;
             }
 
-            if (is_array($options) && array_key_exists('default', $options) && $options['default'] === true) {
+            if (\is_array($options) && \array_key_exists('default', $options) && $options['default'] === true) {
                 return $_locale;
             }
         }
 
-        return current($this->getAvailableLocales());
+        return \current($this->getAvailableLocales());
     }
 
     /**
@@ -268,7 +269,7 @@ class Localization extends AbstractOptions
     {
         $locale = \Locale::acceptFromHttp($this->header);
 
-        if (empty($locale) || !in_array($locale, $this->locales)) {
+        if (empty($locale) || !\in_array($locale, $this->locales)) {
             $locale = $this->getDefaultLocale();
         }
 

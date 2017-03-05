@@ -1,4 +1,15 @@
 <?php
+
+/*
+ * core42
+ *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
+ */
+
 namespace Core42\Mail\Transport;
 
 class FileTransport implements \Swift_Transport
@@ -70,17 +81,17 @@ class FileTransport implements \Swift_Transport
         }
 
         $count = (
-            count((array) $message->getTo())
-            + count((array) $message->getCc())
-            + count((array) $message->getBcc())
+            \count((array) $message->getTo())
+            + \count((array) $message->getCc())
+            + \count((array) $message->getBcc())
         );
 
-        $filename = 'Mail_' . time() . '_' . mt_rand() . '.eml';
+        $filename = 'Mail_' . \time() . '_' . \mt_rand() . '.eml';
         $file     = $this->path . '/' . $filename;
         $email    = $message->toString();
 
-        if (false === file_put_contents($file, $email)) {
-            throw new \Swift_TransportException(sprintf(
+        if (false === \file_put_contents($file, $email)) {
+            throw new \Swift_TransportException(\sprintf(
                 'Unable to write mail to file (directory "%s")',
                 $this->path
             ));
