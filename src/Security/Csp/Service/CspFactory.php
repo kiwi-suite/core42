@@ -37,7 +37,7 @@ class CspFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $cspOptions = new CspOptions($container->get('Config')['security']['csp']);
+        $cspOptions = new CspOptions($container->get('config')['security']['csp']);
 
         return new Csp($cspOptions);
     }

@@ -21,14 +21,14 @@ class AbstractLoggerFactory implements AbstractFactoryInterface
 {
     public function canCreate(ContainerInterface $container, $requestedName)
     {
-        $config = $container->get('Config');
+        $config = $container->get('config');
 
         return isset($config['log']['logger'][$requestedName]);
     }
 
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $config = $container->get('Config')['log']['logger'][$requestedName];
+        $config = $container->get('config')['log']['logger'][$requestedName];
 
         /* @var HandlerPluginManager $handlerPluginManager */
         $handlerPluginManager = $container->get(HandlerPluginManager::class);

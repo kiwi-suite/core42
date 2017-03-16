@@ -40,7 +40,7 @@ class TransportFactory implements FactoryInterface
      */
     private function getConfig(ContainerInterface $container)
     {
-        $config = $container->get('Config');
+        $config = $container->get('config');
 
         if (isset($config['mail']['transport'])) {
             return $config['mail']['transport'];
