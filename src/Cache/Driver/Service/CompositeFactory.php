@@ -37,12 +37,21 @@ class CompositeFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
+        if ($options === null) {
+            $options = [];
+        }
+
         $drivers = [];
 
-        $selectedDrivers = (!empty($options['drivers']) && \is_string($options['drivers'])) ? $options['drivers'] : [];
+        $selectedDrivers = (!empty($options['drivers']) && \is_string($options['drivers'])) ? $options['drivers'] : "";
         $selectedDrivers = \explode(",", $selectedDrivers);
         foreach ($selectedDrivers as $driver) {
-            $drivers[] = $container->get(DriverPluginManager::class)->get(\trim($driver));
+            $driver = \trim($driver);
+            if (empty($driver)) {
+                continue;
+            }
+
+            $drivers[] = $container->get(DriverPluginManager::class)->get($driver);
         }
 
         $options['drivers'] = $drivers;

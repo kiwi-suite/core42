@@ -27,9 +27,11 @@ class DriverAbstractFactory implements AbstractFactoryInterface
      */
     protected function getConfig(ContainerInterface $container)
     {
-        $config = $container->get('Config');
-        $config = (isset($config['cache']['drivers'])) ? $config['cache']['drivers'] : [];
-
+        $config = $container->get('config');
+        $config = (!empty($config['cache']['drivers'])) ? $config['cache']['drivers'] : [];
+        if (!is_array($config)) {
+            $config = [];
+        }
         return $config;
     }
 
