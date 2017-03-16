@@ -30,7 +30,7 @@ class CacheAbstractFactory implements AbstractFactoryInterface
     {
         $config = $container->get('config');
         $config = (!empty($config['cache']['caches'])) ? $config['cache']['caches'] : [];
-        if (!is_array($config)) {
+        if (!\is_array($config)) {
             $config = [];
         }
 
