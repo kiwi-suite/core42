@@ -39,7 +39,7 @@ class Proxy extends AbstractHelper
     public function __call($method, $attributes)
     {
         if (empty($this->object)) {
-            return;
+            return null;
         }
 
         return \call_user_func_array([$this->object, $method], $attributes);
@@ -47,11 +47,12 @@ class Proxy extends AbstractHelper
 
     /**
      * @param string $name
+     * @return mixed
      */
     public function __get($name)
     {
         if (empty($this->object)) {
-            return;
+            return null;
         }
 
         return $this->object->{$name};
