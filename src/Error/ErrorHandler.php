@@ -186,7 +186,6 @@ class ErrorHandler
             $logger = self::$serviceManager->get('Logger')->get('error');
             $logger->error($this->e->getMessage() . ' in ' . $this->e->getFile() . ':' . $this->e->getLine());
         } catch (\Exception $e) {
-
         }
     }
 }
