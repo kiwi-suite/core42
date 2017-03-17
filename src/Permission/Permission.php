@@ -91,7 +91,7 @@ class Permission extends Rbac implements PermissionInterface
         }
 
         if ($assert) {
-            return $this->assert($assert);
+            return $this->assert($assert, $params);
         }
 
         return $this->getRole($role)->hasPermission($permission);
