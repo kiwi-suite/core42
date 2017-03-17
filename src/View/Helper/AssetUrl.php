@@ -20,7 +20,7 @@ class AssetUrl extends AbstractHelper
     /**
      * @var string
      */
-    protected $assetUrl;
+    protected $assetUrl = "";
 
     /**
      * @var array
@@ -37,15 +37,10 @@ class AssetUrl extends AbstractHelper
     /**
      * @param null|string $file
      * @param null $name
-     * @throws \Exception
      * @return string
      */
     public function __invoke($file = "", $name = null)
     {
-        if (null === $this->assetUrl) {
-            throw new \Exception('No base path provided');
-        }
-
         $directory = "";
         if ($name !== null && !empty($this->assetConfig[$name])) {
             $directory = '/' . \trim($this->assetConfig[$name], '/');
@@ -64,6 +59,10 @@ class AssetUrl extends AbstractHelper
      */
     public function setAssetUrl($assetUrl)
     {
+        if (empty($assetUrl)) {
+            $assetUrl = "";
+        }
+
         $this->assetUrl = \rtrim($assetUrl, '/');
 
         return $this;
