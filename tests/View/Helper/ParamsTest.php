@@ -28,10 +28,7 @@ class ParamsTest extends TestCase
             'post_test' => 'abcdefg',
         ];
 
-        $_SERVER = [
-            'HTTP_ACCEPT_ENCODING' => 'gzip, deflate, sdch, br',
-            'SCRIPT_NAME' => 'index.php',
-        ];
+        $_SERVER['HTTP_ACCEPT_ENCODING'] = 'gzip, deflate, sdch, br';
 
         $_FILES = [
             'file1' => [
