@@ -27,6 +27,11 @@ class AssetUrl extends AbstractHelper
      */
     protected $assetConfig = [];
 
+    /**
+     * AssetUrl constructor.
+     * @param $assetUrl
+     * @param array $assetConfig
+     */
     public function __construct($assetUrl, array $assetConfig)
     {
         $this->setAssetUrl($assetUrl);
