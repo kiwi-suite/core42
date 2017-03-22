@@ -69,6 +69,8 @@ class ArrayContainer extends AbstractHelper implements \Countable, \Iterator
     {
         $this->data = ArrayUtils::filter($this->data, $callback, $flag);
 
+        $this->rewind();
+
         return $this;
     }
 
@@ -78,7 +80,9 @@ class ArrayContainer extends AbstractHelper implements \Countable, \Iterator
      */
     public function sort($function)
     {
-        \uasort($this->data, $function);
+        \usort($this->data, $function);
+
+        $this->rewind();
 
         return $this;
     }

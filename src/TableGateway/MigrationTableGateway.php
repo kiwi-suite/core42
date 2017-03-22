@@ -14,16 +14,14 @@
 namespace Core42\TableGateway;
 
 use Core42\Db\TableGateway\AbstractTableGateway;
-use Core42\Hydrator\BaseHydrator;
 use Core42\Model\Migration;
-use Zend\Db\Adapter\Adapter;
 
 class MigrationTableGateway extends AbstractTableGateway
 {
     /**
      * @var string
      */
-    protected $table = 'migrations';
+    protected $table = 'core42_migration';
 
     /**
      * @var array
@@ -42,21 +40,4 @@ class MigrationTableGateway extends AbstractTableGateway
      * @var string
      */
     protected $modelPrototype = Migration::class;
-
-    /**
-     * MigrationTableGateway constructor.
-     * @param Adapter $adapter
-     * @param BaseHydrator $hydrator
-     * @param Adapter $tablename
-     * @param null $slave
-     */
-    public function __construct(
-        Adapter $adapter,
-        BaseHydrator $hydrator,
-        $tablename,
-        $slave = null
-    ) {
-        $this->table = $tablename;
-        parent::__construct($adapter, $hydrator, $slave);
-    }
 }

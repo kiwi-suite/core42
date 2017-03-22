@@ -58,9 +58,6 @@ use Core42\Security\Csp\Csp;
 use Core42\Security\Csp\Service\CspFactory;
 use Core42\Selector\Service\SelectorPluginManager;
 use Core42\Selector\Service\SelectorPluginManagerFactory;
-use Core42\TableGateway\MigrationTableGateway;
-use Core42\TableGateway\Service\MigrationTableGatewayFactory;
-use Core42\View\Http\Service\ExceptionStrategyFactory;
 use Zend\Db\Adapter\AdapterInterface;
 use Zend\I18n\Translator\TranslatorInterface;
 use Zend\ServiceManager\Factory\InvokableFactory;
@@ -108,8 +105,6 @@ return [
 
             'Db\Master'                                     => AdapterFactory::class,
 
-            'HttpExceptionStrategy'                         => ExceptionStrategyFactory::class,
-
             'Core42\Mail\Transport'                         => TransportFactory::class,
 
             CachePluginManager::class                       => CachePluginManagerFactory::class,
@@ -135,12 +130,6 @@ return [
             'Form'                                          => FormPluginManager::class,
             'Cache'                                         => CachePluginManager::class,
             'Logger'                                        => LoggerPluginManager::class,
-        ],
-    ],
-
-    'table_gateway' => [
-        'factories' => [
-            MigrationTableGateway::class => MigrationTableGatewayFactory::class,
         ],
     ],
 ];

@@ -13,7 +13,7 @@
 
 namespace Core42\View\Helper;
 
-use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\Uuid as UuidGenerator;
 use Zend\View\Helper\AbstractHelper;
 
 class WordTruncate extends AbstractHelper
@@ -31,7 +31,7 @@ class WordTruncate extends AbstractHelper
             return $string;
         }
 
-        $uuid = Uuid::uuid4()->toString();
+        $uuid = UuidGenerator::uuid4()->toString();
 
         $wordWrap = \wordwrap($string, $width, "\n{{#wrap#" . $uuid . "}}");
 

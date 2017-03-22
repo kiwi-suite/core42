@@ -110,7 +110,7 @@ class ErrorHandler
 
         if (!empty($_SERVER)) {
             foreach (['application/json', 'text/json', 'application/x-json'] as $check) {
-                if (\mb_strpos($_SERVER['HTTP_ACCEPT'], $check) !== false) {
+                if (!empty($_SERVER['HTTP_ACCEPT']) && \mb_strpos($_SERVER['HTTP_ACCEPT'], $check) !== false) {
                     $this->getJsonErrors();
 
                     return;
@@ -182,7 +182,10 @@ class ErrorHandler
             return;
         }
 
-        $logger = self::$serviceManager->get('Logger')->get('error');
-        $logger->error($this->e->getMessage() . ' in ' . $this->e->getFile() . ':' . $this->e->getLine());
+        try {
+            $logger = self::$serviceManager->get('Logger')->get('error');
+            $logger->error($this->e->getMessage() . ' in ' . $this->e->getFile() . ':' . $this->e->getLine());
+        } catch (\Exception $e) {
+        }
     }
 }

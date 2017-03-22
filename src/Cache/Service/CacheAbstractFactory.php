@@ -28,8 +28,11 @@ class CacheAbstractFactory implements AbstractFactoryInterface
      */
     protected function getConfig(ContainerInterface $container)
     {
-        $config = $container->get('Config');
-        $config = (isset($config['cache']['caches'])) ? $config['cache']['caches'] : [];
+        $config = $container->get('config');
+        $config = (!empty($config['cache']['caches'])) ? $config['cache']['caches'] : [];
+        if (!\is_array($config)) {
+            $config = [];
+        }
 
         return $config;
     }

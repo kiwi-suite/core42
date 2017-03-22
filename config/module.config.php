@@ -14,7 +14,6 @@ namespace Core42;
 
 use Core42\View\Helper\Auth;
 use Core42\View\Helper\InlineScript;
-use Core42\View\Helper\Navigation\Service\BreadcrumbsFactory;
 use Core42\View\Helper\Navigation\Service\MenuFactory;
 use Core42\View\Helper\Params;
 use Core42\View\Helper\Service\AssetUrlFactory;
@@ -40,7 +39,6 @@ return [
             'permission'            => PermissionFactory::class,
             'localization'          => LocalizationFactory::class,
             'menu'                  => MenuFactory::class,
-            'breadcrumbs'           => BreadcrumbsFactory::class,
             'mobileDetect'          => MobileDetectFactory::class,
             'slugify'               => SlugifyFactory::class,
             'csp'                   => CspFactory::class,

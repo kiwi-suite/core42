@@ -37,12 +37,12 @@ class AssetUrlFactory implements FactoryInterface
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
     {
-        $assetUrl = $container->get('Config')['assets']['asset_url'];
+        $assetUrl = $container->get('config')['assets']['asset_url'];
         if (empty($assetUrl)) {
             $assetUrl = '/';
         }
 
-        $prependBasePath = $container->get('Config')['assets']['prepend_base_path'];
+        $prependBasePath = $container->get('config')['assets']['prepend_base_path'];
         if ($prependBasePath === true) {
             $request = $container->get('Request');
 
@@ -52,22 +52,22 @@ class AssetUrlFactory implements FactoryInterface
             }
         }
 
-        $assetPath = $container->get('Config')['assets']['asset_path'];
+        $assetPath = $container->get('config')['assets']['asset_path'];
         if (!empty($assetPath)) {
             $assetUrl = \rtrim($assetUrl, '/');
             $assetUrl .= $assetPath;
         }
 
-        $prependCommit = $container->get('Config')['assets']['prepend_commit'];
+        $prependCommit = $container->get('config')['assets']['prepend_commit'];
         if ($prependCommit === true) {
             $assetUrl = $this->appendCommitHash(
                 $assetUrl,
-                $container->get($container->get('Config')['assets']['commit_strategy'])
+                $container->get($container->get('config')['assets']['commit_strategy'])
             );
         }
 
         $directories = [];
-        $assetDirectories = $container->get('Config')['assets']['directories'];
+        $assetDirectories = $container->get('config')['assets']['directories'];
         foreach ($assetDirectories as $name => $dir) {
             $directories[$name] = $dir['target'];
         }

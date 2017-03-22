@@ -184,8 +184,8 @@ abstract class AbstractTestCase extends \PHPUnit_Framework_TestCase
     /**
      * Reset the request
      *
-     * @return $this
      * @param mixed $keepPersistence
+     * @return $this
      */
     public function reset($keepPersistence = false)
     {

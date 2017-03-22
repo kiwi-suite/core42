@@ -58,7 +58,7 @@ class Params extends AbstractHelper
     /**
      * @param  string                  $name
      * @param  mixed                   $default
-     * @return array|\ArrayAccess|null
+     * @return mixed
      */
     public function fromFiles($name = null, $default = null)
     {
@@ -72,7 +72,7 @@ class Params extends AbstractHelper
     /**
      * @param  string                                 $header
      * @param  mixed                                  $default
-     * @return null|\Zend\Http\Header\HeaderInterface
+     * @return mixed
      */
     public function fromHeader($header = null, $default = null)
     {
@@ -119,7 +119,7 @@ class Params extends AbstractHelper
     public function fromRoute($param = null, $default = null)
     {
         if (empty($this->routeMatch)) {
-            return '';
+            return $default;
         }
         if ($param === null) {
             return $this->routeMatch->getParams();
