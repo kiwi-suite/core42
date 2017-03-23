@@ -46,20 +46,19 @@ abstract class AbstractMigrationCommand extends AbstractCommand
      */
     protected function setupTable()
     {
-        $migrationConfig = $this->getMigrationConfig();
-
         /** @var Adapter $adapter */
         $adapter = $this->getServiceManager()->get('Db\Master');
 
+        $tableName = "core42_migration";
 
         $metadata = Factory::createSourceFromAdapter($adapter);
-        if (\in_array($migrationConfig['table_name'], $metadata->getTableNames())) {
+        if (\in_array($tableName, $metadata->getTableNames())) {
             return;
         }
 
         switch ($adapter->getPlatform()->getName()) {
             case 'MySQL':
-                $sql = 'CREATE TABLE `' . $migrationConfig['table_name'] . '` '
+                $sql = 'CREATE TABLE `' . $tableName . '` '
                     . '(`name` VARCHAR(255) NOT NULL, `created` DATETIME NOT NULL, PRIMARY KEY (`name`))';
                 break;
             default:
