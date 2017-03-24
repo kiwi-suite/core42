@@ -57,15 +57,4 @@ return [
             'InlineScript'          => InlineScript::class,
         ],
     ],
-
-    'navigation' => [
-        'service_manager' => [],
-        'filter_manager' => [],
-    ],
-
-    'controllers' => [
-        'abstract_factories' => [
-            'Core42\Mvc\Controller\Service\ControllerFallbackAbstractFactory',
-        ],
-    ],
 ];
