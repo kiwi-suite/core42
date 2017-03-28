@@ -1,5 +1,17 @@
 <?php
+
+/*
+ * core42
+ *
+ * @package core42
+ * @link https://github.com/raum42/core42
+ * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
+ * @license MIT License
+ * @author raum42 <kiwi@raum42.at>
+ */
+
 namespace Core42\Model;
+
 use Core42\View\Model\MailModel;
 use Zend\Stdlib\ArrayUtils;
 
@@ -37,7 +49,7 @@ class Mail extends AbstractModel
         'cc',
         'bcc',
         'replyTo',
-        'attachments'
+        'attachments',
     ];
 
     /**
@@ -150,6 +162,9 @@ class Mail extends AbstractModel
 
     /**
      *
+     * @param mixed $enableProjectDefaults
+     * @param mixed $enableSubjectPrefix
+     * @param mixed $emailSubjectPrefix
      */
     protected function normalizeSubject($enableProjectDefaults, $enableSubjectPrefix, $emailSubjectPrefix)
     {
@@ -334,7 +349,7 @@ class Mail extends AbstractModel
     protected function normalizeAttachments()
     {
         $attachments = $this->getAttachments();
-        if (!\is_array($attachments)){
+        if (!\is_array($attachments)) {
             $attachments = [];
         }
 

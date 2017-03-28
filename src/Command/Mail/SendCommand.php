@@ -266,13 +266,13 @@ class SendCommand extends AbstractCommand
         $this->mailMessage->setTo($this->mailModel->getTo());
         $this->mailMessage->setFrom($this->mailModel->getFrom());
         $this->mailMessage->setSubject($this->mailModel->getSubject());
-        if (!empty($this->mailModel->getCc())){
+        if (!empty($this->mailModel->getCc())) {
             $this->mailMessage->setCc($this->mailModel->getCc());
         }
-        if (!empty($this->mailModel->getBcc())){
+        if (!empty($this->mailModel->getBcc())) {
             $this->mailMessage->setBcc($this->mailModel->getBcc());
         }
-        if (!empty($this->mailModel->getReplyTo())){
+        if (!empty($this->mailModel->getReplyTo())) {
             $this->mailMessage->setReplyTo($this->mailModel->getReplyTo());
         }
 
