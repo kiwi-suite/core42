@@ -68,4 +68,31 @@ class MailModelTest extends TestCase
         $mailModel = new MailModel();
         $mailModel->useTemplate("test");
     }
+
+    public function testUseHtmlTemplate()
+    {
+        $mailModel = new MailModel();
+        $mailModel->setHtmlTemplate("mail");
+        $mailModel->useHtmlTemplate();
+        $this->assertSame("mail", $mailModel->getTemplate());
+    }
+
+    public function testUsePlainTemplate()
+    {
+        $mailModel = new MailModel();
+        $mailModel->setPlainTemplate("mail");
+        $mailModel->usePlainTemplate();
+        $this->assertSame("mail", $mailModel->getTemplate());
+    }
+
+    public function testUseTemplate()
+    {
+        $mailModel = new MailModel();
+        $mailModel->setPlainTemplate("plain");
+        $mailModel->setHtmlTemplate("html");
+        $mailModel->useTemplate(MailModel::TYPE_PLAIN);
+        $this->assertSame("plain", $mailModel->getTemplate());
+        $mailModel->useTemplate(MailModel::TYPE_HTML);
+        $this->assertSame("html", $mailModel->getTemplate());
+    }
 }
