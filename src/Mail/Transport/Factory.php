@@ -79,7 +79,7 @@ class Factory
      */
     protected static function createSendmailTransport($options)
     {
-        if ((isset($options['command']))) {
+        if (isset($options['command'])) {
             return \Swift_SendmailTransport::newInstance($options['command']);
         } else {
             return \Swift_SendmailTransport::newInstance();
