@@ -90,7 +90,7 @@ class FileTransport implements \Swift_Transport
         $file     = $this->path . '/' . $filename;
         $email    = $message->toString();
 
-        if (false === \file_put_contents($file, $email)) {
+        if (false === @\file_put_contents($file, $email)) {
             throw new \Swift_TransportException(\sprintf(
                 'Unable to write mail to file (directory "%s")',
                 $this->path
