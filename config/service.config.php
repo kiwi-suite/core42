@@ -44,6 +44,7 @@ use Core42\Log\Service\HandlerPluginManagerFactory;
 use Core42\Log\Service\LoggerPluginManager;
 use Core42\Log\Service\LoggerPluginManagerFactory;
 use Core42\Mail\Transport\Service\TransportFactory;
+use Core42\Mvc\Strategy\ExceptionStrategy;
 use Core42\Mvc\TreeRouteMatcher\Service\TreeRouteMatcherFactory;
 use Core42\Mvc\TreeRouteMatcher\TreeRouteMatcher;
 use Core42\Navigation\Service\FilterPluginManager;
@@ -120,9 +121,13 @@ return [
             LongCommitHash::class                           => InvokableFactory::class,
 
             Csp::class                                      => CspFactory::class,
+
+            ExceptionStrategy::class                        => InvokableFactory::class,
         ],
         'aliases' => [
             AdapterInterface::class                         => 'Db\Master',
+
+            'HttpExceptionStrategy'                         => ExceptionStrategy::class,
 
             'Command'                                       => CommandPluginManager::class,
             'TableGateway'                                  => TableGatewayPluginManager::class,
