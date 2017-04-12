@@ -26,7 +26,7 @@ use Zend\Stdlib\ArrayUtils;
  * @method string|array getFrom() getFrom()
  * @method Mail setTo() setTo(array $to)
  * @method array getTo() getTo()
-*  @method Mail setCc() setCc(array $cc)
+ *  @method Mail setCc() setCc(array $cc)
  * @method array getCc() getCc()
  * @method Mail setBcc() setBcc(array $bcc)
  * @method array getBcc() getBcc()
@@ -148,11 +148,13 @@ class Mail extends AbstractModel
         $config['email_from'] = (\array_key_exists("email_from", $config)) ? $config['email_from'] : "";
         $config['email_layout_html'] = (\array_key_exists("email_layout_html", $config)) ? $config['email_layout_html'] : "";
         $config['email_layout_plain'] = (\array_key_exists("email_layout_plain", $config)) ? $config['email_layout_plain'] : "";
+        $config['project_base_url'] = (\array_key_exists("project_base_url", $config)) ? $config['project_base_url'] : "";
+        $config['project_name'] = (\array_key_exists("project_name", $config)) ? $config['project_name'] : "";
 
         $this->normalizeSubject($enableProjectDefaults, $enableSubjectPrefix, $config['email_subject_prefix']);
         $this->normalizeFrom($enableProjectDefaults, $config['email_from']);
-        $this->normalizeLayout($enableProjectDefaults, $config['email_layout_html'], $config['email_layout_plain']);
-        $this->normalizeBody();
+        $this->normalizeLayout($enableProjectDefaults, $config);
+        $this->normalizeBody($config);
         $this->normalizeTo();
         $this->normalizeCc();
         $this->normalizeBcc();
@@ -179,11 +181,12 @@ class Mail extends AbstractModel
 
     /**
      * @param bool $enableProjectDefaults
-     * @param string $emailHtmlTemplate
-     * @param string $emailPlainTemplate
+     * @param array $config
      */
-    protected function normalizeLayout($enableProjectDefaults, $emailHtmlTemplate, $emailPlainTemplate)
+    protected function normalizeLayout($enableProjectDefaults, array $config)
     {
+        $emailHtmlTemplate = $config['email_layout_html'];
+        $emailPlainTemplate = $config['email_layout_plain'];
         $layout = $this->getLayout();
 
         if ($enableProjectDefaults === true
@@ -202,20 +205,30 @@ class Mail extends AbstractModel
 
         if (!($layout instanceof MailModel)) {
             $layout = null;
+        } else {
+            $layout->setVariables([
+                'projectBaseUrl' => $config['project_base_url'],
+                'projectName' => $config['project_name'],
+            ]);
         }
 
         $this->setLayout($layout);
     }
 
     /**
-     *
+     * @param array $config
      */
-    protected function normalizeBody()
+    protected function normalizeBody(array $config)
     {
         $body = $this->getBody();
 
         if (!($body instanceof MailModel)) {
             $body = null;
+        } else {
+            $body->setVariables([
+                'projectBaseUrl' => $config['project_base_url'],
+                'projectName' => $config['project_name'],
+            ]);
         }
 
         $this->setBody($body);
