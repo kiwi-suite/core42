@@ -282,6 +282,8 @@ class SendCommand extends AbstractCommand
         $phpRenderer->setResolver($viewResolver);
         $phpRenderer->setHelperPluginManager($this->getServiceManager()->get('ViewHelperManager'));
 
+        $this->mailModel->getBody()->setVariable("subject", $this->mailModel->getSubject());
+
         foreach ($this->parts as $type => $options) {
             if (!$this->mailModel->getBody()->hasTemplate($type)) {
                 continue;
