@@ -35,7 +35,7 @@
         "zendframework/zend-json": "^3.0",
         "zendframework/zend-math": "^3.0",
         "zendframework/zend-modulemanager": "^2.7",
-        "zendframework/zend-mvc": "^3.0",
+        "zendframework/zend-mvc": "3.0.4",
         "zendframework/zend-mvc-console": "^1.0",
         "zendframework/zend-mvc-plugin-fileprg": "^1.0",
         "zendframework/zend-mvc-plugin-flashmessenger": "^1.0",
