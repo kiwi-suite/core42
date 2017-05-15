@@ -10,7 +10,6 @@
  * @author raum42 <kiwi@raum42.at>
  */
 
-
 namespace Core42\I18n\Localization\Service;
 
 use Core42\I18n\Localization\Localization;
@@ -24,8 +23,8 @@ class LocalizationFactory implements FactoryInterface
 {
     /**
      * @param ContainerInterface $container
-     * @param $requestedName
-     * @param array|null $options
+     * @param                    $requestedName
+     * @param array|null         $options
      * @return Localization
      */
     public function __invoke(ContainerInterface $container, $requestedName, array $options = null)
@@ -36,10 +35,13 @@ class LocalizationFactory implements FactoryInterface
         /** @var AcceptLanguage $header */
         $header = ($request instanceof Request) ? $request->getHeader('Accept-Language', '') : '';
 
-        if($header instanceof AcceptLanguage) {
-            /** @var LanguageFieldValuePart $languageFieldValue */
-            $languageFieldValue = $header->getPrioritized()[0];
-            $header = $languageFieldValue->getLanguage();
+        if ($header instanceof AcceptLanguage) {
+            $headerPrioritized = $header->getPrioritized();
+            if (count($headerPrioritized)) {
+                /** @var LanguageFieldValuePart $languageFieldValue */
+                $languageFieldValue = $headerPrioritized[0];
+                $header = $languageFieldValue->getLanguage();
+            }
         }
 
         return new Localization($header, $config);
