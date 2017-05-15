@@ -15,6 +15,8 @@ namespace Core42\I18n\Localization\Service;
 
 use Core42\I18n\Localization\Localization;
 use Interop\Container\ContainerInterface;
+use Zend\Http\Header\Accept\FieldValuePart\LanguageFieldValuePart;
+use Zend\Http\Header\AcceptLanguage;
 use Zend\Http\PhpEnvironment\Request;
 use Zend\ServiceManager\Factory\FactoryInterface;
 
@@ -31,7 +33,14 @@ class LocalizationFactory implements FactoryInterface
         $config = $container->get('config')['i18n'];
         /** @var Request $request */
         $request = $container->get('request');
-        $header = ($request instanceof Request) ? $request->getHeader('HTTP_ACCEPT_LANGUAGE', '') : '';
+        /** @var AcceptLanguage $header */
+        $header = ($request instanceof Request) ? $request->getHeader('Accept-Language', '') : '';
+
+        if($header instanceof AcceptLanguage) {
+            /** @var LanguageFieldValuePart $languageFieldValue */
+            $languageFieldValue = $header->getPrioritized()[0];
+            $header = $languageFieldValue->getLanguage();
+        }
 
         return new Localization($header, $config);
     }
