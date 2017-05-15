@@ -269,7 +269,7 @@ class Localization extends AbstractOptions
     {
         $locale = \Locale::acceptFromHttp($this->header);
 
-        // fuzzy search for non fully qualitied locales (with language + region)
+        // fuzzy search for incomplete/complete locales (with language + region)
         $locale = str_replace('_', '-', $locale);
         foreach ($this->locales as $availableLocale => $options) {
             if(strpos($availableLocale, $locale) === 0) {
@@ -277,7 +277,7 @@ class Localization extends AbstractOptions
             }
         }
 
-        if (empty($locale) || !\in_array($locale, array_keys($this->locales))) {
+        if (empty($locale)) {
             $locale = $this->getDefaultLocale();
         }
 
