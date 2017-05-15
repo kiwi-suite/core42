@@ -40,8 +40,8 @@ class Localization extends AbstractOptions
     protected $header;
 
     /**
-     * @param array|null|\Traversable $header
-     * @param null                    $options
+     * @param string $header
+     * @param null   $options
      */
     public function __construct($header, $options = null)
     {
