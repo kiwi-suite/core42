@@ -229,7 +229,7 @@ class Localization extends AbstractOptions
         \Locale::setDefault($locale);
 
         foreach (['.utf8', '.UTF-8', ''] as $encodigPrefix) {
-            if ((\setlocale(LC_ALL, \Locale::canonicalize($locale).$encodigPrefix)) !== false) {
+            if ((\setlocale(LC_ALL, \Locale::canonicalize($locale) . $encodigPrefix)) !== false) {
                 break;
             }
         }
