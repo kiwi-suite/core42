@@ -10,7 +10,6 @@
  * @author raum42 <kiwi@raum42.at>
  */
 
-
 namespace Core42\I18n\Localization;
 
 use Zend\Stdlib\AbstractOptions;
@@ -41,8 +40,8 @@ class Localization extends AbstractOptions
     protected $header;
 
     /**
-     * @param array|null|\Traversable $header
-     * @param null $options
+     * @param string $header
+     * @param null   $options
      */
     public function __construct($header, $options = null)
     {
@@ -269,10 +268,14 @@ class Localization extends AbstractOptions
     {
         $locale = \Locale::acceptFromHttp($this->header);
 
+        if (empty($locale)) {
+            return $this->getDefaultLocale();
+        }
+
         // fuzzy search for incomplete/complete locales (with language + region)
-        $locale = str_replace('_', '-', $locale);
+        $locale = \str_replace('_', '-', $locale);
         foreach ($this->locales as $availableLocale => $options) {
-            if(strpos($availableLocale, $locale) === 0) {
+            if (\mb_strpos($availableLocale, $locale) === 0) {
                 $locale = $availableLocale;
             }
         }
