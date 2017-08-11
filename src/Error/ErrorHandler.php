@@ -148,6 +148,7 @@ class ErrorHandler
     protected function getDisplayTemplate()
     {
         \ob_clean();
+        \http_response_code(500);
         $error = $this->e;
         include_once self::$template;
     }
