@@ -4,10 +4,10 @@
  * core42
  *
  * @package core42
- * @link https://github.com/raum42/core42
- * @copyright Copyright (c) 2010 - 2017 raum42 (https://raum42.at)
+ * @link https://github.com/kiwi-suite/core42
+ * @copyright Copyright (c) 2010 - 2017 kiwi suite (https://www.kiwi-suite.com)
  * @license MIT License
- * @author raum42 <kiwi@raum42.at>
+ * @author kiwi suite <dev@kiwi-suite.com>
  */
 
 namespace Core42\Hydrator\Mutator;

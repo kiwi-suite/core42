@@ -184,17 +184,17 @@ class MailTest extends TestCase
         $mail = new Mail();
         $mail->normalizeData(
             [
-                'email_from'            => 'kiwi@raum42.at',
+                'email_from'            => 'dev@kiwi-suite.com',
             ],
             true,
             false
         );
-        $this->assertSame("kiwi@raum42.at", $mail->getFrom());
+        $this->assertSame("dev@kiwi-suite.com", $mail->getFrom());
 
         $mail = new Mail();
         $mail->normalizeData(
             [
-                'email_from'            => 'kiwi@raum42.at',
+                'email_from'            => 'dev@kiwi-suite.com',
             ],
             false,
             false
@@ -202,39 +202,39 @@ class MailTest extends TestCase
         $this->assertSame([], $mail->getFrom());
 
         $mail = new Mail();
-        $mail->setFrom("kiwi@raum42.at");
+        $mail->setFrom("dev@kiwi-suite.com");
         $mail->normalizeData(
             [
-                'email_from'            => 'test@raum42.at',
+                'email_from'            => 'test@kiwi-suite.com',
             ],
             true,
             false
         );
-        $this->assertSame("kiwi@raum42.at", $mail->getFrom());
+        $this->assertSame("dev@kiwi-suite.com", $mail->getFrom());
 
         $mail = new Mail();
-        $mail->setFrom(["kiwi@raum42.at" => "Thomas"]);
+        $mail->setFrom(["dev@kiwi-suite.com" => "Thomas"]);
         $mail->normalizeData(
             [
-                'email_from'            => 'test@raum42.at',
+                'email_from'            => 'test@kiwi-suite.com',
             ],
             true,
             false
         );
-        $this->assertSame(["kiwi@raum42.at" => "Thomas"], $mail->getFrom());
+        $this->assertSame(["dev@kiwi-suite.com" => "Thomas"], $mail->getFrom());
     }
 
     public function testNormalizeTo()
     {
         $mail = new Mail();
-        $mail->addTo(["kiwi@raum42.at" => "Thomas"]);
+        $mail->addTo(["dev@kiwi-suite.com" => "Thomas"]);
         $mail->normalizeData([], false, false);
-        $this->assertSame([["kiwi@raum42.at" => "Thomas"]], $mail->getTo());
+        $this->assertSame([["dev@kiwi-suite.com" => "Thomas"]], $mail->getTo());
 
         $mail = new Mail();
-        $mail->addTo("kiwi@raum42.at");
+        $mail->addTo("dev@kiwi-suite.com");
         $mail->normalizeData([], false, false);
-        $this->assertSame(["kiwi@raum42.at"], $mail->getTo());
+        $this->assertSame(["dev@kiwi-suite.com"], $mail->getTo());
 
         $mail = new Mail();
         $mail->addTo(new \stdClass());
@@ -250,14 +250,14 @@ class MailTest extends TestCase
     public function testNormalizeCc()
     {
         $mail = new Mail();
-        $mail->addCc(["kiwi@raum42.at" => "Thomas"]);
+        $mail->addCc(["dev@kiwi-suite.com" => "Thomas"]);
         $mail->normalizeData([], false, false);
-        $this->assertSame([["kiwi@raum42.at" => "Thomas"]], $mail->getCc());
+        $this->assertSame([["dev@kiwi-suite.com" => "Thomas"]], $mail->getCc());
 
         $mail = new Mail();
-        $mail->addCc("kiwi@raum42.at");
+        $mail->addCc("dev@kiwi-suite.com");
         $mail->normalizeData([], false, false);
-        $this->assertSame(["kiwi@raum42.at"], $mail->getCc());
+        $this->assertSame(["dev@kiwi-suite.com"], $mail->getCc());
 
         $mail = new Mail();
         $mail->addCc(new \stdClass());
@@ -273,14 +273,14 @@ class MailTest extends TestCase
     public function testNormalizeBcc()
     {
         $mail = new Mail();
-        $mail->addBcc(["kiwi@raum42.at" => "Thomas"]);
+        $mail->addBcc(["dev@kiwi-suite.com" => "Thomas"]);
         $mail->normalizeData([], false, false);
-        $this->assertSame([["kiwi@raum42.at" => "Thomas"]], $mail->getBcc());
+        $this->assertSame([["dev@kiwi-suite.com" => "Thomas"]], $mail->getBcc());
 
         $mail = new Mail();
-        $mail->addBcc("kiwi@raum42.at");
+        $mail->addBcc("dev@kiwi-suite.com");
         $mail->normalizeData([], false, false);
-        $this->assertSame(["kiwi@raum42.at"], $mail->getBcc());
+        $this->assertSame(["dev@kiwi-suite.com"], $mail->getBcc());
 
         $mail = new Mail();
         $mail->addBcc(new \stdClass());
@@ -296,14 +296,14 @@ class MailTest extends TestCase
     public function testNormalizeReplyTo()
     {
         $mail = new Mail();
-        $mail->addReplyTo(["kiwi@raum42.at" => "Thomas"]);
+        $mail->addReplyTo(["dev@kiwi-suite.com" => "Thomas"]);
         $mail->normalizeData([], false, false);
-        $this->assertSame([["kiwi@raum42.at" => "Thomas"]], $mail->getReplyTo());
+        $this->assertSame([["dev@kiwi-suite.com" => "Thomas"]], $mail->getReplyTo());
 
         $mail = new Mail();
-        $mail->addReplyTo("kiwi@raum42.at");
+        $mail->addReplyTo("dev@kiwi-suite.com");
         $mail->normalizeData([], false, false);
-        $this->assertSame(["kiwi@raum42.at"], $mail->getReplyTo());
+        $this->assertSame(["dev@kiwi-suite.com"], $mail->getReplyTo());
 
         $mail = new Mail();
         $mail->addReplyTo(new \stdClass());

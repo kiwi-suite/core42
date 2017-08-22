@@ -21,8 +21,8 @@ class FileTransportTest extends TestCase
         @mkdir($this->mailDir);
 
         $this->mailMessage = new \Swift_Message();
-        $this->mailMessage->setFrom("kiwi@raum42.at");
-        $this->mailMessage->setTo("kiwi@raum42.at");
+        $this->mailMessage->setFrom("dev@kiwi-suite.com");
+        $this->mailMessage->setTo("dev@kiwi-suite.com");
         $this->mailMessage->setSubject("test");
         $this->mailMessage->setBody("Test");
     }

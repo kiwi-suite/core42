@@ -29,7 +29,7 @@ class UuidTest extends TestCase
     {
         $uuidHelper = new Uuid();
 
-        $uuid = $uuidHelper->uuid3(\Ramsey\Uuid\Uuid::NAMESPACE_DNS, 'raum42.at');
+        $uuid = $uuidHelper->uuid3(\Ramsey\Uuid\Uuid::NAMESPACE_DNS, 'kiwi-suite.com');
         $uuidModel = \Ramsey\Uuid\Uuid::fromString($uuid);
         $this->assertInstanceOf(\Ramsey\Uuid\Uuid::class, $uuidModel);
         $this->assertEquals($uuid, $uuidModel->toString());
@@ -49,7 +49,7 @@ class UuidTest extends TestCase
     {
         $uuidHelper = new Uuid();
 
-        $uuid = $uuidHelper->uuid5(\Ramsey\Uuid\Uuid::NAMESPACE_DNS, 'raum42.at');
+        $uuid = $uuidHelper->uuid5(\Ramsey\Uuid\Uuid::NAMESPACE_DNS, 'kiwi-suite.com');
         $uuidModel = \Ramsey\Uuid\Uuid::fromString($uuid);
         $this->assertInstanceOf(\Ramsey\Uuid\Uuid::class, $uuidModel);
         $this->assertEquals($uuid, $uuidModel->toString());
