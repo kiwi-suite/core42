@@ -30,41 +30,6 @@ class SendCommandTest extends TestCase
         $this->serviceManager->setService('ViewHelperManager', new HelperPluginManager($this->serviceManager));
     }
 
-    /*public function testSuccess()
-    {
-        $this->serviceManager->setService("config", $this->config);
-
-        $sendCommand = new SendCommand($this->serviceManager);
-        $sendCommand->setEnableProjectDefaults(true);
-        $sendCommand->setEnableSubjectPrefix(true);
-
-        $layoutModel = new MailModel();
-        $layoutModel->setPlainTemplate("mail");
-        $sendCommand->setLayout($layoutModel);
-
-        $bodyModel = new MailModel();
-        $bodyModel->setPlainTemplate("mail");
-        $sendCommand->setBody($bodyModel);
-
-        $sendCommand->setSubject("test");
-        $sendCommand->setFrom("kiwi@raum42.at");
-        $sendCommand->addTo("kiwi@raum42.at");
-        $sendCommand->addCc("kiwi@raum42.at");
-        $sendCommand->addBcc("kiwi@raum42.at");
-        $sendCommand->addReplyTo("kiwi@raum42.at");
-        $sendCommand->addAttachment(__FILE__);
-        $sendCommand->addAttachment([
-            'content' => 'test',
-            'filename' => 'test.txt',
-            'type' => 'text/plain',
-            'id' => 'kiwi@raum42.at',
-        ]);
-
-        $sendCommand->run();
-
-        $this->assertFalse($sendCommand->hasErrors());
-    }*/
-
     /**
      * @dataProvider configProvider
      */
@@ -84,15 +49,15 @@ class SendCommandTest extends TestCase
 
         $sendCommand->setSubject("test");
         if ($enableProjectDefaults === true) {
-            $sendCommand->setFrom("kiwi@raum42.at");
+            $sendCommand->setFrom("dev@kiwi-suite.com");
         } else {
-            $sendCommand->addFrom("kiwi@raum42.at");
+            $sendCommand->addFrom("dev@kiwi-suite.com");
         }
 
-        $sendCommand->addTo("kiwi@raum42.at");
-        $sendCommand->addCc("kiwi@raum42.at");
-        $sendCommand->addBcc("kiwi@raum42.at");
-        $sendCommand->addReplyTo("kiwi@raum42.at");
+        $sendCommand->addTo("dev@kiwi-suite.com");
+        $sendCommand->addCc("dev@kiwi-suite.com");
+        $sendCommand->addBcc("dev@kiwi-suite.com");
+        $sendCommand->addReplyTo("dev@kiwi-suite.com");
 
         $result = $sendCommand->run();
         $this->assertFalse($sendCommand->hasErrors());
@@ -104,11 +69,11 @@ class SendCommandTest extends TestCase
 
         $this->assertSame($bodyModel, $result->getBody());
         $this->assertSame($layoutModel, $result->getLayout());
-        $this->assertSame("kiwi@raum42.at", $result->getFrom());
-        $this->assertSame(["kiwi@raum42.at"], $result->getTo());
-        $this->assertSame(["kiwi@raum42.at"], $result->getCc());
-        $this->assertSame(["kiwi@raum42.at"], $result->getBcc());
-        $this->assertSame(["kiwi@raum42.at"], $result->getReplyTo());
+        $this->assertSame("dev@kiwi-suite.com", $result->getFrom());
+        $this->assertSame(["dev@kiwi-suite.com"], $result->getTo());
+        $this->assertSame(["dev@kiwi-suite.com"], $result->getCc());
+        $this->assertSame(["dev@kiwi-suite.com"], $result->getBcc());
+        $this->assertSame(["dev@kiwi-suite.com"], $result->getReplyTo());
 
         $sendCommand = new SendCommand($this->serviceManager);
         $sendCommand->setEnableProjectDefaults($enableProjectDefaults);
@@ -123,8 +88,8 @@ class SendCommandTest extends TestCase
         $sendCommand->setBody($bodyModel);
 
         $sendCommand->setSubject("test");
-        $sendCommand->setFrom("kiwi@raum42.at");
-        $sendCommand->addTo("payer@raum42.at");
+        $sendCommand->setFrom("dev@kiwi-suite.com");
+        $sendCommand->addTo("dev@kiwi-suite.com");
 
         $result = $sendCommand->run();
         $this->assertFalse($sendCommand->hasErrors());
@@ -145,15 +110,15 @@ class SendCommandTest extends TestCase
         $bodyModel->setPlainTemplate("mail");
         $sendCommand->setBody($bodyModel);
 
-        $sendCommand->setFrom("kiwi@raum42.at");
-        $sendCommand->addTo("kiwi@raum42.at");
+        $sendCommand->setFrom("dev@kiwi-suite.com");
+        $sendCommand->addTo("dev@kiwi-suite.com");
 
         $sendCommand->addAttachment(__FILE__);
         $sendCommand->addAttachment([
             'content' => 'test',
             'filename' => 'test.txt',
             'type' => 'text/plain',
-            'id' => 'kiwi@raum42.at',
+            'id' => 'dev@kiwi-suite.com',
         ]);
 
         $result = $sendCommand->run();
@@ -163,7 +128,7 @@ class SendCommandTest extends TestCase
                 'content' => 'test',
                 'filename' => 'test.txt',
                 'type' => 'text/plain',
-                'id' => 'kiwi@raum42.at',
+                'id' => 'dev@kiwi-suite.com',
             ]
         ], $result->getAttachments());
 
@@ -177,8 +142,8 @@ class SendCommandTest extends TestCase
         $bodyModel->setPlainTemplate("mail");
         $sendCommand->setBody($bodyModel);
 
-        $sendCommand->setFrom("kiwi@raum42.at");
-        $sendCommand->addTo("kiwi@raum42.at");
+        $sendCommand->setFrom("dev@kiwi-suite.com");
+        $sendCommand->addTo("dev@kiwi-suite.com");
 
         $sendCommand->setAttachments([
             __FILE__,
@@ -186,7 +151,7 @@ class SendCommandTest extends TestCase
                 'content' => 'test',
                 'filename' => 'test.txt',
                 'type' => 'text/plain',
-                'id' => 'kiwi@raum42.at',
+                'id' => 'dev@kiwi-suite.com',
             ]
         ]);
         $result = $sendCommand->run();
@@ -197,7 +162,7 @@ class SendCommandTest extends TestCase
                 'content' => 'test',
                 'filename' => 'test.txt',
                 'type' => 'text/plain',
-                'id' => 'kiwi@raum42.at',
+                'id' => 'dev@kiwi-suite.com',
             ]
         ], $result->getAttachments());
     }
@@ -219,7 +184,7 @@ class SendCommandTest extends TestCase
         $config1 = [
             'project' => [
                 'email_subject_prefix'  => 'Prefix ',
-                'email_from'            => 'kiwi@raum42.at',
+                'email_from'            => 'dev@kiwi-suite.com',
                 'email_layout_html'     => 'mail',
                 'email_layout_plain'    => 'mail',
             ],
