@@ -10,7 +10,6 @@
  * @author kiwi suite <dev@kiwi-suite.com>
  */
 
-
 namespace Core42\Command\Maintenance;
 
 use Core42\Command\AbstractCommand;

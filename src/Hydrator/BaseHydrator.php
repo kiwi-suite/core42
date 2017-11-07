@@ -10,7 +10,6 @@
  * @author kiwi suite <dev@kiwi-suite.com>
  */
 
-
 namespace Core42\Hydrator;
 
 use Core42\Hydrator\Strategy\Service\StrategyPluginManager;

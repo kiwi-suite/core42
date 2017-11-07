@@ -10,7 +10,6 @@
  * @author kiwi suite <dev@kiwi-suite.com>
  */
 
-
 namespace Core42\Command\Mail;
 
 use Core42\Command\AbstractCommand;

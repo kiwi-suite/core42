@@ -26,7 +26,7 @@ use Zend\Stdlib\ArrayUtils;
  * @method string|array getFrom() getFrom()
  * @method Mail setTo() setTo(array $to)
  * @method array getTo() getTo()
- *  @method Mail setCc() setCc(array $cc)
+ * @method Mail setCc() setCc(array $cc)
  * @method array getCc() getCc()
  * @method Mail setBcc() setBcc(array $bcc)
  * @method array getBcc() getBcc()

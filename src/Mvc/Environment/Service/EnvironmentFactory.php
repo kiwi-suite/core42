@@ -10,7 +10,6 @@
  * @author kiwi suite <dev@kiwi-suite.com>
  */
 
-
 namespace Core42\Mvc\Environment\Service;
 
 use Core42\Mvc\Environment\Environment;

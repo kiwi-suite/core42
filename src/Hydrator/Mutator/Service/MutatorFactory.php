@@ -10,7 +10,6 @@
  * @author kiwi suite <dev@kiwi-suite.com>
  */
 
-
 namespace Core42\Hydrator\Mutator\Service;
 
 use Core42\Hydrator\Mutator\Mutator;

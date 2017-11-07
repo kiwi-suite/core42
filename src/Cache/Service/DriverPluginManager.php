@@ -10,7 +10,6 @@
  * @author kiwi suite <dev@kiwi-suite.com>
  */
 
-
 namespace Core42\Cache\Service;
 
 use Core42\Cache\Driver\Service\ApcFactory;

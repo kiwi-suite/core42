@@ -10,7 +10,6 @@
  * @author kiwi suite <dev@kiwi-suite.com>
  */
 
-
 namespace Core42\View\Helper\Service;
 
 use Core42\View\Helper\Params;
