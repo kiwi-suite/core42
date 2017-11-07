@@ -35,6 +35,10 @@ trait CacheAbleTrait
      */
     public function getResult()
     {
+        if (empty($this->getCacheKey())) {
+            return null;
+        }
+
         if ($this->disableCache === false && $this->checkCache()) {
             return $this->getCachedResult();
         }
