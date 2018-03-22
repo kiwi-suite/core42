@@ -122,6 +122,10 @@ class Factory
             $transport->setAuthMode($options['auth_mode']);
         }
 
+        if (isset($options['streamOptions'])) {
+            $transport->setStreamOptions($options['streamOptions']);
+        }
+
         return $transport;
     }
 }
