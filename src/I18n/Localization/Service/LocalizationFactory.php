@@ -37,7 +37,7 @@ class LocalizationFactory implements FactoryInterface
 
         if ($header instanceof AcceptLanguage) {
             $headerPrioritized = $header->getPrioritized();
-            if (count($headerPrioritized)) {
+            if (\count($headerPrioritized)) {
                 /** @var LanguageFieldValuePart $languageFieldValue */
                 $languageFieldValue = $headerPrioritized[0];
                 $header = $languageFieldValue->getLanguage();

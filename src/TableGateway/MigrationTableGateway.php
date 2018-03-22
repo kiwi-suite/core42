@@ -10,7 +10,6 @@
  * @author kiwi suite <dev@kiwi-suite.com>
  */
 
-
 namespace Core42\TableGateway;
 
 use Core42\Db\TableGateway\AbstractTableGateway;

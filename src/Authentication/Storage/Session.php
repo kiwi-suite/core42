@@ -10,7 +10,6 @@
  * @author kiwi suite <dev@kiwi-suite.com>
  */
 
-
 namespace Core42\Authentication\Storage;
 
 class Session extends \Zend\Authentication\Storage\Session

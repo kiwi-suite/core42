@@ -10,7 +10,6 @@
  * @author kiwi suite <dev@kiwi-suite.com>
  */
 
-
 namespace Core42\Error;
 
 use Whoops\Handler\JsonResponseHandler;
@@ -128,7 +127,7 @@ class ErrorHandler
     }
 
     /**
-     * @return string
+     * @return void
      */
     protected function getDisplayErrors()
     {
@@ -143,7 +142,7 @@ class ErrorHandler
     }
 
     /**
-     * @return string
+     * @return void
      */
     protected function getDisplayTemplate()
     {

@@ -16,6 +16,7 @@ use Core42\Hydrator\BaseHydrator;
 use Core42\Hydrator\Service\BaseHydratorFactory;
 use Core42\Hydrator\Strategy\ArrayStrategy;
 use Core42\Hydrator\Strategy\BooleanStrategy;
+use Core42\Hydrator\Strategy\BooleanTinyintStrategy;
 use Core42\Hydrator\Strategy\DateStrategy;
 use Core42\Hydrator\Strategy\DateTimeStrategy;
 use Core42\Hydrator\Strategy\DateTimeTimestampStrategy;
@@ -29,6 +30,7 @@ return [
     'hydrator_strategies' => [
         'factories' => [
             BooleanStrategy::class              => InvokableFactory::class,
+            BooleanTinyintStrategy::class       => InvokableFactory::class,
             DateStrategy::class                 => InvokableFactory::class,
             DateTimeStrategy::class             => InvokableFactory::class,
             DateTimeTimestampStrategy::class    => InvokableFactory::class,
@@ -40,6 +42,7 @@ return [
         ],
         'aliases' => [
             'boolean'                           => BooleanStrategy::class,
+            'booleanTinyint'                    => BooleanTinyintStrategy::class,
             'date'                              => DateStrategy::class,
             'dateTime'                          => DateTimeStrategy::class,
             'dateTimeTimestamp'                 => DateTimeTimestampStrategy::class,

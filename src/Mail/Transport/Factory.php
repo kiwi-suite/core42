@@ -10,7 +10,6 @@
  * @author kiwi suite <dev@kiwi-suite.com>
  */
 
-
 namespace Core42\Mail\Transport;
 
 class Factory
@@ -121,6 +120,10 @@ class Factory
         }
         if (isset($options['auth_mode'])) {
             $transport->setAuthMode($options['auth_mode']);
+        }
+
+        if (isset($options['streamOptions'])) {
+            $transport->setStreamOptions($options['streamOptions']);
         }
 
         return $transport;

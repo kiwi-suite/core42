@@ -10,7 +10,6 @@
  * @author kiwi suite <dev@kiwi-suite.com>
  */
 
-
 namespace Core42\Log\Service\Handler;
 
 use Interop\Container\ContainerInterface;

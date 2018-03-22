@@ -10,7 +10,6 @@
  * @author kiwi suite <dev@kiwi-suite.com>
  */
 
-
 namespace Core42\Permission;
 
 interface RoleInterface extends \Zend\Permissions\Rbac\RoleInterface

@@ -10,7 +10,6 @@
  * @author kiwi suite <dev@kiwi-suite.com>
  */
 
-
 namespace Core42\Hydrator\Strategy;
 
 use Core42\Stdlib\Date;
@@ -43,6 +42,8 @@ class DateStrategy implements StrategyInterface
      */
     public function hydrate($value)
     {
-        return Date::createFromFormat('Y-m-d', $value);
+        $date = Date::createFromFormat('Y-m-d', $value);
+        $date->setTime(0, 0, 0);
+        return $date;
     }
 }

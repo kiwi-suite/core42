@@ -10,8 +10,6 @@
  * @author kiwi suite <dev@kiwi-suite.com>
  */
 
-
-
 namespace Core42\Hydrator\Mutator\Strategy;
 
 class FloatStrategy implements StrategyInterface

@@ -10,7 +10,6 @@
  * @author kiwi suite <dev@kiwi-suite.com>
  */
 
-
 namespace Core42\I18n\Translator\Service;
 
 use Interop\Container\ContainerInterface;
