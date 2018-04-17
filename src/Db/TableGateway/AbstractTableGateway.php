@@ -156,8 +156,11 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
      * @see \Zend\Db\TableGateway\AbstractTableGateway::update()
      * @param mixed $set
      * @param null|mixed $where
+     * @param array|null $joins
+     * @return int
+     * @throws \Exception
      */
-    public function update($set, $where = null)
+    public function update($set, $where = null, array $joins = null)
     {
         if ($set instanceof ModelInterface) {
             $where = $this->getPrimaryValues($set);
@@ -178,7 +181,7 @@ abstract class AbstractTableGateway extends ZendAbstractTableGateway
             return 0;
         }
 
-        return parent::update($updateSet, $where);
+        return parent::update($updateSet, $where, $joins);
     }
 
     /**
