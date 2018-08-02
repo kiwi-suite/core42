@@ -12,39 +12,12 @@
 
 namespace Core42\Stdlib;
 
-class DateTime extends \DateTime implements \JsonSerializable
+if (\version_compare(\phpversion(), '7.2', '>=')) {
+    \class_alias(DateTime72::class, AbstractDateTime::class);
+} else {
+    \class_alias(DateTime71::class, AbstractDateTime::class);
+}
+
+class DateTime extends AbstractDateTime
 {
-
-    /**
-     * @param string $format
-     * @param string $time
-     * @param \DateTimeZone|null $timezone
-     * @return DateTime|bool
-     */
-    public static function createFromFormat($format, $time, \DateTimeZone $timezone = null)
-    {
-        if ($timezone !== null) {
-            $dateTime = parent::createFromFormat($format, $time, $timezone);
-        } else {
-            $dateTime = parent::createFromFormat($format, $time);
-        }
-
-        if (!$dateTime instanceof \DateTime) {
-            return $dateTime;
-        }
-
-        return new DateTime($dateTime->format('Y-m-d H:i:s.u'), $dateTime->getTimezone());
-    }
-
-    /**
-     * Specify data which should be serialized to JSON
-     * @see http://php.net/manual/en/jsonserializable.jsonserialize.php
-     * @return mixed data which can be serialized by <b>json_encode</b>,
-     * which is a value of any type other than a resource
-     * @since 5.4.0
-     */
-    public function jsonSerialize()
-    {
-        return $this->format('Y-m-d H:i:s');
-    }
 }
