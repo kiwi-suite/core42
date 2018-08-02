@@ -21,7 +21,7 @@ class Date extends \DateTime implements \JsonSerializable
      * @param \DateTimeZone|null $timezone
      * @return Date|bool
      */
-    public static function createFromFormat($format, $time, $timezone = null)
+    public static function createFromFormat($format, $time, \DateTimeZone $timezone = null)
     {
         if ($timezone !== null) {
             $dateTime = parent::createFromFormat($format, $time, $timezone);
