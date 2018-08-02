@@ -111,12 +111,11 @@ class CronTaskCommand extends AbstractCommand
         try {
             $cronExpression = CronExpression::factory($this->task->getCronInterval());
         } catch (\InvalidArgumentException $e) {
-            $this->consoleOutput(
-                \sprintf('<error>cron task %s: unable to parse cron expression! (%s)</error>'),
+            $this->consoleOutput(\sprintf(
+                '<error>cron task %s: unable to parse cron expression! (%s)</error>',
                 $this->task->getName(),
                 $this->task->getCronInterval()
-            );
-
+            ));
             return;
         }
 
