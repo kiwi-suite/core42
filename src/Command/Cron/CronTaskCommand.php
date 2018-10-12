@@ -108,6 +108,9 @@ class CronTaskCommand extends AbstractCommand
         $this->task->setLock(new DateTime());
         $this->cronTableGateway->update($this->task);
 
+        //disconnect database to prevent connection timeouts
+        $this->cronTableGateway->getAdapter()->getDriver()->getConnection()->disconnect();
+
         try {
             $cronExpression = CronExpression::factory($this->task->getCronInterval());
         } catch (\InvalidArgumentException $e) {
@@ -136,6 +139,9 @@ class CronTaskCommand extends AbstractCommand
                 $returnVar
             ));
         }
+
+        //reconnect database to prevent connection timeouts
+        $this->cronTableGateway->getAdapter()->getDriver()->getConnection()->connect();
 
         $nextRun = $cronExpression->getNextRunDate();
 
